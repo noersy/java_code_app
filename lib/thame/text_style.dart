@@ -7,6 +7,12 @@ class TypoSty {
     fontSize: 20.0,
   );
 
+  static const TextStyle title2 = TextStyle(
+    fontFamily: "Montserrat",
+    fontWeight: FontWeight.normal,
+    fontSize: 20.0,
+  );
+
   static const TextStyle caption = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.normal,
