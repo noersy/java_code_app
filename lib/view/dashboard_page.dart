@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/icons_cs_icons.dart';
 import 'package:java_code_app/view/brenda_page.dart';
 
@@ -17,25 +18,34 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        elevation: 4,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(IconsCs.beranda, size: 28.0),
-            label: 'Beranda',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(IconsCs.pesanan, size: 32.0),
-            label: 'Pesanan',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(IconsCs.profil, size: 28.0),
-            label: 'Profil',
-          ),
-        ],
-        currentIndex: _bottomNavBarSelectedIndex,
-        selectedItemColor: Colors.green,
-        onTap: _onItemTapped,
+      extendBody: true,
+      bottomNavigationBar: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0),
+        ),
+        child: BottomNavigationBar(
+          elevation: 10,
+          backgroundColor: ColorSty.black60,
+          unselectedItemColor: ColorSty.white,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(IconsCs.beranda, size: 28.0),
+              label: 'Beranda',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(IconsCs.pesanan, size: 32.0),
+              label: 'Pesanan',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(IconsCs.profil, size: 28.0),
+              label: 'Profil',
+            ),
+          ],
+          currentIndex: _bottomNavBarSelectedIndex,
+          selectedItemColor: Colors.green,
+          onTap: _onItemTapped,
+        ),
       ),
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),

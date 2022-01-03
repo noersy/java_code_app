@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/spacing.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
 
@@ -10,17 +11,27 @@ class BerandaPage extends StatefulWidget {
 }
 
 class _BerandaPageState extends State<BerandaPage> {
-
   TextFormField get _search => TextFormField(
-    decoration: InputDecoration(
-      isDense: true,
-      icon: const Icon (Icons.search, size: 26.0,),
-      contentPadding: const EdgeInsets.symmetric(vertical: SpaceDims.sp8, horizontal: SpaceDims.sp8),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(30.0),
-      ),
-    ),
-  );
+        decoration: InputDecoration(
+          isDense: true,
+          hintText: "Pencarian",
+          icon: const Icon(
+            Icons.search,
+            size: 26.0,
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: SpaceDims.sp12,
+            horizontal: SpaceDims.sp16,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: ColorSty.primary, width: 2.0),
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
