@@ -20,7 +20,10 @@ class LoginPage extends StatelessWidget {
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
-              Image.asset("assert/image/bg_login.png"),
+              Padding(
+                padding: const EdgeInsets.all(35.0),
+                child: Image.asset("assert/image/bg_login.png"),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 46.0),
                 child: Column(
