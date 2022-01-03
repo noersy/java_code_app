@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/icons_cs_icons.dart';
 import 'package:java_code_app/thame/spacing.dart';
@@ -23,7 +23,7 @@ class _BerandaPageState extends State<BerandaPage> {
       ),
       floating: true,
       pinned: true,
-      body: const ContentBeranda(),
+      body:  const ContentBeranda(),
     );
   }
 
@@ -50,9 +50,15 @@ class _BerandaPageState extends State<BerandaPage> {
       );
 }
 
-class ContentBeranda extends StatelessWidget {
-  const ContentBeranda({Key? key}) : super(key: key);
+class ContentBeranda extends StatefulWidget {
+   const ContentBeranda({Key? key}) : super(key: key);
 
+  @override
+  State<ContentBeranda> createState() => _ContentBerandaState();
+}
+
+class _ContentBerandaState extends State<ContentBeranda> {
+  int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -91,91 +97,112 @@ class ContentBeranda extends StatelessWidget {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: const [
-                SizedBox(width: SpaceDims.sp12),
+              children: [
+                const SizedBox(width: SpaceDims.sp12),
                 LabelButton(
+                  onPressed: () => setState(()=> _selectedIndex = 0),
                   title: "Semua Menu",
                   icon: Icons.list,
                 ),
                 LabelButton(
+                  onPressed: () => setState(()=> _selectedIndex = 1),
                   title: "Makanan",
                   icon: Icons.coffee,
                 ),
                 LabelButton(
-                  title: "Minum",
+                  onPressed: () => setState(()=> _selectedIndex = 2),
+                  title: "Minuman",
                   icon: Icons.wine_bar,
                 ),
               ],
             ),
           ),
-          const SizedBox(height: SpaceDims.sp22),
-          Padding(
-            padding: const EdgeInsets.only(left: SpaceDims.sp24),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.coffee,
-                  color: ColorSty.primary,
-                  size: 32.0,
-                ),
-                const SizedBox(width: SpaceDims.sp22),
-                Text("Makanan",
-                    style: TypoSty.title.copyWith(color: ColorSty.primary)),
-              ],
-            ),
-          ),
+          if(_selectedIndex == 0)
+            for(Widget item in _category)
+              item,
+          if(_selectedIndex > 0)
+            _category[_selectedIndex],
           const SizedBox(height: SpaceDims.sp12),
-          SizedBox(
-            width: double.infinity,
-            child: Column(
-              children: [
-                for (Map<String, dynamic> item in datafake)
-                  if (item["jenis"]?.compareTo("makanan") == 0)
-                    CardMakananBeranda(
-                      nama: item["nama"] ?? "",
-                      url: item["image"] ?? "",
-                      harga: item["harga"] ?? "",
-                      amount: item["amount"] ?? 0,
-                    ),
-              ],
-            ),
-          ),
-          const SizedBox(height: SpaceDims.sp22),
-          Padding(
-            padding: const EdgeInsets.only(left: SpaceDims.sp24),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.wine_bar,
-                  color: ColorSty.primary,
-                  size: 32.0,
-                ),
-                const SizedBox(width: SpaceDims.sp22),
-                Text("Minuman",
-                    style: TypoSty.title.copyWith(color: ColorSty.primary)),
-              ],
-            ),
-          ),
-          const SizedBox(height: SpaceDims.sp12),
-          SizedBox(
-            width: double.infinity,
-            child: Column(
-              children: [
-                for (Map<String, dynamic> item in datafake)
-                  if (item["jenis"]?.compareTo("minuman") == 0)
-                    CardMakananBeranda(
-                      nama: item["nama"] ?? "",
-                      url: item["image"] ?? "",
-                      harga: item["harga"] ?? "",
-                      amount: item["amount"] ?? 0,
-                    ),
-              ],
-            ),
-          )
         ],
       ),
     );
   }
+
+  final List<Widget> _category = [
+    const SizedBox(),
+    Column(
+      children: [
+        const SizedBox(height: SpaceDims.sp22),
+        Padding(
+          padding: const EdgeInsets.only(left: SpaceDims.sp24),
+          child: Row(
+            children: [
+              const Icon(
+                Icons.coffee,
+                color: ColorSty.primary,
+                size: 32.0,
+              ),
+              const SizedBox(width: SpaceDims.sp22),
+              Text("Makanan",
+                  style: TypoSty.title.copyWith(color: ColorSty.primary)),
+            ],
+          ),
+        ),
+        const SizedBox(height: SpaceDims.sp12),
+        SizedBox(
+          width: double.infinity,
+          child: Column(
+            children: [
+              for (Map<String, dynamic> item in datafake)
+                if (item["jenis"]?.compareTo("makanan") == 0)
+                  CardMakananBeranda(
+                    nama: item["nama"] ?? "",
+                    url: item["image"] ?? "",
+                    harga: item["harga"] ?? "",
+                    amount: item["amount"] ?? 0,
+                  ),
+            ],
+          ),
+        ),
+      ],
+    ),
+    Column(
+      children: [
+        const SizedBox(height: SpaceDims.sp22),
+        Padding(
+          padding: const EdgeInsets.only(left: SpaceDims.sp24),
+          child: Row(
+            children: [
+              const Icon(
+                Icons.wine_bar,
+                color: ColorSty.primary,
+                size: 32.0,
+              ),
+              const SizedBox(width: SpaceDims.sp22),
+              Text("Minuman",
+                  style: TypoSty.title.copyWith(color: ColorSty.primary)),
+            ],
+          ),
+        ),
+        const SizedBox(height: SpaceDims.sp12),
+        SizedBox(
+          width: double.infinity,
+          child: Column(
+            children: [
+              for (Map<String, dynamic> item in datafake)
+                if (item["jenis"]?.compareTo("minuman") == 0)
+                  CardMakananBeranda(
+                    nama: item["nama"] ?? "",
+                    url: item["image"] ?? "",
+                    harga: item["harga"] ?? "",
+                    amount: item["amount"] ?? 0,
+                  ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  ];
 }
 
 class CardMakananBeranda extends StatefulWidget {
@@ -304,11 +331,13 @@ class _CardMakananBerandaState extends State<CardMakananBeranda> {
 class LabelButton extends StatelessWidget {
   final String title;
   final IconData icon;
+  final Function() onPressed;
 
   const LabelButton({
     Key? key,
     required this.title,
     required this.icon,
+    required this.onPressed,
   }) : super(key: key);
 
   @override
@@ -316,7 +345,7 @@ class LabelButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp8),
       child: ElevatedButton.icon(
-        onPressed: () {},
+        onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           primary: Icons.list == icon ? ColorSty.black : ColorSty.primary,
           shape: RoundedRectangleBorder(
@@ -339,36 +368,39 @@ class CardCoupon extends StatelessWidget {
       height: 158.0,
       width: 282.0,
       margin: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Diskon",
-                style: TypoSty.heading.copyWith(
-                  color: ColorSty.white,
+      child: TextButton(
+        onPressed: () => Navigate.toPromoPage(context),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Diskon",
+                  style: TypoSty.heading.copyWith(
+                    color: ColorSty.white,
+                  ),
                 ),
-              ),
-              const SizedBox(width: SpaceDims.sp12),
-              Text(
-                "10 %",
-                style: TypoSty.heading.copyWith(
-                  fontSize: 36.0,
-                  foreground: Paint()
-                    ..style = PaintingStyle.stroke
-                    ..strokeWidth = 1
-                    ..color = ColorSty.white,
+                const SizedBox(width: SpaceDims.sp12),
+                Text(
+                  "10 %",
+                  style: TypoSty.heading.copyWith(
+                    fontSize: 36.0,
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = 1
+                      ..color = ColorSty.white,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Text(
-            "Lorem ipsum dolor sit amet",
-            style: TypoSty.caption.copyWith(color: ColorSty.white),
-          )
-        ],
+              ],
+            ),
+            Text(
+              "Lorem ipsum dolor sit amet",
+              style: TypoSty.caption.copyWith(color: ColorSty.white),
+            )
+          ],
+        ),
       ),
       decoration: BoxDecoration(
         color: ColorSty.primary,

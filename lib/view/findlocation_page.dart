@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:java_code_app/thame/spacing.dart';
 import 'package:java_code_app/thame/text_style.dart';
-import 'package:java_code_app/transision/route.dart';
+import 'package:java_code_app/route/route.dart';
 
 class FindLocationPage extends StatefulWidget {
   const FindLocationPage({Key? key}) : super(key: key);
@@ -19,7 +19,7 @@ class _FindLocationPageState extends State<FindLocationPage> {
     return Timer(_duration, _navigationPage);
   }
 
-  void _navigationPage() async => NavRoute.toDashboard(context);
+  void _navigationPage() async => Navigate.toDashboard(context);
 
   @override
   void initState() {

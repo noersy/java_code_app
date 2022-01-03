@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/spacing.dart';
 import 'package:java_code_app/thame/text_style.dart';
-import 'package:java_code_app/transision/route.dart';
-import 'package:java_code_app/transision/route_transisition.dart';
+import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/widget/button_login.dart';
 import 'package:java_code_app/widget/form_login.dart';
 
@@ -54,7 +53,7 @@ class LoginPage extends StatelessWidget {
                     const SizedBox(height: 30.0),
                     ButtonLogin(
                       title: 'Masuk',
-                      onPressed: ()=> NavRoute.toFindLocation(context),
+                      onPressed: ()=> Navigate.toFindLocation(context),
                       bgColors: ColorSty.primary,
                     ),
                     const SizedBox(height: 40.0),
