@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/spacing.dart';
 import 'package:java_code_app/thame/text_style.dart';
+import 'package:java_code_app/transision/route.dart';
+import 'package:java_code_app/transision/route_transisition.dart';
 import 'package:java_code_app/widget/button_login.dart';
 import 'package:java_code_app/widget/form_login.dart';
 
@@ -47,8 +49,9 @@ class LoginPage extends StatelessWidget {
                       editingController: _controllerPassword,
                     ),
                     const SizedBox(height: 30.0),
-                    const ButtonLogin(
+                    ButtonLogin(
                       title: 'Masuk',
+                      onPressed: ()=> NavRoute.toFindLocation(context),
                       bgColors: ColorSty.primary,
                     ),
                     const SizedBox(height: 40.0),
@@ -74,18 +77,20 @@ class LoginPage extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: SpaceDims.sp16),
-                    const ButtonLogin(
+                    ButtonLogin(
                       title: 'Masuk menggunakan',
                       boldTitle: "Google",
                       bgColors: ColorSty.white,
                       icon: "assert/image/icon_google.png",
+                      onPressed: () {},
                     ),
                     const SizedBox(height: SpaceDims.sp8),
-                    const ButtonLogin(
+                    ButtonLogin(
                       title: 'Masuk menggunakan',
                       boldTitle: "Apple",
                       icon: "assert/image/icon_apple.png",
                       bgColors: ColorSty.black,
+                      onPressed: () {},
                     ),
                   ],
                 ),
@@ -97,4 +102,3 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
-

@@ -8,13 +8,14 @@ class ButtonLogin extends StatelessWidget {
   final String? icon;
   final Color bgColors;
   final String title;
+  final Function() onPressed;
 
   const ButtonLogin({
     Key? key,
     this.icon,
     this.boldTitle,
     required this.bgColors,
-    required this.title,
+    required this.title, required this.onPressed,
   }) : super(key: key);
 
   final String? boldTitle;
@@ -22,7 +23,7 @@ class ButtonLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         primary: bgColors,
         onPrimary: bgColors == ColorSty.white ? ColorSty.primary : ColorSty.white,
