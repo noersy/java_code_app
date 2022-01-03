@@ -24,4 +24,5 @@ class IconsCs {
   static const IconData profil = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData pesanan = IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData beranda = IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData coupon = IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

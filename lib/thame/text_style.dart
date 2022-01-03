@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
 
 class TypoSty {
+  static const TextStyle heading = TextStyle(
+    fontFamily: "Montserrat",
+    fontWeight: FontWeight.w700,
+    fontSize: 36.0,
+  );
+
   static const TextStyle title = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.bold,
     fontSize: 20.0,
+  );
+  
+  static const TextStyle subtitle = TextStyle(
+    fontFamily: "Montserrat",
+    fontWeight: FontWeight.bold,
+    fontSize: 16.0,
   );
 
   static const TextStyle title2 = TextStyle(
