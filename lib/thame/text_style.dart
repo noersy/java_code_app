@@ -14,6 +14,13 @@ class TypoSty {
     color: ColorSty.black,
     fontSize: 20.0,
   );
+
+  static const TextStyle titlePrimary = TextStyle(
+    fontFamily: "Montserrat",
+    fontWeight: FontWeight.bold,
+    color: ColorSty.primary,
+    fontSize: 20.0,
+  );
   
   static const TextStyle subtitle = TextStyle(
     fontFamily: "Montserrat",

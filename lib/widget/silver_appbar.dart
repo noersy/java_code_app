@@ -4,7 +4,7 @@ import 'package:java_code_app/thame/spacing.dart';
 
 class SilverAppBar extends StatelessWidget {
   final Widget body, title;
-  final bool? back;
+  final bool? back, notScrolled;
   final List<Widget>? actions;
   final bool pinned, floating;
 
@@ -15,20 +15,21 @@ class SilverAppBar extends StatelessWidget {
     required this.pinned,
     required this.floating,
     this.actions,
-    this.back,
+    this.back, this.notScrolled,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: NestedScrollView(
-        physics: const BouncingScrollPhysics(),
+        physics: notScrolled ?? true ? const BouncingScrollPhysics() : const NeverScrollableScrollPhysics(),
         body: body,
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        headerSliverBuilder: (BuildContext context, _) {
           return <Widget>[
             SliverAppBar(
               elevation: 4,
               actions: actions,
+              primary: notScrolled != null ? true : false,
               leading: back != null ? IconButton(
                 icon: const Icon(Icons.arrow_back_ios),
                 onPressed: () => Navigator.of(context).pop(),

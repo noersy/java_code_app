@@ -5,6 +5,8 @@ class ColorSty {
   static const Color white60 = Color(0x99FFFFFF);
   static const Color white80 = Color(0xCDFFFFFF);
   static const Color grey = Color(0x40000000);
+  static const Color grey80 = Color(0xbedcdcdc);
+  static const Color grey5 = Color(0xd8ffffff);
   static const Color black = Color(0xff1E1E1E);
   static const Color black60 = Color(0xff2E2E2E);
   static const Color primary = Color(0xff009AAD);

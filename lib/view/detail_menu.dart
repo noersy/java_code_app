@@ -337,15 +337,17 @@ class TileListDMenu extends StatelessWidget {
   final String title, prefix;
   final IconData icon;
   final bool? prefixIcon;
+  final TextStyle? textStylePrefix;
   final Function() onPressed;
-
+  final bool? dense;
   const TileListDMenu({
     Key? key,
     required this.title,
     required this.prefix,
     required this.icon,
+
     this.prefixIcon,
-    required this.onPressed,
+    required this.onPressed, this.textStylePrefix, this.dense,
   }) : super(key: key);
 
   @override
@@ -372,24 +374,24 @@ class TileListDMenu extends StatelessWidget {
               Row(
                 children: [
                   SizedBox(
-                    width: 168,
+                    width: 108,
                     child: Text(
                       prefix,
                       style: prefixIcon ?? false
-                          ? TypoSty.captionSemiBold
-                          .copyWith(fontWeight: FontWeight.normal)
-                          : TypoSty.title.copyWith(color: ColorSty.primary),
+                          ? TypoSty.captionSemiBold.copyWith(fontWeight: FontWeight.normal).merge(textStylePrefix)
+                          : dense ?? false
+                          ? TypoSty.captionSemiBold.copyWith(fontWeight: FontWeight.normal).merge(textStylePrefix) : TypoSty.title.copyWith(color: ColorSty.primary).merge(textStylePrefix),
                       textAlign: TextAlign.right,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   if (prefixIcon ?? false)
-                    const Padding(
-                      padding: EdgeInsets.only(left: SpaceDims.sp8),
+                     Padding(
+                      padding: EdgeInsets.only(left: dense ?? false ? SpaceDims.sp4 :  SpaceDims.sp8),
                       child: Icon(
                         Icons.arrow_forward_ios,
-                        size: 22.0,
-                        color: ColorSty.black60,
+                        size: dense ?? false ? 18.0 : 22.0,
+                        color: ColorSty.grey,
                       ),
                     ),
                 ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:java_code_app/providers/order_providers.dart';
+import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/icons_cs_icons.dart';
 import 'package:java_code_app/view/beranda_page.dart';
@@ -65,7 +66,7 @@ class _DashboardPageState extends State<DashboardPage> {
             return FloatingActionButton(
               backgroundColor: ColorSty.primary,
               onPressed: () {
-
+                Navigate.toChekOut(context);
                 Provider.of<OrderProvider>(context, listen: false).addOrder(0);
               },
               child: const Padding(
