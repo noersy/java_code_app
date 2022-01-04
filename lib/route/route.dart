@@ -3,14 +3,18 @@ import 'package:java_code_app/transision/route_transisition.dart';
 import 'package:java_code_app/view/checkout_page.dart';
 import 'package:java_code_app/view/dashboard_page.dart';
 import 'package:java_code_app/view/detail_menu.dart';
+import 'package:java_code_app/view/detailvoucher_page.dart';
 import 'package:java_code_app/view/findlocation_page.dart';
 import 'package:java_code_app/view/promo_page.dart';
+import 'package:java_code_app/view/selection_vocher_page.dart';
 
 class Navigate {
   static void toFindLocation(context) => Navigator.of(context).pushReplacement(routeTransition(const FindLocationPage()));
   static void toDashboard(context) => Navigator.of(context).pushReplacement(routeTransition(const DashboardPage()));
   static void toPromoPage(context) => Navigator.of(context).push(routeTransition(const PromoPage()));
   static void toChekOut(context) => Navigator.of(context).push(routeTransition(const CheckOutPage()));
+  static void toSelectionVoucherPage(context) => Navigator.of(context).push(routeTransition(const SelectionVoucherPage()));
+  static void toDetailVoucherPage(context) => Navigator.of(context).push(routeTransition(const DetailVoucherPage()));
   static void toDetailMenu(context, {
     required String harga,
     required String urlImage,

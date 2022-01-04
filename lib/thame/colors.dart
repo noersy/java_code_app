@@ -10,4 +10,5 @@ class ColorSty {
   static const Color black = Color(0xff1E1E1E);
   static const Color black60 = Color(0xff2E2E2E);
   static const Color primary = Color(0xff009AAD);
+  static const Color bg2 = Color(0xffF6F6F6);
 }

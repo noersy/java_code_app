@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/icons_cs_icons.dart';
 import 'package:java_code_app/thame/spacing.dart';
@@ -112,7 +113,8 @@ class CheckOutPage extends StatelessWidget {
                           title: "Voucher",
                           prefix: "Pilih Voucher",
                           icon: IconsCs.voucher_icon_line,
-                          onPressed: () {},
+                          onPressed: () =>
+                              Navigate.toSelectionVoucherPage(context),
                         ),
                         Stack(children: [
                           TileListDMenu(
@@ -181,8 +183,11 @@ class CheckOutPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
-                            Text("Total Penumbra"),
-                            Text("Rp 27.000"),
+                            Text(
+                              "Total Pembayaran",
+                              style: TextStyle(color: ColorSty.black60),
+                            ),
+                            Text("Rp 27.000", style: TypoSty.titlePrimary),
                           ],
                         ),
                       ],
@@ -196,8 +201,10 @@ class CheckOutPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      child:
-                          const Text("Pesan Sekarang", style: TypoSty.button),
+                      child: const Text(
+                        "Pesan Sekarang",
+                        style: TypoSty.button,
+                      ),
                     )
                   ],
                 ),
@@ -248,10 +255,8 @@ class InfoDiscount extends StatelessWidget {
               ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(),
                 style: ElevatedButton.styleFrom(
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(30.0))
-                  )
-                ),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(30.0)))),
                 child: const SizedBox(
                   width: 90.0,
                   child: Align(alignment: Alignment.center, child: Text("Oke")),

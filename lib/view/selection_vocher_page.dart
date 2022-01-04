@@ -1,11 +1,193 @@
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:java_code_app/thame/colors.dart';
+import 'package:java_code_app/thame/icons_cs_icons.dart';
+import 'package:java_code_app/thame/spacing.dart';
+import 'package:java_code_app/thame/text_style.dart';
+import 'package:java_code_app/widget/silver_appbar.dart';
 
-class SelectionVocherPage extends StatelessWidget {
-  const SelectionVocherPage({Key? key}) : super(key: key);
+class SelectionVoucherPage extends StatelessWidget {
+  const SelectionVoucherPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Container());
+    return Scaffold(
+      body: SilverAppBar(
+        pinned: true,
+        floating: true,
+        back: true,
+        title: Row(
+          children: const [
+            Icon(IconsCs.voucher_icon_line, color: ColorSty.primary),
+            SizedBox(width: SpaceDims.sp18),
+            Text("Pilih Voucher", style: TypoSty.title),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+                vertical: SpaceDims.sp24, horizontal: SpaceDims.sp24),
+            child: Column(
+              children: [
+                for (Map<String, dynamic> item in dataVoucher)
+                  VoucherCard(
+                    urlImage: item["urlImage"],
+                    title: item["title"],
+                  )
+              ],
+            ),
+          ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        height: 106.0,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: ColorSty.white,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(30.0),
+            topRight: Radius.circular(30.0),
+          ),
+          boxShadow: [
+            for (int index in Iterable.generate(15))
+              BoxShadow(
+                offset: const Offset(0, -3),
+                color: ColorSty.grey80.withOpacity(0.02),
+                spreadRadius: index.toDouble(),
+              ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp22),
+          child: Column(
+            children: [
+              const SizedBox(height: SpaceDims.sp14),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.check_circle_outline,
+                    color: ColorSty.primary,
+                    size: 18.0,
+                  ),
+                  const SizedBox(width: SpaceDims.sp8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text("Penggunaan voucher tidak dapat digabung dengan"),
+                      Text("discount employee reward program",
+                          style: TextStyle(
+                              color: ColorSty.primary,
+                              fontWeight: FontWeight.bold)),
+                    ],
+                  )
+                ],
+              ),
+              const SizedBox(height: SpaceDims.sp8),
+              ElevatedButton(
+                onPressed: () {},
+                child: const SizedBox(
+                  width: double.infinity,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text("Oke"),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
+
+class VoucherCard extends StatefulWidget {
+  final String urlImage, title;
+
+  const VoucherCard({
+    Key? key,
+    required this.urlImage,
+    required this.title,
+  }) : super(key: key);
+
+  @override
+  _VoucherCardState createState() => _VoucherCardState();
+}
+
+class _VoucherCardState extends State<VoucherCard> {
+  bool _isSelected = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp8),
+      child: ElevatedButton(
+        onPressed: () {  },
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.all(0),
+          primary: ColorSty.bg2,
+          onPrimary: ColorSty.grey80,
+          elevation: 5,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: SpaceDims.sp18),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    widget.title,
+                    style: TypoSty.button.copyWith(color: ColorSty.black60),
+                  ),
+                  IconButton(
+                    onPressed: () => setState(() => _isSelected = !_isSelected),
+                    icon: _isSelected
+                        ? const Icon(
+                            Icons.check_box_outlined,
+                            color: ColorSty.black60,
+                          )
+                        : const Icon(
+                            Icons.check_box_outline_blank_sharp,
+                            color: ColorSty.black60,
+                          ),
+                  )
+                ],
+              ),
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: Image.asset(widget.urlImage),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+List<Map<String, dynamic>> dataVoucher = [
+  {
+    "title": "Friend Referral Retention",
+    "urlImage": "assert/image/voucher/Voucher Java Code app-01.jpg",
+  },
+  {
+    "title": "Koordinator Program Kekompakan",
+    "urlImage": "assert/image/voucher/Voucher Java Code app-02.jpg",
+  },
+  {
+    "title": "Birthday",
+    "urlImage": "assert/image/voucher/Voucher Java Code app-03.jpg",
+  },
+  {
+    "title": "Friend Referral Retention",
+    "urlImage": "assert/image/voucher/Voucher Java Code app-04.jpg",
+  },
+  {
+    "title": "Friend Referral Retention",
+    "urlImage": "assert/image/voucher/Voucher Java Code app-05.jpg",
+  },
+];
