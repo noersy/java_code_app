@@ -255,8 +255,12 @@ class InfoDiscount extends StatelessWidget {
               ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(),
                 style: ElevatedButton.styleFrom(
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(30.0)))),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(30.0),
+                    ),
+                  ),
+                ),
                 child: const SizedBox(
                   width: 90.0,
                   child: Align(alignment: Alignment.center, child: Text("Oke")),

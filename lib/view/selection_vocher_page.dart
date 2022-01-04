@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/icons_cs_icons.dart';
 import 'package:java_code_app/thame/spacing.dart';
@@ -12,6 +12,7 @@ class SelectionVoucherPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorSty.white,
       body: SilverAppBar(
         pinned: true,
         floating: true,
@@ -77,14 +78,16 @@ class SelectionVoucherPage extends StatelessWidget {
                       Text("discount employee reward program",
                           style: TextStyle(
                               color: ColorSty.primary,
-                              fontWeight: FontWeight.bold)),
+                              fontWeight: FontWeight.bold,
+                          ),
+                      ),
                     ],
                   )
                 ],
               ),
               const SizedBox(height: SpaceDims.sp8),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () => Navigator.of(context).pop(),
                 child: const SizedBox(
                   width: double.infinity,
                   child: Align(
@@ -122,14 +125,15 @@ class _VoucherCardState extends State<VoucherCard> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp8),
       child: ElevatedButton(
-        onPressed: () {  },
+        onPressed: () => Navigate.toDetailVoucherPage(context, title: widget.title, urlImage: widget.urlImage),
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.all(0),
           primary: ColorSty.bg2,
           onPrimary: ColorSty.grey80,
           elevation: 5,
           shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
