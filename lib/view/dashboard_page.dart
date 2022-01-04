@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/icons_cs_icons.dart';
 import 'package:java_code_app/view/beranda_page.dart';
+import 'package:provider/provider.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -13,7 +15,6 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   int _bottomNavBarSelectedIndex = 0;
   final PageController _pageController = PageController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +51,32 @@ class _DashboardPageState extends State<DashboardPage> {
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: _pageController,
-        children:   const [
+        children: const [
           BerandaPage(),
           Text("2"),
           Text("3"),
         ],
+      ),
+      floatingActionButton: AnimatedBuilder(
+        animation: OrderProvider(),
+        builder: (BuildContext context, Widget? child) {
+          int _order = Provider.of<OrderProvider>(context).order;
+          if (_order > 0) {
+            return FloatingActionButton(
+              backgroundColor: ColorSty.primary,
+              onPressed: () {
+
+                Provider.of<OrderProvider>(context, listen: false).addOrder(0);
+              },
+              child: const Padding(
+                padding: EdgeInsets.only(right: 3.0),
+                child: Icon(IconsCs.shopingbag_icon),
+              ),
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        },
       ),
     );
   }
@@ -83,6 +105,3 @@ class _DashboardPageState extends State<DashboardPage> {
     }
   }
 }
-
-
-

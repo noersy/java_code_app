@@ -1,12 +1,13 @@
-
 import 'package:flutter/material.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/icons_cs_icons.dart';
 import 'package:java_code_app/thame/spacing.dart';
 import 'package:java_code_app/thame/text_style.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
+import 'package:provider/provider.dart';
 
-class DetailMenu extends StatelessWidget {
+class DetailMenu extends StatefulWidget {
   final String urlImage, name, harga;
   final int amount;
   final int? count;
@@ -21,6 +22,12 @@ class DetailMenu extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<DetailMenu> createState() => _DetailMenuState();
+}
+
+class _DetailMenuState extends State<DetailMenu> {
+  int _jumlahOrder = 0;
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorSty.white.withOpacity(0.95),
@@ -34,7 +41,8 @@ class DetailMenu extends StatelessWidget {
             const SizedBox(height: SpaceDims.sp24),
             SizedBox(
               width: 234.0,
-              child: Image.asset(urlImage),
+              height: 182.4,
+              child: Image.asset(widget.urlImage),
             ),
             const SizedBox(height: SpaceDims.sp24),
             Expanded(
@@ -65,12 +73,16 @@ class DetailMenu extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              name,
+                              widget.name,
                               style: TypoSty.title.copyWith(
                                 color: ColorSty.primary,
                               ),
                             ),
-                            const AddOrderButton(),
+                            AddOrderButton(
+                              onChange: (int value){
+                                setState(() => _jumlahOrder = value);
+                              },
+                            ),
                           ],
                         ),
                       ),
@@ -93,143 +105,165 @@ class DetailMenu extends StatelessWidget {
                             TileListDMenu(
                               icon: IconsCs.bi_cash_coin,
                               title: "Harga",
-                              prefix: harga,
+                              prefix: widget.harga,
                               onPressed: () {},
                             ),
-                             TileListDMenu(
+                            TileListDMenu(
                               prefixIcon: true,
                               icon: IconsCs.fire,
                               title: "Level",
                               prefix: "1",
-                              onPressed: ()=> showModalBottomSheet(
-                                isScrollControlled: true,
-                                barrierColor: ColorSty.grey.withOpacity(0.2),
-                                context: context,
-                                builder: (BuildContext context) => BottomSheetDetailMenu(
-                                  title: "Pilih Toping",
-                                  content: Expanded(
-                                    child: ListView(
-                                      scrollDirection: Axis.horizontal,
-                                      children: [
-                                        LabelSelection(
-                                          title: "1",
-                                          onSelection: (String value){
+                              onPressed: () =>
+                                  showModalBottomSheet(
+                                    isScrollControlled: true,
+                                    barrierColor: ColorSty.grey.withOpacity(
+                                        0.2),
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        BottomSheetDetailMenu(
+                                          title: "Pilih Toping",
+                                          content: Expanded(
+                                            child: ListView(
+                                              scrollDirection: Axis.horizontal,
+                                              children: [
+                                                LabelSelection(
+                                                  title: "1",
+                                                  onSelection: (String value) {
 
-                                          },
-                                        ),
-                                        LabelSelection(
-                                          title: "2",
-                                          onSelection: (String value){
+                                                  },
+                                                ),
+                                                LabelSelection(
+                                                  title: "2",
+                                                  onSelection: (String value) {
 
-                                          },
-                                        ),
-                                        LabelSelection(
-                                          title: "3",
-                                          onSelection: (String value){
+                                                  },
+                                                ),
+                                                LabelSelection(
+                                                  title: "3",
+                                                  onSelection: (String value) {
 
-                                          },
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ),
-                                      ],
-                                    ),
                                   ),
-                                ),
-                              ),
                             ),
-                             TileListDMenu(
+                            TileListDMenu(
                               prefixIcon: true,
                               icon: IconsCs.topping_icon,
                               title: "Topping",
                               prefix: "Morizela",
-                              onPressed: ()=> showModalBottomSheet(
-                                isScrollControlled: true,
-                                barrierColor: ColorSty.grey.withOpacity(0.2),
-                                context: context,
-                                builder: (BuildContext context) => BottomSheetDetailMenu(
-                                  title: "Pilih Toping",
-                                  content: Expanded(
-                                    child: ListView(
-                                      scrollDirection: Axis.horizontal,
-                                      children: [
-                                        LabelSelection(
-                                          title: "Mozarella",
-                                          onSelection: (String value){
+                              onPressed: () =>
+                                  showModalBottomSheet(
+                                    isScrollControlled: true,
+                                    barrierColor: ColorSty.grey.withOpacity(
+                                        0.2),
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        BottomSheetDetailMenu(
+                                          title: "Pilih Toping",
+                                          content: Expanded(
+                                            child: ListView(
+                                              scrollDirection: Axis.horizontal,
+                                              children: [
+                                                LabelSelection(
+                                                  title: "Mozarella",
+                                                  onSelection: (String value) {
 
-                                          },
-                                        ),
-                                        LabelSelection(
-                                          title: "Sausagge",
-                                          onSelection: (String value){
+                                                  },
+                                                ),
+                                                LabelSelection(
+                                                  title: "Sausagge",
+                                                  onSelection: (String value) {
 
-                                          },
-                                        ),
-                                        LabelSelection(
-                                          title: "Dimsum",
-                                          onSelection: (String value){
+                                                  },
+                                                ),
+                                                LabelSelection(
+                                                  title: "Dimsum",
+                                                  onSelection: (String value) {
 
-                                          },
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ),
-                                      ],
-                                    ),
                                   ),
-                                ),
-                              ),
                             ),
                             TileListDMenu(
                               prefixIcon: true,
                               icon: IconsCs.note_icon,
                               title: "Catatan",
                               prefix: "Lorem Ipsum sit aaasss",
-                              onPressed: () => showModalBottomSheet(
-                                isScrollControlled: true,
-                                barrierColor: ColorSty.grey.withOpacity(0.2),
-                                context: context,
-                                builder: (BuildContext context) => BottomSheetDetailMenu(
-                                  title: "Buat Catatan",
-                                  content: Row(
-                                    children: [
-                                      Expanded(
-                                        child: TextFormField(
-                                          maxLength: 100,
-                                          decoration: const InputDecoration(
-                                            contentPadding: EdgeInsets.symmetric(
-                                                horizontal: 0, vertical: 0),
+                              onPressed: () =>
+                                  showModalBottomSheet(
+                                    isScrollControlled: true,
+                                    barrierColor: ColorSty.grey.withOpacity(
+                                        0.2),
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        BottomSheetDetailMenu(
+                                          title: "Buat Catatan",
+                                          content: Row(
+                                            children: [
+                                              Expanded(
+                                                child: TextFormField(
+                                                  maxLength: 100,
+                                                  decoration: const InputDecoration(
+                                                    contentPadding: EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 0,
+                                                        vertical: 0),
+                                                  ),
+                                                ),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () {},
+                                                style: ElevatedButton.styleFrom(
+                                                    padding: const EdgeInsets
+                                                        .all(0),
+                                                    minimumSize: const Size(
+                                                        25.0, 25.0),
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius
+                                                            .circular(100.0)
+                                                    )
+                                                ),
+                                                child: const Icon(
+                                                    Icons.check, size: 26.0),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () {},
-                                        style: ElevatedButton.styleFrom(
-                                            padding: const EdgeInsets.all(0),
-                                            minimumSize: const Size(25.0, 25.0),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(100.0)
-                                            )
-                                        ),
-                                        child: const Icon(Icons.check, size: 26.0),
-                                      ),
-                                    ],
                                   ),
-                                ),
-                              ),
                             ),
                             const Divider(thickness: 1.5),
                             const SizedBox(height: SpaceDims.sp12),
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: SpaceDims.sp2),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
+                            ChangeNotifierProvider(
+                              create: (_) => OrderProvider(),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Provider.of<OrderProvider>(context, listen: false).addOrder(_jumlahOrder);
+                                  Navigator.of(context).pop();
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: SpaceDims.sp2,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                  ),
                                 ),
-                              ),
-                              child: const SizedBox(
-                                width: double.infinity,
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    "Tambahkan Ke Pesanan",
+                                child: const SizedBox(
+                                  width: double.infinity,
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Tambahkan Ke Pesanan",
                                       style: TypoSty.button,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -252,7 +286,10 @@ class DetailMenu extends StatelessWidget {
 class LabelSelection extends StatefulWidget {
   final String title;
   final ValueChanged<String> onSelection;
-  const LabelSelection({Key? key, required this.title, required this.onSelection}) : super(key: key);
+
+  const LabelSelection(
+      {Key? key, required this.title, required this.onSelection})
+      : super(key: key);
 
   @override
   _LabelSelectionState createState() => _LabelSelectionState();
@@ -264,17 +301,18 @@ class _LabelSelectionState extends State<LabelSelection> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: SpaceDims.sp20, horizontal: SpaceDims.sp4),
+      margin: const EdgeInsets.symmetric(
+          vertical: SpaceDims.sp20, horizontal: SpaceDims.sp4),
       child: TextButton(
         style: TextButton.styleFrom(
             backgroundColor: _isSelected ? ColorSty.primary : ColorSty.white,
-            primary:  !_isSelected ? ColorSty.primary : ColorSty.white,
+            primary: !_isSelected ? ColorSty.primary : ColorSty.white,
             padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
             minimumSize: Size.zero,
             shape: RoundedRectangleBorder(
               side: const BorderSide(color: ColorSty.primary),
               borderRadius: BorderRadius.circular(30.0),
-          )
+            )
         ),
         onPressed: () {
           setState(() {
@@ -294,7 +332,6 @@ class _LabelSelectionState extends State<LabelSelection> {
     );
   }
 }
-
 
 class TileListDMenu extends StatelessWidget {
   final String title, prefix;
@@ -340,7 +377,7 @@ class TileListDMenu extends StatelessWidget {
                       prefix,
                       style: prefixIcon ?? false
                           ? TypoSty.captionSemiBold
-                              .copyWith(fontWeight: FontWeight.normal)
+                          .copyWith(fontWeight: FontWeight.normal)
                           : TypoSty.title.copyWith(color: ColorSty.primary),
                       textAlign: TextAlign.right,
                       overflow: TextOverflow.ellipsis,
@@ -366,7 +403,9 @@ class TileListDMenu extends StatelessWidget {
 }
 
 class AddOrderButton extends StatefulWidget {
-  const AddOrderButton({Key? key}) : super(key: key);
+  final ValueChanged<int> onChange;
+
+  const AddOrderButton({Key? key, required this.onChange}) : super(key: key);
 
   @override
   _AddOrderButtonState createState() => _AddOrderButtonState();
@@ -382,7 +421,10 @@ class _AddOrderButtonState extends State<AddOrderButton> {
       children: [
         if (jumlahOrder != 0)
           TextButton(
-            onPressed: () => setState(() => jumlahOrder--),
+            onPressed: () {
+              setState(() => jumlahOrder--);
+              widget.onChange(jumlahOrder);
+            },
             style: TextButton.styleFrom(
               padding: EdgeInsets.zero,
               minimumSize: const Size(25, 25),
@@ -392,7 +434,10 @@ class _AddOrderButtonState extends State<AddOrderButton> {
           ),
         if (jumlahOrder != 0) Text("$jumlahOrder", style: TypoSty.subtitle),
         TextButton(
-          onPressed: () => setState(() => jumlahOrder++),
+          onPressed: () {
+            setState(() => jumlahOrder++);
+            widget.onChange(jumlahOrder);
+          },
           style: TextButton.styleFrom(
             padding: EdgeInsets.zero,
             minimumSize: const Size(25, 25),
@@ -420,8 +465,14 @@ class BottomSheetDetailMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 140,
-      width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
+      margin: EdgeInsets.only(bottom: MediaQuery
+          .of(context)
+          .viewInsets
+          .bottom),
       padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp12),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp16),
@@ -438,7 +489,10 @@ class BottomSheetDetailMenu extends StatelessWidget {
             ),
             const SizedBox(height: SpaceDims.sp16),
             SizedBox(
-              width: MediaQuery.of(context).size.width,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
               child: Text(title, style: TypoSty.title),
             ),
             content,

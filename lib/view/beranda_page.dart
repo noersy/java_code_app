@@ -174,8 +174,8 @@ class ListMenu extends StatelessWidget {
             children: [
               Icon(
                 type.compareTo("makanan") == 0
-                    ? IconsCs.ep_coffee
-                    : Icons.coffee,
+                    ? Icons.coffee
+                    : IconsCs.ep_coffee,
                 color: ColorSty.primary,
                 size: 26.0,
               ),
