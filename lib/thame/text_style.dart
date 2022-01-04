@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/thame/colors.dart';
 
 class TypoSty {
   static const TextStyle heading = TextStyle(
@@ -10,6 +11,7 @@ class TypoSty {
   static const TextStyle title = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.bold,
+    color: ColorSty.black,
     fontSize: 20.0,
   );
   

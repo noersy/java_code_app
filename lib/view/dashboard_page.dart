@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/icons_cs_icons.dart';
-import 'package:java_code_app/view/brenda_page.dart';
+import 'package:java_code_app/view/beranda_page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);

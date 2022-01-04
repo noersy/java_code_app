@@ -8,4 +8,8 @@ class SpaceDims {
   static const double sp18 = 18.0;
   static const double sp22 = 22.0;
   static const double sp24 = 24.0;
+  static const double sp32 = 32.0;
+  static const double sp36 = 24.0;
+  static const double sp42 = 42.0;
+  static const double sp46 = 46.0;
 }
