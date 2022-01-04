@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:java_code_app/transision/route_transisition.dart';
 import 'package:java_code_app/view/checkout_page.dart';
 import 'package:java_code_app/view/dashboard_page.dart';
-import 'package:java_code_app/view/detail_menu.dart';
+import 'package:java_code_app/view/detailmenu_page.dart';
 import 'package:java_code_app/view/detailvoucher_page.dart';
 import 'package:java_code_app/view/findlocation_page.dart';
 import 'package:java_code_app/view/promo_page.dart';

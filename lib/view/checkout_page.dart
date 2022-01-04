@@ -5,7 +5,9 @@ import 'package:java_code_app/thame/icons_cs_icons.dart';
 import 'package:java_code_app/thame/spacing.dart';
 import 'package:java_code_app/thame/text_style.dart';
 import 'package:java_code_app/view/beranda_page.dart';
-import 'package:java_code_app/view/detail_menu.dart';
+import 'package:java_code_app/view/detailmenu_page.dart';
+import 'package:java_code_app/widget/infodiscount_dialog.dart';
+import 'package:java_code_app/widget/listmenut_tile.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
 
 class CheckOutPage extends StatelessWidget {
@@ -105,7 +107,7 @@ class CheckOutPage extends StatelessWidget {
                           icon: Icons.wine_bar,
                           onPressed: () => showDialog(
                               context: context,
-                              builder: (_) => const InfoDiscount()),
+                              builder: (_) => const InfoDiscountDialog()),
                         ),
                         TileListDMenu(
                           dense: true,
@@ -217,59 +219,3 @@ class CheckOutPage extends StatelessWidget {
   }
 }
 
-class InfoDiscount extends StatelessWidget {
-  const InfoDiscount({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      child: SizedBox(
-        height: 195.0,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp32),
-          child: Column(
-            children: [
-              const SizedBox(height: SpaceDims.sp24),
-              const Text("Info Discount", style: TypoSty.titlePrimary),
-              Column(
-                children: [
-                  const SizedBox(height: SpaceDims.sp24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text("Info Discount", style: TypoSty.caption),
-                      Text("10%", style: TypoSty.captionBold),
-                    ],
-                  ),
-                  const SizedBox(height: SpaceDims.sp4),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text("Info Discount", style: TypoSty.caption),
-                      Text("10%", style: TypoSty.captionBold),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: SpaceDims.sp22),
-              ElevatedButton(
-                onPressed: () => Navigator.of(context).pop(),
-                style: ElevatedButton.styleFrom(
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(30.0),
-                    ),
-                  ),
-                ),
-                child: const SizedBox(
-                  width: 90.0,
-                  child: Align(alignment: Alignment.center, child: Text("Oke")),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
