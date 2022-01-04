@@ -33,6 +33,18 @@ class TypoSty {
     fontSize: 16.0,
   );
 
+  static const TextStyle captionSemiBold = TextStyle(
+    fontFamily: "Montserrat",
+    fontWeight: FontWeight.w600,
+    fontSize: 16.0,
+  );
+
+  static const TextStyle captionBold = TextStyle(
+    fontFamily: "Montserrat",
+    fontWeight: FontWeight.bold,
+    fontSize: 16.0,
+  );
+
   static const TextStyle caption2 = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.bold,
@@ -42,7 +54,7 @@ class TypoSty {
 
   static const TextStyle button = TextStyle(
     fontFamily: "Montserrat",
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     fontSize: 14.0,
   );
 }

@@ -9,5 +9,13 @@ class Navigate {
   static void toFindLocation(context) => Navigator.of(context).pushReplacement(routeTransition(const FindLocationPage()));
   static void toDashboard(context) => Navigator.of(context).pushReplacement(routeTransition(const DashboardPage()));
   static void toPromoPage(context) => Navigator.of(context).push(routeTransition(const PromoPage()));
-  static void toDetailMenu(context) => Navigator.of(context).push(routeTransition(const DetailMenu()));
+  static void toDetailMenu(context, {
+    required String harga,
+    required String urlImage,
+    required String name,
+    required int amount,
+    int? count,
+  }) => Navigator.of(context).push(routeTransition(
+      DetailMenu(harga: harga, urlImage: urlImage, name: name, count: count, amount: amount),
+  ));
 }

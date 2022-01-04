@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/icons_cs_icons.dart';
 import 'package:java_code_app/thame/spacing.dart';
@@ -18,7 +19,7 @@ class BerandaPage extends StatefulWidget {
 class _BerandaPageState extends State<BerandaPage> {
   @override
   Widget build(BuildContext context) {
-    return SilverAppBar(
+    return MainSilverAppBar(
       title: Stack(
         alignment: Alignment.centerLeft,
         children: [
@@ -37,15 +38,18 @@ class _BerandaPageState extends State<BerandaPage> {
                 bottom: SpaceDims.sp8,
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: ColorSty.primary, width: 1.0),
+                borderSide:
+                    const BorderSide(color: ColorSty.primary, width: 1.0),
                 borderRadius: BorderRadius.circular(30.0),
               ),
               border: OutlineInputBorder(
-                borderSide: const BorderSide(color: ColorSty.primary, width: 1.0),
+                borderSide:
+                    const BorderSide(color: ColorSty.primary, width: 1.0),
                 borderRadius: BorderRadius.circular(30.0),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: ColorSty.primary, width: 2.0),
+                borderSide:
+                    const BorderSide(color: ColorSty.primary, width: 2.0),
                 borderRadius: BorderRadius.circular(30.0),
               ),
             ),
@@ -70,6 +74,12 @@ class _ContentBerandaState extends State<ContentBeranda> {
   int _selectedIndex = 0;
   final ScrollController _controller = ScrollController();
 
+  final List<Widget> _category = [
+    const SizedBox(),
+    const ListMenu(type: "makanan", title: "Makanan"),
+    const ListMenu(type: "minuman", title: "Minuman"),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -87,8 +97,9 @@ class _ContentBerandaState extends State<ContentBeranda> {
                   size: 22.0,
                 ),
                 const SizedBox(width: SpaceDims.sp22),
-                Text("Promo yang Tersedia",
-                    style: TypoSty.title.copyWith(color: ColorSty.primary),
+                Text(
+                  "Promo yang Tersedia",
+                  style: TypoSty.title.copyWith(color: ColorSty.primary),
                 ),
               ],
             ),
@@ -113,19 +124,22 @@ class _ContentBerandaState extends State<ContentBeranda> {
               children: [
                 const SizedBox(width: SpaceDims.sp12),
                 LabelButton(
-                  color: _selectedIndex == 0 ? ColorSty.black : ColorSty.primary,
+                  color:
+                      _selectedIndex == 0 ? ColorSty.black : ColorSty.primary,
                   onPressed: () => setState(() => _selectedIndex = 0),
                   title: "Semua Menu",
                   icon: Icons.list,
                 ),
                 LabelButton(
-                  color: _selectedIndex == 1 ? ColorSty.black : ColorSty.primary,
+                  color:
+                      _selectedIndex == 1 ? ColorSty.black : ColorSty.primary,
                   onPressed: () => setState(() => _selectedIndex = 1),
                   title: "Makanan",
                   icon: Icons.coffee,
                 ),
                 LabelButton(
-                  color: _selectedIndex == 2 ? ColorSty.black : ColorSty.primary,
+                  color:
+                      _selectedIndex == 2 ? ColorSty.black : ColorSty.primary,
                   onPressed: () => setState(() => _selectedIndex = 2),
                   title: "Minuman",
                   icon: IconsCs.ep_coffee,
@@ -141,23 +155,32 @@ class _ContentBerandaState extends State<ContentBeranda> {
       ),
     );
   }
+}
 
-  final List<Widget> _category = [
-    const SizedBox(),
-    Column(
+class ListMenu extends StatelessWidget {
+  final String type, title;
+
+  const ListMenu({Key? key, required this.type, required this.title})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
       children: [
         const SizedBox(height: SpaceDims.sp22),
         Padding(
           padding: const EdgeInsets.only(left: SpaceDims.sp24),
           child: Row(
             children: [
-              const Icon(
-                Icons.coffee,
+              Icon(
+                type.compareTo("makanan") == 0
+                    ? IconsCs.ep_coffee
+                    : Icons.coffee,
                 color: ColorSty.primary,
                 size: 26.0,
               ),
               const SizedBox(width: SpaceDims.sp4),
-              Text("Makanan",
+              Text(title,
                   style: TypoSty.title.copyWith(color: ColorSty.primary)),
             ],
           ),
@@ -168,8 +191,16 @@ class _ContentBerandaState extends State<ContentBeranda> {
           child: Column(
             children: [
               for (Map<String, dynamic> item in datafake)
-                if (item["jenis"]?.compareTo("makanan") == 0)
+                if (item["jenis"]?.compareTo(type) == 0)
                   CardMenu(
+                    onPressed: () => Navigate.toDetailMenu(
+                      context,
+                      count: 0,
+                      name: item["nama"] ?? "",
+                      urlImage: item["image"] ?? "",
+                      harga: item["harga"] ?? "",
+                      amount: item["amount"] ?? 0,
+                    ),
                     nama: item["nama"] ?? "",
                     url: item["image"] ?? "",
                     harga: item["harga"] ?? "",
@@ -179,48 +210,9 @@ class _ContentBerandaState extends State<ContentBeranda> {
           ),
         ),
       ],
-    ),
-    Column(
-      children: [
-        const SizedBox(height: SpaceDims.sp22),
-        Padding(
-          padding: const EdgeInsets.only(left: SpaceDims.sp24),
-          child: Row(
-            children: [
-              const Icon(
-                IconsCs.ep_coffee,
-                color: ColorSty.primary,
-                size: 23.0,
-              ),
-              const SizedBox(width: SpaceDims.sp4),
-              Text(
-                "Minuman",
-                style: TypoSty.title.copyWith(color: ColorSty.primary),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: SpaceDims.sp12),
-        SizedBox(
-          width: double.infinity,
-          child: Column(
-            children: [
-              for (Map<String, dynamic> item in datafake)
-                if (item["jenis"]?.compareTo("minuman") == 0)
-                  CardMenu(
-                    nama: item["nama"] ?? "",
-                    url: item["image"] ?? "",
-                    harga: item["harga"] ?? "",
-                    amount: item["amount"] ?? 0,
-                  ),
-            ],
-          ),
-        ),
-      ],
-    ),
-  ];
+    );
+  }
 }
-
 
 List<Map<String, dynamic>> datafake = [
   {

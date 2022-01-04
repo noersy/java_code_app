@@ -23,7 +23,6 @@ class PromoPage extends StatelessWidget {
             Icon(IconsCs.coupon),
             SizedBox(width: SpaceDims.sp24),
             Text("Promo", style: TypoSty.title),
-            SizedBox(width: SpaceDims.sp32),
           ],
         ),
         body: Column(

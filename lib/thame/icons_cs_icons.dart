@@ -21,7 +21,6 @@ class IconsCs {
   static const _kFontFam = 'IconsCs';
   static const String? _kFontPkg = null;
 
-  static const IconData ep_food = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData order_icon = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData profil = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData pesanan = IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
@@ -38,4 +37,7 @@ class IconsCs {
   static const IconData finger_print = IconData(0xe810, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData ep_coffee = IconData(0xe811, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData bi_cash_coin = IconData(0xe813, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData fire = IconData(0xe814, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData la_list = IconData(0xe815, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData note_icon = IconData(0xe816, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
