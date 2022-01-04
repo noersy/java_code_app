@@ -27,12 +27,18 @@ class DetailMenu extends StatefulWidget {
 
 class _DetailMenuState extends State<DetailMenu> {
   int _jumlahOrder = 0;
+  String _selectedLevel = "1";
+
+  final List<String> _listLevel = [
+    "1", "2", "3"
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorSty.white.withOpacity(0.95),
       body: SilverAppBar(
-        title: const Text("Detai Menu", style: TypoSty.title),
+        title: const Text("Detail Menu", style: TypoSty.title),
         floating: true,
         pinned: true,
         back: true,
@@ -79,7 +85,7 @@ class _DetailMenuState extends State<DetailMenu> {
                               ),
                             ),
                             AddOrderButton(
-                              onChange: (int value){
+                              onChange: (int value) {
                                 setState(() => _jumlahOrder = value);
                               },
                             ),
@@ -113,131 +119,118 @@ class _DetailMenuState extends State<DetailMenu> {
                               icon: IconsCs.fire,
                               title: "Level",
                               prefix: "1",
-                              onPressed: () =>
-                                  showModalBottomSheet(
-                                    isScrollControlled: true,
-                                    barrierColor: ColorSty.grey.withOpacity(
-                                        0.2),
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        BottomSheetDetailMenu(
-                                          title: "Pilih Toping",
-                                          content: Expanded(
-                                            child: ListView(
-                                              scrollDirection: Axis.horizontal,
-                                              children: [
-                                                LabelSelection(
-                                                  title: "1",
-                                                  onSelection: (String value) {
-
-                                                  },
-                                                ),
-                                                LabelSelection(
-                                                  title: "2",
-                                                  onSelection: (String value) {
-
-                                                  },
-                                                ),
-                                                LabelSelection(
-                                                  title: "3",
-                                                  onSelection: (String value) {
-
-                                                  },
-                                                ),
-                                              ],
-                                            ),
-                                          ),
+                              onPressed: () => showModalBottomSheet(
+                                isScrollControlled: true,
+                                barrierColor: ColorSty.grey.withOpacity(0.2),
+                                context: context,
+                                builder: (BuildContext context){
+                                  return StatefulBuilder(
+                                    builder: (BuildContext context, void Function(void Function()) setState) {
+                                    return BottomSheetDetailMenu(
+                                      title: "Pilih Level",
+                                      content: Expanded(
+                                        child: ListView(
+                                          scrollDirection: Axis.horizontal,
+                                          children: _listLevel.map((e) => LabelSelection(
+                                            title: e,
+                                            isSelected: e == _selectedLevel ? true : false,
+                                            onSelection: (String value) => setState(() => _selectedLevel = value),
+                                          ),).toList(),
                                         ),
-                                  ),
+                                      ),
+                                    );
+                                  },
+                                  );
+                                },
+                              ),
                             ),
                             TileListDMenu(
                               prefixIcon: true,
                               icon: IconsCs.topping_icon,
                               title: "Topping",
                               prefix: "Morizela",
-                              onPressed: () =>
-                                  showModalBottomSheet(
-                                    isScrollControlled: true,
-                                    barrierColor: ColorSty.grey.withOpacity(
-                                        0.2),
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        BottomSheetDetailMenu(
-                                          title: "Pilih Toping",
-                                          content: Expanded(
-                                            child: ListView(
-                                              scrollDirection: Axis.horizontal,
-                                              children: [
-                                                LabelSelection(
-                                                  title: "Mozarella",
-                                                  onSelection: (String value) {
-
-                                                  },
-                                                ),
-                                                LabelSelection(
-                                                  title: "Sausagge",
-                                                  onSelection: (String value) {
-
-                                                  },
-                                                ),
-                                                LabelSelection(
-                                                  title: "Dimsum",
-                                                  onSelection: (String value) {
-
-                                                  },
-                                                ),
-                                              ],
-                                            ),
-                                          ),
+                              onPressed: () => showModalBottomSheet(
+                                isScrollControlled: true,
+                                barrierColor: ColorSty.grey.withOpacity(0.2),
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    BottomSheetDetailMenu(
+                                  title: "Pilih Toping",
+                                  content: Expanded(
+                                    child: ListView(
+                                      scrollDirection: Axis.horizontal,
+                                      children: [
+                                        LabelSelection(
+                                          isSelected: "Mozarella"
+                                                  .compareTo(_selectedLevel) ==
+                                              0,
+                                          title: "Mozarella",
+                                          onSelection: (String value) {
+                                            setState(
+                                                () => _selectedLevel = value);
+                                            Navigator.of(context).pop();
+                                          },
                                         ),
+                                        LabelSelection(
+                                          isSelected: "Sausagge"
+                                                  .compareTo(_selectedLevel) ==
+                                              0,
+                                          title: "Sausagge",
+                                          onSelection: (String value) {},
+                                        ),
+                                        LabelSelection(
+                                          isSelected: "Dimsum"
+                                                  .compareTo(_selectedLevel) ==
+                                              0,
+                                          title: "Dimsum",
+                                          onSelection: (String value) {},
+                                        ),
+                                      ],
+                                    ),
                                   ),
+                                ),
+                              ),
                             ),
                             TileListDMenu(
                               prefixIcon: true,
                               icon: IconsCs.note_icon,
                               title: "Catatan",
                               prefix: "Lorem Ipsum sit aaasss",
-                              onPressed: () =>
-                                  showModalBottomSheet(
-                                    isScrollControlled: true,
-                                    barrierColor: ColorSty.grey.withOpacity(
-                                        0.2),
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        BottomSheetDetailMenu(
-                                          title: "Buat Catatan",
-                                          content: Row(
-                                            children: [
-                                              Expanded(
-                                                child: TextFormField(
-                                                  maxLength: 100,
-                                                  decoration: const InputDecoration(
-                                                    contentPadding: EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 0,
-                                                        vertical: 0),
-                                                  ),
-                                                ),
-                                              ),
-                                              ElevatedButton(
-                                                onPressed: () {},
-                                                style: ElevatedButton.styleFrom(
-                                                    padding: const EdgeInsets
-                                                        .all(0),
-                                                    minimumSize: const Size(
-                                                        25.0, 25.0),
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius
-                                                            .circular(100.0)
-                                                    )
-                                                ),
-                                                child: const Icon(
-                                                    Icons.check, size: 26.0),
-                                              ),
-                                            ],
+                              onPressed: () => showModalBottomSheet(
+                                isScrollControlled: true,
+                                barrierColor: ColorSty.grey.withOpacity(0.2),
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    BottomSheetDetailMenu(
+                                  title: "Buat Catatan",
+                                  content: Row(
+                                    children: [
+                                      Expanded(
+                                        child: TextFormField(
+                                          maxLength: 100,
+                                          decoration: const InputDecoration(
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    horizontal: 0, vertical: 0),
                                           ),
                                         ),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {},
+                                        style: ElevatedButton.styleFrom(
+                                            padding: const EdgeInsets.all(0),
+                                            minimumSize: const Size(25.0, 25.0),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(100.0),
+                                            ),
+                                        ),
+                                        child:
+                                            const Icon(Icons.check, size: 26.0),
+                                      ),
+                                    ],
                                   ),
+                                ),
+                              ),
                             ),
                             const Divider(thickness: 1.5),
                             const SizedBox(height: SpaceDims.sp12),
@@ -250,7 +243,7 @@ class _DetailMenuState extends State<DetailMenu> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   padding: const EdgeInsets.symmetric(
-                                      vertical: SpaceDims.sp2,
+                                    vertical: SpaceDims.sp2,
                                   ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30.0),
@@ -283,49 +276,43 @@ class _DetailMenuState extends State<DetailMenu> {
   }
 }
 
-class LabelSelection extends StatefulWidget {
+class LabelSelection extends StatelessWidget {
   final String title;
+  final bool isSelected;
   final ValueChanged<String> onSelection;
 
-  const LabelSelection(
-      {Key? key, required this.title, required this.onSelection})
-      : super(key: key);
+  const LabelSelection({
+    Key? key,
+    required this.title,
+    required this.onSelection,
+    required this.isSelected,
+  }) : super(key: key);
 
-  @override
-  _LabelSelectionState createState() => _LabelSelectionState();
-}
-
-class _LabelSelectionState extends State<LabelSelection> {
-  bool _isSelected = false;
-
-  @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(
           vertical: SpaceDims.sp20, horizontal: SpaceDims.sp4),
       child: TextButton(
         style: TextButton.styleFrom(
-            backgroundColor: _isSelected ? ColorSty.primary : ColorSty.white,
-            primary: !_isSelected ? ColorSty.primary : ColorSty.white,
-            padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
-            minimumSize: Size.zero,
-            shape: RoundedRectangleBorder(
-              side: const BorderSide(color: ColorSty.primary),
-              borderRadius: BorderRadius.circular(30.0),
-            )
+          backgroundColor: isSelected ? ColorSty.primary : ColorSty.white,
+          primary: !isSelected ? ColorSty.primary : ColorSty.white,
+          padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
+          minimumSize: Size.zero,
+          shape: RoundedRectangleBorder(
+            side: const BorderSide(color: ColorSty.primary),
+            borderRadius: BorderRadius.circular(30.0),
+          ),
         ),
         onPressed: () {
-          setState(() {
-            _isSelected = !_isSelected;
-            widget.onSelection(widget.title);
-          });
+          onSelection(title);
+          Navigator.of(context).pop();
         },
         child: Row(
           children: [
             const SizedBox(width: SpaceDims.sp4),
-            Text(widget.title),
+            Text(title),
             const SizedBox(width: SpaceDims.sp4),
-            if(_isSelected) const Icon(Icons.check, size: 18.0),
+            if (isSelected) const Icon(Icons.check, size: 18.0),
           ],
         ),
       ),
@@ -340,14 +327,16 @@ class TileListDMenu extends StatelessWidget {
   final TextStyle? textStylePrefix;
   final Function() onPressed;
   final bool? dense;
+
   const TileListDMenu({
     Key? key,
     required this.title,
     required this.prefix,
     required this.icon,
-
     this.prefixIcon,
-    required this.onPressed, this.textStylePrefix, this.dense,
+    required this.onPressed,
+    this.textStylePrefix,
+    this.dense,
   }) : super(key: key);
 
   @override
@@ -356,9 +345,7 @@ class TileListDMenu extends StatelessWidget {
       children: [
         const Divider(thickness: 1.5),
         ListTile(
-          onTap: prefixIcon ?? false
-              ? onPressed
-              : null,
+          onTap: prefixIcon ?? false ? onPressed : null,
           leading: Padding(
             padding: const EdgeInsets.only(top: SpaceDims.sp2),
             child: Icon(icon, color: ColorSty.primary, size: 22.0),
@@ -378,16 +365,25 @@ class TileListDMenu extends StatelessWidget {
                     child: Text(
                       prefix,
                       style: prefixIcon ?? false
-                          ? TypoSty.captionSemiBold.copyWith(fontWeight: FontWeight.normal).merge(textStylePrefix)
+                          ? TypoSty.captionSemiBold
+                              .copyWith(fontWeight: FontWeight.normal)
+                              .merge(textStylePrefix)
                           : dense ?? false
-                          ? TypoSty.captionSemiBold.copyWith(fontWeight: FontWeight.normal).merge(textStylePrefix) : TypoSty.title.copyWith(color: ColorSty.primary).merge(textStylePrefix),
+                              ? TypoSty.captionSemiBold
+                                  .copyWith(fontWeight: FontWeight.normal)
+                                  .merge(textStylePrefix)
+                              : TypoSty.title
+                                  .copyWith(color: ColorSty.primary)
+                                  .merge(textStylePrefix),
                       textAlign: TextAlign.right,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   if (prefixIcon ?? false)
-                     Padding(
-                      padding: EdgeInsets.only(left: dense ?? false ? SpaceDims.sp4 :  SpaceDims.sp8),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: dense ?? false ? SpaceDims.sp4 : SpaceDims.sp8,
+                      ),
                       child: Icon(
                         Icons.arrow_forward_ios,
                         size: dense ?? false ? 18.0 : 22.0,
@@ -467,14 +463,8 @@ class BottomSheetDetailMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 140,
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
-      margin: EdgeInsets.only(bottom: MediaQuery
-          .of(context)
-          .viewInsets
-          .bottom),
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp12),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp16),
@@ -491,10 +481,7 @@ class BottomSheetDetailMenu extends StatelessWidget {
             ),
             const SizedBox(height: SpaceDims.sp16),
             SizedBox(
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
+              width: MediaQuery.of(context).size.width,
               child: Text(title, style: TypoSty.title),
             ),
             content,
