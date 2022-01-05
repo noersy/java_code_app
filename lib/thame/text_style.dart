@@ -12,6 +12,7 @@ class TypoSty {
   static TextStyle title = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.bold,
+    color: ColorSty.black,
     fontSize: ScreenUtil().setSp(16),
   );
 
@@ -21,10 +22,16 @@ class TypoSty {
     color: ColorSty.primary,
     fontSize: 20.0,
   );
-  
+
   static const TextStyle subtitle = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.bold,
+    fontSize: 16.0,
+  );
+
+  static const TextStyle subtitle2 = TextStyle(
+    fontFamily: "Montserrat",
+    fontWeight: FontWeight.w600,
     fontSize: 16.0,
   );
 
@@ -63,5 +70,10 @@ class TypoSty {
     fontFamily: "Montserrat",
     fontWeight: FontWeight.w600,
     fontSize: 14.0,
+  );
+
+  static const TextStyle mini = TextStyle(
+    fontWeight: FontWeight.normal,
+    fontSize: 11.0,
   );
 }

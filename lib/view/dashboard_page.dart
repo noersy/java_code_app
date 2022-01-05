@@ -22,6 +22,7 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
+      backgroundColor: ColorSty.white,
       bottomNavigationBar: ClipRRect(
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(30.0),
@@ -62,7 +63,7 @@ class _DashboardPageState extends State<DashboardPage> {
       floatingActionButton: AnimatedBuilder(
         animation: OrderProvider(),
         builder: (BuildContext context, Widget? child) {
-          int _order = Provider.of<OrderProvider>(context).order;
+          int _order = Provider.of<OrderProvider>(context).checkOrder;
           if (_order > 0) {
             return FloatingActionButton(
               backgroundColor: ColorSty.primary,

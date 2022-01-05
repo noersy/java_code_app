@@ -1,17 +1,20 @@
 import 'package:flutter/cupertino.dart';
 
 class OrderProvider extends ChangeNotifier {
-  static int _order = 0;
+  static int _checkOrder = 0;
+  static int _orderInProgress = 0;
 
-  int get order => _order;
+  int get checkOrder => _checkOrder;
+  int get orderProgress => _orderInProgress;
 
   addOrder(int jumlah) async {
-    _order += jumlah;
+    _checkOrder += jumlah;
     notifyListeners();
   }
 
   submitOrder() async {
-    _order = 0;
+    _orderInProgress = _checkOrder;
+    _checkOrder = 0;
     notifyListeners();
   }
 }
