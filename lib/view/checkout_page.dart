@@ -242,7 +242,7 @@ class ListOrder extends StatelessWidget {
               for (Map<String, dynamic> item in orders)
                 if (item["jenis"]?.compareTo(type) == 0)
                   CardMenu(
-                    onPressed: () => Navigate.toEditOrder(
+                    onPressed: () => Navigate.toViewOrder(
                       context,
                       count: 1,
                       name: item["nama"] ?? "",
