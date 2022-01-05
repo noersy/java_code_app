@@ -4,7 +4,7 @@ import 'package:java_code_app/thame/spacing.dart';
 
 class SilverAppBar extends StatelessWidget {
   final Widget body, title;
-  final bool? back, notScrolled;
+  final bool? back, notScrolled, tabs;
   final List<Widget>? actions;
   final bool pinned, floating;
 
@@ -15,7 +15,7 @@ class SilverAppBar extends StatelessWidget {
     required this.pinned,
     required this.floating,
     this.actions,
-    this.back, this.notScrolled,
+    this.back, this.notScrolled, this.tabs,
   }) : super(key: key);
 
   @override
@@ -36,7 +36,7 @@ class SilverAppBar extends StatelessWidget {
               ) : null,
               backgroundColor: ColorSty.white,
               iconTheme: const IconThemeData(color: ColorSty.primary),
-              title: Row(
+              title: tabs ?? false ? title : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   title,

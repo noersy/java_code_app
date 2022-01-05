@@ -20,46 +20,48 @@ class BerandaPage extends StatefulWidget {
 class _BerandaPageState extends State<BerandaPage> {
   @override
   Widget build(BuildContext context) {
-    return MainSilverAppBar(
-      title: Stack(
-        alignment: Alignment.centerLeft,
-        children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: SpaceDims.sp14),
-            child: Icon(IconsCs.search_icon),
-          ),
-          TextFormField(
-            decoration: InputDecoration(
-              isDense: true,
-              hintText: "Pencarian",
-              contentPadding: const EdgeInsets.only(
-                left: 53,
-                right: SpaceDims.sp12,
-                top: SpaceDims.sp12,
-                bottom: SpaceDims.sp8,
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide:
-                    const BorderSide(color: ColorSty.primary, width: 1.0),
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-              border: OutlineInputBorder(
-                borderSide:
-                    const BorderSide(color: ColorSty.primary, width: 1.0),
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide:
-                    const BorderSide(color: ColorSty.primary, width: 2.0),
-                borderRadius: BorderRadius.circular(30.0),
+    return Scaffold(
+      body: MainSilverAppBar(
+        title: Stack(
+          alignment: Alignment.centerLeft,
+          children: [
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: SpaceDims.sp14),
+              child: Icon(IconsCs.search_icon),
+            ),
+            TextFormField(
+              decoration: InputDecoration(
+                isDense: true,
+                hintText: "Pencarian",
+                contentPadding: const EdgeInsets.only(
+                  left: 53,
+                  right: SpaceDims.sp12,
+                  top: SpaceDims.sp12,
+                  bottom: SpaceDims.sp8,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide:
+                      const BorderSide(color: ColorSty.primary, width: 1.0),
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                border: OutlineInputBorder(
+                  borderSide:
+                      const BorderSide(color: ColorSty.primary, width: 1.0),
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide:
+                      const BorderSide(color: ColorSty.primary, width: 2.0),
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
+        floating: true,
+        pinned: true,
+        body: const ContentBeranda(),
       ),
-      floating: true,
-      pinned: true,
-      body: const ContentBeranda(),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/icons_cs_icons.dart';
 import 'package:java_code_app/view/beranda_page.dart';
+import 'package:java_code_app/view/pesanan_page.dart';
 import 'package:provider/provider.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -54,7 +55,7 @@ class _DashboardPageState extends State<DashboardPage> {
         controller: _pageController,
         children: const [
           BerandaPage(),
-          Text("2"),
+          PesananPage(),
           Text("3"),
         ],
       ),

@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         builder: () => MaterialApp(
           title: 'Java Code App',
           debugShowCheckedModeBanner: false,
-          initialRoute: "dashboard",
+          initialRoute: "/",
           routes: {"dashboard": (_) => const DashboardPage()},
           theme: ThemeData.light().copyWith(
             colorScheme: ThemeData().colorScheme.copyWith(

@@ -12,7 +12,6 @@ class TypoSty {
   static TextStyle title = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.bold,
-    color: ColorSty.black,
     fontSize: ScreenUtil().setSp(16),
   );
 

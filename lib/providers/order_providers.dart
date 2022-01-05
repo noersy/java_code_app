@@ -9,4 +9,9 @@ class OrderProvider extends ChangeNotifier {
     _order += jumlah;
     notifyListeners();
   }
+
+  submitOrder() async {
+    _order = 0;
+    notifyListeners();
+  }
 }

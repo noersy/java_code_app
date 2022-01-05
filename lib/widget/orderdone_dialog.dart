@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/thame/spacing.dart';
 import 'package:java_code_app/thame/text_style.dart';
+import 'package:provider/provider.dart';
 
 class OrderDoneDialog extends StatelessWidget {
   const OrderDoneDialog({Key? key}) : super(key: key);
@@ -65,10 +67,7 @@ class OrderDoneDialog extends StatelessWidget {
                               ),
                             ),
                           ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          },
+                          onPressed: () => _submit(context),
                           child: const SizedBox(
                             width: double.infinity,
                             child: Align(
@@ -87,5 +86,12 @@ class OrderDoneDialog extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _submit(context) async{
+    await Provider.of<OrderProvider>(context, listen: false).submitOrder();
+    Navigator.pop(context);
+    Navigator.pop(context);
+
   }
 }
