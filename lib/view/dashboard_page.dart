@@ -3,6 +3,7 @@ import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/icons_cs_icons.dart';
+import 'package:java_code_app/thame/text_style.dart';
 import 'package:java_code_app/view/beranda_page.dart';
 import 'package:java_code_app/view/pesanan_page.dart';
 import 'package:provider/provider.dart';
@@ -32,16 +33,45 @@ class _DashboardPageState extends State<DashboardPage> {
           elevation: 10,
           backgroundColor: ColorSty.black60,
           unselectedItemColor: ColorSty.white,
-          items: const [
-            BottomNavigationBarItem(
+          items: [
+            const BottomNavigationBarItem(
               icon: Icon(IconsCs.beranda, size: 28.0),
               label: 'Beranda',
             ),
             BottomNavigationBarItem(
-              icon: Icon(IconsCs.pesanan, size: 32.0),
+              icon: Stack(children: [
+                const Icon(IconsCs.pesanan, size: 32.0),
+                Positioned(
+                  top: 0.0,
+                  right: 0.0,
+                  child: AnimatedBuilder(
+                    animation: OrderProvider(),
+                    builder: (BuildContext context, Widget? child) {
+                      int _orderOngoing = 0;
+                      _orderOngoing = Provider.of<OrderProvider>(context).orderProgress;
+                      if (_orderOngoing > 0) {
+                        return Container(
+                          height: 20,
+                          width: 20,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: ColorSty.primary,
+                              borderRadius: BorderRadius.circular(100.0),
+                              border: Border.all(color: ColorSty.white)),
+                          child: Text("2",
+                              style: TypoSty.button
+                                  .copyWith(color: ColorSty.white)),
+                        );
+                      }else{
+                        return const SizedBox.shrink();
+                      }
+                    },
+                  ),
+                )
+              ]),
               label: 'Pesanan',
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(IconsCs.profil, size: 28.0),
               label: 'Profil',
             ),
