@@ -30,7 +30,7 @@ class EditOrderPage extends StatefulWidget {
 }
 
 class _EditOrderPageState extends State<EditOrderPage> {
-  int _jumlahOrder = 0;
+  int _jumlahOrder = 2;
   String _selectedLevel = "1";
   List<String> _selectedTopping = [];
 
@@ -220,13 +220,12 @@ class _EditOrderPageState extends State<EditOrderPage> {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(
-              horizontal: SpaceDims.sp24, vertical: SpaceDims.sp8),
+            horizontal: SpaceDims.sp24,
+            vertical: SpaceDims.sp8,
+          ),
           child: ElevatedButton(
             onPressed: () {
-              showDialog(
-                context: context,
-                builder: (_) => VFingerPrintDialog(ctx: context),
-              );
+              Navigator.pop(context);
             },
             style: ElevatedButton.styleFrom(
               shape: const RoundedRectangleBorder(

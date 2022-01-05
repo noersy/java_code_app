@@ -35,6 +35,7 @@ class _CardMenuState extends State<CardMenu> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12, vertical: SpaceDims.sp2),
       child: Card(
+        elevation: 4,
         color: ColorSty.white80,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -56,9 +57,11 @@ class _CardMenuState extends State<CardMenu> {
                   child: Image.asset(widget.url),
                 ),
                 decoration: BoxDecoration(
+                  color: ColorSty.grey60,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
+              const SizedBox(width: SpaceDims.sp8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

@@ -21,6 +21,7 @@ class _BerandaPageState extends State<BerandaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: MainSilverAppBar(
         title: Stack(
           alignment: Alignment.centerLeft,
@@ -127,15 +128,13 @@ class _ContentBerandaState extends State<ContentBeranda> {
               children: [
                 const SizedBox(width: SpaceDims.sp12),
                 LabelButton(
-                  color:
-                      _selectedIndex == 0 ? ColorSty.black : ColorSty.primary,
+                  color: _selectedIndex == 0 ? ColorSty.black : ColorSty.primary,
                   onPressed: () => setState(() => _selectedIndex = 0),
                   title: "Semua Menu",
                   icon: Icons.list,
                 ),
                 LabelButton(
-                  color:
-                      _selectedIndex == 1 ? ColorSty.black : ColorSty.primary,
+                  color: _selectedIndex == 1 ? ColorSty.black : ColorSty.primary,
                   onPressed: () => setState(() => _selectedIndex = 1),
                   title: "Makanan",
                   icon: Icons.coffee,

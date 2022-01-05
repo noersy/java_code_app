@@ -12,7 +12,7 @@ class PromoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorSty.white.withOpacity(0.95),
+      backgroundColor: ColorSty.bg2,
       body: SilverAppBar(
         floating: true,
         pinned: true,

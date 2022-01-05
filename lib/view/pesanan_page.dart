@@ -68,8 +68,8 @@ class OngoingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-        right: SpaceDims.sp24,
-        left: SpaceDims.sp24,
+        right: SpaceDims.sp18,
+        left: SpaceDims.sp18,
         top: SpaceDims.sp12,
       ),
       child: Column(
@@ -82,13 +82,6 @@ class OngoingScreen extends StatelessWidget {
               name: "name",
               amount: 1,
             ),
-            urlImage: "urlImage",
-            title: " title",
-            date: " date",
-            harga: "harga",
-          ),
-          OrderMenuCard(
-            onPressed: () {},
             urlImage: "urlImage",
             title: " title",
             date: " date",
@@ -115,90 +108,94 @@ class OrderMenuCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 138,
-      width: double.infinity,
-      margin: const EdgeInsets.symmetric(vertical: SpaceDims.sp8),
-      decoration: BoxDecoration(
-        color: ColorSty.grey90,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(7.0),
-        ),
-        boxShadow: ShadowsB.boxShadow2,
+    return Card(
+      elevation: 4,
+      color: ColorSty.white80,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
       ),
-      child: InkWell(
-        onTap: onPressed,
-        child: Row(
-          children: [
-            Container(
-              width: 120,
-              height: 120,
-              padding: const EdgeInsets.all(SpaceDims.sp14),
-              margin: const EdgeInsets.all(SpaceDims.sp8),
-              decoration: BoxDecoration(
-                color: ColorSty.grey60,
-                borderRadius: BorderRadius.circular(10.0),
+      child: Container(
+        height: 138,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(10.0),
+          ),
+        ),
+        child: InkWell(
+          onTap: onPressed,
+          child: Row(
+            children: [
+              Container(
+                width: 120,
+                height: 120,
+                padding: const EdgeInsets.all(SpaceDims.sp14),
+                margin: const EdgeInsets.all(SpaceDims.sp8),
+                decoration: BoxDecoration(
+                  color: ColorSty.grey60,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Image.asset("assert/image/menu/1637916792.png"),
               ),
-              child: Image.asset("assert/image/menu/1637916792.png"),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: SpaceDims.sp18),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: SpaceDims.sp18),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.access_time,
+                                  size: 18.0,
+                                  color: Colors.orange,
+                                ),
+                                const SizedBox(width: SpaceDims.sp4),
+                                Text(
+                                  "Sedang disiapkan",
+                                  style:
+                                      TypoSty.mini.copyWith(color: Colors.orange),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              "20 Des 2021",
+                              style: TypoSty.mini.copyWith(color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: SpaceDims.sp12),
+                      Text("Fried Rice, Chicken Katsu", style: TypoSty.title),
+                      const SizedBox(height: SpaceDims.sp12),
+                      Row(
                         children: [
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.access_time,
-                                size: 18.0,
-                                color: Colors.orange,
-                              ),
-                              const SizedBox(width: SpaceDims.sp4),
-                              Text(
-                                "Sedang disiapkan",
-                                style:
-                                    TypoSty.mini.copyWith(color: Colors.orange),
-                              ),
-                            ],
-                          ),
                           Text(
-                            "20 Des 2021",
-                            style: TypoSty.mini.copyWith(color: Colors.grey),
+                            "Rp 20.000",
+                            style: TypoSty.mini.copyWith(
+                                fontSize: 14.0, color: ColorSty.primary),
+                          ),
+                          const SizedBox(width: SpaceDims.sp8),
+                          Text(
+                            "(3 Menu)",
+                            style: TypoSty.mini.copyWith(
+                              fontSize: 12.0,
+                              color: ColorSty.grey,
+                            ),
                           ),
                         ],
-                      ),
-                    ),
-                    const SizedBox(height: SpaceDims.sp12),
-                    Text("Fried Rice, Chicken Katsu", style: TypoSty.title),
-                    const SizedBox(height: SpaceDims.sp12),
-                    Row(
-                      children: [
-                        Text(
-                          "Rp 20.000",
-                          style: TypoSty.mini.copyWith(
-                              fontSize: 14.0, color: ColorSty.primary),
-                        ),
-                        const SizedBox(width: SpaceDims.sp8),
-                        Text(
-                          "(3 Menu)",
-                          style: TypoSty.mini.copyWith(
-                            fontSize: 12.0,
-                            color: ColorSty.grey,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -221,7 +218,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: SpaceDims.sp24,
+        horizontal: SpaceDims.sp18,
         vertical: SpaceDims.sp14,
       ),
       child: Column(
@@ -300,141 +297,145 @@ class OrderHistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 138,
-      width: double.infinity,
-      margin: const EdgeInsets.symmetric(vertical: SpaceDims.sp8),
-      decoration: BoxDecoration(
-        color: ColorSty.grey90.withOpacity(0.5),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(7.0),
-        ),
-        boxShadow: ShadowsB.boxShadow2,
+    return Card(
+      elevation: 4,
+      color: ColorSty.white80,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
       ),
-      child: InkWell(
-        onTap: onPressed,
-        child: Row(
-          children: [
-            Container(
-              width: 120,
-              height: 120,
-              padding: const EdgeInsets.all(SpaceDims.sp14),
-              margin: const EdgeInsets.all(SpaceDims.sp8),
-              decoration: BoxDecoration(
-                color: ColorSty.grey60,
-                borderRadius: BorderRadius.circular(10.0),
+      child: Container(
+        height: 138,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(10.0),
+          ),
+        ),
+        child: InkWell(
+          onTap: onPressed,
+          child: Row(
+            children: [
+              Container(
+                width: 120,
+                height: 120,
+                padding: const EdgeInsets.all(SpaceDims.sp14),
+                margin: const EdgeInsets.all(SpaceDims.sp8),
+                decoration: BoxDecoration(
+                  color: ColorSty.grey60,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Image.asset("assert/image/menu/1637916792.png"),
               ),
-              child: Image.asset("assert/image/menu/1637916792.png"),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(top: SpaceDims.sp8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: SpaceDims.sp18),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: SpaceDims.sp8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: SpaceDims.sp18),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.check,
+                                  size: 18.0,
+                                  color: Colors.green,
+                                ),
+                                const SizedBox(width: SpaceDims.sp4),
+                                Text(
+                                  "Selesai",
+                                  style:
+                                      TypoSty.mini.copyWith(color: Colors.green),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              "20 Des 2021",
+                              style: TypoSty.mini
+                                  .copyWith(color: Colors.grey, fontSize: 14.0),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: SpaceDims.sp2),
+                      Text("Fried Rice, Chicken Katsu", style: TypoSty.title),
+                      const SizedBox(height: SpaceDims.sp4),
+                      Row(
                         children: [
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.check,
-                                size: 18.0,
-                                color: Colors.green,
-                              ),
-                              const SizedBox(width: SpaceDims.sp4),
-                              Text(
-                                "Selesai",
-                                style:
-                                    TypoSty.mini.copyWith(color: Colors.green),
-                              ),
-                            ],
-                          ),
                           Text(
-                            "20 Des 2021",
-                            style: TypoSty.mini
-                                .copyWith(color: Colors.grey, fontSize: 14.0),
+                            "Rp 20.000",
+                            style: TypoSty.mini.copyWith(
+                                fontSize: 14.0, color: ColorSty.primary),
+                          ),
+                          const SizedBox(width: SpaceDims.sp8),
+                          Text(
+                            "(3 Menu)",
+                            style: TypoSty.mini.copyWith(
+                              fontSize: 12.0,
+                              color: ColorSty.grey,
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                    const SizedBox(height: SpaceDims.sp2),
-                    Text("Fried Rice, Chicken Katsu", style: TypoSty.title),
-                    const SizedBox(height: SpaceDims.sp4),
-                    Row(
-                      children: [
-                        Text(
-                          "Rp 20.000",
-                          style: TypoSty.mini.copyWith(
-                              fontSize: 14.0, color: ColorSty.primary),
-                        ),
-                        const SizedBox(width: SpaceDims.sp8),
-                        Text(
-                          "(3 Menu)",
-                          style: TypoSty.mini.copyWith(
-                            fontSize: 12.0,
-                            color: ColorSty.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: Size.zero,
-                            primary: ColorSty.white,
-                            onPrimary: ColorSty.primary,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: SpaceDims.sp8,
-                              horizontal: SpaceDims.sp12,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              side: const BorderSide(
-                                color: ColorSty.primaryDark,
-                                width: 2,
+                      Row(
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size.zero,
+                              primary: ColorSty.white,
+                              onPrimary: ColorSty.primary,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: SpaceDims.sp8,
+                                horizontal: SpaceDims.sp12,
                               ),
-                              borderRadius: BorderRadius.circular(30.0),
-                            ),
-                          ),
-                          onPressed: () {},
-                          child: Text(
-                            "Beri Penilaian",
-                            style: TypoSty.button.copyWith(fontSize: 11.0),
-                          ),
-                        ),
-                        const SizedBox(width: SpaceDims.sp8),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: Size.zero,
-                            primary: ColorSty.primary,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: SpaceDims.sp8,
-                              horizontal: SpaceDims.sp12,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              side: const BorderSide(
-                                color: ColorSty.primaryDark,
-                                width: 2,
+                              shape: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                  color: ColorSty.primaryDark,
+                                  width: 2,
+                                ),
+                                borderRadius: BorderRadius.circular(30.0),
                               ),
-                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            onPressed: () {},
+                            child: Text(
+                              "Beri Penilaian",
+                              style: TypoSty.button.copyWith(fontSize: 11.0),
                             ),
                           ),
-                          onPressed: () {},
-                          child: Text(
-                            "Pesan Lagi",
-                            style: TypoSty.button.copyWith(fontSize: 11.0),
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
+                          const SizedBox(width: SpaceDims.sp8),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size.zero,
+                              primary: ColorSty.primary,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: SpaceDims.sp8,
+                                horizontal: SpaceDims.sp12,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                  color: ColorSty.primaryDark,
+                                  width: 2,
+                                ),
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                            ),
+                            onPressed: () {},
+                            child: Text(
+                              "Pesan Lagi",
+                              style: TypoSty.button.copyWith(fontSize: 11.0),
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

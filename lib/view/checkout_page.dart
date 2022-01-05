@@ -199,6 +199,64 @@ class CheckOutPage extends StatelessWidget {
   }
 }
 
+class ListOrderOngoing extends StatelessWidget {
+  final String type, title;
+
+  const ListOrderOngoing({
+    Key? key,
+    required this.type,
+    required this.title,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(height: SpaceDims.sp22),
+        Padding(
+          padding: const EdgeInsets.only(left: SpaceDims.sp24),
+          child: Row(
+            children: [
+              Icon(
+                type.compareTo("makanan") == 0
+                    ? Icons.coffee
+                    : IconsCs.ep_coffee,
+                color: ColorSty.primary,
+                size: 26.0,
+              ),
+              const SizedBox(width: SpaceDims.sp4),
+              Text(
+                title,
+                style: TypoSty.title.copyWith(
+                  color: ColorSty.primary,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: SpaceDims.sp12),
+        SizedBox(
+          width: double.infinity,
+          child: Column(
+            children: [
+              for (Map<String, dynamic> item in orders)
+                if (item["jenis"]?.compareTo(type) == 0)
+                  CardMenu(
+                    onPressed: (){},
+                    nama: item["nama"] ?? "",
+                    url: item["image"] ?? "",
+                    harga: item["harga"] ?? "",
+                    amount: item["amount"] ?? 0,
+                    count: 2,
+                  ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class ListOrder extends StatelessWidget {
   final String type, title;
 
@@ -242,7 +300,7 @@ class ListOrder extends StatelessWidget {
               for (Map<String, dynamic> item in orders)
                 if (item["jenis"]?.compareTo(type) == 0)
                   CardMenu(
-                    onPressed: () => Navigate.toViewOrder(
+                    onPressed: () => Navigate.toEditOrderMenu(
                       context,
                       count: 1,
                       name: item["nama"] ?? "",

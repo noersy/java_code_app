@@ -34,11 +34,11 @@ class OrderPage extends StatelessWidget {
             children: [
               Column(
                 children: const [
-                  ListOrder(
+                  ListOrderOngoing(
                     title: 'Makanan',
                     type: 'makanan',
                   ),
-                  ListOrder(
+                  ListOrderOngoing(
                     title: 'Minuman',
                     type: 'minuman',
                   ),

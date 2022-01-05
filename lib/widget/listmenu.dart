@@ -58,7 +58,7 @@ class ListMenu extends StatelessWidget {
                     url: item["image"] ?? "",
                     harga: item["harga"] ?? "",
                     amount: item["amount"] ?? 0,
-                    count: 1,
+                    count: 0,
                   ),
             ],
           ),

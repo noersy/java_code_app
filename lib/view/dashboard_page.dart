@@ -58,9 +58,8 @@ class _DashboardPageState extends State<DashboardPage> {
                               color: ColorSty.primary,
                               borderRadius: BorderRadius.circular(100.0),
                               border: Border.all(color: ColorSty.white)),
-                          child: Text("2",
-                              style: TypoSty.button
-                                  .copyWith(color: ColorSty.white)),
+                          child: Text("$_orderOngoing",
+                              style: TypoSty.button.copyWith(color: ColorSty.white,),),
                         );
                       }else{
                         return const SizedBox.shrink();

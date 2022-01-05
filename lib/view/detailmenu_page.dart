@@ -40,7 +40,7 @@ class _DetailMenuState extends State<DetailMenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorSty.white.withOpacity(0.95),
+      backgroundColor: ColorSty.bg2,
       body: SilverAppBar(
         title: Text("Detail Menu", style: TypoSty.title),
         floating: true,
