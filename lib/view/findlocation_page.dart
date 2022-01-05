@@ -50,8 +50,8 @@ class _FindLocationPageState extends State<FindLocationPage> {
                   ),
                   Image.asset("assert/image/maps_ilustrasion.png"),
                   const SizedBox(height: SpaceDims.sp8),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: SpaceDims.sp16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp16),
                     child: Text(
                       "Perumahan Griyashanta Permata N-524, Mojolangu, Kec. Lowokwaru, Kota Malang",
                       textAlign: TextAlign.center,

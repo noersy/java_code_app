@@ -31,10 +31,11 @@ class LoginPage extends StatelessWidget {
                     const SizedBox(height: 80.0),
                     Image.asset("assert/image/javacode_logo.png"),
                     const SizedBox(height: 90.0),
-                    const SizedBox(
+                     SizedBox(
                       width: 339.0,
                       child: Text('Masuk untuk melanjutkan!',
-                          style: TypoSty.title),
+                          style: TypoSty.title,
+                      ),
                     ),
                     const SizedBox(height: 30.0),
                     FormLogin(

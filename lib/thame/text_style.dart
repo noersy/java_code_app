@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/thame/colors.dart';
 
 class TypoSty {
@@ -8,11 +9,11 @@ class TypoSty {
     fontSize: 36.0,
   );
 
-  static const TextStyle title = TextStyle(
+  static TextStyle title = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.bold,
     color: ColorSty.black,
-    fontSize: 20.0,
+    fontSize: ScreenUtil().setSp(16),
   );
 
   static const TextStyle titlePrimary = TextStyle(

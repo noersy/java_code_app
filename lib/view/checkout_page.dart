@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/icons_cs_icons.dart';
+import 'package:java_code_app/thame/shadows.dart';
 import 'package:java_code_app/thame/spacing.dart';
 import 'package:java_code_app/thame/text_style.dart';
 import 'package:java_code_app/view/beranda_page.dart';
-import 'package:java_code_app/view/detailmenu_page.dart';
 import 'package:java_code_app/widget/infodiscount_dialog.dart';
 import 'package:java_code_app/widget/listmenut_tile.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
+import 'package:java_code_app/widget/vp_fingerprint_dialog.dart';
 
 class CheckOutPage extends StatelessWidget {
   const CheckOutPage({Key? key}) : super(key: key);
@@ -19,11 +20,11 @@ class CheckOutPage extends StatelessWidget {
       body: SilverAppBar(
         notScrolled: true,
         title: Row(
-          children: const [
-            Icon(IconsCs.pesanan, size: 28.0),
-            SizedBox(width: SpaceDims.sp8),
+          children: [
+            const Icon(IconsCs.pesanan, size: 28.0),
+            const SizedBox(width: SpaceDims.sp8),
             Text("Pesanan", style: TypoSty.title),
-            SizedBox(width: SpaceDims.sp8),
+            const SizedBox(width: SpaceDims.sp8),
           ],
         ),
         pinned: true,
@@ -69,7 +70,7 @@ class CheckOutPage extends StatelessWidget {
                 children: [
                   Padding(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: SpaceDims.sp24),
+                    const EdgeInsets.symmetric(horizontal: SpaceDims.sp24),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -105,9 +106,10 @@ class CheckOutPage extends StatelessWidget {
                           prefix: "Rp 4.000",
                           textStylePrefix: const TextStyle(color: Colors.red),
                           icon: Icons.wine_bar,
-                          onPressed: () => showDialog(
-                              context: context,
-                              builder: (_) => const InfoDiscountDialog()),
+                          onPressed: () =>
+                              showDialog(
+                                  context: context,
+                                  builder: (_) => const InfoDiscountDialog()),
                         ),
                         TileListDMenu(
                           dense: true,
@@ -137,38 +139,13 @@ class CheckOutPage extends StatelessWidget {
               height: 60.0,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  color: ColorSty.white,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: const Offset(0, -0.9),
-                      color: ColorSty.grey80.withOpacity(0.05),
-                      spreadRadius: 10,
-                    ),
-                    BoxShadow(
-                      offset: const Offset(0, -0.9),
-                      color: ColorSty.grey80.withOpacity(0.05),
-                      spreadRadius: 8,
-                    ),
-                    BoxShadow(
-                      offset: const Offset(0, -0.9),
-                      color: ColorSty.grey80.withOpacity(0.1),
-                      spreadRadius: 7,
-                    ),
-                    BoxShadow(
-                      offset: const Offset(0, -0.9),
-                      color: ColorSty.grey80.withOpacity(0.1),
-                      spreadRadius: 3,
-                    ),
-                    BoxShadow(
-                      offset: const Offset(0, -0.9),
-                      color: ColorSty.grey80.withOpacity(0.1),
-                      spreadRadius: 2,
-                    ),
-                  ]),
+                color: ColorSty.white,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(30.0),
+                  topRight: Radius.circular(30.0),
+                ),
+                boxShadow: ShadowsB.boxShadow1,
+              ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp24),
                 child: Row(
@@ -195,7 +172,9 @@ class CheckOutPage extends StatelessWidget {
                       ],
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        showDialog(context: context, builder: (_) => VFingerPrintDialog(ctx: context));
+                      },
                       style: ElevatedButton.styleFrom(
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(

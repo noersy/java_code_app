@@ -19,9 +19,9 @@ class PromoPage extends StatelessWidget {
         back: true,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(IconsCs.coupon),
-            SizedBox(width: SpaceDims.sp24),
+          children:  [
+            const Icon(IconsCs.coupon),
+            const SizedBox(width: SpaceDims.sp24),
             Text("Promo", style: TypoSty.title),
           ],
         ),
@@ -58,7 +58,7 @@ class PromoPage extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text("Nama Promo", style: TypoSty.title),
+                            Text("Nama Promo", style: TypoSty.title),
                             Text("Diskon 10%",
                                 style: TypoSty.title
                                     .copyWith(color: ColorSty.primary))

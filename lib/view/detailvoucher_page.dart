@@ -28,7 +28,7 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
         pinned: true,
         floating: true,
         notScrolled: false,
-        title: const Text("Detail Voucher", style: TypoSty.title),
+        title: Text("Detail Voucher", style: TypoSty.title),
         body: Column(
           children: [
             const SizedBox(height: SpaceDims.sp12),

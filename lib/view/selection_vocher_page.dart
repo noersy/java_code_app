@@ -18,9 +18,9 @@ class SelectionVoucherPage extends StatelessWidget {
         floating: true,
         back: true,
         title: Row(
-          children: const [
-            Icon(IconsCs.voucher_icon_line, color: ColorSty.primary),
-            SizedBox(width: SpaceDims.sp18),
+          children: [
+            const Icon(IconsCs.voucher_icon_line, color: ColorSty.primary),
+            const SizedBox(width: SpaceDims.sp18),
             Text("Pilih Voucher", style: TypoSty.title),
           ],
         ),

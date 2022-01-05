@@ -42,7 +42,7 @@ class _DetailMenuState extends State<DetailMenu> {
     return Scaffold(
       backgroundColor: ColorSty.white.withOpacity(0.95),
       body: SilverAppBar(
-        title: const Text("Detail Menu", style: TypoSty.title),
+        title: Text("Detail Menu", style: TypoSty.title),
         floating: true,
         pinned: true,
         back: true,

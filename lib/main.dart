@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/thame/colors.dart';
+import 'package:java_code_app/view/dashboard_page.dart';
 import 'package:java_code_app/view/login_page.dart';
 import 'package:provider/provider.dart';
 
@@ -15,17 +17,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (BuildContext context)  => OrderProvider(),
-      child: MaterialApp(
-        title: 'Java Code App',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData.light().copyWith(
-          // primaryColor: ColorSty.primary,
-          colorScheme: ThemeData().colorScheme.copyWith(
-                primary: ColorSty.primary,
-              ),
+      create: (BuildContext context) => OrderProvider(),
+      child: ScreenUtilInit(
+        builder: () => MaterialApp(
+          title: 'Java Code App',
+          debugShowCheckedModeBanner: false,
+          initialRoute: "dashboard",
+          routes: {"dashboard": (_) => const DashboardPage()},
+          theme: ThemeData.light().copyWith(
+            colorScheme: ThemeData().colorScheme.copyWith(
+                  primary: ColorSty.primary,
+                ),
+          ),
+          home: LoginPage(),
         ),
-        home: LoginPage(),
       ),
     );
   }
