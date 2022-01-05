@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/icons_cs_icons.dart';
+import 'package:java_code_app/thame/shadows.dart';
 import 'package:java_code_app/thame/spacing.dart';
 import 'package:java_code_app/thame/text_style.dart';
 import 'package:java_code_app/widget/addorder_button.dart';
@@ -9,14 +9,14 @@ import 'package:java_code_app/widget/detailmenu_sheet.dart';
 import 'package:java_code_app/widget/labellevel_selection.dart';
 import 'package:java_code_app/widget/listmenu_tile.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
-import 'package:provider/provider.dart';
+import 'package:java_code_app/widget/vp_fingerprint_dialog.dart';
 
-class DetailMenu extends StatefulWidget {
+class EditOrderPage extends StatefulWidget {
   final String urlImage, name, harga;
   final int amount;
   final int? count;
 
-  const DetailMenu({
+  const EditOrderPage({
     Key? key,
     required this.urlImage,
     required this.name,
@@ -26,10 +26,10 @@ class DetailMenu extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<DetailMenu> createState() => _DetailMenuState();
+  State<EditOrderPage> createState() => _EditOrderPageState();
 }
 
-class _DetailMenuState extends State<DetailMenu> {
+class _EditOrderPageState extends State<EditOrderPage> {
   int _jumlahOrder = 0;
   String _selectedLevel = "1";
   List<String> _selectedTopping = [];
@@ -42,7 +42,7 @@ class _DetailMenuState extends State<DetailMenu> {
     return Scaffold(
       backgroundColor: ColorSty.white.withOpacity(0.95),
       body: SilverAppBar(
-        title: Text("Detail Menu", style: TypoSty.title),
+        title: Text("Edit Menu", style: TypoSty.title),
         floating: true,
         pinned: true,
         back: true,
@@ -58,18 +58,18 @@ class _DetailMenuState extends State<DetailMenu> {
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                    color: ColorSty.white,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(30.0),
-                      topRight: Radius.circular(20.0),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        offset: const Offset(0, -1),
-                        color: ColorSty.grey.withOpacity(0.01),
-                        spreadRadius: 1,
-                      )
-                    ],
+                  color: ColorSty.white,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(30.0),
+                    topRight: Radius.circular(20.0),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      offset: const Offset(0, -1),
+                      color: ColorSty.grey.withOpacity(0.01),
+                      spreadRadius: 1,
+                    )
+                  ],
                 ),
                 child: SingleChildScrollView(
                   child: Column(
@@ -144,7 +144,7 @@ class _DetailMenuState extends State<DetailMenu> {
                                         for (String item in _listTopping)
                                           LabelToppingSelection(
                                             title: item,
-                                            onSelection: (value){},
+                                            onSelection: (value) {},
                                           )
                                       ],
                                     ),
@@ -182,7 +182,8 @@ class _DetailMenuState extends State<DetailMenu> {
                                           padding: const EdgeInsets.all(0),
                                           minimumSize: const Size(25.0, 25.0),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(100.0),
+                                            borderRadius:
+                                                BorderRadius.circular(100.0),
                                           ),
                                         ),
                                         child:
@@ -195,31 +196,6 @@ class _DetailMenuState extends State<DetailMenu> {
                             ),
                             const Divider(thickness: 1.5),
                             const SizedBox(height: SpaceDims.sp12),
-                            ElevatedButton(
-                              onPressed: () {
-                                Provider.of<OrderProvider>(context, listen: false)
-                                    .addOrder(_jumlahOrder);
-                                Navigator.of(context).pop();
-                              },
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: SpaceDims.sp2,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                ),
-                              ),
-                              child: const SizedBox(
-                                width: double.infinity,
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    "Tambahkan Ke Pesanan",
-                                    style: TypoSty.button,
-                                  ),
-                                ),
-                              ),
-                            )
                           ],
                         ),
                       )
@@ -229,6 +205,47 @@ class _DetailMenuState extends State<DetailMenu> {
               ),
             ),
           ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        height: 60.0,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: ColorSty.white,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(30.0),
+            topRight: Radius.circular(30.0),
+          ),
+          boxShadow: ShadowsB.boxShadow1,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+              horizontal: SpaceDims.sp24, vertical: SpaceDims.sp8),
+          child: ElevatedButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (_) => VFingerPrintDialog(ctx: context),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(30.0),
+                ),
+              ),
+            ),
+            child: const SizedBox(
+              width: double.infinity,
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  "Simpan",
+                  style: TypoSty.button,
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -278,7 +295,8 @@ class LabelToppingSelection extends StatefulWidget {
   const LabelToppingSelection({
     Key? key,
     required this.title,
-    required this.onSelection, this.initial,
+    required this.onSelection,
+    this.initial,
   }) : super(key: key);
 
   @override
@@ -287,7 +305,6 @@ class LabelToppingSelection extends StatefulWidget {
 
 class _LabelToppingSelectionState extends State<LabelToppingSelection> {
   bool _isSelected = false;
-
 
   @override
   void initState() {
@@ -304,8 +321,7 @@ class _LabelToppingSelectionState extends State<LabelToppingSelection> {
       ),
       child: TextButton(
         style: TextButton.styleFrom(
-          backgroundColor:
-              _isSelected ? ColorSty.primary : ColorSty.white,
+          backgroundColor: _isSelected ? ColorSty.primary : ColorSty.white,
           primary: !_isSelected ? ColorSty.primary : ColorSty.white,
           padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
           minimumSize: Size.zero,

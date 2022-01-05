@@ -5,9 +5,9 @@ import 'package:java_code_app/thame/icons_cs_icons.dart';
 import 'package:java_code_app/thame/shadows.dart';
 import 'package:java_code_app/thame/spacing.dart';
 import 'package:java_code_app/thame/text_style.dart';
-import 'package:java_code_app/view/beranda_page.dart';
 import 'package:java_code_app/widget/infodiscount_dialog.dart';
-import 'package:java_code_app/widget/listmenut_tile.dart';
+import 'package:java_code_app/widget/listmenu_tile.dart';
+import 'package:java_code_app/widget/menuberanda_card.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
 import 'package:java_code_app/widget/vp_fingerprint_dialog.dart';
 
@@ -35,11 +35,11 @@ class CheckOutPage extends StatelessWidget {
             children: [
               Column(
                 children: const [
-                  ListMenu(
+                  ListOrder(
                     title: 'Makanan',
                     type: 'makanan',
                   ),
-                  ListMenu(
+                  ListOrder(
                     title: 'Minuman',
                     type: 'minuman',
                   ),
@@ -70,7 +70,7 @@ class CheckOutPage extends StatelessWidget {
                 children: [
                   Padding(
                     padding:
-                    const EdgeInsets.symmetric(horizontal: SpaceDims.sp24),
+                        const EdgeInsets.symmetric(horizontal: SpaceDims.sp24),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -106,10 +106,9 @@ class CheckOutPage extends StatelessWidget {
                           prefix: "Rp 4.000",
                           textStylePrefix: const TextStyle(color: Colors.red),
                           icon: Icons.wine_bar,
-                          onPressed: () =>
-                              showDialog(
-                                  context: context,
-                                  builder: (_) => const InfoDiscountDialog()),
+                          onPressed: () => showDialog(
+                              context: context,
+                              builder: (_) => const InfoDiscountDialog()),
                         ),
                         TileListDMenu(
                           dense: true,
@@ -173,7 +172,9 @@ class CheckOutPage extends StatelessWidget {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        showDialog(context: context, builder: (_) => VFingerPrintDialog(ctx: context));
+                        showDialog(
+                            context: context,
+                            builder: (_) => VFingerPrintDialog(ctx: context));
                       },
                       style: ElevatedButton.styleFrom(
                         shape: const RoundedRectangleBorder(
@@ -198,3 +199,91 @@ class CheckOutPage extends StatelessWidget {
   }
 }
 
+class ListOrder extends StatelessWidget {
+  final String type, title;
+
+  const ListOrder({
+    Key? key,
+    required this.type,
+    required this.title,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(height: SpaceDims.sp22),
+        Padding(
+          padding: const EdgeInsets.only(left: SpaceDims.sp24),
+          child: Row(
+            children: [
+              Icon(
+                type.compareTo("makanan") == 0
+                    ? Icons.coffee
+                    : IconsCs.ep_coffee,
+                color: ColorSty.primary,
+                size: 26.0,
+              ),
+              const SizedBox(width: SpaceDims.sp4),
+              Text(
+                title,
+                style: TypoSty.title.copyWith(
+                  color: ColorSty.primary,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: SpaceDims.sp12),
+        SizedBox(
+          width: double.infinity,
+          child: Column(
+            children: [
+              for (Map<String, dynamic> item in orders)
+                if (item["jenis"]?.compareTo(type) == 0)
+                  CardMenu(
+                    onPressed: () => Navigate.toEditOrder(
+                      context,
+                      count: 1,
+                      name: item["nama"] ?? "",
+                      urlImage: item["image"] ?? "",
+                      harga: item["harga"] ?? "",
+                      amount: item["amount"] ?? 0,
+                    ),
+                    nama: item["nama"] ?? "",
+                    url: item["image"] ?? "",
+                    harga: item["harga"] ?? "",
+                    amount: item["amount"] ?? 0,
+                    count: 2,
+                  ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+List<Map<String, dynamic>> orders = [
+  {
+    "jenis": "minuman",
+    "image": "assert/image/menu/1637916759.png",
+    "harga": "Rp 10.000",
+    "nama": "Chicken Katsu",
+    "amount": 99,
+  },
+  {
+    "jenis": "makanan",
+    "image": "assert/image/menu/1637916792.png",
+    "harga": "Rp 10.000",
+    "nama": "Chicken Katsu",
+    "amount": 99,
+  },
+  {
+    "jenis": "makanan",
+    "image": "assert/image/menu/1637916829.png",
+    "harga": "Rp 10.000",
+    "nama": "Chicken Slam",
+    "amount": 99,
+  },
+];

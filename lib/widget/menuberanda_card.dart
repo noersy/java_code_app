@@ -6,7 +6,7 @@ import 'package:java_code_app/thame/text_style.dart';
 class CardMenu extends StatefulWidget {
   final String nama, harga, url;
   final Function() onPressed;
-  final int amount;
+  final int amount, count;
 
   const CardMenu({
     Key? key,
@@ -14,7 +14,7 @@ class CardMenu extends StatefulWidget {
     required this.harga,
     required this.url,
     required this.amount,
-    required this.onPressed,
+    required this.onPressed, required this.count,
   }) : super(key: key);
 
   @override
@@ -23,6 +23,12 @@ class CardMenu extends StatefulWidget {
 
 class _CardMenuState extends State<CardMenu> {
   int jumlahOrder = 0;
+
+  @override
+  void initState() {
+    jumlahOrder = widget.count;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

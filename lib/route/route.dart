@@ -4,6 +4,7 @@ import 'package:java_code_app/view/checkout_page.dart';
 import 'package:java_code_app/view/dashboard_page.dart';
 import 'package:java_code_app/view/detailmenu_page.dart';
 import 'package:java_code_app/view/detailvoucher_page.dart';
+import 'package:java_code_app/view/editorder_page.dart';
 import 'package:java_code_app/view/findlocation_page.dart';
 import 'package:java_code_app/view/promo_page.dart';
 import 'package:java_code_app/view/selection_vocher_page.dart';
@@ -17,4 +18,5 @@ class Navigate {
   static void toSelectionVoucherPage(context) => Navigator.of(context).push(routeTransition(const SelectionVoucherPage()));
   static void toDetailVoucherPage(context, {required String urlImage, required String title}) {Navigator.of(context).push(routeTransition(DetailVoucherPage(urlImage: urlImage, title: title,),));}
   static void toDetailMenu(context, {required String harga, required String urlImage, required String name, required int amount, int? count}) => Navigator.of(context).push(routeTransition(DetailMenu(harga: harga, urlImage: urlImage, name: name,count: count, amount: amount),),);
+  static void toEditOrder(context, {required String harga, required String urlImage, required String name, required int amount, int? count}) => Navigator.of(context).push(routeTransition(EditOrderPage(harga: harga, urlImage: urlImage, name: name,count: count, amount: amount),),);
 }
