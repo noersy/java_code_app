@@ -22,7 +22,7 @@ class CheckOutPage extends StatefulWidget {
 
 class _CheckOutPageState extends State<CheckOutPage> {
   List<Map<String, dynamic>> get _orders  => Provider.of<OrderProvider>(context, listen: false).checkOrder;
-
+  Map<String, dynamic> _selectedVoucher = {};
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +65,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
       ),
       bottomNavigationBar: Container(
         width: double.infinity,
-        height: 300,
+        height: _selectedVoucher.isEmpty ? 300 : 240,
         decoration: const BoxDecoration(
           color: ColorSty.grey80,
           borderRadius: BorderRadius.only(
@@ -112,25 +112,35 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     ),
                     child: Column(
                       children: [
-                        TileListDMenu(
-                          dense: true,
-                          prefixIcon: true,
-                          title: "Diskon 20%",
-                          prefix: "Rp 4.000",
-                          textStylePrefix: const TextStyle(color: Colors.red),
-                          icon: Icons.wine_bar,
-                          onPressed: () => showDialog(
-                              context: context,
-                              builder: (_) => const InfoDiscountDialog()),
-                        ),
+                        if(_selectedVoucher.isEmpty)
+                          TileListDMenu(
+                            dense: true,
+                            prefixIcon: true,
+                            title: "Diskon 20%",
+                            prefix: "Rp 4.000",
+                            textStylePrefix: const TextStyle(color: Colors.red),
+                            icon: Icons.wine_bar,
+                            onPressed: () => showDialog(
+                                context: context,
+                                builder: (_) => const InfoDiscountDialog()),
+                          ),
                         TileListDMenu(
                           dense: true,
                           prefixIcon: true,
                           title: "Voucher",
-                          prefix: "Pilih Voucher",
+                          prefixCostume: _selectedVoucher.isEmpty? null : Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(_selectedVoucher["harga"], style: TypoSty.captionSemiBold.copyWith(color: Colors.red)),
+                              Text(_selectedVoucher["title"], style: TypoSty.mini)
+                            ],
+                          ),
+                          prefix: _selectedVoucher.isEmpty ? "Pilih Voucher" : null,
                           icon: IconsCs.voucher_icon_line,
-                          onPressed: () =>
-                              Navigate.toSelectionVoucherPage(context),
+                          onPressed: () async {
+                            _selectedVoucher = await Navigate.toSelectionVoucherPage(context);
+                            setState(() {});
+                          }
                         ),
                         Stack(children: [
                           TileListDMenu(

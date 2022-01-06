@@ -6,8 +6,15 @@ import 'package:java_code_app/thame/spacing.dart';
 import 'package:java_code_app/thame/text_style.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
 
-class SelectionVoucherPage extends StatelessWidget {
+class SelectionVoucherPage extends StatefulWidget {
   const SelectionVoucherPage({Key? key}) : super(key: key);
+
+  @override
+  State<SelectionVoucherPage> createState() => _SelectionVoucherPageState();
+}
+
+class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
+  Map<String, dynamic> _selectedVoucher = {};
 
   @override
   Widget build(BuildContext context) {
@@ -27,15 +34,30 @@ class SelectionVoucherPage extends StatelessWidget {
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(
-                vertical: SpaceDims.sp24, horizontal: SpaceDims.sp24),
+              vertical: SpaceDims.sp24,
+              horizontal: SpaceDims.sp24,
+            ),
             child: Column(
               children: [
-                for (Map<String, dynamic> item in dataVoucher)
-                  VoucherCard(
-                    urlImage: item["urlImage"],
-                    title: item["title"],
-                  )
-              ],
+                  for (Map<String, dynamic> item in dataVoucher)
+                    if(_selectedVoucher.isEmpty)
+                    VoucherCard(
+                        onPressed: (String value){
+                          setState(() => _selectedVoucher.addAll(item));
+                        },
+                        urlImage: item["urlImage"] ?? "",
+                        title: item["title"] ?? "",
+                      ),
+                if(_selectedVoucher.isNotEmpty)
+                    VoucherCard(
+                      onPressed: (String value){
+                        setState(() => _selectedVoucher.clear());
+                      },
+                      urlImage: _selectedVoucher["urlImage"] ?? "",
+                      title: _selectedVoucher["title"] ?? "",
+                    )
+
+                ],
             ),
           ),
         ),
@@ -87,12 +109,17 @@ class SelectionVoucherPage extends StatelessWidget {
               ),
               const SizedBox(height: SpaceDims.sp8),
               ElevatedButton(
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () => Navigator.of(context).pop(_selectedVoucher),
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0)
+                  )
+                ),
                 child: const SizedBox(
                   width: double.infinity,
                   child: Align(
                     alignment: Alignment.center,
-                    child: Text("Oke"),
+                    child: Text("Oke", style: TypoSty.button),
                   ),
                 ),
               )
@@ -106,11 +133,15 @@ class SelectionVoucherPage extends StatelessWidget {
 
 class VoucherCard extends StatefulWidget {
   final String urlImage, title;
+  final Function(String string) onPressed;
+  final bool? isChecked;
 
   const VoucherCard({
     Key? key,
     required this.urlImage,
     required this.title,
+    required this.onPressed,
+    this.isChecked,
   }) : super(key: key);
 
   @override
@@ -119,6 +150,8 @@ class VoucherCard extends StatefulWidget {
 
 class _VoucherCardState extends State<VoucherCard> {
   bool _isSelected = false;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +181,10 @@ class _VoucherCardState extends State<VoucherCard> {
                     style: TypoSty.button.copyWith(color: ColorSty.black60),
                   ),
                   IconButton(
-                    onPressed: () => setState(() => _isSelected = !_isSelected),
+                    onPressed: () {
+                      setState(() => _isSelected = !_isSelected);
+                      widget.onPressed(widget.title);
+                    },
                     icon: _isSelected
                         ? const Icon(
                             Icons.check_box_outlined,
@@ -177,21 +213,26 @@ List<Map<String, dynamic>> dataVoucher = [
   {
     "title": "Friend Referral Retention",
     "urlImage": "assert/image/voucher/Voucher Java Code app-01.jpg",
+    "harga" : "Rp 100.000"
   },
   {
     "title": "Koordinator Program Kekompakan",
     "urlImage": "assert/image/voucher/Voucher Java Code app-02.jpg",
+    "harga" : "Rp 100.000"
   },
   {
     "title": "Birthday",
     "urlImage": "assert/image/voucher/Voucher Java Code app-03.jpg",
+    "harga" : "Rp 100.000"
   },
   {
     "title": "Friend Referral Retention",
     "urlImage": "assert/image/voucher/Voucher Java Code app-04.jpg",
+    "harga" : "Rp 100.000"
   },
   {
     "title": "Friend Referral Retention",
     "urlImage": "assert/image/voucher/Voucher Java Code app-05.jpg",
+    "harga" : "Rp 100.000"
   },
 ];
