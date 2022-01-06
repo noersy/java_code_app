@@ -7,10 +7,11 @@ import 'package:java_code_app/thame/text_style.dart';
 import 'package:java_code_app/view/checkout_page.dart';
 import 'package:java_code_app/widget/infodiscount_dialog.dart';
 import 'package:java_code_app/widget/listmenu_tile.dart';
+import 'package:java_code_app/widget/listongoing_card.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
 
-class OrderPage extends StatelessWidget {
-  const OrderPage({Key? key}) : super(key: key);
+class OngoingOrderPage extends StatelessWidget {
+  const OngoingOrderPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -104,8 +105,7 @@ class OrderPage extends StatelessWidget {
                           title: "Voucher",
                           prefix: "Pilih Voucher",
                           icon: IconsCs.voucher_icon_line,
-                          onPressed: () =>
-                              Navigate.toSelectionVoucherPage(context),
+                          onPressed: (){},
                         ),
                         Stack(children: [
                           TileListDMenu(

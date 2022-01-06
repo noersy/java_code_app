@@ -6,7 +6,7 @@ import 'package:java_code_app/view/detailmenu_page.dart';
 import 'package:java_code_app/view/detailvoucher_page.dart';
 import 'package:java_code_app/view/editorder_page.dart';
 import 'package:java_code_app/view/findlocation_page.dart';
-import 'package:java_code_app/view/order_page.dart';
+import 'package:java_code_app/view/ongoingorder_page.dart';
 import 'package:java_code_app/view/promo_page.dart';
 import 'package:java_code_app/view/selection_vocher_page.dart';
 import 'package:java_code_app/widget/vp_pin_dialog.dart';
@@ -20,5 +20,5 @@ class Navigate {
   static void toDetailVoucherPage(context, {required String urlImage, required String title}) {Navigator.of(context).push(routeTransition(DetailVoucherPage(urlImage: urlImage, title: title,),));}
   static void toDetailMenu(context, {required Map<String, dynamic> data, required int countOrder}) => Navigator.of(context).push(routeTransition(DetailMenu(data:data, countOrder: countOrder)));
   static void toEditOrderMenu(context, {required Map<String, dynamic> data, required int countOrder}) => Navigator.of(context).push(routeTransition(EditOrderPage(data:data, countOrder: countOrder)));
-  static void toViewOrder(context, {required String harga, required String urlImage, required String name, required int amount, int? count}) => Navigator.of(context).push(routeTransition(const OrderPage()));
+  static void toViewOrder(context, {required String harga, required String urlImage, required String name, required int amount, int? count}) => Navigator.of(context).push(routeTransition(const OngoingOrderPage()));
 }
