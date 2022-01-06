@@ -139,28 +139,52 @@ class _DetailMenuState extends State<DetailMenu> {
                             TileListDMenu(
                               prefixIcon: true,
                               icon: IconsCs.topping_icon,
-                              title: "Topping",
-                              prefix: "Morizela",
-                              onPressed: () => showModalBottomSheet(
-                                isScrollControlled: true,
-                                barrierColor: ColorSty.grey.withOpacity(0.2),
-                                context: context,
-                                builder: (_) => BottomSheetDetailMenu(
-                                  title: "Pilih Toping",
-                                  content: Expanded(
-                                    child: ListView(
-                                      scrollDirection: Axis.horizontal,
-                                      children: [
-                                        for (String item in _listTopping)
-                                          LabelToppingSelection(
-                                            title: item,
-                                            onSelection: (value){},
-                                          )
-                                      ],
-                                    ),
-                                  ),
+                              prefixCostume: RichText(
+                                textAlign: TextAlign.end,
+                                overflow: TextOverflow.ellipsis,
+                                text: TextSpan(
+                                  style: TypoSty.captionSemiBold.copyWith(color: ColorSty.black),
+                                  text: _selectedTopping.isEmpty ? _listTopping[0] : "",
+                                  children: [
+                                    for(final item in _selectedTopping)
+                                      TextSpan(
+                                        text: item + " ",
+                                        style: TypoSty.captionSemiBold.copyWith(color: ColorSty.black),
+                                      )
+                                  ]
                                 ),
                               ),
+                              title: "Topping",
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  barrierColor: ColorSty.grey.withOpacity(0.2),
+                                  context: context,
+                                  builder: (_) =>
+                                      BottomSheetDetailMenu(
+                                        title: "Pilih Toping",
+                                        content: Expanded(
+                                          child: ListView(
+                                            scrollDirection: Axis.horizontal,
+                                            children: [
+                                              for (String item in _listTopping)
+                                                LabelToppingSelection(
+                                                  title: item,
+                                                  initial: _selectedTopping.where((e) => e == item).isNotEmpty,
+                                                  onSelection: (value) {
+                                                    if(_selectedTopping.where((e) => e == value).isNotEmpty) {
+                                                      setState(() => _selectedTopping.remove(value));
+                                                    }else{
+                                                      setState(() => _selectedTopping.add(value));
+                                                    }
+                                                  },
+                                                )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                );
+                              }
                             ),
                             TileListDMenu(
                               prefixIcon: true,
@@ -292,7 +316,7 @@ class _DetailMenuState extends State<DetailMenu> {
 class LabelToppingSelection extends StatefulWidget {
   final String title;
   final bool? initial;
-  final ValueChanged<bool> onSelection;
+  final ValueChanged<String> onSelection;
 
   const LabelToppingSelection({
     Key? key,
@@ -335,7 +359,7 @@ class _LabelToppingSelectionState extends State<LabelToppingSelection> {
         ),
         onPressed: () {
           setState(() => _isSelected = !_isSelected);
-          widget.onSelection(_isSelected);
+          widget.onSelection(widget.title);
         },
         child: Row(
           children: [

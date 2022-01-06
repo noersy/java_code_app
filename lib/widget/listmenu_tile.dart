@@ -4,7 +4,9 @@ import 'package:java_code_app/thame/spacing.dart';
 import 'package:java_code_app/thame/text_style.dart';
 
 class TileListDMenu extends StatelessWidget {
-  final String title, prefix;
+  final String title;
+  final String? prefix;
+  final Widget? prefixCostume;
   final IconData icon;
   final bool? prefixIcon;
   final TextStyle? textStylePrefix;
@@ -14,12 +16,13 @@ class TileListDMenu extends StatelessWidget {
   const TileListDMenu({
     Key? key,
     required this.title,
-    required this.prefix,
+    this.prefix,
     required this.icon,
     this.prefixIcon,
     required this.onPressed,
     this.textStylePrefix,
     this.dense,
+    this.prefixCostume,
   }) : super(key: key);
 
   @override
@@ -45,19 +48,13 @@ class TileListDMenu extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: 108,
-                    child: Text(
-                      prefix,
+                    child: prefixCostume ?? Text(
+                      prefix ?? "",
                       style: prefixIcon ?? false
-                          ? TypoSty.captionSemiBold
-                          .copyWith(fontWeight: FontWeight.normal)
-                          .merge(textStylePrefix)
-                          : dense ?? false
-                          ? TypoSty.captionSemiBold
-                          .copyWith(fontWeight: FontWeight.normal)
-                          .merge(textStylePrefix)
-                          : TypoSty.title
-                          .copyWith(color: ColorSty.primary)
-                          .merge(textStylePrefix),
+                          ? TypoSty.captionSemiBold.copyWith(fontWeight: FontWeight.normal).merge(textStylePrefix)
+                            : dense ?? false
+                            ? TypoSty.captionSemiBold.copyWith(fontWeight: FontWeight.normal).merge(textStylePrefix)
+                          : TypoSty.title.copyWith(color: ColorSty.primary).merge(textStylePrefix),
                       textAlign: TextAlign.right,
                       overflow: TextOverflow.ellipsis,
                     ),
