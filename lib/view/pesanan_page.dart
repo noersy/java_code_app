@@ -1,13 +1,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/icons_cs_icons.dart';
-import 'package:java_code_app/thame/shadows.dart';
 import 'package:java_code_app/thame/spacing.dart';
 import 'package:java_code_app/thame/text_style.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
+import 'package:provider/provider.dart';
 
 class PesananPage extends StatefulWidget {
   const PesananPage({Key? key}) : super(key: key);
@@ -72,22 +73,46 @@ class OngoingScreen extends StatelessWidget {
         left: SpaceDims.sp18,
         top: SpaceDims.sp12,
       ),
-      child: Column(
-        children: [
-          OrderMenuCard(
-            onPressed: () => Navigate.toViewOrder(
-              context,
-              harga: "harga",
-              urlImage: "urlImage",
-              name: "name",
-              amount: 1,
-            ),
-            urlImage: "urlImage",
-            title: " title",
-            date: " date",
-            harga: "harga",
-          ),
-        ],
+      child: AnimatedBuilder(
+        animation: OrderProvider(),
+        builder: (BuildContext context, Widget? child) {
+          final _ordersOngoing = Provider.of<OrderProvider>(context).orderProgress;
+
+          // "id" : getRandomString(10),
+          // "jenis": widget.data["jenis"],
+          // "image": widget.data["image"],
+          // "harga": widget.data["harga"],
+          // "amount": widget.data["amount"],
+          // "nama": widget.data["nama"],
+          // "countOrder" : _jumlahOrder,
+
+
+          return _ordersOngoing.isNotEmpty ? Column(
+            children: [
+              for(var item in _ordersOngoing)
+              OrderMenuCard(
+                onPressed: () => Navigate.toViewOrder(
+                  context,
+                  harga: item["harga"],
+                  urlImage: item["image"],
+                  name: item["name"],
+                  amount: item["countOrder"],
+                ),
+                urlImage: item["image"],
+                title: item["name"],
+                date: "date",
+                harga: item["harga"],
+              ),
+            ],
+          ) : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Icon(IconsCs.order_icon, size: 120, color: ColorSty.primary),
+              SizedBox(height: SpaceDims.sp22),
+              Text("Sudah Pesan?\nLacak pesananmu\ndi sini.", textAlign: TextAlign.center, style: TypoSty.title2)
+            ],
+          );
+        },
       ),
     );
   }

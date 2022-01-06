@@ -34,7 +34,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
   @override
   void initState() {
     _jumlahOrder = widget.countOrder;
-    name = widget.data["nama"] ?? "";
+    name = widget.data["name"] ?? "";
     urlImage = widget.data["image"] ?? "";
     harga = widget.data["harga"] ?? "";
     amount = widget.data["amount"] ?? 0;

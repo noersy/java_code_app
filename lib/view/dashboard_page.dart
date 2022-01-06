@@ -47,8 +47,8 @@ class _DashboardPageState extends State<DashboardPage> {
                   child: AnimatedBuilder(
                     animation: OrderProvider(),
                     builder: (BuildContext context, Widget? child) {
-                      int _orderOngoing = 0;
-                      _orderOngoing = Provider.of<OrderProvider>(context).orderProgress.length;
+                       int _orderOngoing = Provider.of<OrderProvider>(context).orderProgress.length;
+
                       if (_orderOngoing > 0) {
                         return Container(
                           height: 20,

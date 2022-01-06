@@ -24,7 +24,7 @@ class _CardMenuState extends State<CardMenu> {
   @override
   void initState() {
     _jumlahOrder = widget.data["countOrder"] ?? 0;
-    nama = widget.data["nama"] ?? "";
+    nama = widget.data["name"] ?? "";
     url = widget.data["image"] ?? "";
     harga = widget.data["harga"] ?? "";
     amount = widget.data["amount"] ?? 0;

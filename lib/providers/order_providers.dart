@@ -14,8 +14,13 @@ class OrderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  editOrder(Map<String, dynamic> item, String id) async {
+    // final _id = _checkOrder.firstWhere((element) => element["id"] == id);
+    notifyListeners();
+  }
+
   submitOrder() async {
-    _orderInProgress = _checkOrder;
+    _orderInProgress.addAll(_checkOrder);
     _checkOrder.clear();
     notifyListeners();
   }

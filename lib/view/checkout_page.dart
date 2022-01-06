@@ -187,7 +187,8 @@ class _CheckOutPageState extends State<CheckOutPage> {
                       onPressed: () {
                         showDialog(
                             context: context,
-                            builder: (_) => VFingerPrintDialog(ctx: context));
+                            builder: (_) => VFingerPrintDialog(ctx: context),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         shape: const RoundedRectangleBorder(
@@ -344,7 +345,7 @@ class _CardMenuChecoutState extends State<CardMenuChecout> {
   @override
   void initState() {
     _jumlahOrder = widget.data["countOrder"] ?? 0;
-    nama = widget.data["nama"] ?? "";
+    nama = widget.data["name"] ?? "";
     url = widget.data["image"] ?? "";
     harga = widget.data["harga"] ?? "";
     amount = widget.data["amount"] ?? 0;

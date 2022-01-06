@@ -4,6 +4,7 @@ import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/icons_cs_icons.dart';
 import 'package:java_code_app/thame/spacing.dart';
 import 'package:java_code_app/thame/text_style.dart';
+import 'package:java_code_app/tools/random_string.dart';
 import 'package:java_code_app/widget/addorder_button.dart';
 import 'package:java_code_app/widget/detailmenu_sheet.dart';
 import 'package:java_code_app/widget/labellevel_selection.dart';
@@ -33,7 +34,7 @@ class _DetailMenuState extends State<DetailMenu> {
   @override
   void initState() {
     _jumlahOrder = widget.countOrder;
-    name = widget.data["nama"] ?? "";
+    name = widget.data["name"] ?? "";
     urlImage = widget.data["image"] ?? "";
     harga = widget.data["harga"] ?? "";
     amount = widget.data["amount"] ?? 0;
@@ -208,11 +209,12 @@ class _DetailMenuState extends State<DetailMenu> {
                               onPressed: () {
 
                                 Provider.of<OrderProvider>(context, listen: false).addOrder({
+                                  "id" : getRandomString(10),
                                   "jenis": widget.data["jenis"],
                                   "image": widget.data["image"],
                                   "harga": widget.data["harga"],
                                   "amount": widget.data["amount"],
-                                  "nama": widget.data["nama"],
+                                  "name": widget.data["name"],
                                   "countOrder" : _jumlahOrder,
                                 });
 
