@@ -104,12 +104,18 @@ class OngoingScreen extends StatelessWidget {
                 harga: item["harga"],
               ),
             ],
-          ) : Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Icon(IconsCs.order_icon, size: 120, color: ColorSty.primary),
-              SizedBox(height: SpaceDims.sp22),
-              Text("Sudah Pesan?\nLacak pesananmu\ndi sini.", textAlign: TextAlign.center, style: TypoSty.title2)
+          ) : Stack(
+            alignment: Alignment.center,
+            children: [
+              Image.asset("assert/image/bg_findlocation.png"),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(IconsCs.order_icon, size: 120, color: ColorSty.primary),
+                  SizedBox(height: SpaceDims.sp22),
+                  Text("Sudah Pesan?\nLacak pesananmu\ndi sini.", textAlign: TextAlign.center, style: TypoSty.title2),
+                ],
+              )
             ],
           );
         },
@@ -246,7 +252,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         horizontal: SpaceDims.sp18,
         vertical: SpaceDims.sp14,
       ),
-      child: Column(
+      child: false ? Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -309,6 +315,21 @@ class _HistoryScreenState extends State<HistoryScreen> {
             ],
           ),
           OrderHistoryCard(onPressed: () {}),
+        ],
+      ) : Stack(
+        alignment: Alignment.center,
+        children: [
+          Image.asset("assert/image/bg_findlocation.png"),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Icon(IconsCs.order_icon, size: 120, color: ColorSty.primary),
+              SizedBox(height: SpaceDims.sp22),
+              Text("Mulai buat pesanan.", textAlign: TextAlign.center, style: TypoSty.title2),
+              SizedBox(height: SpaceDims.sp22),
+              Text("Makanan yang kamu pesan\nakan muncul di sini agar\nkamu bisa menemukan\nmenu favoritmu lagi!.", textAlign: TextAlign.center, style: TypoSty.title2),
+            ],
+          )
         ],
       ),
     );
