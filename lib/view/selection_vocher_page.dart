@@ -7,7 +7,9 @@ import 'package:java_code_app/thame/text_style.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
 
 class SelectionVoucherPage extends StatefulWidget {
-  const SelectionVoucherPage({Key? key}) : super(key: key);
+  final Map<String, dynamic>? initialData;
+
+  const SelectionVoucherPage({Key? key, this.initialData}) : super(key: key);
 
   @override
   State<SelectionVoucherPage> createState() => _SelectionVoucherPageState();
@@ -15,6 +17,14 @@ class SelectionVoucherPage extends StatefulWidget {
 
 class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
   Map<String, dynamic> _selectedVoucher = {};
+
+  @override
+  void initState() {
+    if (widget.initialData != null) {
+      _selectedVoucher.addAll(widget.initialData!);
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,25 +49,29 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
             ),
             child: Column(
               children: [
+                if (_selectedVoucher.isEmpty)
                   for (Map<String, dynamic> item in dataVoucher)
-                    if(_selectedVoucher.isEmpty)
                     VoucherCard(
-                        onPressed: (String value){
-                          setState(() => _selectedVoucher.addAll(item));
-                        },
-                        urlImage: item["urlImage"] ?? "",
-                        title: item["title"] ?? "",
-                      ),
-                if(_selectedVoucher.isNotEmpty)
-                    VoucherCard(
-                      onPressed: (String value){
-                        setState(() => _selectedVoucher.clear());
+                      isChecked: false,
+                      onChanged: (String value){
+                        setState(() => _selectedVoucher.addAll(item));
                       },
-                      urlImage: _selectedVoucher["urlImage"] ?? "",
-                      title: _selectedVoucher["title"] ?? "",
-                    )
-
-                ],
+                      onPressed: (String value) {
+                        setState(() => _selectedVoucher.addAll(item));
+                      },
+                      urlImage: item["urlImage"] ?? "",
+                      title: item["title"] ?? "",
+                    ),
+                if (_selectedVoucher.isNotEmpty)
+                  VoucherCard(
+                    isChecked: true,
+                    onPressed: (String value) {
+                      setState(() => _selectedVoucher.clear());
+                    },
+                    urlImage: _selectedVoucher["urlImage"] ?? "",
+                    title: _selectedVoucher["title"] ?? "",
+                  )
+              ],
             ),
           ),
         ),
@@ -97,11 +111,12 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
                       Text("Penggunaan voucher tidak dapat digabung dengan"),
-                      Text("discount employee reward program",
-                          style: TextStyle(
-                              color: ColorSty.primary,
-                              fontWeight: FontWeight.bold,
-                          ),
+                      Text(
+                        "discount employee reward program",
+                        style: TextStyle(
+                          color: ColorSty.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   )
@@ -112,8 +127,8 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
                 onPressed: () => Navigator.of(context).pop(_selectedVoucher),
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0)
-                  )
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
                 ),
                 child: const SizedBox(
                   width: double.infinity,
@@ -132,16 +147,18 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
 }
 
 class VoucherCard extends StatefulWidget {
+  final bool isChecked;
   final String urlImage, title;
   final Function(String string) onPressed;
-  final bool? isChecked;
+  final ValueChanged<String>? onChanged;
 
   const VoucherCard({
     Key? key,
     required this.urlImage,
     required this.title,
     required this.onPressed,
-    this.isChecked,
+    required this.isChecked,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -151,21 +168,33 @@ class VoucherCard extends StatefulWidget {
 class _VoucherCardState extends State<VoucherCard> {
   bool _isSelected = false;
 
-
+  @override
+  void initState() {
+    _isSelected = widget.isChecked;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp8),
       child: ElevatedButton(
-        onPressed: () => Navigate.toDetailVoucherPage(context, title: widget.title, urlImage: widget.urlImage),
+        onPressed: () async{
+          _isSelected = (await Navigate.toDetailVoucherPage(
+            context,
+            title: widget.title,
+            urlImage: widget.urlImage,
+          )) ?? false;
+
+          if(_isSelected && widget.onChanged != null) widget.onChanged!(widget.title);
+        },
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.all(0),
           primary: ColorSty.bg2,
           onPrimary: ColorSty.grey80,
           elevation: 5,
           shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+            borderRadius: BorderRadius.all(Radius.circular(20.0)),
           ),
         ),
         child: Column(
@@ -185,7 +214,7 @@ class _VoucherCardState extends State<VoucherCard> {
                       setState(() => _isSelected = !_isSelected);
                       widget.onPressed(widget.title);
                     },
-                    icon: _isSelected
+                    icon: widget.isChecked
                         ? const Icon(
                             Icons.check_box_outlined,
                             color: ColorSty.black60,
@@ -213,26 +242,26 @@ List<Map<String, dynamic>> dataVoucher = [
   {
     "title": "Friend Referral Retention",
     "urlImage": "assert/image/voucher/Voucher Java Code app-01.jpg",
-    "harga" : "Rp 100.000"
+    "harga": "Rp 100.000"
   },
   {
     "title": "Koordinator Program Kekompakan",
     "urlImage": "assert/image/voucher/Voucher Java Code app-02.jpg",
-    "harga" : "Rp 100.000"
+    "harga": "Rp 100.000"
   },
   {
     "title": "Birthday",
     "urlImage": "assert/image/voucher/Voucher Java Code app-03.jpg",
-    "harga" : "Rp 100.000"
+    "harga": "Rp 100.000"
   },
   {
     "title": "Friend Referral Retention",
     "urlImage": "assert/image/voucher/Voucher Java Code app-04.jpg",
-    "harga" : "Rp 100.000"
+    "harga": "Rp 100.000"
   },
   {
     "title": "Friend Referral Retention",
     "urlImage": "assert/image/voucher/Voucher Java Code app-05.jpg",
-    "harga" : "Rp 100.000"
+    "harga": "Rp 100.000"
   },
 ];

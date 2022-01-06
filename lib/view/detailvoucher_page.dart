@@ -164,7 +164,7 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
               horizontal: SpaceDims.sp12, vertical: SpaceDims.sp8),
           child: ElevatedButton(
             onPressed: (){
-              Navigator.of(context).pop();
+              Navigator.of(context).pop(true);
             },
             style: ElevatedButton.styleFrom(
               shape: const RoundedRectangleBorder(

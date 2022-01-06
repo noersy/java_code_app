@@ -132,13 +132,13 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(_selectedVoucher["harga"], style: TypoSty.captionSemiBold.copyWith(color: Colors.red)),
-                              Text(_selectedVoucher["title"], style: TypoSty.mini)
+                              Text(_selectedVoucher["title"], style: TypoSty.mini, overflow: TextOverflow.ellipsis, textAlign: TextAlign.end)
                             ],
                           ),
                           prefix: _selectedVoucher.isEmpty ? "Pilih Voucher" : null,
                           icon: IconsCs.voucher_icon_line,
                           onPressed: () async {
-                            _selectedVoucher = await Navigate.toSelectionVoucherPage(context);
+                            _selectedVoucher = await Navigate.toSelectionVoucherPage(context, initialData: _selectedVoucher);
                             setState(() {});
                           }
                         ),
