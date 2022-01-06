@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:java_code_app/route/route.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/icons_cs_icons.dart';
 import 'package:java_code_app/thame/spacing.dart';
 import 'package:java_code_app/thame/text_style.dart';
-import 'package:java_code_app/view/checkout_page.dart';
-import 'package:java_code_app/widget/infodiscount_dialog.dart';
 import 'package:java_code_app/widget/listmenu_tile.dart';
 import 'package:java_code_app/widget/listongoing_card.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
+import 'package:provider/provider.dart';
 
-class OngoingOrderPage extends StatelessWidget {
+class OngoingOrderPage extends StatefulWidget {
   const OngoingOrderPage({Key? key}) : super(key: key);
+
+  @override
+  State<OngoingOrderPage> createState() => _OngoingOrderPageState();
+}
+
+class _OngoingOrderPageState extends State<OngoingOrderPage> {
+  List<Map<String, dynamic>> get _orders =>
+      Provider.of<OrderProvider>(context, listen: false).orderProgress;
 
   @override
   Widget build(BuildContext context) {
@@ -34,15 +41,19 @@ class OngoingOrderPage extends StatelessWidget {
           child: Column(
             children: [
               Column(
-                children: const [
-                  ListOrderOngoing(
-                    title: 'Makanan',
-                    type: 'makanan',
-                  ),
-                  ListOrderOngoing(
-                    title: 'Minuman',
-                    type: 'minuman',
-                  ),
+                children: [
+                  if (_orders.where((e) => e["jenis"] == "makanan").isNotEmpty)
+                    ListOrderOngoing(
+                      orders: _orders,
+                      title: 'Makanan',
+                      type: 'makanan',
+                    ),
+                  if (_orders.where((e) => e["jenis"] == "minuman").isNotEmpty)
+                    ListOrderOngoing(
+                      orders: _orders,
+                      title: 'Minuman',
+                      type: 'minuman',
+                    ),
                 ],
               ),
               const SizedBox(height: SpaceDims.sp24),
@@ -69,7 +80,8 @@ class OngoingOrderPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp24),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: SpaceDims.sp24),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -105,7 +117,7 @@ class OngoingOrderPage extends StatelessWidget {
                           title: "Voucher",
                           prefix: "Pilih Voucher",
                           icon: IconsCs.voucher_icon_line,
-                          onPressed: (){},
+                          onPressed: () {},
                         ),
                         Stack(children: [
                           TileListDMenu(
@@ -122,9 +134,7 @@ class OngoingOrderPage extends StatelessWidget {
                           prefix: "Rp 4.000",
                           textStylePrefix: TypoSty.titlePrimary,
                           icon: Icons.wine_bar,
-                          onPressed: () => showDialog(
-                              context: context,
-                              builder: (_) => const InfoDiscountDialog()),
+                          onPressed: (){},
                         ),
                         const SizedBox(height: SpaceDims.sp18),
                         Text(
@@ -155,7 +165,8 @@ class OngoingOrderPage extends StatelessWidget {
                                   child: DecoratedBox(
                                     decoration: BoxDecoration(
                                       color: ColorSty.grey,
-                                      borderRadius: BorderRadius.circular(100.0),
+                                      borderRadius:
+                                          BorderRadius.circular(100.0),
                                     ),
                                   ),
                                 ),
@@ -189,12 +200,18 @@ class OngoingOrderPage extends StatelessWidget {
                             Expanded(child: Divider(color: Colors.transparent)),
                             SizedBox(
                               width: 80,
-                              child: Text("Silahkan Ambil", textAlign: TextAlign.center),
+                              child: Text(
+                                "Silahkan Ambil",
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                             Expanded(child: Divider(color: Colors.transparent)),
                             SizedBox(
                               width: 80,
-                              child: Text("Pesanan Selesai", textAlign: TextAlign.center),
+                              child: Text(
+                                "Pesanan Selesai",
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ],
                         ),

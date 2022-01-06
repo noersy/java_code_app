@@ -213,6 +213,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
   }
 }
 
+
 class ListOrder extends StatelessWidget {
   final String type, title;
   final List<Map<String,dynamic>> orders;
@@ -255,7 +256,7 @@ class ListOrder extends StatelessWidget {
             children: [
               for (Map<String, dynamic> item in orders)
                 if (item["jenis"]?.compareTo(type) == 0)
-                  CardMenuChecout(data: item),
+                  CardMenuCheckout(data: item),
             ],
           ),
         ),
@@ -266,19 +267,19 @@ class ListOrder extends StatelessWidget {
 
 
 
-class CardMenuChecout extends StatefulWidget {
+class CardMenuCheckout extends StatefulWidget {
   final Map<String, dynamic> data;
 
-  const CardMenuChecout({
+  const CardMenuCheckout({
     Key? key,
     required this.data,
   }) : super(key: key);
 
   @override
-  State<CardMenuChecout> createState() => _CardMenuChecoutState();
+  State<CardMenuCheckout> createState() => _CardMenuCheckoutState();
 }
 
-class _CardMenuChecoutState extends State<CardMenuChecout> {
+class _CardMenuCheckoutState extends State<CardMenuCheckout> {
   int _jumlahOrder = 0;
   late final String nama, harga, url;
   late final int amount;
