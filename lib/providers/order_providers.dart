@@ -1,20 +1,22 @@
 import 'package:flutter/cupertino.dart';
 
 class OrderProvider extends ChangeNotifier {
-  static int _checkOrder = 0;
-  static int _orderInProgress = 0;
+  // static int _orderInProgress = 0;
+  // static int _checkOrder = 0;
+  static List<Map<String, dynamic>> _orderInProgress = [];
+  static List<Map<String, dynamic>> _checkOrder = [];
 
-  int get checkOrder => _checkOrder;
-  int get orderProgress => _orderInProgress;
+  List<Map<String, dynamic>> get checkOrder => _checkOrder;
+  List<Map<String, dynamic>> get orderProgress => _orderInProgress;
 
-  addOrder(int jumlah) async {
-    _checkOrder += jumlah;
+  addOrder(Map<String, dynamic> item) async {
+    _checkOrder.add(item);
     notifyListeners();
   }
 
   submitOrder() async {
     _orderInProgress = _checkOrder;
-    _checkOrder = 0;
+    _checkOrder.clear();
     notifyListeners();
   }
 }

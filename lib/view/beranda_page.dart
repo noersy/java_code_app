@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/icons_cs_icons.dart';
 import 'package:java_code_app/thame/spacing.dart';
@@ -7,7 +6,6 @@ import 'package:java_code_app/thame/text_style.dart';
 import 'package:java_code_app/widget/card_coupun.dart';
 import 'package:java_code_app/widget/label_button.dart';
 import 'package:java_code_app/widget/listmenu.dart';
-import 'package:java_code_app/widget/menuberanda_card.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
 
 class BerandaPage extends StatefulWidget {
@@ -41,18 +39,24 @@ class _BerandaPageState extends State<BerandaPage> {
                   bottom: SpaceDims.sp8,
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide:
-                      const BorderSide(color: ColorSty.primary, width: 1.0),
+                  borderSide: const BorderSide(
+                    color: ColorSty.primary,
+                    width: 1.0,
+                  ),
                   borderRadius: BorderRadius.circular(30.0),
                 ),
                 border: OutlineInputBorder(
-                  borderSide:
-                      const BorderSide(color: ColorSty.primary, width: 1.0),
+                  borderSide: const BorderSide(
+                    color: ColorSty.primary,
+                    width: 1.0,
+                  ),
                   borderRadius: BorderRadius.circular(30.0),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide:
-                      const BorderSide(color: ColorSty.primary, width: 2.0),
+                  borderSide: const BorderSide(
+                    color: ColorSty.primary,
+                    width: 2.0,
+                  ),
                   borderRadius: BorderRadius.circular(30.0),
                 ),
               ),
@@ -140,8 +144,7 @@ class _ContentBerandaState extends State<ContentBeranda> {
                   icon: Icons.coffee,
                 ),
                 LabelButton(
-                  color:
-                      _selectedIndex == 2 ? ColorSty.black : ColorSty.primary,
+                  color: _selectedIndex == 2 ? ColorSty.black : ColorSty.primary,
                   onPressed: () => setState(() => _selectedIndex = 2),
                   title: "Minuman",
                   icon: IconsCs.ep_coffee,
@@ -158,8 +161,6 @@ class _ContentBerandaState extends State<ContentBeranda> {
     );
   }
 }
-
-
 
 List<Map<String, dynamic>> datafake = [
   {

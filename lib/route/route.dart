@@ -18,7 +18,7 @@ class Navigate {
   static void toChekOut(context) => Navigator.of(context).push(routeTransition(const CheckOutPage()));
   static void toSelectionVoucherPage(context) => Navigator.of(context).push(routeTransition(const SelectionVoucherPage()));
   static void toDetailVoucherPage(context, {required String urlImage, required String title}) {Navigator.of(context).push(routeTransition(DetailVoucherPage(urlImage: urlImage, title: title,),));}
-  static void toDetailMenu(context, {required String harga, required String urlImage, required String name, required int amount, int? count}) => Navigator.of(context).push(routeTransition(DetailMenu(harga: harga, urlImage: urlImage, name: name,count: count, amount: amount),),);
-  static void toEditOrderMenu(context, {required String harga, required String urlImage, required String name, required int amount, int? count}) => Navigator.of(context).push(routeTransition(EditOrderPage(harga: harga, urlImage: urlImage, name: name,count: count, amount: amount),),);
+  static void toDetailMenu(context, {required Map<String, dynamic> data, required int countOrder}) => Navigator.of(context).push(routeTransition(DetailMenu(data:data, countOrder: countOrder)));
+  static void toEditOrderMenu(context, {required Map<String, dynamic> data, required int countOrder}) => Navigator.of(context).push(routeTransition(EditOrderPage(data:data, countOrder: countOrder)));
   static void toViewOrder(context, {required String harga, required String urlImage, required String name, required int amount, int? count}) => Navigator.of(context).push(routeTransition(const OrderPage()));
 }

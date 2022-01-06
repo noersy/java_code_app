@@ -12,17 +12,11 @@ import 'package:java_code_app/widget/silver_appbar.dart';
 import 'package:provider/provider.dart';
 
 class DetailMenu extends StatefulWidget {
-  final String urlImage, name, harga;
-  final int amount;
-  final int? count;
-
+  final Map<String, dynamic> data;
+  final int countOrder;
   const DetailMenu({
     Key? key,
-    required this.urlImage,
-    required this.name,
-    required this.harga,
-    required this.amount,
-    this.count,
+    required this.data, required this.countOrder,
   }) : super(key: key);
 
   @override
@@ -30,9 +24,23 @@ class DetailMenu extends StatefulWidget {
 }
 
 class _DetailMenuState extends State<DetailMenu> {
+  late final String urlImage, name, harga;
+  late final int amount;
   int _jumlahOrder = 0;
   String _selectedLevel = "1";
   List<String> _selectedTopping = [];
+
+  @override
+  void initState() {
+    _jumlahOrder = widget.countOrder;
+    name = widget.data["nama"] ?? "";
+    urlImage = widget.data["image"] ?? "";
+    harga = widget.data["harga"] ?? "";
+    amount = widget.data["amount"] ?? 0;
+
+    super.initState();
+  }
+
 
   final List<String> _listLevel = ["1", "2", "3"];
   final List<String> _listTopping = ["Mozarella", "Sausagge", "Dimsum"];
@@ -52,7 +60,7 @@ class _DetailMenuState extends State<DetailMenu> {
             SizedBox(
               width: 234.0,
               height: 182.4,
-              child: Image.asset(widget.urlImage),
+              child: Image.asset(urlImage),
             ),
             const SizedBox(height: SpaceDims.sp24),
             Expanded(
@@ -84,12 +92,13 @@ class _DetailMenuState extends State<DetailMenu> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              widget.name,
+                              name,
                               style: TypoSty.title.copyWith(
                                 color: ColorSty.primary,
                               ),
                             ),
                             AddOrderButton(
+                              initCount: _jumlahOrder,
                               onChange: (int value) {
                                 setState(() => _jumlahOrder = value);
                               },
@@ -116,7 +125,7 @@ class _DetailMenuState extends State<DetailMenu> {
                             TileListDMenu(
                               icon: IconsCs.bi_cash_coin,
                               title: "Harga",
-                              prefix: widget.harga,
+                              prefix: harga,
                               onPressed: () {},
                             ),
                             TileListDMenu(
@@ -197,8 +206,16 @@ class _DetailMenuState extends State<DetailMenu> {
                             const SizedBox(height: SpaceDims.sp12),
                             ElevatedButton(
                               onPressed: () {
-                                Provider.of<OrderProvider>(context, listen: false)
-                                    .addOrder(_jumlahOrder);
+
+                                Provider.of<OrderProvider>(context, listen: false).addOrder({
+                                  "jenis": widget.data["jenis"],
+                                  "image": widget.data["image"],
+                                  "harga": widget.data["harga"],
+                                  "amount": widget.data["amount"],
+                                  "nama": widget.data["nama"],
+                                  "countOrder" : _jumlahOrder,
+                                });
+
                                 Navigator.of(context).pop();
                               },
                               style: ElevatedButton.styleFrom(

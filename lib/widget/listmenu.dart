@@ -45,21 +45,7 @@ class ListMenu extends StatelessWidget {
             children: [
               for (Map<String, dynamic> item in datafake)
                 if (item["jenis"]?.compareTo(type) == 0)
-                  CardMenu(
-                    onPressed: () => Navigate.toDetailMenu(
-                      context,
-                      count: 0,
-                      name: item["nama"] ?? "",
-                      urlImage: item["image"] ?? "",
-                      harga: item["harga"] ?? "",
-                      amount: item["amount"] ?? 0,
-                    ),
-                    nama: item["nama"] ?? "",
-                    url: item["image"] ?? "",
-                    harga: item["harga"] ?? "",
-                    amount: item["amount"] ?? 0,
-                    count: 0,
-                  ),
+                  CardMenu(data: item),
             ],
           ),
         ),

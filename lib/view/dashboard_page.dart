@@ -48,20 +48,25 @@ class _DashboardPageState extends State<DashboardPage> {
                     animation: OrderProvider(),
                     builder: (BuildContext context, Widget? child) {
                       int _orderOngoing = 0;
-                      _orderOngoing = Provider.of<OrderProvider>(context).orderProgress;
+                      _orderOngoing = Provider.of<OrderProvider>(context).orderProgress.length;
                       if (_orderOngoing > 0) {
                         return Container(
                           height: 20,
                           width: 20,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                              color: ColorSty.primary,
-                              borderRadius: BorderRadius.circular(100.0),
-                              border: Border.all(color: ColorSty.white)),
-                          child: Text("$_orderOngoing",
-                              style: TypoSty.button.copyWith(color: ColorSty.white,),),
+                            color: ColorSty.primary,
+                            borderRadius: BorderRadius.circular(100.0),
+                            border: Border.all(color: ColorSty.white),
+                          ),
+                          child: Text(
+                            "$_orderOngoing",
+                            style: TypoSty.button.copyWith(
+                              color: ColorSty.white,
+                            ),
+                          ),
                         );
-                      }else{
+                      } else {
                         return const SizedBox.shrink();
                       }
                     },
@@ -92,13 +97,12 @@ class _DashboardPageState extends State<DashboardPage> {
       floatingActionButton: AnimatedBuilder(
         animation: OrderProvider(),
         builder: (BuildContext context, Widget? child) {
-          int _order = Provider.of<OrderProvider>(context).checkOrder;
+          final _order = Provider.of<OrderProvider>(context).checkOrder.length;
           if (_order > 0) {
             return FloatingActionButton(
               backgroundColor: ColorSty.primary,
               onPressed: () {
                 Navigate.toChekOut(context);
-                Provider.of<OrderProvider>(context, listen: false).addOrder(0);
               },
               child: const Padding(
                 padding: EdgeInsets.only(right: 3.0),

@@ -12,17 +12,11 @@ import 'package:java_code_app/widget/silver_appbar.dart';
 import 'package:java_code_app/widget/vp_fingerprint_dialog.dart';
 
 class EditOrderPage extends StatefulWidget {
-  final String urlImage, name, harga;
-  final int amount;
-  final int? count;
+  final Map<String, dynamic> data;
+  final int countOrder;
 
   const EditOrderPage({
-    Key? key,
-    required this.urlImage,
-    required this.name,
-    required this.harga,
-    required this.amount,
-    this.count,
+    Key? key, required this.data, required this.countOrder,
   }) : super(key: key);
 
   @override
@@ -30,9 +24,25 @@ class EditOrderPage extends StatefulWidget {
 }
 
 class _EditOrderPageState extends State<EditOrderPage> {
-  int _jumlahOrder = 2;
   String _selectedLevel = "1";
   List<String> _selectedTopping = [];
+
+  late final String urlImage, name, harga;
+  late final int amount;
+  int _jumlahOrder = 0;
+
+  @override
+  void initState() {
+    _jumlahOrder = widget.countOrder;
+    name = widget.data["nama"] ?? "";
+    urlImage = widget.data["image"] ?? "";
+    harga = widget.data["harga"] ?? "";
+    amount = widget.data["amount"] ?? 0;
+
+    super.initState();
+  }
+
+
 
   final List<String> _listLevel = ["1", "2", "3"];
   final List<String> _listTopping = ["Mozarella", "Sausagge", "Dimsum"];
@@ -40,7 +50,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorSty.white.withOpacity(0.95),
+      backgroundColor: ColorSty.bg2,
       body: SilverAppBar(
         title: Text("Edit Menu", style: TypoSty.title),
         floating: true,
@@ -52,7 +62,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
             SizedBox(
               width: 234.0,
               height: 182.4,
-              child: Image.asset(widget.urlImage),
+              child: Image.asset(urlImage),
             ),
             const SizedBox(height: SpaceDims.sp24),
             Expanded(
@@ -84,12 +94,13 @@ class _EditOrderPageState extends State<EditOrderPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              widget.name,
+                              name,
                               style: TypoSty.title.copyWith(
                                 color: ColorSty.primary,
                               ),
                             ),
                             AddOrderButton(
+                              initCount: _jumlahOrder,
                               onChange: (int value) {
                                 setState(() => _jumlahOrder = value);
                               },
@@ -116,7 +127,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
                             TileListDMenu(
                               icon: IconsCs.bi_cash_coin,
                               title: "Harga",
-                              prefix: widget.harga,
+                              prefix: harga,
                               onPressed: () {},
                             ),
                             TileListDMenu(

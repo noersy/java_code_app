@@ -5,8 +5,9 @@ import 'package:java_code_app/thame/text_style.dart';
 
 class AddOrderButton extends StatefulWidget {
   final ValueChanged<int> onChange;
+  final int initCount;
 
-  const AddOrderButton({Key? key, required this.onChange}) : super(key: key);
+  const AddOrderButton({Key? key, required this.onChange, required this.initCount}) : super(key: key);
 
   @override
   _AddOrderButtonState createState() => _AddOrderButtonState();
@@ -14,6 +15,12 @@ class AddOrderButton extends StatefulWidget {
 
 class _AddOrderButtonState extends State<AddOrderButton> {
   int jumlahOrder = 0;
+
+  @override
+  void initState() {
+    jumlahOrder = widget.initCount;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

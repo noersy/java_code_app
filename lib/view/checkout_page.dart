@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/icons_cs_icons.dart';
@@ -10,9 +11,17 @@ import 'package:java_code_app/widget/listmenu_tile.dart';
 import 'package:java_code_app/widget/menuberanda_card.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
 import 'package:java_code_app/widget/vp_fingerprint_dialog.dart';
+import 'package:provider/provider.dart';
 
-class CheckOutPage extends StatelessWidget {
+class CheckOutPage extends StatefulWidget {
   const CheckOutPage({Key? key}) : super(key: key);
+
+  @override
+  State<CheckOutPage> createState() => _CheckOutPageState();
+}
+
+class _CheckOutPageState extends State<CheckOutPage> {
+  List<Map<String, dynamic>> get _orders  => Provider.of<OrderProvider>(context, listen: false).checkOrder;
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +43,16 @@ class CheckOutPage extends StatelessWidget {
           child: Column(
             children: [
               Column(
-                children: const [
+                children: [
+                  if(_orders.where((e) => e["jenis"] == "makanan").isNotEmpty)
                   ListOrder(
+                    orders: _orders,
                     title: 'Makanan',
                     type: 'makanan',
                   ),
+                  if(_orders.where((e) => e["jenis"] == "minuman").isNotEmpty)
                   ListOrder(
+                    orders: _orders,
                     title: 'Minuman',
                     type: 'minuman',
                   ),
@@ -199,7 +212,7 @@ class CheckOutPage extends StatelessWidget {
   }
 }
 
-class ListOrderOngoing extends StatelessWidget {
+class ListOrderOngoing extends StatefulWidget {
   final String type, title;
 
   const ListOrderOngoing({
@@ -209,16 +222,24 @@ class ListOrderOngoing extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<ListOrderOngoing> createState() => _ListOrderOngoingState();
+}
+
+class _ListOrderOngoingState extends State<ListOrderOngoing> {
+  List<Map<String, dynamic>> get _orders  => Provider.of<OrderProvider>(context, listen: false).orderProgress;
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         const SizedBox(height: SpaceDims.sp22),
+        if(_orders.where((element) => element["type"] == widget.type).isEmpty)
         Padding(
           padding: const EdgeInsets.only(left: SpaceDims.sp24),
           child: Row(
             children: [
               Icon(
-                type.compareTo("makanan") == 0
+                widget.type.compareTo("makanan") == 0
                     ? Icons.coffee
                     : IconsCs.ep_coffee,
                 color: ColorSty.primary,
@@ -226,7 +247,7 @@ class ListOrderOngoing extends StatelessWidget {
               ),
               const SizedBox(width: SpaceDims.sp4),
               Text(
-                title,
+                widget.title,
                 style: TypoSty.title.copyWith(
                   color: ColorSty.primary,
                 ),
@@ -239,16 +260,9 @@ class ListOrderOngoing extends StatelessWidget {
           width: double.infinity,
           child: Column(
             children: [
-              for (Map<String, dynamic> item in orders)
-                if (item["jenis"]?.compareTo(type) == 0)
-                  CardMenu(
-                    onPressed: (){},
-                    nama: item["nama"] ?? "",
-                    url: item["image"] ?? "",
-                    harga: item["harga"] ?? "",
-                    amount: item["amount"] ?? 0,
-                    count: 2,
-                  ),
+              for (Map<String, dynamic> item in _orders)
+                if (item["jenis"]?.compareTo(widget.type) == 0)
+                  CardMenuChecout(data: item),
             ],
           ),
         ),
@@ -259,11 +273,11 @@ class ListOrderOngoing extends StatelessWidget {
 
 class ListOrder extends StatelessWidget {
   final String type, title;
-
+  final List<Map<String,dynamic>> orders;
   const ListOrder({
     Key? key,
     required this.type,
-    required this.title,
+    required this.title, required this.orders,
   }) : super(key: key);
 
   @override
@@ -271,7 +285,7 @@ class ListOrder extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: SpaceDims.sp22),
-        Padding(
+          Padding(
           padding: const EdgeInsets.only(left: SpaceDims.sp24),
           child: Row(
             children: [
@@ -299,21 +313,7 @@ class ListOrder extends StatelessWidget {
             children: [
               for (Map<String, dynamic> item in orders)
                 if (item["jenis"]?.compareTo(type) == 0)
-                  CardMenu(
-                    onPressed: () => Navigate.toEditOrderMenu(
-                      context,
-                      count: 1,
-                      name: item["nama"] ?? "",
-                      urlImage: item["image"] ?? "",
-                      harga: item["harga"] ?? "",
-                      amount: item["amount"] ?? 0,
-                    ),
-                    nama: item["nama"] ?? "",
-                    url: item["image"] ?? "",
-                    harga: item["harga"] ?? "",
-                    amount: item["amount"] ?? 0,
-                    count: 2,
-                  ),
+                  CardMenuChecout(data: item),
             ],
           ),
         ),
@@ -322,26 +322,156 @@ class ListOrder extends StatelessWidget {
   }
 }
 
-List<Map<String, dynamic>> orders = [
-  {
-    "jenis": "minuman",
-    "image": "assert/image/menu/1637916759.png",
-    "harga": "Rp 10.000",
-    "nama": "Chicken Katsu",
-    "amount": 99,
-  },
-  {
-    "jenis": "makanan",
-    "image": "assert/image/menu/1637916792.png",
-    "harga": "Rp 10.000",
-    "nama": "Chicken Katsu",
-    "amount": 99,
-  },
-  {
-    "jenis": "makanan",
-    "image": "assert/image/menu/1637916829.png",
-    "harga": "Rp 10.000",
-    "nama": "Chicken Slam",
-    "amount": 99,
-  },
-];
+
+
+class CardMenuChecout extends StatefulWidget {
+  final Map<String, dynamic> data;
+
+  const CardMenuChecout({
+    Key? key,
+    required this.data,
+  }) : super(key: key);
+
+  @override
+  State<CardMenuChecout> createState() => _CardMenuChecoutState();
+}
+
+class _CardMenuChecoutState extends State<CardMenuChecout> {
+  int _jumlahOrder = 0;
+  late final String nama, harga, url;
+  late final int amount;
+
+  @override
+  void initState() {
+    _jumlahOrder = widget.data["countOrder"] ?? 0;
+    nama = widget.data["nama"] ?? "";
+    url = widget.data["image"] ?? "";
+    harga = widget.data["harga"] ?? "";
+    amount = widget.data["amount"] ?? 0;
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12, vertical: SpaceDims.sp2),
+      child: Card(
+        elevation: 4,
+        color: ColorSty.white80,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: TextButton(
+          onPressed: (){
+
+            Navigate.toEditOrderMenu(
+                context,
+                data: widget.data,
+                countOrder: _jumlahOrder
+            );
+
+          },
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                height: 74,
+                width: 74,
+                child: Padding(
+                  padding: const EdgeInsets.all(SpaceDims.sp4),
+                  child: Image.asset(url),
+                ),
+                decoration: BoxDecoration(
+                  color: ColorSty.grey60,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              const SizedBox(width: SpaceDims.sp8),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    nama,
+                    style: TypoSty.title.copyWith(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    harga,
+                    style: TypoSty.title.copyWith(color: ColorSty.primary),
+                  ),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.playlist_add_check,
+                        color: ColorSty.primary,
+                      ),
+                      const SizedBox(width: SpaceDims.sp4),
+                      Text(
+                        "Tambahkan Catatan",
+                        style: TypoSty.caption2.copyWith(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12.0,
+                          color: ColorSty.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              if (amount != 0)
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      if (_jumlahOrder != 0)
+                        TextButton(
+                          onPressed: () => setState(() => _jumlahOrder--),
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            minimumSize: const Size(25, 25),
+                            side: const BorderSide(
+                              color: ColorSty.primary, width: 2,
+                            ),
+                          ),
+                          child: const Icon(Icons.remove),
+                        ),
+                      if (_jumlahOrder != 0)
+                        Text("$_jumlahOrder", style: TypoSty.subtitle),
+                      TextButton(
+                        onPressed: () => setState(() => _jumlahOrder++),
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          minimumSize: const Size(25, 25),
+                          primary: ColorSty.white,
+                          backgroundColor: ColorSty.primary,
+                        ),
+                        child: const Icon(Icons.add, color: ColorSty.white),
+                      )
+                    ],
+                  ),
+                )
+              else
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.bottomRight,
+                    height: 70,
+                    padding:
+                    const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
+                    child: Text("Stok Habis",
+                      style: TypoSty.caption.copyWith(color: ColorSty.grey,),),
+                  ),
+                )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
