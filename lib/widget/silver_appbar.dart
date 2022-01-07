@@ -96,7 +96,7 @@ class MainSilverAppBar extends StatelessWidget {
               ) : null,
               backgroundColor: ColorSty.white,
               iconTheme: const IconThemeData(color: ColorSty.primary),
-              title: isExpand! ? Expanded(child: Align(alignment : Alignment.center, child: title)) : title,
+              title: isExpand! ? Align(alignment : Alignment.center, child: title) : title,
               pinned: pinned,
               floating: floating,
               forceElevated: true,

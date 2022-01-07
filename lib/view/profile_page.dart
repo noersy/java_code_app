@@ -53,7 +53,8 @@ class ProfilePage extends StatelessWidget {
                             alignment: Alignment.bottomCenter,
                             children: [
                               SvgPicture.asset(
-                                  "assert/image/icons/user-icon.svg"),
+                                "assert/image/icons/user-icon.svg",
+                              ),
                               Positioned(
                                 bottom: -10,
                                 child: TextButton(
@@ -80,8 +81,11 @@ class ProfilePage extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: const [
-                          Icon(Icons.check,
-                              color: ColorSty.primary, size: 18.0),
+                          Icon(
+                            Icons.check,
+                            color: ColorSty.primary,
+                            size: 18.0,
+                          ),
                           SizedBox(width: SpaceDims.sp2),
                           Text(
                             "Kamu sudah verifikasi KTP",
@@ -106,37 +110,51 @@ class ProfilePage extends StatelessWidget {
                           vertical: SpaceDims.sp12,
                         ),
                         padding: const EdgeInsets.symmetric(
-                            vertical: SpaceDims.sp22),
+                          vertical: SpaceDims.sp22,
+                        ),
                         decoration: BoxDecoration(
                           color: ColorSty.grey60,
                           borderRadius: BorderRadius.circular(30.0),
                         ),
                         child: Column(
-                          children: const [
-                            TileListProfile(
+                          children: [
+                            const TileListProfile(
                               top: false,
                               title: 'Nama',
                               suffix: 'Fajar',
                             ),
-                            TileListProfile(
+                            const TileListProfile(
                               title: 'Tanggal Lahir',
                               suffix: '01/03/1993',
                             ),
-                            TileListProfile(
+                            const TileListProfile(
                               title: 'No.Telepon',
                               suffix: '0822-4111-400',
                             ),
-                            TileListProfile(
+                            const TileListProfile(
                               title: 'Email',
                               suffix: 'lorem.ipsum@gmail.com',
                             ),
-                            TileListProfile(
+                            const TileListProfile(
                               title: 'Ubah PIN',
                               suffix: '*********',
                             ),
                             TileListProfile(
                               title: 'Ganti Bahasa',
                               suffix: 'Indonesia',
+                              onPreseed: () =>
+                                  showModalBottomSheet(
+                                    barrierColor: ColorSty.grey.withOpacity(0.2),
+                                    elevation: 5,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(30.0),
+                                            topRight: Radius.circular(30.0)
+                                        )
+                                    ),
+                                    context: context,
+                                    builder: (BuildContext context) => const ChangeLagSheet(),
+                                  ),
                             ),
                           ],
                         ),
@@ -150,7 +168,7 @@ class ProfilePage extends StatelessWidget {
                       const Padding(
                         padding: EdgeInsets.only(left: SpaceDims.sp32),
                         child:
-                            Text("Info Lainnya", style: TypoSty.titlePrimary),
+                        Text("Info Lainnya", style: TypoSty.titlePrimary),
                       ),
                       Container(
                         alignment: Alignment.center,
@@ -159,7 +177,8 @@ class ProfilePage extends StatelessWidget {
                           vertical: SpaceDims.sp12,
                         ),
                         padding: const EdgeInsets.symmetric(
-                            vertical: SpaceDims.sp22),
+                          vertical: SpaceDims.sp22,
+                        ),
                         decoration: BoxDecoration(
                           color: ColorSty.grey60,
                           borderRadius: BorderRadius.circular(30.0),
@@ -212,9 +231,20 @@ class ProfilePage extends StatelessWidget {
   }
 }
 
+class InfoSheet extends StatelessWidget {
+  const InfoSheet({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+
 class TileListProfile extends StatefulWidget {
   final bool? top, bottom;
   final String title, suffix;
+  final Function()? onPreseed;
 
   const TileListProfile({
     Key? key,
@@ -222,6 +252,7 @@ class TileListProfile extends StatefulWidget {
     this.bottom = false,
     required this.title,
     required this.suffix,
+    this.onPreseed,
   }) : super(key: key);
 
   @override
@@ -236,53 +267,65 @@ class _TileListProfileState extends State<TileListProfile> {
     return Column(
       children: [
         widget.top!
-            ? const Padding(
-                padding: EdgeInsets.symmetric(horizontal: SpaceDims.sp18),
-                child: Divider(thickness: 2),
-              )
+            ? Container(
+          margin: const EdgeInsets.symmetric(horizontal: SpaceDims.sp18),
+          width: double.infinity,
+          color: ColorSty.grey,
+          height: 2,
+        )
             : const SizedBox.shrink(),
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: SpaceDims.sp18,
           ),
           child: TextButton(
-            onPressed: () => showModalBottomSheet(
-              isScrollControlled: true,
-              barrierColor: ColorSty.grey.withOpacity(0.2),
-              context: context,
-              builder: (BuildContext context) => BottomSheetDetailMenu(
-                title: widget.title,
-                content: Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        maxLength: 100,
-                        controller: _editingController,
-                        decoration: InputDecoration(
-                          hintText: widget.suffix,
-                          contentPadding: EdgeInsets.all(0),
+            onPressed: widget.onPreseed ?? () =>
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  barrierColor: ColorSty.grey.withOpacity(0.2),
+                  elevation: 5,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30.0),
+                        topRight: Radius.circular(30.0)
+                      )
+                  ),
+                  context: context,
+                  builder: (BuildContext context) =>
+                      BottomSheetDetailMenu(
+                        title: widget.title,
+                        content: Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                maxLength: 100,
+                                controller: _editingController,
+                                decoration: InputDecoration(
+                                  hintText: widget.suffix,
+                                  contentPadding: const EdgeInsets.all(0),
+                                ),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.all(0),
+                                minimumSize: const Size(25.0, 25.0),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100.0),
+                                ),
+                              ),
+                              child: const Icon(Icons.check, size: 26.0),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(0),
-                        minimumSize: const Size(25.0, 25.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100.0),
-                        ),
-                      ),
-                      child: const Icon(Icons.check, size: 26.0),
-                    ),
-                  ],
                 ),
-              ),
-            ),
             style: TextButton.styleFrom(
-                primary: ColorSty.black,
-                padding: const EdgeInsets.all(8.0),
-                minimumSize: const Size(0, 0)),
+              primary: ColorSty.black,
+              padding: const EdgeInsets.all(SpaceDims.sp8),
+              minimumSize: const Size(0, 0),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -305,12 +348,82 @@ class _TileListProfileState extends State<TileListProfile> {
           ),
         ),
         widget.bottom!
-            ? const Padding(
-                padding: EdgeInsets.symmetric(horizontal: SpaceDims.sp18),
-                child: Divider(thickness: 2),
-              )
+            ? Container(
+          margin: const EdgeInsets.symmetric(horizontal: SpaceDims.sp18),
+          width: double.infinity,
+          color: ColorSty.grey,
+          height: 2,
+        )
             : const SizedBox.shrink(),
       ],
+    );
+  }
+}
+
+
+class ChangeLagSheet extends StatefulWidget {
+  const ChangeLagSheet({Key? key}) : super(key: key);
+
+  @override
+  _ChangeLagSheetState createState() => _ChangeLagSheetState();
+}
+
+class _ChangeLagSheetState extends State<ChangeLagSheet> {
+  bool _isIndo = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomSheetDetailMenu(
+      title: "Ganti Bahasa",
+      heightGp: SpaceDims.sp12,
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            onPressed: () => setState(()=> _isIndo = true),
+            style: ElevatedButton.styleFrom(
+              primary: _isIndo ? ColorSty.primary : ColorSty.white,
+              onPrimary: _isIndo ? ColorSty.white : ColorSty.black,
+              padding: const EdgeInsets.all(SpaceDims.sp8),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(7.0),
+              ),
+            ),
+            child: Align(
+              alignment: Alignment.center,
+              child: Row(
+                children: [
+                  Image.asset("assert/image/ind-flag.png"),
+                  const SizedBox(width: SpaceDims.sp12),
+                  const Text("Indonesia", style: TypoSty.button)
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: SpaceDims.sp14),
+          ElevatedButton(
+            onPressed: () => setState(()=> _isIndo = false),
+            style: ElevatedButton.styleFrom(
+              primary: !_isIndo ? ColorSty.primary : ColorSty.white,
+              onPrimary: !_isIndo ? ColorSty.white : ColorSty.black,
+              padding: const EdgeInsets.all(SpaceDims.sp8),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(7.0),
+              ),
+            ),
+            child: Align(
+              alignment: Alignment.center,
+              child: Row(
+                children: [
+                  Image.asset("assert/image/eng-flag.png", height: 40),
+                  const SizedBox(width: SpaceDims.sp12),
+                  const Text("Inggris", style: TypoSty.button)
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

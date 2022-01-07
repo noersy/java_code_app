@@ -5,12 +5,13 @@ import 'package:java_code_app/thame/text_style.dart';
 
 class BottomSheetDetailMenu extends StatelessWidget {
   final Widget content;
+  final double? heightGp;
   final String title;
 
   const BottomSheetDetailMenu({
     Key? key,
     required this.content,
-    required this.title,
+    required this.title, this.heightGp,
   }) : super(key: key);
 
   @override
@@ -30,7 +31,8 @@ class BottomSheetDetailMenu extends StatelessWidget {
               child: DecoratedBox(
                 decoration: BoxDecoration(
                     color: ColorSty.grey,
-                    borderRadius: BorderRadius.circular(30.0)),
+                    borderRadius: BorderRadius.circular(30.0),
+                ),
               ),
             ),
             const SizedBox(height: SpaceDims.sp16),
@@ -38,6 +40,7 @@ class BottomSheetDetailMenu extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               child: Text(title, style: TypoSty.title),
             ),
+            SizedBox(height: heightGp ?? 0.0),
             content,
           ],
         ),

@@ -179,6 +179,7 @@ class _VoucherCardState extends State<VoucherCard> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp8),
       child: ElevatedButton(
+        clipBehavior: Clip.antiAlias,
         onPressed: () async{
           _isSelected = (await Navigate.toDetailVoucherPage(
             context,
@@ -192,7 +193,7 @@ class _VoucherCardState extends State<VoucherCard> {
           padding: const EdgeInsets.all(0),
           primary: ColorSty.bg2,
           onPrimary: ColorSty.grey80,
-          elevation: 5,
+          // elevation: 5,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(20.0)),
           ),
@@ -229,7 +230,7 @@ class _VoucherCardState extends State<VoucherCard> {
             ),
             ClipRRect(
               borderRadius: BorderRadius.circular(20.0),
-              child: Image.asset(widget.urlImage),
+              child: Image.asset(widget.urlImage, filterQuality: FilterQuality.medium),
             ),
           ],
         ),
