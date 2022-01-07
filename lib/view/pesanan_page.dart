@@ -29,32 +29,32 @@ class _PesananPageState extends State<PesananPage>
 
   @override
   Widget build(BuildContext context) {
-    return SilverAppBar(
-      tabs: true,
-      notScrolled: true,
-      title: ScreenUtilInit(
-        builder: () => Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TabBar(
-            controller: _tabController,
-            indicatorPadding: const EdgeInsets.symmetric(
-              horizontal: 50.0,
-              vertical: 8.0,
-            ),
-            labelPadding: const EdgeInsets.all(0),
-            labelStyle: TypoSty.title.copyWith(fontSize: 18),
-            indicatorColor: ColorSty.primary,
-            unselectedLabelColor: ColorSty.black,
-            labelColor: ColorSty.primary,
-            tabs: const [
-              Tab(child: Text("Sedang Berjalan")),
-              Tab(child: Text("Riwayat")),
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomRight: Radius.circular(30.0),
+            bottomLeft: Radius.circular(30.0)
+          )
+        ),
+        backgroundColor: ColorSty.white,
+        title: TabBar(
+          controller: _tabController,
+          indicatorPadding: const EdgeInsets.symmetric(
+            horizontal: 50.0,
+            vertical: 8.0,
           ),
+          labelPadding: const EdgeInsets.all(0),
+          labelStyle: TypoSty.title.copyWith(fontSize: 18),
+          indicatorColor: ColorSty.primary,
+          unselectedLabelColor: ColorSty.black,
+          labelColor: ColorSty.primary,
+          tabs: const [
+            Tab(child: Text("Sedang Berjalan")),
+            Tab(child: Text("Riwayat")),
+          ],
         ),
       ),
-      floating: true,
-      pinned: true,
       body: TabBarView(
         controller: _tabController,
         children: const [OngoingScreen(), HistoryScreen()],
@@ -63,60 +63,70 @@ class _PesananPageState extends State<PesananPage>
   }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 class OngoingScreen extends StatelessWidget {
   const OngoingScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        right: SpaceDims.sp18,
-        left: SpaceDims.sp18,
-        top: SpaceDims.sp12,
-      ),
-      child: AnimatedBuilder(
-        animation: OrderProvider(),
-        builder: (BuildContext context, Widget? child) {
-          final _orderOngoing = Provider.of<OrderProvider>(context).orderProgress;
+    return SingleChildScrollView(
+      primary: true,
+      child: Padding(
+        padding: const EdgeInsets.only(
+          right: SpaceDims.sp18,
+          left: SpaceDims.sp18,
+          top: SpaceDims.sp12,
+        ),
+        child: AnimatedBuilder(
+          animation: OrderProvider(),
+          builder: (BuildContext context, Widget? child) {
+            final _orderOngoing = Provider.of<OrderProvider>(context).orderProgress;
 
-          // "id" : getRandomString(10),
-          // "jenis": widget.data["jenis"],
-          // "image": widget.data["image"],
-          // "harga": widget.data["harga"],
-          // "amount": widget.data["amount"],
-          // "nama": widget.data["nama"],
-          // "countOrder" : _jumlahOrder,
-
-
-          return _orderOngoing.isNotEmpty ? Column(
-            children: [
-              for(Map<String, dynamic> item in _orderOngoing)
-              OrderMenuCard(
-                onPressed: () => Navigate.toViewOrder(
-                  context,
-                  dataOrders: item,
-                ),
-                date: "date",
-                harga: item["orders"][0]["harga"],
-                title: item["orders"][0]["image"],
-                urlImage: item["orders"][0]["harga"],
-              ),
-            ],
-          ) : Stack(
-            alignment: Alignment.center,
-            children: [
-              Image.asset("assert/image/bg_findlocation.png"),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(IconsCs.order_icon, size: 120, color: ColorSty.primary),
-                  SizedBox(height: SpaceDims.sp22),
-                  Text("Sudah Pesan?\nLacak pesananmu\ndi sini.", textAlign: TextAlign.center, style: TypoSty.title2),
+            return SizedBox(
+              height: MediaQuery.of(context).size.height - 120,
+              child: _orderOngoing.isNotEmpty ? Column(
+                children: [
+                  for(Map<String, dynamic> item in _orderOngoing)
+                  OrderMenuCard(
+                    onPressed: () => Navigate.toViewOrder(
+                      context,
+                      dataOrders: item,
+                    ),
+                    date: "date",
+                    harga: item["orders"][0]["harga"],
+                    title: item["orders"][0]["image"],
+                    urlImage: item["orders"][0]["harga"],
+                  ),
                 ],
-              )
-            ],
-          );
-        },
+              ) : Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.asset("assert/image/bg_findlocation.png"),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(IconsCs.order_icon, size: 120, color: ColorSty.primary),
+                      SizedBox(height: SpaceDims.sp22),
+                      Text("Sudah Pesan?\nLacak pesananmu\ndi sini.", textAlign: TextAlign.center, style: TypoSty.title2),
+                    ],
+                  )
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -247,90 +257,96 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: SpaceDims.sp18,
-        vertical: SpaceDims.sp14,
-      ),
-      child: false ? Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                padding: const EdgeInsets.only(
-                  right: SpaceDims.sp8,
-                  left: SpaceDims.sp12,
-                  bottom: SpaceDims.sp4,
-                  top: SpaceDims.sp4,
-                ),
-                width: 160.0,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: ColorSty.grey60,
-                    border: Border.all(color: ColorSty.primary),
-                    borderRadius: BorderRadius.circular(30.0)
-                ),
-                child: DropdownButton<String>(
-                  isDense: true,
-                  value: _dropdownValue,
-                  alignment: Alignment.topCenter,
-                  borderRadius: BorderRadius.circular(30.0),
-                  icon: const Icon(Icons.arrow_drop_down),
-                  style: TypoSty.caption2.copyWith(fontSize: 14.0, fontWeight: FontWeight.w600, color: ColorSty.black),
-                  onChanged: (String? newValue) {
-                    setState(() => _dropdownValue = newValue!);
-                  },
-                  items: [
-                    for(String item in _item)
-                      DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(item),
-                      ),
-                  ],
-                ),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: ColorSty.grey60,
-                  shape: RoundedRectangleBorder(
-                    side: const BorderSide(color: ColorSty.primary),
-                    borderRadius: BorderRadius.circular(30.0)
-                  )
-                ),
-                onPressed: null,
-                child: SizedBox(
+    return SingleChildScrollView(
+      primary: true,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: SpaceDims.sp18,
+          vertical: SpaceDims.sp14,
+        ),
+        child: false ? Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(
+                    right: SpaceDims.sp8,
+                    left: SpaceDims.sp12,
+                    bottom: SpaceDims.sp4,
+                    top: SpaceDims.sp4,
+                  ),
                   width: 160.0,
-                  child: Row(
-                    children:  [
-                      const SizedBox(width: SpaceDims.sp12),
-                      Text("25/12/21 - 30/12/21", style: TypoSty.caption2.copyWith(fontSize: 13.0, fontWeight: FontWeight.w600)),
-                      const SizedBox(width: SpaceDims.sp8),
-                      const Icon(IconsCs.uiw_date, size: 18.0, color: ColorSty.primary),
-                      const SizedBox(width: SpaceDims.sp8),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: ColorSty.grey60,
+                      border: Border.all(color: ColorSty.primary),
+                      borderRadius: BorderRadius.circular(30.0)
+                  ),
+                  child: DropdownButton<String>(
+                    isDense: true,
+                    value: _dropdownValue,
+                    alignment: Alignment.topCenter,
+                    borderRadius: BorderRadius.circular(30.0),
+                    icon: const Icon(Icons.arrow_drop_down),
+                    style: TypoSty.caption2.copyWith(fontSize: 14.0, fontWeight: FontWeight.w600, color: ColorSty.black),
+                    onChanged: (String? newValue) {
+                      setState(() => _dropdownValue = newValue!);
+                    },
+                    items: [
+                      for(String item in _item)
+                        DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(item),
+                        ),
                     ],
                   ),
                 ),
-              ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: ColorSty.grey60,
+                    shape: RoundedRectangleBorder(
+                      side: const BorderSide(color: ColorSty.primary),
+                      borderRadius: BorderRadius.circular(30.0)
+                    )
+                  ),
+                  onPressed: null,
+                  child: SizedBox(
+                    width: 160.0,
+                    child: Row(
+                      children:  [
+                        const SizedBox(width: SpaceDims.sp12),
+                        Text("25/12/21 - 30/12/21", style: TypoSty.caption2.copyWith(fontSize: 13.0, fontWeight: FontWeight.w600)),
+                        const SizedBox(width: SpaceDims.sp8),
+                        const Icon(IconsCs.uiw_date, size: 18.0, color: ColorSty.primary),
+                        const SizedBox(width: SpaceDims.sp8),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            OrderHistoryCard(onPressed: () {}),
+          ],
+        ) : SizedBox(
+          height: MediaQuery.of(context).size.height - 80,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Image.asset("assert/image/bg_findlocation.png"),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(IconsCs.order_icon, size: 120, color: ColorSty.primary),
+                  SizedBox(height: SpaceDims.sp22),
+                  Text("Mulai buat pesanan.", textAlign: TextAlign.center, style: TypoSty.title2),
+                  SizedBox(height: SpaceDims.sp12),
+                  Text("Makanan yang kamu pesan\nakan muncul di sini agar\nkamu bisa menemukan\nmenu favoritmu lagi!.", textAlign: TextAlign.center, style: TypoSty.title2),
+                ],
+              )
             ],
           ),
-          OrderHistoryCard(onPressed: () {}),
-        ],
-      ) : Stack(
-        alignment: Alignment.center,
-        children: [
-          Image.asset("assert/image/bg_findlocation.png"),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Icon(IconsCs.order_icon, size: 120, color: ColorSty.primary),
-              SizedBox(height: SpaceDims.sp22),
-              Text("Mulai buat pesanan.", textAlign: TextAlign.center, style: TypoSty.title2),
-              SizedBox(height: SpaceDims.sp22),
-              Text("Makanan yang kamu pesan\nakan muncul di sini agar\nkamu bisa menemukan\nmenu favoritmu lagi!.", textAlign: TextAlign.center, style: TypoSty.title2),
-            ],
-          )
-        ],
+        ),
       ),
     );
   }

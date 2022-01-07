@@ -5,6 +5,7 @@ import 'package:java_code_app/thame/shadows.dart';
 import 'package:java_code_app/thame/spacing.dart';
 import 'package:java_code_app/thame/text_style.dart';
 import 'package:java_code_app/widget/addorder_button.dart';
+import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/detailmenu_sheet.dart';
 import 'package:java_code_app/widget/labellevel_selection.dart';
 import 'package:java_code_app/widget/listmenu_tile.dart';
@@ -51,172 +52,170 @@ class _EditOrderPageState extends State<EditOrderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorSty.bg2,
-      body: SilverAppBar(
-        title: Text("Edit Menu", style: TypoSty.title),
-        floating: true,
-        pinned: true,
+      appBar: const CostumeAppBar(
         back: true,
-        body: Column(
-          children: [
-            const SizedBox(height: SpaceDims.sp24),
-            SizedBox(
-              width: 234.0,
-              height: 182.4,
-              child: Image.asset(urlImage),
-            ),
-            const SizedBox(height: SpaceDims.sp24),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: ColorSty.white,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(20.0),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: const Offset(0, -1),
-                      color: ColorSty.grey.withOpacity(0.01),
-                      spreadRadius: 1,
-                    )
-                  ],
+        title: "Edit Menu",
+      ),
+      body: Column(
+        children: [
+          const SizedBox(height: SpaceDims.sp24),
+          SizedBox(
+            width: 234.0,
+            height: 182.4,
+            child: Image.asset(urlImage),
+          ),
+          const SizedBox(height: SpaceDims.sp24),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: ColorSty.white,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(30.0),
+                  topRight: Radius.circular(20.0),
                 ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: SpaceDims.sp24,
-                          left: SpaceDims.sp24,
-                          right: SpaceDims.sp24,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              name,
-                              style: TypoSty.title.copyWith(
-                                color: ColorSty.primary,
-                              ),
-                            ),
-                            AddOrderButton(
-                              initCount: _jumlahOrder,
-                              onChange: (int value) {
-                                setState(() => _jumlahOrder = value);
-                              },
-                            ),
-                          ],
-                        ),
+                boxShadow: [
+                  BoxShadow(
+                    offset: const Offset(0, -1),
+                    color: ColorSty.grey.withOpacity(0.01),
+                    spreadRadius: 1,
+                  )
+                ],
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: SpaceDims.sp24,
+                        left: SpaceDims.sp24,
+                        right: SpaceDims.sp24,
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(
-                          bottom: SpaceDims.sp12,
-                          left: SpaceDims.sp24,
-                          right: 108.0,
-                        ),
-                        child: Text(
-                            "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            name,
+                            style: TypoSty.title.copyWith(
+                              color: ColorSty.primary,
+                            ),
+                          ),
+                          AddOrderButton(
+                            initCount: _jumlahOrder,
+                            onChange: (int value) {
+                              setState(() => _jumlahOrder = value);
+                            },
+                          ),
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: SpaceDims.sp24,
-                          right: SpaceDims.sp24,
-                        ),
-                        child: Column(
-                          children: [
-                            TileListDMenu(
-                              icon: IconsCs.bi_cash_coin,
-                              title: "Harga",
-                              prefix: harga,
-                              onPressed: () {},
-                            ),
-                            TileListDMenu(
-                              prefixIcon: true,
-                              icon: IconsCs.fire,
-                              title: "Level",
-                              prefix: _selectedLevel,
-                              onPressed: () => _showDialogLevel(_listLevel),
-                            ),
-                            TileListDMenu(
-                              prefixIcon: true,
-                              icon: IconsCs.topping_icon,
-                              title: "Topping",
-                              prefix: "Morizela",
-                              onPressed: () => showModalBottomSheet(
-                                isScrollControlled: true,
-                                barrierColor: ColorSty.grey.withOpacity(0.2),
-                                context: context,
-                                builder: (_) => BottomSheetDetailMenu(
-                                  title: "Pilih Toping",
-                                  content: Expanded(
-                                    child: ListView(
-                                      scrollDirection: Axis.horizontal,
-                                      children: [
-                                        for (String item in _listTopping)
-                                          LabelToppingSelection(
-                                            title: item,
-                                            onSelection: (value) {},
-                                          )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            TileListDMenu(
-                              prefixIcon: true,
-                              icon: IconsCs.note_icon,
-                              title: "Catatan",
-                              prefix: "Lorem Ipsum sit aaasss",
-                              onPressed: () => showModalBottomSheet(
-                                isScrollControlled: true,
-                                barrierColor: ColorSty.grey.withOpacity(0.2),
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    BottomSheetDetailMenu(
-                                  title: "Buat Catatan",
-                                  content: Row(
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(
+                        bottom: SpaceDims.sp12,
+                        left: SpaceDims.sp24,
+                        right: 108.0,
+                      ),
+                      child: Text(
+                          "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: SpaceDims.sp24,
+                        right: SpaceDims.sp24,
+                      ),
+                      child: Column(
+                        children: [
+                          TileListDMenu(
+                            icon: IconsCs.bi_cash_coin,
+                            title: "Harga",
+                            prefix: harga,
+                            onPressed: () {},
+                          ),
+                          TileListDMenu(
+                            prefixIcon: true,
+                            icon: IconsCs.fire,
+                            title: "Level",
+                            prefix: _selectedLevel,
+                            onPressed: () => _showDialogLevel(_listLevel),
+                          ),
+                          TileListDMenu(
+                            prefixIcon: true,
+                            icon: IconsCs.topping_icon,
+                            title: "Topping",
+                            prefix: "Morizela",
+                            onPressed: () => showModalBottomSheet(
+                              isScrollControlled: true,
+                              barrierColor: ColorSty.grey.withOpacity(0.2),
+                              context: context,
+                              builder: (_) => BottomSheetDetailMenu(
+                                title: "Pilih Toping",
+                                content: Expanded(
+                                  child: ListView(
+                                    scrollDirection: Axis.horizontal,
                                     children: [
-                                      Expanded(
-                                        child: TextFormField(
-                                          maxLength: 100,
-                                          decoration: const InputDecoration(
-                                            contentPadding:
-                                                EdgeInsets.symmetric(
-                                                    horizontal: 0, vertical: 0),
-                                          ),
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () {},
-                                        style: ElevatedButton.styleFrom(
-                                          padding: const EdgeInsets.all(0),
-                                          minimumSize: const Size(25.0, 25.0),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(100.0),
-                                          ),
-                                        ),
-                                        child:
-                                            const Icon(Icons.check, size: 26.0),
-                                      ),
+                                      for (String item in _listTopping)
+                                        LabelToppingSelection(
+                                          title: item,
+                                          onSelection: (value) {},
+                                        )
                                     ],
                                   ),
                                 ),
                               ),
                             ),
-                            const Divider(thickness: 1.5),
-                            const SizedBox(height: SpaceDims.sp12),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                          ),
+                          TileListDMenu(
+                            prefixIcon: true,
+                            icon: IconsCs.note_icon,
+                            title: "Catatan",
+                            prefix: "Lorem Ipsum sit aaasss",
+                            onPressed: () => showModalBottomSheet(
+                              isScrollControlled: true,
+                              barrierColor: ColorSty.grey.withOpacity(0.2),
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  BottomSheetDetailMenu(
+                                    title: "Buat Catatan",
+                                    content: Row(
+                                      children: [
+                                        Expanded(
+                                          child: TextFormField(
+                                            maxLength: 100,
+                                            decoration: const InputDecoration(
+                                              contentPadding:
+                                              EdgeInsets.symmetric(
+                                                  horizontal: 0, vertical: 0),
+                                            ),
+                                          ),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () {},
+                                          style: ElevatedButton.styleFrom(
+                                            padding: const EdgeInsets.all(0),
+                                            minimumSize: const Size(25.0, 25.0),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(100.0),
+                                            ),
+                                          ),
+                                          child:
+                                          const Icon(Icons.check, size: 26.0),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                            ),
+                          ),
+                          const Divider(thickness: 1.5),
+                          const SizedBox(height: SpaceDims.sp12),
+                        ],
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       bottomNavigationBar: Container(
         height: 60.0,
