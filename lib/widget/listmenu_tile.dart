@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/spacing.dart';
 import 'package:java_code_app/thame/text_style.dart';
@@ -7,7 +8,8 @@ class TileListDMenu extends StatelessWidget {
   final String title;
   final String? prefix;
   final Widget? prefixCostume;
-  final IconData icon;
+  final IconData? icon;
+  final SvgPicture? svgPicture;
   final bool? prefixIcon;
   final TextStyle? textStylePrefix;
   final Function() onPressed;
@@ -17,12 +19,12 @@ class TileListDMenu extends StatelessWidget {
     Key? key,
     required this.title,
     this.prefix,
-    required this.icon,
+    this.icon,
     this.prefixIcon,
     required this.onPressed,
     this.textStylePrefix,
     this.dense,
-    this.prefixCostume,
+    this.prefixCostume, this.svgPicture,
   }) : super(key: key);
 
   @override

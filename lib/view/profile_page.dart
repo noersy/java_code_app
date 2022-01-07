@@ -33,11 +33,12 @@ class ProfilePage extends StatelessWidget {
             )
           ],
         ),
-        body: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Image.asset("assert/image/bg_findlocation.png"),
-              Column(
+        body: Stack(
+          children: [
+            Image.asset("assert/image/bg_findlocation.png"),
+            SingleChildScrollView(
+              primary: true,
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Column(
@@ -203,8 +204,8 @@ class ProfilePage extends StatelessWidget {
                   const SizedBox(height: SpaceDims.sp22),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
