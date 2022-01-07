@@ -31,6 +31,7 @@ class _PesananPageState extends State<PesananPage>
   Widget build(BuildContext context) {
     return SilverAppBar(
       tabs: true,
+      notScrolled: true,
       title: ScreenUtilInit(
         builder: () => Padding(
           padding: const EdgeInsets.all(8.0),
@@ -76,7 +77,7 @@ class OngoingScreen extends StatelessWidget {
       child: AnimatedBuilder(
         animation: OrderProvider(),
         builder: (BuildContext context, Widget? child) {
-          final _ordersOngoing = Provider.of<OrderProvider>(context).orderProgress;
+          final _orderOngoing = Provider.of<OrderProvider>(context).orderProgress;
 
           // "id" : getRandomString(10),
           // "jenis": widget.data["jenis"],
@@ -87,21 +88,18 @@ class OngoingScreen extends StatelessWidget {
           // "countOrder" : _jumlahOrder,
 
 
-          return _ordersOngoing.isNotEmpty ? Column(
+          return _orderOngoing.isNotEmpty ? Column(
             children: [
-              for(var item in _ordersOngoing)
+              for(Map<String, dynamic> item in _orderOngoing)
               OrderMenuCard(
                 onPressed: () => Navigate.toViewOrder(
                   context,
-                  harga: item["harga"],
-                  urlImage: item["image"],
-                  name: item["name"],
-                  amount: item["countOrder"],
+                  dataOrders: item,
                 ),
-                urlImage: item["image"],
-                title: item["name"],
                 date: "date",
-                harga: item["harga"],
+                harga: item["orders"][0]["harga"],
+                title: item["orders"][0]["image"],
+                urlImage: item["orders"][0]["harga"],
               ),
             ],
           ) : Stack(
@@ -139,6 +137,8 @@ class OrderMenuCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(urlImage);
+
     return Card(
       elevation: 4,
       color: ColorSty.white80,

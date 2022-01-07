@@ -7,7 +7,8 @@ import 'package:java_code_app/widget/orderdone_dialog.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 
 class VPinDialog extends StatefulWidget {
-  const VPinDialog({Key? key}) : super(key: key);
+  final Map<String, dynamic> voucher;
+  const VPinDialog({Key? key, required this.voucher}) : super(key: key);
 
   @override
   State<VPinDialog> createState() => _VPinDialogState();
@@ -69,7 +70,7 @@ class _VPinDialogState extends State<VPinDialog> {
                         eachFieldConstraints: const BoxConstraints(minHeight: 30.0, minWidth: 30.0),
                         onSubmit: (_) {
                           Navigator.pop(context);
-                          showDialog(context: context, builder: (_)=>const OrderDoneDialog());
+                          showDialog(context: context, builder: (_)=> OrderDoneDialog(voucher: widget.voucher));
                         },
                         separator: Padding(
                           padding: const EdgeInsets.all(SpaceDims.sp4),

@@ -7,7 +7,8 @@ import 'package:java_code_app/thame/text_style.dart';
 import 'package:provider/provider.dart';
 
 class OrderDoneDialog extends StatelessWidget {
-  const OrderDoneDialog({Key? key}) : super(key: key);
+  final Map<String, dynamic> voucher;
+  const OrderDoneDialog({Key? key, required this.voucher}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +68,7 @@ class OrderDoneDialog extends StatelessWidget {
                               ),
                             ),
                           ),
-                          onPressed: () => _submit(context),
+                          onPressed: () => _submit(context, voucher: voucher),
                           child: const SizedBox(
                             width: double.infinity,
                             child: Align(
@@ -88,8 +89,8 @@ class OrderDoneDialog extends StatelessWidget {
     );
   }
 
-  _submit(context) async{
-    await Provider.of<OrderProvider>(context, listen: false).submitOrder();
+  _submit(context, {Map<String, dynamic>? voucher}) async{
+    await Provider.of<OrderProvider>(context, listen: false).submitOrder(voucher);
     Navigator.pop(context);
     Navigator.pop(context);
 

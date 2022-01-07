@@ -23,6 +23,7 @@ class CheckOutPage extends StatefulWidget {
 class _CheckOutPageState extends State<CheckOutPage> {
   List<Map<String, dynamic>> get _orders  => Provider.of<OrderProvider>(context, listen: false).checkOrder;
   Map<String, dynamic> _selectedVoucher = {};
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -197,7 +198,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                       onPressed: () {
                         showDialog(
                             context: context,
-                            builder: (_) => VFingerPrintDialog(ctx: context),
+                            builder: (_) => VFingerPrintDialog(ctx: context, voucher: _selectedVoucher),
                         );
                       },
                       style: ElevatedButton.styleFrom(

@@ -3,14 +3,17 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/text_style.dart';
 import 'package:java_code_app/widget/vp_pin_dialog.dart';
+import 'package:provider/provider.dart';
 
 class VFingerPrintDialog extends StatelessWidget {
-  final BuildContext ctx;
-  const VFingerPrintDialog({Key? key, required this.ctx}) : super(key: key);
+  final BuildContext ctx;  final Map<String, dynamic> voucher;
+
+  const VFingerPrintDialog({Key? key, required this.ctx, required this.voucher}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +60,7 @@ class VFingerPrintDialog extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       Navigator.pop(context);
-                      showDialog(context: context, builder: (_)=> const VPinDialog());
+                      showDialog(context: context, builder: (_)=> VPinDialog(voucher: voucher));
                     },
                     child: Text(
                       "Verifikasi Menggunakan PIN",

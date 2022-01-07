@@ -10,15 +10,14 @@ import 'package:java_code_app/widget/silver_appbar.dart';
 import 'package:provider/provider.dart';
 
 class OngoingOrderPage extends StatefulWidget {
-  const OngoingOrderPage({Key? key}) : super(key: key);
+  final Map<String, dynamic> dataOrder;
+  const OngoingOrderPage({Key? key, required this.dataOrder}) : super(key: key);
 
   @override
   State<OngoingOrderPage> createState() => _OngoingOrderPageState();
 }
 
 class _OngoingOrderPageState extends State<OngoingOrderPage> {
-  List<Map<String, dynamic>> get _orders =>
-      Provider.of<OrderProvider>(context, listen: false).orderProgress;
 
   @override
   Widget build(BuildContext context) {
@@ -42,15 +41,15 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
             children: [
               Column(
                 children: [
-                  if (_orders.where((e) => e["jenis"] == "makanan").isNotEmpty)
+                  if (widget.dataOrder["orders"].where((e) => e["jenis"] == "makanan").isNotEmpty)
                     ListOrderOngoing(
-                      orders: _orders,
+                      orders: widget.dataOrder["orders"],
                       title: 'Makanan',
                       type: 'makanan',
                     ),
-                  if (_orders.where((e) => e["jenis"] == "minuman").isNotEmpty)
+                  if (widget.dataOrder["orders"].where((e) => e["jenis"] == "minuman").isNotEmpty)
                     ListOrderOngoing(
-                      orders: _orders,
+                      orders: widget.dataOrder["orders"],
                       title: 'Minuman',
                       type: 'minuman',
                     ),
@@ -115,7 +114,13 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                           dense: true,
                           prefixIcon: true,
                           title: "Voucher",
-                          prefix: "Pilih Voucher",
+                          prefixCostume: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(widget.dataOrder["voucher"]["harga"], style: TypoSty.captionSemiBold.copyWith(fontWeight: FontWeight.normal, color: Colors.red), textAlign: TextAlign.right),
+                              Text(widget.dataOrder["voucher"]["title"], style: TypoSty.mini, overflow: TextOverflow.ellipsis, textAlign: TextAlign.right)
+                            ],
+                          ),
                           icon: IconsCs.voucher_icon_line,
                           onPressed: () {},
                         ),

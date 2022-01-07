@@ -6,6 +6,7 @@ import 'package:java_code_app/thame/icons_cs_icons.dart';
 import 'package:java_code_app/thame/text_style.dart';
 import 'package:java_code_app/view/beranda_page.dart';
 import 'package:java_code_app/view/pesanan_page.dart';
+import 'package:java_code_app/view/profile_page.dart';
 import 'package:provider/provider.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -48,7 +49,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     animation: OrderProvider(),
                     builder: (BuildContext context, Widget? child) {
                        int _orderOngoing = Provider.of<OrderProvider>(context).orderProgress.length;
-
+                       // print(Provider.of<OrderProvider>(context).orderProgress.first);
                       if (_orderOngoing > 0) {
                         return Container(
                           height: 20,
@@ -91,7 +92,7 @@ class _DashboardPageState extends State<DashboardPage> {
         children: const [
           BerandaPage(),
           PesananPage(),
-          Text("3"),
+          ProfilePage(),
         ],
       ),
       floatingActionButton: AnimatedBuilder(

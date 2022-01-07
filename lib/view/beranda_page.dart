@@ -21,47 +21,42 @@ class _BerandaPageState extends State<BerandaPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: MainSilverAppBar(
-        title: Stack(
-          alignment: Alignment.centerLeft,
-          children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: SpaceDims.sp14),
-              child: Icon(IconsCs.search_icon),
-            ),
-            TextFormField(
-              decoration: InputDecoration(
-                isDense: true,
-                hintText: "Pencarian",
-                contentPadding: const EdgeInsets.only(
-                  left: 53,
-                  right: SpaceDims.sp12,
-                  top: SpaceDims.sp12,
-                  bottom: SpaceDims.sp8,
+        title: SizedBox(
+          height: 42.0,
+          child: TextFormField(
+            decoration: InputDecoration(
+              isDense: true,
+              hintText: "Pencarian",
+              prefixIcon: const Icon(IconsCs.search_icon, color: ColorSty.primary),
+              contentPadding: const EdgeInsets.only(
+                left: 53,
+                right: SpaceDims.sp12,
+                top: SpaceDims.sp12,
+                bottom: SpaceDims.sp8,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: ColorSty.primary,
+                  width: 1.0,
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: ColorSty.primary,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(30.0),
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: ColorSty.primary,
+                  width: 1.0,
                 ),
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: ColorSty.primary,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(30.0),
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: ColorSty.primary,
+                  width: 2.0,
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: ColorSty.primary,
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
+                borderRadius: BorderRadius.circular(30.0),
               ),
             ),
-          ],
+          ),
         ),
         floating: true,
         pinned: true,

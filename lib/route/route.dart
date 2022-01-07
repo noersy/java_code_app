@@ -20,5 +20,5 @@ class Navigate {
   static Future<bool>? toDetailVoucherPage(context, {required String urlImage, required String title}) async => await Navigator.of(context).push(routeTransition(DetailVoucherPage(urlImage: urlImage, title: title,))) ?? false;
   static void toDetailMenu(context, {required Map<String, dynamic> data, required int countOrder}) => Navigator.of(context).push(routeTransition(DetailMenu(data:data, countOrder: countOrder)));
   static void toEditOrderMenu(context, {required Map<String, dynamic> data, required int countOrder}) => Navigator.of(context).push(routeTransition(EditOrderPage(data:data, countOrder: countOrder)));
-  static void toViewOrder(context, {required String harga, required String urlImage, required String name, required int amount, int? count}) => Navigator.of(context).push(routeTransition(const OngoingOrderPage()));
+  static void toViewOrder(context, {required Map<String, dynamic> dataOrders}) => Navigator.of(context).push(routeTransition( OngoingOrderPage(dataOrder: dataOrders)));
 }

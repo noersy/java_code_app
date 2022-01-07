@@ -19,9 +19,18 @@ class OrderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  submitOrder() async {
-    _orderInProgress.addAll(_checkOrder);
-    _checkOrder.clear();
+  submitOrder(Map<String, dynamic>? voucher) async {
+
+    _orderInProgress.addAll([
+      {
+        "orders": _checkOrder,
+        "voucher" : voucher,
+      }
+    ]);
+
+
+    // print(_orderInProgress);
+    _checkOrder = [];
     notifyListeners();
   }
 }
