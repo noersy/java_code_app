@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/icons_cs_icons.dart';
 import 'package:java_code_app/thame/spacing.dart';
@@ -25,14 +26,9 @@ class ListOrderOngoing extends StatelessWidget {
             padding: const EdgeInsets.only(left: SpaceDims.sp24),
             child: Row(
               children: [
-                Icon(
-                  type.compareTo("makanan") == 0
-                      ? Icons.coffee
-                      : IconsCs.ep_coffee,
-                  color: ColorSty.primary,
-                  size: 26.0,
-                ),
-                const SizedBox(width: SpaceDims.sp4),
+                type.compareTo("makanan") == 0
+                    ? SvgPicture.asset("assert/image/icons/ep_food.svg", height: 22)
+                    : SvgPicture.asset("assert/image/icons/ep_coffee.svg", height: 26),                const SizedBox(width: SpaceDims.sp4),
                 Text(
                   title,
                   style: TypoSty.title.copyWith(

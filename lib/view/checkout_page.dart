@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/thame/colors.dart';
@@ -243,13 +244,9 @@ class ListOrder extends StatelessWidget {
           padding: const EdgeInsets.only(left: SpaceDims.sp24),
           child: Row(
             children: [
-              Icon(
-                type.compareTo("makanan") == 0
-                    ? Icons.coffee
-                    : IconsCs.ep_coffee,
-                color: ColorSty.primary,
-                size: 26.0,
-              ),
+              type.compareTo("makanan") == 0
+                  ? SvgPicture.asset("assert/image/icons/ep_food.svg", height: 22)
+                  : SvgPicture.asset("assert/image/icons/ep_coffee.svg", height: 26),
               const SizedBox(width: SpaceDims.sp4),
               Text(
                 title,

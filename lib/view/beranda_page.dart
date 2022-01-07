@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/thame/colors.dart';
 import 'package:java_code_app/thame/icons_cs_icons.dart';
 import 'package:java_code_app/thame/spacing.dart';
@@ -136,7 +137,7 @@ class _ContentBerandaState extends State<ContentBeranda> {
                   color: _selectedIndex == 1 ? ColorSty.black : ColorSty.primary,
                   onPressed: () => setState(() => _selectedIndex = 1),
                   title: "Makanan",
-                  icon: Icons.coffee,
+                  svgPicture: SvgPicture.asset("assert/image/icons/ep_food.svg", color: ColorSty.white, width: 24,),
                 ),
                 LabelButton(
                   color: _selectedIndex == 2 ? ColorSty.black : ColorSty.primary,
