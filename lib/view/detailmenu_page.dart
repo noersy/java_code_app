@@ -48,6 +48,8 @@ class _DetailMenuState extends State<DetailMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final safeTopPadding = MediaQuery.of(context).viewPadding.vertical;
+
     return Scaffold(
       backgroundColor: ColorSty.bg2,
       body: SilverAppBar(
@@ -55,17 +57,19 @@ class _DetailMenuState extends State<DetailMenu> {
         floating: true,
         pinned: true,
         back: true,
-        body: Column(
-          children: [
-            const SizedBox(height: SpaceDims.sp24),
-            SizedBox(
-              width: 234.0,
-              height: 182.4,
-              child: Image.asset(urlImage),
-            ),
-            const SizedBox(height: SpaceDims.sp24),
-            Expanded(
-              child: Container(
+        notScrolled: true,
+        body: SingleChildScrollView(
+          primary: true,
+          child: Column(
+            children: [
+              const SizedBox(height: SpaceDims.sp24),
+              SizedBox(
+                width: 234.0,
+                height: 182.4,
+                child: Image.asset(urlImage),
+              ),
+              const SizedBox(height: SpaceDims.sp24),
+              Container(
                 decoration: BoxDecoration(
                     color: ColorSty.white,
                     borderRadius: const BorderRadius.only(
@@ -80,198 +84,196 @@ class _DetailMenuState extends State<DetailMenu> {
                       )
                     ],
                 ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: SpaceDims.sp24,
-                          left: SpaceDims.sp24,
-                          right: SpaceDims.sp24,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              name,
-                              style: TypoSty.title.copyWith(
-                                color: ColorSty.primary,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: SpaceDims.sp24,
+                        left: SpaceDims.sp24,
+                        right: SpaceDims.sp24,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            name,
+                            style: TypoSty.title.copyWith(
+                              color: ColorSty.primary,
+                            ),
+                          ),
+                          AddOrderButton(
+                            initCount: _jumlahOrder,
+                            onChange: (int value) {
+                              setState(() => _jumlahOrder = value);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(
+                        bottom: SpaceDims.sp12,
+                        left: SpaceDims.sp24,
+                        right: 108.0,
+                      ),
+                      child: Text(
+                          "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: SpaceDims.sp24,
+                        right: SpaceDims.sp24,
+                      ),
+                      child: Column(
+                        children: [
+                          TileListDMenu(
+                            icon: IconsCs.bi_cash_coin,
+                            title: "Harga",
+                            prefix: harga,
+                            onPressed: () {},
+                          ),
+                          TileListDMenu(
+                            prefixIcon: true,
+                            icon: IconsCs.fire,
+                            title: "Level",
+                            prefix: _selectedLevel,
+                            onPressed: () => _showDialogLevel(_listLevel),
+                          ),
+                          TileListDMenu(
+                            prefixIcon: true,
+                            icon: IconsCs.topping_icon,
+                            prefixCostume: RichText(
+                              textAlign: TextAlign.end,
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                style: TypoSty.captionSemiBold.copyWith(color: ColorSty.black),
+                                text: _selectedTopping.isEmpty ? _listTopping[0] : "",
+                                children: [
+                                  for(final item in _selectedTopping)
+                                    TextSpan(
+                                      text: item + " ",
+                                      style: TypoSty.captionSemiBold.copyWith(color: ColorSty.black),
+                                    )
+                                ]
                               ),
                             ),
-                            AddOrderButton(
-                              initCount: _jumlahOrder,
-                              onChange: (int value) {
-                                setState(() => _jumlahOrder = value);
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(
-                          bottom: SpaceDims.sp12,
-                          left: SpaceDims.sp24,
-                          right: 108.0,
-                        ),
-                        child: Text(
-                            "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: SpaceDims.sp24,
-                          right: SpaceDims.sp24,
-                        ),
-                        child: Column(
-                          children: [
-                            TileListDMenu(
-                              icon: IconsCs.bi_cash_coin,
-                              title: "Harga",
-                              prefix: harga,
-                              onPressed: () {},
-                            ),
-                            TileListDMenu(
-                              prefixIcon: true,
-                              icon: IconsCs.fire,
-                              title: "Level",
-                              prefix: _selectedLevel,
-                              onPressed: () => _showDialogLevel(_listLevel),
-                            ),
-                            TileListDMenu(
-                              prefixIcon: true,
-                              icon: IconsCs.topping_icon,
-                              prefixCostume: RichText(
-                                textAlign: TextAlign.end,
-                                overflow: TextOverflow.ellipsis,
-                                text: TextSpan(
-                                  style: TypoSty.captionSemiBold.copyWith(color: ColorSty.black),
-                                  text: _selectedTopping.isEmpty ? _listTopping[0] : "",
-                                  children: [
-                                    for(final item in _selectedTopping)
-                                      TextSpan(
-                                        text: item + " ",
-                                        style: TypoSty.captionSemiBold.copyWith(color: ColorSty.black),
-                                      )
-                                  ]
-                                ),
-                              ),
-                              title: "Topping",
-                              onPressed: () {
-                                showModalBottomSheet(
-                                  isScrollControlled: true,
-                                  barrierColor: ColorSty.grey.withOpacity(0.2),
-                                  context: context,
-                                  builder: (_) =>
-                                      BottomSheetDetailMenu(
-                                        title: "Pilih Toping",
-                                        content: Expanded(
-                                          child: ListView(
-                                            scrollDirection: Axis.horizontal,
-                                            children: [
-                                              for (String item in _listTopping)
-                                                LabelToppingSelection(
-                                                  title: item,
-                                                  initial: _selectedTopping.where((e) => e == item).isNotEmpty,
-                                                  onSelection: (value) {
-                                                    if(_selectedTopping.where((e) => e == value).isNotEmpty) {
-                                                      setState(() => _selectedTopping.remove(value));
-                                                    }else{
-                                                      setState(() => _selectedTopping.add(value));
-                                                    }
-                                                  },
-                                                )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                );
-                              }
-                            ),
-                            TileListDMenu(
-                              prefixIcon: true,
-                              icon: IconsCs.note_icon,
-                              title: "Catatan",
-                              prefix: "Lorem Ipsum sit aaasss",
-                              onPressed: () => showModalBottomSheet(
+                            title: "Topping",
+                            onPressed: () {
+                              showModalBottomSheet(
                                 isScrollControlled: true,
                                 barrierColor: ColorSty.grey.withOpacity(0.2),
                                 context: context,
-                                builder: (BuildContext context) =>
+                                builder: (_) =>
                                     BottomSheetDetailMenu(
-                                  title: "Buat Catatan",
-                                  content: Row(
-                                    children: [
-                                      Expanded(
-                                        child: TextFormField(
-                                          maxLength: 100,
-                                          decoration: const InputDecoration(
-                                            contentPadding:
-                                                EdgeInsets.symmetric(
-                                                    horizontal: 0, vertical: 0),
-                                          ),
+                                      title: "Pilih Toping",
+                                      content: Expanded(
+                                        child: ListView(
+                                          scrollDirection: Axis.horizontal,
+                                          children: [
+                                            for (String item in _listTopping)
+                                              LabelToppingSelection(
+                                                title: item,
+                                                initial: _selectedTopping.where((e) => e == item).isNotEmpty,
+                                                onSelection: (value) {
+                                                  if(_selectedTopping.where((e) => e == value).isNotEmpty) {
+                                                    setState(() => _selectedTopping.remove(value));
+                                                  }else{
+                                                    setState(() => _selectedTopping.add(value));
+                                                  }
+                                                },
+                                              )
+                                          ],
                                         ),
                                       ),
-                                      ElevatedButton(
-                                        onPressed: () {},
-                                        style: ElevatedButton.styleFrom(
-                                          padding: const EdgeInsets.all(0),
-                                          minimumSize: const Size(25.0, 25.0),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(100.0),
-                                          ),
+                                    ),
+                              );
+                            }
+                          ),
+                          TileListDMenu(
+                            prefixIcon: true,
+                            icon: IconsCs.note_icon,
+                            title: "Catatan",
+                            prefix: "Lorem Ipsum sit aaasss",
+                            onPressed: () => showModalBottomSheet(
+                              isScrollControlled: true,
+                              barrierColor: ColorSty.grey.withOpacity(0.2),
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  BottomSheetDetailMenu(
+                                title: "Buat Catatan",
+                                content: Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextFormField(
+                                        maxLength: 100,
+                                        decoration: const InputDecoration(
+                                          contentPadding:
+                                              EdgeInsets.symmetric(
+                                                  horizontal: 0, vertical: 0),
                                         ),
-                                        child:
-                                            const Icon(Icons.check, size: 26.0),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {},
+                                      style: ElevatedButton.styleFrom(
+                                        padding: const EdgeInsets.all(0),
+                                        minimumSize: const Size(25.0, 25.0),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(100.0),
+                                        ),
+                                      ),
+                                      child:
+                                          const Icon(Icons.check, size: 26.0),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                            const Divider(thickness: 1.5),
-                            const SizedBox(height: SpaceDims.sp12),
-                            ElevatedButton(
-                              onPressed: () {
+                          ),
+                          const Divider(thickness: 1.5),
+                          const SizedBox(height: SpaceDims.sp12),
+                          ElevatedButton(
+                            onPressed: () {
 
-                                Provider.of<OrderProvider>(context, listen: false).addOrder({
-                                  "id" : getRandomString(10),
-                                  "jenis": widget.data["jenis"],
-                                  "image": widget.data["image"],
-                                  "harga": widget.data["harga"],
-                                  "amount": widget.data["amount"],
-                                  "name": widget.data["name"],
-                                  "countOrder" : _jumlahOrder,
-                                });
+                              Provider.of<OrderProvider>(context, listen: false).addOrder({
+                                "id" : getRandomString(10),
+                                "jenis": widget.data["jenis"],
+                                "image": widget.data["image"],
+                                "harga": widget.data["harga"],
+                                "amount": widget.data["amount"],
+                                "name": widget.data["name"],
+                                "countOrder" : _jumlahOrder,
+                              });
 
-                                Navigator.of(context).pop();
-                              },
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: SpaceDims.sp2,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
+                              Navigator.of(context).pop();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: SpaceDims.sp2,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                            ),
+                            child: const SizedBox(
+                              width: double.infinity,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Tambahkan Ke Pesanan",
+                                  style: TypoSty.button,
                                 ),
                               ),
-                              child: const SizedBox(
-                                width: double.infinity,
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    "Tambahkan Ke Pesanan",
-                                    style: TypoSty.button,
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

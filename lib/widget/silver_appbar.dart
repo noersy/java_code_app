@@ -30,7 +30,7 @@ class SilverAppBar extends StatelessWidget {
             SliverAppBar(
               elevation: 4,
               actions: actions,
-              primary: notScrolled != null ? true : false,
+              primary: false,
               leading: back != null ? IconButton(
                 icon: const Icon(Icons.arrow_back_ios),
                 onPressed: () => Navigator.of(context).pop(),
