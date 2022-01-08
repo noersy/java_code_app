@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:java_code_app/thame/colors.dart';
+import 'package:java_code_app/theme/colors.dart';
 
 class TypoSty {
   static const TextStyle heading = TextStyle(
@@ -70,6 +70,12 @@ class TypoSty {
     fontFamily: "Montserrat",
     fontWeight: FontWeight.w600,
     fontSize: 14.0,
+  );
+
+  static const TextStyle button2 = TextStyle(
+    fontFamily: "Montserrat",
+    fontWeight: FontWeight.w600,
+    fontSize: 12.0,
   );
 
   static const TextStyle mini = TextStyle(

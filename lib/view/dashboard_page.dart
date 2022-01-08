@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
-import 'package:java_code_app/thame/colors.dart';
-import 'package:java_code_app/thame/icons_cs_icons.dart';
-import 'package:java_code_app/thame/text_style.dart';
+import 'package:java_code_app/theme/colors.dart';
+import 'package:java_code_app/theme/icons_cs_icons.dart';
+import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/view/beranda_page.dart';
 import 'package:java_code_app/view/pesanan_page.dart';
 import 'package:java_code_app/view/profile_page.dart';
@@ -33,7 +33,10 @@ class _DashboardPageState extends State<DashboardPage> {
         child: BottomNavigationBar(
           elevation: 10,
           backgroundColor: ColorSty.black60,
-          unselectedItemColor: ColorSty.white,
+          unselectedItemColor: ColorSty.white.withOpacity(0.8),
+          selectedItemColor: ColorSty.white,
+          selectedLabelStyle: TypoSty.button2,
+          unselectedLabelStyle: TypoSty.button2.copyWith(fontWeight: FontWeight.normal),
           items: [
             const BottomNavigationBarItem(
               icon: Icon(IconsCs.beranda, size: 28.0),
@@ -82,7 +85,6 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
           ],
           currentIndex: _bottomNavBarSelectedIndex,
-          selectedItemColor: Colors.green,
           onTap: _onItemTapped,
         ),
       ),
@@ -130,15 +132,6 @@ class _DashboardPageState extends State<DashboardPage> {
           _bottomNavBarSelectedIndex = index;
         });
       }
-
-      // if (index == 2) {
-      //   showModalBottomSheet(
-      //     context: context,
-      //     builder: (BuildContext context) => UserBottomSheetDialog(
-      //       ctx: context,
-      //     ),
-      //   );
-      // }
     }
   }
 }

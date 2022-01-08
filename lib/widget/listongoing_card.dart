@@ -1,10 +1,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:java_code_app/thame/colors.dart';
-import 'package:java_code_app/thame/icons_cs_icons.dart';
-import 'package:java_code_app/thame/spacing.dart';
-import 'package:java_code_app/thame/text_style.dart';
+import 'package:java_code_app/theme/colors.dart';
+import 'package:java_code_app/theme/icons_cs_icons.dart';
+import 'package:java_code_app/theme/spacing.dart';
+import 'package:java_code_app/theme/text_style.dart';
 
 class ListOrderOngoing extends StatelessWidget {
 

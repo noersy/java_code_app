@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:java_code_app/thame/colors.dart';
-import 'package:java_code_app/thame/icons_cs_icons.dart';
-import 'package:java_code_app/thame/spacing.dart';
-import 'package:java_code_app/thame/text_style.dart';
+import 'package:java_code_app/theme/colors.dart';
+import 'package:java_code_app/theme/icons_cs_icons.dart';
+import 'package:java_code_app/theme/spacing.dart';
+import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/widget/card_coupun.dart';
 import 'package:java_code_app/widget/label_button.dart';
 import 'package:java_code_app/widget/listmenu.dart';
@@ -28,7 +28,8 @@ class _BerandaPageState extends State<BerandaPage> {
             decoration: InputDecoration(
               isDense: true,
               hintText: "Pencarian",
-              prefixIcon: const Icon(IconsCs.search_icon, color: ColorSty.primary),
+              prefixIcon:
+                  const Icon(IconsCs.search_icon, color: ColorSty.primary),
               contentPadding: const EdgeInsets.only(
                 left: 53,
                 right: SpaceDims.sp12,
@@ -77,17 +78,14 @@ class ContentBeranda extends StatefulWidget {
 class _ContentBerandaState extends State<ContentBeranda> {
   int _selectedIndex = 0;
   final ScrollController _controller = ScrollController();
-
-  final List<Widget> _category = [
-    const SizedBox(),
-    const ListMenu(type: "makanan", title: "Makanan"),
-    const ListMenu(type: "minuman", title: "Minuman"),
-  ];
+  final PageController _pageController = PageController();
+  final Duration _duration = const Duration(milliseconds: 500);
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: SpaceDims.sp22),
@@ -129,62 +127,57 @@ class _ContentBerandaState extends State<ContentBeranda> {
                 const SizedBox(width: SpaceDims.sp12),
                 LabelButton(
                   color: _selectedIndex == 0 ? ColorSty.black : ColorSty.primary,
-                  onPressed: () => setState(() => _selectedIndex = 0),
-                  title: "Semua Menu",
+                  onPressed: (){
+                    setState(() => _selectedIndex = 0);
+                    _pageController.animateToPage(0, duration: _duration, curve: Curves.ease);
+                  },title: "Semua Menu",
                   icon: Icons.list,
                 ),
                 LabelButton(
                   color: _selectedIndex == 1 ? ColorSty.black : ColorSty.primary,
-                  onPressed: () => setState(() => _selectedIndex = 1),
+                  onPressed: (){
+                    setState(() => _selectedIndex = 1);
+                    _pageController.animateToPage(1, duration: _duration, curve: Curves.ease);
+                  },
                   title: "Makanan",
-                  svgPicture: SvgPicture.asset("assert/image/icons/ep_food.svg", color: ColorSty.white, width: 24,),
+                  svgPicture: SvgPicture.asset(
+                    "assert/image/icons/ep_food.svg",
+                    color: ColorSty.white,
+                    width: 24,
+                  ),
                 ),
                 LabelButton(
                   color: _selectedIndex == 2 ? ColorSty.black : ColorSty.primary,
-                  onPressed: () => setState(() => _selectedIndex = 2),
+                  onPressed: (){
+                    setState(() => _selectedIndex = 2);
+                    _pageController.animateToPage(2, duration: _duration, curve: Curves.ease);
+                  },
                   title: "Minuman",
                   icon: IconsCs.ep_coffee,
                 ),
               ],
             ),
           ),
-          if (_selectedIndex == 0)
-            for (Widget item in _category) item,
-          if (_selectedIndex > 0) _category[_selectedIndex],
           const SizedBox(height: SpaceDims.sp12),
+          SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: PageView(
+              controller: _pageController,
+              children: [
+                Column(
+                  children: const [
+                    ListMenu(type: "makanan", title: "Makanan"),
+                    ListMenu(type: "minuman", title: "Minuman"),
+                  ],
+                ),
+                const ListMenu(type: "makanan", title: "Makanan"),
+                const ListMenu(type: "minuman", title: "Minuman"),
+
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 }
-
-List<Map<String, dynamic>> datafake = [
-  {
-    "jenis": "minuman",
-    "image": "assert/image/menu/1637916759.png",
-    "harga": "Rp 10.000",
-    "name": "Chicken Katsu",
-    "amount": 99,
-  },
-  {
-    "jenis": "makanan",
-    "image": "assert/image/menu/1637916792.png",
-    "harga": "Rp 10.000",
-    "name": "Chicken Katsu",
-    "amount": 99,
-  },
-  {
-    "jenis": "makanan",
-    "image": "assert/image/menu/1637916829.png",
-    "harga": "Rp 10.000",
-    "name": "Chicken Slam",
-    "amount": 99,
-  },
-  {
-    "jenis": "makanan",
-    "image": "assert/image/menu/167916789.png",
-    "harga": "Rp 10.000",
-    "name": "Fried Rice",
-    "amount": 0,
-  },
-];

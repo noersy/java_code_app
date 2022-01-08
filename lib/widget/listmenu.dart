@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:java_code_app/route/route.dart';
-import 'package:java_code_app/thame/colors.dart';
-import 'package:java_code_app/thame/icons_cs_icons.dart';
-import 'package:java_code_app/thame/spacing.dart';
-import 'package:java_code_app/thame/text_style.dart';
-import 'package:java_code_app/view/beranda_page.dart';
+import 'package:java_code_app/theme/colors.dart';
+import 'package:java_code_app/theme/spacing.dart';
+import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/widget/menuberanda_card.dart';
 
 class ListMenu extends StatelessWidget {
@@ -26,12 +23,16 @@ class ListMenu extends StatelessWidget {
           padding: const EdgeInsets.only(left: SpaceDims.sp24),
           child: Row(
             children: [
-              type.compareTo("makanan") == 0
-                  ? SvgPicture.asset("assert/image/icons/ep_food.svg", height: 22)
-                  : SvgPicture.asset("assert/image/icons/ep_coffee.svg", height: 26),
+              type == "makanan"
+                  ? SvgPicture.asset("assert/image/icons/ep_food.svg",
+                      height: 22)
+                  : SvgPicture.asset("assert/image/icons/ep_coffee.svg",
+                      height: 26),
               const SizedBox(width: SpaceDims.sp4),
-              Text(title,
-                  style: TypoSty.title.copyWith(color: ColorSty.primary)),
+              Text(
+                title,
+                style: TypoSty.title.copyWith(color: ColorSty.primary),
+              ),
             ],
           ),
         ),
@@ -40,8 +41,11 @@ class ListMenu extends StatelessWidget {
           width: double.infinity,
           child: Column(
             children: [
-              for (Map<String, dynamic> item in datafake)
-                if (item["jenis"]?.compareTo(type) == 0)
+              if (type == "makanan")
+                for (Map<String, dynamic> item in datafakeMakanan)
+                  CardMenu(data: item),
+              if (type == "minuman")
+                for (Map<String, dynamic> item in datafakeMinuman)
                   CardMenu(data: item),
             ],
           ),
@@ -50,3 +54,37 @@ class ListMenu extends StatelessWidget {
     );
   }
 }
+
+List<Map<String, dynamic>> datafakeMakanan = [
+  {
+    "jenis": "makanan",
+    "image": "assert/image/menu/1637916792.png",
+    "harga": "Rp 10.000",
+    "name": "Chicken Katsu",
+    "amount": 99,
+  },
+  {
+    "jenis": "makanan",
+    "image": "assert/image/menu/1637916829.png",
+    "harga": "Rp 10.000",
+    "name": "Chicken Slam",
+    "amount": 99,
+  },
+  {
+    "jenis": "makanan",
+    "image": "assert/image/menu/167916789.png",
+    "harga": "Rp 10.000",
+    "name": "Fried Rice",
+    "amount": 0,
+  },
+];
+
+List<Map<String, dynamic>> datafakeMinuman = [
+  {
+    "jenis": "min",
+    "image": "assert/image/menu/1637916759.png",
+    "harga": "Rp 10.000",
+    "name": "Es Jeruk",
+    "amount": 99,
+  },
+];

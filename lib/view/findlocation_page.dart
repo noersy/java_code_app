@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:java_code_app/thame/spacing.dart';
-import 'package:java_code_app/thame/text_style.dart';
+import 'package:java_code_app/theme/spacing.dart';
+import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/route/route.dart';
 
 class FindLocationPage extends StatefulWidget {

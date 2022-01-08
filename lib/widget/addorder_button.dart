@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:java_code_app/thame/colors.dart';
-import 'package:java_code_app/thame/text_style.dart';
+import 'package:java_code_app/theme/colors.dart';
+import 'package:java_code_app/theme/text_style.dart';
 
 class AddOrderButton extends StatefulWidget {
   final ValueChanged<int> onChange;

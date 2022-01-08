@@ -1,5 +1,5 @@
 import 'package:flutter/painting.dart';
-import 'package:java_code_app/thame/colors.dart';
+import 'package:java_code_app/theme/colors.dart';
 
 class ShadowsB {
   static List<BoxShadow> boxShadow1 = [
