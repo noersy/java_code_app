@@ -8,9 +8,14 @@ import 'package:java_code_app/widget/detailmenu_sheet.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
 import 'package:provider/provider.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
