@@ -23,10 +23,7 @@ class CheckOutPage extends StatefulWidget {
 }
 
 class _CheckOutPageState extends State<CheckOutPage> {
-  List<Map<String, dynamic>> get _orders =>
-      Provider
-          .of<OrderProvider>(context, listen: false)
-          .checkOrder;
+  Map<String, dynamic> get _orders => Provider.of<OrderProvider>(context, listen: false).checkOrder;
   Map<String, dynamic> _selectedVoucher = {};
 
   @override
@@ -43,17 +40,13 @@ class _CheckOutPageState extends State<CheckOutPage> {
           children: [
             Column(
               children: [
-                if(_orders
-                    .where((e) => e["jenis"] == "makanan")
-                    .isNotEmpty)
+                if(_orders.values.where((element) => element["jenis"] == "makanan").isNotEmpty)
                   ListOrder(
                     orders: _orders,
                     title: 'Makanan',
                     type: 'makanan',
                   ),
-                if(_orders
-                    .where((e) => e["jenis"] == "minuman")
-                    .isNotEmpty)
+                if(_orders.values.where((element) => element["jenis"] == "minuman").isNotEmpty)
                   ListOrder(
                     orders: _orders,
                     title: 'Minuman',
@@ -242,7 +235,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
 
 class ListOrder extends StatelessWidget {
   final String type, title;
-  final List<Map<String, dynamic>> orders;
+  final Map<String, dynamic> orders;
 
   const ListOrder({
     Key? key,
@@ -279,7 +272,7 @@ class ListOrder extends StatelessWidget {
           width: double.infinity,
           child: Column(
             children: [
-              for (Map<String, dynamic> item in orders)
+              for (Map<String, dynamic> item in orders.values)
                 if (item["jenis"]?.compareTo(type) == 0)
                   CardMenuCheckout(data: item),
             ],

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
+import 'package:provider/provider.dart';
 
 class CardMenu extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -43,14 +45,12 @@ class _CardMenuState extends State<CardMenu> {
           borderRadius: BorderRadius.circular(10.0),
         ),
         child: TextButton(
-          onPressed: (){
-
-            Navigate.toDetailMenu(
+          onPressed: () async {
+            await Navigate.toDetailMenu(
               context,
               data: widget.data,
               countOrder: _jumlahOrder
             );
-
             },
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
@@ -112,7 +112,17 @@ class _CardMenuState extends State<CardMenu> {
                     children: [
                       if (_jumlahOrder != 0)
                         TextButton(
-                          onPressed: () => setState(() => _jumlahOrder--),
+                          onPressed: () async {
+                            setState(() => _jumlahOrder--);
+                            if(_jumlahOrder != 0) {
+                              Provider.of<OrderProvider>(context, listen: false).addOrder(
+                              jumlahOrder: _jumlahOrder,
+                              data: widget.data,
+                            );
+                            }else{
+                              Provider.of<OrderProvider>(context, listen: false).deleteOrder(id: widget.data["id"]);
+                            }
+                          },
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.zero,
                             minimumSize: const Size(25, 25),
@@ -125,7 +135,13 @@ class _CardMenuState extends State<CardMenu> {
                       if (_jumlahOrder != 0)
                         Text("$_jumlahOrder", style: TypoSty.subtitle),
                       TextButton(
-                        onPressed: () => setState(() => _jumlahOrder++),
+                        onPressed: () async {
+                          setState(() => _jumlahOrder++);
+                          Provider.of<OrderProvider>(context, listen: false).addOrder(
+                            jumlahOrder: _jumlahOrder,
+                            data: widget.data,
+                          );
+                        },
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero,
                           minimumSize: const Size(25, 25),
@@ -144,8 +160,12 @@ class _CardMenuState extends State<CardMenu> {
                     height: 70,
                     padding:
                     const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
-                    child: Text("Stok Habis",
-                        style: TypoSty.caption.copyWith(color: ColorSty.grey,),),
+                    child: Text(
+                      "Stok Habis",
+                      style: TypoSty.caption.copyWith(
+                        color: ColorSty.grey,
+                      ),
+                    ),
                   ),
                 )
             ],

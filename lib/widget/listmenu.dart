@@ -57,6 +57,7 @@ class ListMenu extends StatelessWidget {
 
 List<Map<String, dynamic>> datafakeMakanan = [
   {
+    "id" : "1",
     "jenis": "makanan",
     "image": "assert/image/menu/1637916792.png",
     "harga": "Rp 10.000",
@@ -64,6 +65,7 @@ List<Map<String, dynamic>> datafakeMakanan = [
     "amount": 99,
   },
   {
+    "id" : "2",
     "jenis": "makanan",
     "image": "assert/image/menu/1637916829.png",
     "harga": "Rp 10.000",
@@ -71,6 +73,7 @@ List<Map<String, dynamic>> datafakeMakanan = [
     "amount": 99,
   },
   {
+    "id" : "3",
     "jenis": "makanan",
     "image": "assert/image/menu/167916789.png",
     "harga": "Rp 10.000",
@@ -81,7 +84,8 @@ List<Map<String, dynamic>> datafakeMakanan = [
 
 List<Map<String, dynamic>> datafakeMinuman = [
   {
-    "jenis": "min",
+    "id" : "4",
+    "jenis": "minuman",
     "image": "assert/image/menu/1637916759.png",
     "harga": "Rp 10.000",
     "name": "Es Jeruk",

@@ -237,16 +237,7 @@ class _DetailMenuState extends State<DetailMenu> {
                         const SizedBox(height: SpaceDims.sp12),
                         ElevatedButton(
                           onPressed: () {
-                            Provider.of<OrderProvider>(context, listen: false)
-                                .addOrder({
-                              "id": getRandomString(10),
-                              "jenis": widget.data["jenis"],
-                              "image": widget.data["image"],
-                              "harga": widget.data["harga"],
-                              "amount": widget.data["amount"],
-                              "name": widget.data["name"],
-                              "countOrder": _jumlahOrder,
-                            });
+                            Provider.of<OrderProvider>(context, listen: false).addOrder(data : widget.data, jumlahOrder: _jumlahOrder);
 
                             Navigator.of(context).pop();
                           },
