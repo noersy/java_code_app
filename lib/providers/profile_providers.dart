@@ -5,8 +5,8 @@ class ProfileProviders extends ChangeNotifier {
 
   bool get isKasir => _isKasir;
 
-  changeRole() async {
-    _isKasir = !_isKasir;
+  changeRole(bool change) async {
+    _isKasir = change;
     notifyListeners();
   }
 }

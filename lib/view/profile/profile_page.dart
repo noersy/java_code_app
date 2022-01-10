@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/providers/profile_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/widget/detailmenu_sheet.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -156,6 +158,23 @@ class ProfilePage extends StatelessWidget {
                                     builder: (BuildContext context) => const ChangeLagSheet(),
                                   ),
                             ),
+                            TileListProfile(
+                              title: 'Role',
+                              suffix: '',
+                              onPreseed: () =>
+                                  showModalBottomSheet(
+                                    barrierColor: ColorSty.grey.withOpacity(0.2),
+                                    elevation: 5,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(30.0),
+                                            topRight: Radius.circular(30.0)
+                                        )
+                                    ),
+                                    context: context,
+                                    builder: (BuildContext context) => const ChangeRoleSheet(),
+                                  ),
+                            ),
                           ],
                         ),
                       ),
@@ -239,7 +258,6 @@ class InfoSheet extends StatelessWidget {
     return Container();
   }
 }
-
 
 class TileListProfile extends StatefulWidget {
   final bool? top, bottom;
@@ -360,7 +378,6 @@ class _TileListProfileState extends State<TileListProfile> {
   }
 }
 
-
 class ChangeLagSheet extends StatefulWidget {
   const ChangeLagSheet({Key? key}) : super(key: key);
 
@@ -424,6 +441,72 @@ class _ChangeLagSheetState extends State<ChangeLagSheet> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class ChangeRoleSheet extends StatefulWidget {
+  const ChangeRoleSheet({Key? key}) : super(key: key);
+
+  @override
+  _ChangeRoleSheetState createState() => _ChangeRoleSheetState();
+}
+
+class _ChangeRoleSheetState extends State<ChangeRoleSheet> {
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: ProfileProviders(),
+      builder: (context, snapshot) {
+        final _role = Provider.of<ProfileProviders>(context).isKasir;
+
+        return BottomSheetDetailMenu(
+          title: "Ganti Bahasa",
+          heightGp: SpaceDims.sp12,
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () => Provider.of<ProfileProviders>(context, listen: false).changeRole(true),
+                  style: ElevatedButton.styleFrom(
+                    primary: _role ? ColorSty.primary : ColorSty.white,
+                    onPrimary: _role ? ColorSty.white : ColorSty.black,
+                    padding: const EdgeInsets.all(SpaceDims.sp12),
+                    shape: RoundedRectangleBorder(
+                      side: const BorderSide(color: ColorSty.primary),
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                  ),
+                  child: const Align(
+                    alignment: Alignment.center,
+                    child: Text("Kasir", style: TypoSty.button),
+                  ),
+                ),
+              ),
+              const SizedBox(width: SpaceDims.sp14),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () => Provider.of<ProfileProviders>(context, listen: false).changeRole(false),
+                  style: ElevatedButton.styleFrom(
+                    primary: !_role ? ColorSty.primary : ColorSty.white,
+                    onPrimary: !_role ? ColorSty.white : ColorSty.black,
+                    padding: const EdgeInsets.all(SpaceDims.sp12),
+                    shape: RoundedRectangleBorder(
+                      side: const BorderSide(color: ColorSty.primary),
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                  ),
+                  child: const Align(
+                    alignment: Alignment.center,
+                    child: Text("Pelanggan", style: TypoSty.button),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }
     );
   }
 }
