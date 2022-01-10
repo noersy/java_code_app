@@ -483,7 +483,7 @@ class _ChangeRoleSheetState extends State<ChangeRoleSheet> {
           final _role = Provider.of<ProfileProviders>(context).isKasir;
 
           return BottomSheetDetailMenu(
-            title: "Ganti Bahasa",
+            title: "Genti Role",
             heightGp: SpaceDims.sp12,
             content: Row(
               mainAxisAlignment: MainAxisAlignment.center,
