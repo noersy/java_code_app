@@ -10,6 +10,7 @@ class LangProviders extends ChangeNotifier {
   static int _indexLang = 0;
 
   Lang get lang => languages[_indexLang];
+  bool get isIndo => _indexLang == 0;
 
   changeLang(bool isIndo) async {
     if(isIndo) _indexLang = 0;

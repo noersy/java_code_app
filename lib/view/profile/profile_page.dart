@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/providers/profile_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -162,20 +163,26 @@ class ProfilePage extends StatelessWidget {
                                 );
                               },
                             ),
-                            TileListProfile(
-                              title: 'Ganti Bahasa',
-                              suffix: 'Indonesia',
-                              onPreseed: () => showModalBottomSheet(
-                                barrierColor: ColorSty.grey.withOpacity(0.2),
-                                elevation: 5,
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(30.0),
-                                        topRight: Radius.circular(30.0))),
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    const ChangeLagSheet(),
-                              ),
+                            AnimatedBuilder(
+                              animation: LangProviders(),
+                              builder: (context, snapshot) {
+                                bool _isIndo = Provider.of<LangProviders>(context).isIndo;
+                                return TileListProfile(
+                                  title: 'Ganti Bahasa',
+                                  suffix: _isIndo ? 'Indonesia' : 'English',
+                                  onPreseed: () => showModalBottomSheet(
+                                    barrierColor: ColorSty.grey.withOpacity(0.2),
+                                    elevation: 5,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(30.0),
+                                            topRight: Radius.circular(30.0))),
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        const ChangeLagSheet(),
+                                  ),
+                                );
+                              }
                             ),
                             AnimatedBuilder(
                                 animation: OrderProviders(),
@@ -408,60 +415,66 @@ class ChangeLagSheet extends StatefulWidget {
 }
 
 class _ChangeLagSheetState extends State<ChangeLagSheet> {
-  bool _isIndo = true;
 
   @override
   Widget build(BuildContext context) {
     return BottomSheetDetailMenu(
       title: "Ganti Bahasa",
       heightGp: SpaceDims.sp12,
-      content: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton(
-            onPressed: () => setState(() => _isIndo = true),
-            style: ElevatedButton.styleFrom(
-              primary: _isIndo ? ColorSty.primary : ColorSty.white,
-              onPrimary: _isIndo ? ColorSty.white : ColorSty.black,
-              padding: const EdgeInsets.all(SpaceDims.sp8),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(7.0),
+      content: AnimatedBuilder(
+        animation: LangProviders(),
+        builder: (context, snapshot) {
+          bool _isIndo = Provider.of<LangProviders>(context).isIndo;
+
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () => Provider.of<LangProviders>(context, listen: false).changeLang(true),
+                style: ElevatedButton.styleFrom(
+                  primary: _isIndo ? ColorSty.primary : ColorSty.white,
+                  onPrimary: _isIndo ? ColorSty.white : ColorSty.black,
+                  padding: const EdgeInsets.all(SpaceDims.sp8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(7.0),
+                  ),
+                ),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Row(
+                    children: [
+                      Image.asset("assert/image/ind-flag.png"),
+                      const SizedBox(width: SpaceDims.sp12),
+                      const Text("Indonesia", style: TypoSty.button)
+                    ],
+                  ),
+                ),
               ),
-            ),
-            child: Align(
-              alignment: Alignment.center,
-              child: Row(
-                children: [
-                  Image.asset("assert/image/ind-flag.png"),
-                  const SizedBox(width: SpaceDims.sp12),
-                  const Text("Indonesia", style: TypoSty.button)
-                ],
+              const SizedBox(width: SpaceDims.sp14),
+              ElevatedButton(
+                onPressed: () => Provider.of<LangProviders>(context, listen: false).changeLang(false),
+                style: ElevatedButton.styleFrom(
+                  primary: !_isIndo ? ColorSty.primary : ColorSty.white,
+                  onPrimary: !_isIndo ? ColorSty.white : ColorSty.black,
+                  padding: const EdgeInsets.all(SpaceDims.sp8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(7.0),
+                  ),
+                ),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Row(
+                    children: [
+                      Image.asset("assert/image/eng-flag.png", height: 40),
+                      const SizedBox(width: SpaceDims.sp12),
+                      const Text("English", style: TypoSty.button)
+                    ],
+                  ),
+                ),
               ),
-            ),
-          ),
-          const SizedBox(width: SpaceDims.sp14),
-          ElevatedButton(
-            onPressed: () => setState(() => _isIndo = false),
-            style: ElevatedButton.styleFrom(
-              primary: !_isIndo ? ColorSty.primary : ColorSty.white,
-              onPrimary: !_isIndo ? ColorSty.white : ColorSty.black,
-              padding: const EdgeInsets.all(SpaceDims.sp8),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(7.0),
-              ),
-            ),
-            child: Align(
-              alignment: Alignment.center,
-              child: Row(
-                children: [
-                  Image.asset("assert/image/eng-flag.png", height: 40),
-                  const SizedBox(width: SpaceDims.sp12),
-                  const Text("Inggris", style: TypoSty.button)
-                ],
-              ),
-            ),
-          ),
-        ],
+            ],
+          );
+        }
       ),
     );
   }

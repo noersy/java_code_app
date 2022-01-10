@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/models/lang.dart';
+import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -30,62 +32,68 @@ class _DashboardPageState extends State<DashboardPage> {
           topLeft: Radius.circular(30.0),
           topRight: Radius.circular(30.0),
         ),
-        child: BottomNavigationBar(
-          elevation: 10,
-          backgroundColor: ColorSty.black60,
-          unselectedItemColor: ColorSty.white.withOpacity(0.8),
-          selectedItemColor: ColorSty.white,
-          selectedLabelStyle: TypoSty.button2,
-          unselectedLabelStyle: TypoSty.button2.copyWith(fontWeight: FontWeight.normal),
-          items: [
-            const BottomNavigationBarItem(
-              icon: Icon(IconsCs.beranda, size: 28.0),
-              label: 'Beranda',
-            ),
-            BottomNavigationBarItem(
-              icon: Stack(children: [
-                const Icon(IconsCs.pesanan, size: 32.0),
-                Positioned(
-                  top: 0.0,
-                  right: 0.0,
-                  child: AnimatedBuilder(
-                    animation: OrderProviders(),
-                    builder: (BuildContext context, Widget? child) {
-                       int _orderOngoing = Provider.of<OrderProviders>(context).orderProgress.length;
-                       // print(Provider.of<OrderProvider>(context).orderProgress.first);
-                      if (_orderOngoing > 0) {
-                        return Container(
-                          height: 20,
-                          width: 20,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: ColorSty.primary,
-                            borderRadius: BorderRadius.circular(100.0),
-                            border: Border.all(color: ColorSty.white),
-                          ),
-                          child: Text(
-                            "$_orderOngoing",
-                            style: TypoSty.button.copyWith(
-                              color: ColorSty.white,
-                            ),
-                          ),
-                        );
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    },
-                  ),
-                )
-              ]),
-              label: 'Pesanan',
-            ),
-            const BottomNavigationBarItem(
-              icon: Icon(IconsCs.profil, size: 28.0),
-              label: 'Profil',
-            ),
-          ],
-          currentIndex: _bottomNavBarSelectedIndex,
-          onTap: _onItemTapped,
+        child: AnimatedBuilder(
+          animation: LangProviders(),
+          builder: (context, snapshot) {
+            Lang _lang = Provider.of<LangProviders>(context).lang;
+            return BottomNavigationBar(
+              elevation: 10,
+              backgroundColor: ColorSty.black60,
+              unselectedItemColor: ColorSty.white.withOpacity(0.8),
+              selectedItemColor: ColorSty.white,
+              selectedLabelStyle: TypoSty.button2,
+              unselectedLabelStyle: TypoSty.button2.copyWith(fontWeight: FontWeight.normal),
+              items: [
+                BottomNavigationBarItem(
+                  icon: const Icon(IconsCs.beranda, size: 28.0),
+                  label: _lang.bottomNav.nav1,
+                ),
+                BottomNavigationBarItem(
+                  icon: Stack(children: [
+                    const Icon(IconsCs.pesanan, size: 32.0),
+                    Positioned(
+                      top: 0.0,
+                      right: 0.0,
+                      child: AnimatedBuilder(
+                        animation: OrderProviders(),
+                        builder: (BuildContext context, Widget? child) {
+                           int _orderOngoing = Provider.of<OrderProviders>(context).orderProgress.length;
+                           // print(Provider.of<OrderProvider>(context).orderProgress.first);
+                          if (_orderOngoing > 0) {
+                            return Container(
+                              height: 20,
+                              width: 20,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: ColorSty.primary,
+                                borderRadius: BorderRadius.circular(100.0),
+                                border: Border.all(color: ColorSty.white),
+                              ),
+                              child: Text(
+                                "$_orderOngoing",
+                                style: TypoSty.button.copyWith(
+                                  color: ColorSty.white,
+                                ),
+                              ),
+                            );
+                          } else {
+                            return const SizedBox.shrink();
+                          }
+                        },
+                      ),
+                    )
+                  ]),
+                  label: _lang.bottomNav.nav2,
+                ),
+                BottomNavigationBarItem(
+                  icon: const Icon(IconsCs.profil, size: 28.0),
+                  label: _lang.bottomNav.nav3,
+                ),
+              ],
+              currentIndex: _bottomNavBarSelectedIndex,
+              onTap: _onItemTapped,
+            );
+          }
         ),
       ),
       body: PageView(

@@ -2,14 +2,14 @@ import 'package:java_code_app/models/lang.dart';
 
 class ConstLang {
   static BottomNav ind = BottomNav(
-    bottomNav1: "Beranda",
-    bottomNav2: "Pesanan",
-    bottomNav3: "Profile",
+    nav1: "Beranda",
+    nav2: "Pesanan",
+    nav3: "Profile",
   );
 
   static BottomNav eng = BottomNav(
-    bottomNav1: "Home",
-    bottomNav2: "Orders",
-    bottomNav3: "Profile",
+    nav1: "Home",
+    nav2: "Orders",
+    nav3: "Profile",
   );
 }

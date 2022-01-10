@@ -21,23 +21,23 @@ class Lang {
 }
 
 class BottomNav {
-  final String bottomNav1, bottomNav2, bottomNav3;
+  final String nav1, nav2, nav3;
 
   BottomNav({
-    required this.bottomNav1,
-    required this.bottomNav2,
-    required this.bottomNav3,
+    required this.nav1,
+    required this.nav2,
+    required this.nav3,
   });
 
   factory BottomNav.fromJson(Map<String, dynamic> json) => BottomNav(
-        bottomNav1: json["bottomNav1"],
-        bottomNav2: json["bottomNav2"],
-        bottomNav3: json["bottomNav3"],
+        nav1: json["bottomNav1"],
+        nav2: json["bottomNav2"],
+        nav3: json["bottomNav3"],
       );
 
   Map<String, dynamic> toJson() => {
-        "bottomNav1": bottomNav1,
-        "bottomNav2": bottomNav2,
-        "bottomNav3": bottomNav3,
+        "bottomNav1": nav1,
+        "bottomNav2": nav2,
+        "bottomNav3": nav3,
       };
 }
