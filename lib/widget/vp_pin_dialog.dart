@@ -7,8 +7,11 @@ import 'package:java_code_app/widget/orderdone_dialog.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 
 class VPinDialog extends StatefulWidget {
-  final Map<String, dynamic> voucher;
-  const VPinDialog({Key? key, required this.voucher}) : super(key: key);
+  final Map<String, dynamic>? voucher;
+  final String? title;
+  final ValueChanged<void>? onComplete;
+
+  const VPinDialog({Key? key, this.voucher, this.title = "Verifikasi Pesanan", this.onComplete}) : super(key: key);
 
   @override
   State<VPinDialog> createState() => _VPinDialogState();
@@ -29,7 +32,6 @@ class _VPinDialogState extends State<VPinDialog> {
 
   @override
   Widget build(BuildContext context) {
-
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28.h)),
       child: SizedBox(
@@ -39,7 +41,9 @@ class _VPinDialogState extends State<VPinDialog> {
           child: Column(
             children: [
               Text(
-                "Verifikasi Pesanan",
+                widget.voucher != null
+                    ? "Verifikasi Pesanan"
+                    : widget.title ?? "",
                 style: TypoSty.title.copyWith(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.w600,
@@ -65,12 +69,21 @@ class _VPinDialogState extends State<VPinDialog> {
                         fieldsCount: 6,
                         focusNode: _pinPutFocusNode,
                         controller: _pinPutController,
-                        obscureText : _isHide ?  "*" : null,
+                        obscureText: _isHide ? "*" : null,
                         textStyle: TypoSty.button,
-                        eachFieldConstraints: const BoxConstraints(minHeight: 30.0, minWidth: 30.0),
+                        eachFieldConstraints: const BoxConstraints(
+                            minHeight: 30.0, minWidth: 30.0),
                         onSubmit: (_) {
                           Navigator.pop(context);
-                          showDialog(context: context, builder: (_)=> OrderDoneDialog(voucher: widget.voucher));
+                          if(widget.onComplete != null) widget.onComplete!(null);
+                          if (widget.voucher != null) {
+                            if (widget.voucher!.isNotEmpty) {
+                              showDialog(
+                                  context: context,
+                                  builder: (_) =>
+                                      OrderDoneDialog(voucher: widget.voucher!));
+                            }
+                          }
                         },
                         separator: Padding(
                           padding: const EdgeInsets.all(SpaceDims.sp4),
@@ -100,8 +113,9 @@ class _VPinDialogState extends State<VPinDialog> {
                     Padding(
                       padding: const EdgeInsets.only(left: SpaceDims.sp12),
                       child: GestureDetector(
-                        onTap: ()=> setState(() => _isHide = !_isHide),
-                        child: const Icon(Icons.visibility_off, color: ColorSty.grey),
+                        onTap: () => setState(() => _isHide = !_isHide),
+                        child: const Icon(Icons.visibility_off,
+                            color: ColorSty.grey),
                       ),
                     )
                   ],

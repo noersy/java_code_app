@@ -7,6 +7,7 @@ import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/widget/detailmenu_sheet.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
+import 'package:java_code_app/widget/vp_pin_dialog.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -138,50 +139,67 @@ class ProfilePage extends StatelessWidget {
                               title: 'Email',
                               suffix: 'lorem.ipsum@gmail.com',
                             ),
-                            const TileListProfile(
+                            TileListProfile(
                               title: 'Ubah PIN',
                               suffix: '*********',
+                              onPreseed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => VPinDialog(
+                                    title: "Pin Lama",
+                                    onComplete: (_){
+                                      showDialog(
+                                        context: context,
+                                        builder: (_) => VPinDialog(
+                                          title: "Pin Baru",
+                                          onComplete: (_){
+
+                                          },
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
                             ),
                             TileListProfile(
                               title: 'Ganti Bahasa',
                               suffix: 'Indonesia',
-                              onPreseed: () =>
-                                  showModalBottomSheet(
-                                    barrierColor: ColorSty.grey.withOpacity(0.2),
-                                    elevation: 5,
-                                    shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(30.0),
-                                            topRight: Radius.circular(30.0)
-                                        )
-                                    ),
-                                    context: context,
-                                    builder: (BuildContext context) => const ChangeLagSheet(),
-                                  ),
+                              onPreseed: () => showModalBottomSheet(
+                                barrierColor: ColorSty.grey.withOpacity(0.2),
+                                elevation: 5,
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(30.0),
+                                        topRight: Radius.circular(30.0))),
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    const ChangeLagSheet(),
+                              ),
                             ),
                             AnimatedBuilder(
-                              animation: OrderProviders(),
-                              builder: (context, snapshot) {
-                                final role = Provider.of<ProfileProviders>(context).isKasir;
-                                return TileListProfile(
-                                  title: 'Role',
-                                  suffix: role ? 'Kasir' : 'Pelanggan',
-                                  onPreseed: () =>
-                                      showModalBottomSheet(
-                                        barrierColor: ColorSty.grey.withOpacity(0.2),
-                                        elevation: 5,
-                                        shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(30.0),
-                                                topRight: Radius.circular(30.0)
-                                            )
-                                        ),
-                                        context: context,
-                                        builder: (BuildContext context) => const ChangeRoleSheet(),
-                                      ),
-                                );
-                              }
-                            ),
+                                animation: OrderProviders(),
+                                builder: (context, snapshot) {
+                                  final role =
+                                      Provider.of<ProfileProviders>(context)
+                                          .isKasir;
+                                  return TileListProfile(
+                                    title: 'Role',
+                                    suffix: role ? 'Kasir' : 'Pelanggan',
+                                    onPreseed: () => showModalBottomSheet(
+                                      barrierColor:
+                                          ColorSty.grey.withOpacity(0.2),
+                                      elevation: 5,
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(30.0),
+                                              topRight: Radius.circular(30.0))),
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          const ChangeRoleSheet(),
+                                    ),
+                                  );
+                                }),
                           ],
                         ),
                       ),
@@ -194,7 +212,7 @@ class ProfilePage extends StatelessWidget {
                       const Padding(
                         padding: EdgeInsets.only(left: SpaceDims.sp32),
                         child:
-                        Text("Info Lainnya", style: TypoSty.titlePrimary),
+                            Text("Info Lainnya", style: TypoSty.titlePrimary),
                       ),
                       Container(
                         alignment: Alignment.center,
@@ -293,31 +311,28 @@ class _TileListProfileState extends State<TileListProfile> {
       children: [
         widget.top!
             ? Container(
-          margin: const EdgeInsets.symmetric(horizontal: SpaceDims.sp18),
-          width: double.infinity,
-          color: ColorSty.grey,
-          height: 2,
-        )
+                margin: const EdgeInsets.symmetric(horizontal: SpaceDims.sp18),
+                width: double.infinity,
+                color: ColorSty.grey,
+                height: 2,
+              )
             : const SizedBox.shrink(),
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: SpaceDims.sp18,
           ),
           child: TextButton(
-            onPressed: widget.onPreseed ?? () =>
-                showModalBottomSheet(
-                  isScrollControlled: true,
-                  barrierColor: ColorSty.grey.withOpacity(0.2),
-                  elevation: 5,
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30.0),
-                        topRight: Radius.circular(30.0)
-                      )
-                  ),
-                  context: context,
-                  builder: (BuildContext context) =>
-                      BottomSheetDetailMenu(
+            onPressed: widget.onPreseed ??
+                () => showModalBottomSheet(
+                      isScrollControlled: true,
+                      barrierColor: ColorSty.grey.withOpacity(0.2),
+                      elevation: 5,
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30.0),
+                              topRight: Radius.circular(30.0))),
+                      context: context,
+                      builder: (BuildContext context) => BottomSheetDetailMenu(
                         title: widget.title,
                         content: Row(
                           children: [
@@ -345,7 +360,7 @@ class _TileListProfileState extends State<TileListProfile> {
                           ],
                         ),
                       ),
-                ),
+                    ),
             style: TextButton.styleFrom(
               primary: ColorSty.black,
               padding: const EdgeInsets.all(SpaceDims.sp8),
@@ -374,11 +389,11 @@ class _TileListProfileState extends State<TileListProfile> {
         ),
         widget.bottom!
             ? Container(
-          margin: const EdgeInsets.symmetric(horizontal: SpaceDims.sp18),
-          width: double.infinity,
-          color: ColorSty.grey,
-          height: 2,
-        )
+                margin: const EdgeInsets.symmetric(horizontal: SpaceDims.sp18),
+                width: double.infinity,
+                color: ColorSty.grey,
+                height: 2,
+              )
             : const SizedBox.shrink(),
       ],
     );
@@ -404,7 +419,7 @@ class _ChangeLagSheetState extends State<ChangeLagSheet> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ElevatedButton(
-            onPressed: () => setState(()=> _isIndo = true),
+            onPressed: () => setState(() => _isIndo = true),
             style: ElevatedButton.styleFrom(
               primary: _isIndo ? ColorSty.primary : ColorSty.white,
               onPrimary: _isIndo ? ColorSty.white : ColorSty.black,
@@ -426,7 +441,7 @@ class _ChangeLagSheetState extends State<ChangeLagSheet> {
           ),
           const SizedBox(width: SpaceDims.sp14),
           ElevatedButton(
-            onPressed: () => setState(()=> _isIndo = false),
+            onPressed: () => setState(() => _isIndo = false),
             style: ElevatedButton.styleFrom(
               primary: !_isIndo ? ColorSty.primary : ColorSty.white,
               onPrimary: !_isIndo ? ColorSty.white : ColorSty.black,
@@ -463,57 +478,60 @@ class _ChangeRoleSheetState extends State<ChangeRoleSheet> {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: ProfileProviders(),
-      builder: (context, snapshot) {
-        final _role = Provider.of<ProfileProviders>(context).isKasir;
+        animation: ProfileProviders(),
+        builder: (context, snapshot) {
+          final _role = Provider.of<ProfileProviders>(context).isKasir;
 
-        return BottomSheetDetailMenu(
-          title: "Ganti Bahasa",
-          heightGp: SpaceDims.sp12,
-          content: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () => Provider.of<ProfileProviders>(context, listen: false).changeRole(true),
-                  style: ElevatedButton.styleFrom(
-                    primary: _role ? ColorSty.primary : ColorSty.white,
-                    onPrimary: _role ? ColorSty.white : ColorSty.black,
-                    padding: const EdgeInsets.all(SpaceDims.sp12),
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(color: ColorSty.primary),
-                      borderRadius: BorderRadius.circular(30.0),
+          return BottomSheetDetailMenu(
+            title: "Ganti Bahasa",
+            heightGp: SpaceDims.sp12,
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () =>
+                        Provider.of<ProfileProviders>(context, listen: false)
+                            .changeRole(true),
+                    style: ElevatedButton.styleFrom(
+                      primary: _role ? ColorSty.primary : ColorSty.white,
+                      onPrimary: _role ? ColorSty.white : ColorSty.black,
+                      padding: const EdgeInsets.all(SpaceDims.sp12),
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(color: ColorSty.primary),
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
+                    child: const Align(
+                      alignment: Alignment.center,
+                      child: Text("Kasir", style: TypoSty.button),
                     ),
                   ),
-                  child: const Align(
-                    alignment: Alignment.center,
-                    child: Text("Kasir", style: TypoSty.button),
-                  ),
                 ),
-              ),
-              const SizedBox(width: SpaceDims.sp14),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () => Provider.of<ProfileProviders>(context, listen: false).changeRole(false),
-                  style: ElevatedButton.styleFrom(
-                    primary: !_role ? ColorSty.primary : ColorSty.white,
-                    onPrimary: !_role ? ColorSty.white : ColorSty.black,
-                    padding: const EdgeInsets.all(SpaceDims.sp12),
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(color: ColorSty.primary),
-                      borderRadius: BorderRadius.circular(30.0),
+                const SizedBox(width: SpaceDims.sp14),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () =>
+                        Provider.of<ProfileProviders>(context, listen: false)
+                            .changeRole(false),
+                    style: ElevatedButton.styleFrom(
+                      primary: !_role ? ColorSty.primary : ColorSty.white,
+                      onPrimary: !_role ? ColorSty.white : ColorSty.black,
+                      padding: const EdgeInsets.all(SpaceDims.sp12),
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(color: ColorSty.primary),
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
+                    child: const Align(
+                      alignment: Alignment.center,
+                      child: Text("Pelanggan", style: TypoSty.button),
                     ),
                   ),
-                  child: const Align(
-                    alignment: Alignment.center,
-                    child: Text("Pelanggan", style: TypoSty.button),
-                  ),
                 ),
-              ),
-            ],
-          ),
-        );
-      }
-    );
+              ],
+            ),
+          );
+        });
   }
 }
