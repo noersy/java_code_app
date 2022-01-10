@@ -9,12 +9,16 @@ import 'package:java_code_app/widget/listongoing_card.dart';
 
 class OrderDetailPage extends StatelessWidget {
   final Map<String, dynamic> dataOrder;
+  final bool? preparing;
 
-  const OrderDetailPage({Key? key, required this.dataOrder}) : super(key: key);
+  const OrderDetailPage({
+    Key? key,
+    required this.dataOrder,
+    this.preparing = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // print(dataOrder);
     return Scaffold(
       backgroundColor: ColorSty.white,
       appBar: const CostumeAppBar(
@@ -154,16 +158,20 @@ class OrderDetailPage extends StatelessWidget {
                         ElevatedButton(
                           onPressed: () {},
                           style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.all(SpaceDims.sp12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                            )
-                          ),
+                              padding: const EdgeInsets.all(SpaceDims.sp12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              )),
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width,
-                            child: const Align(
+                            child: Align(
                               alignment: Alignment.center,
-                              child: Text("Terima Pesanan", style: TypoSty.button),
+                              child: Text(
+                                preparing ?? false
+                                    ? "Pesanan Selesai"
+                                    : "Terima Pesanan",
+                                style: TypoSty.button,
+                              ),
                             ),
                           ),
                         )

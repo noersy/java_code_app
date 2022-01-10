@@ -6,8 +6,8 @@ import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:java_code_app/view/pesanan/history_screen.dart';
-import 'package:java_code_app/view/pesanan/ongoing_screen.dart';
+import 'package:java_code_app/view/orders/history_screen.dart';
+import 'package:java_code_app/view/orders/ongoing_screen.dart';
 import 'package:provider/provider.dart';
 
 class PesananPage extends StatefulWidget {
@@ -99,7 +99,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
       child: AnimatedBuilder(
         animation: OrderProviders(),
         builder: (BuildContext context, Widget? child) {
-          final _queue = [
+          final List<Map<String, dynamic>> _queue = [
             {
               "id": "1",
               "orders": [
@@ -109,6 +109,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   "harga": "Rp 10.000",
                   "name": "Chicken Katsu",
                   "countOrder": 1,
+                  "amount": 99
                 }
               ],
               "voucher": {},
@@ -165,7 +166,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   for (Map<String, dynamic> item in _queue)
                                     OrdersCard(
                                       isActive: true,
-                                      onPressed: () => Navigate.toViewOrderKasir(context, dataOrders: item),
+                                      onPressed: () => Navigate.toViewOrderKasir(context, dataOrders: item, preparing: true),
                                     ),
                                 ],
                               ),
@@ -538,3 +539,4 @@ class OrderHistoryScreen extends StatelessWidget {
     );
   }
 }
+

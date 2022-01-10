@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/providers/profile_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
@@ -8,14 +9,9 @@ import 'package:java_code_app/widget/detailmenu_sheet.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
 import 'package:provider/provider.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
-  @override
-  State<ProfilePage> createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -163,22 +159,28 @@ class _ProfilePageState extends State<ProfilePage> {
                                     builder: (BuildContext context) => const ChangeLagSheet(),
                                   ),
                             ),
-                            TileListProfile(
-                              title: 'Role',
-                              suffix: '',
-                              onPreseed: () =>
-                                  showModalBottomSheet(
-                                    barrierColor: ColorSty.grey.withOpacity(0.2),
-                                    elevation: 5,
-                                    shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(30.0),
-                                            topRight: Radius.circular(30.0)
-                                        )
-                                    ),
-                                    context: context,
-                                    builder: (BuildContext context) => const ChangeRoleSheet(),
-                                  ),
+                            AnimatedBuilder(
+                              animation: OrderProviders(),
+                              builder: (context, snapshot) {
+                                final role = Provider.of<ProfileProviders>(context).isKasir;
+                                return TileListProfile(
+                                  title: 'Role',
+                                  suffix: role ? 'Kasir' : 'Pelanggan',
+                                  onPreseed: () =>
+                                      showModalBottomSheet(
+                                        barrierColor: ColorSty.grey.withOpacity(0.2),
+                                        elevation: 5,
+                                        shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(30.0),
+                                                topRight: Radius.circular(30.0)
+                                            )
+                                        ),
+                                        context: context,
+                                        builder: (BuildContext context) => const ChangeRoleSheet(),
+                                      ),
+                                );
+                              }
                             ),
                           ],
                         ),

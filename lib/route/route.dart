@@ -7,7 +7,7 @@ import 'package:java_code_app/view/orders/detailvoucher_page.dart';
 import 'package:java_code_app/view/orders/editorder_page.dart';
 import 'package:java_code_app/view/auth/findlocation_page.dart';
 import 'package:java_code_app/view/orders/ordersdetail_page.dart';
-import 'package:java_code_app/view/pesanan/ongoingorder_page.dart';
+import 'package:java_code_app/view/orders/ongoingorder_page.dart';
 import 'package:java_code_app/view/branda/promo_page.dart';
 import 'package:java_code_app/view/orders/selection_vocher_page.dart';
 import 'package:java_code_app/widget/vp_pin_dialog.dart';
@@ -22,5 +22,5 @@ class Navigate {
   static Future toDetailMenu(context, {required Map<String, dynamic> data, required int countOrder}) => Navigator.of(context).push(routeTransition(DetailMenu(data:data, countOrder: countOrder)));
   static void toEditOrderMenu(context, {required Map<String, dynamic> data, required int countOrder}) => Navigator.of(context).push(routeTransition(EditOrderPage(data:data, countOrder: countOrder)));
   static void toViewOrder(context, {required Map<String, dynamic> dataOrders}) => Navigator.of(context).push(routeTransition( OngoingOrderPage(dataOrder: dataOrders)));
-  static void toViewOrderKasir(context, {required Map<String, dynamic> dataOrders}) => Navigator.of(context).push(routeTransition(OrderDetailPage(dataOrder: dataOrders)));
+  static void toViewOrderKasir(context, {required Map<String, dynamic> dataOrders, bool? preparing}) => Navigator.of(context).push(routeTransition(OrderDetailPage(dataOrder: dataOrders, preparing: preparing)));
 }
