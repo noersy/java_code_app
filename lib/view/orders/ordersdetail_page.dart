@@ -79,7 +79,7 @@ class OrderDetailPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
-                          children: const [
+                          children:  [
                             Text(
                               "Total Pesanan",
                               style: TypoSty.captionSemiBold,
@@ -127,7 +127,7 @@ class OrderDetailPage extends StatelessWidget {
                                         fontWeight: FontWeight.normal,
                                         color: Colors.red),
                                     textAlign: TextAlign.right),
-                                const Text("None",
+                                Text("None",
                                     style: TypoSty.mini,
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.right)

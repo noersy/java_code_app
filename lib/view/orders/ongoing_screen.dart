@@ -47,9 +47,9 @@ class OngoingScreen extends StatelessWidget {
                   Image.asset("assert/image/bg_findlocation.png"),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(IconsCs.order_icon, size: 120, color: ColorSty.primary),
-                      SizedBox(height: SpaceDims.sp22),
+                    children: [
+                      const Icon(IconsCs.order_icon, size: 120, color: ColorSty.primary),
+                      const SizedBox(height: SpaceDims.sp22),
                       Text("Sudah Pesan?\nLacak pesananmu\ndi sini.", textAlign: TextAlign.center, style: TypoSty.title2),
                     ],
                   )

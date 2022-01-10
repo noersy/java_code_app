@@ -130,7 +130,7 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
                     borderRadius: BorderRadius.circular(30.0),
                   ),
                 ),
-                child: const SizedBox(
+                child: SizedBox(
                   width: double.infinity,
                   child: Align(
                     alignment: Alignment.center,

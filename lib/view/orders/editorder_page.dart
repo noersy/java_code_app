@@ -244,7 +244,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
                 ),
               ),
             ),
-            child: const SizedBox(
+            child: SizedBox(
               width: double.infinity,
               child: Align(
                 alignment: Alignment.center,

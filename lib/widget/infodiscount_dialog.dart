@@ -15,13 +15,13 @@ class InfoDiscountDialog extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: SpaceDims.sp24),
-              const Text("Info Discount", style: TypoSty.titlePrimary),
+              Text("Info Discount", style: TypoSty.titlePrimary),
               Column(
                 children: [
                   const SizedBox(height: SpaceDims.sp24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children:  [
                       Text("Info Discount", style: TypoSty.caption),
                       Text("10%", style: TypoSty.captionBold),
                     ],
@@ -29,7 +29,7 @@ class InfoDiscountDialog extends StatelessWidget {
                   const SizedBox(height: SpaceDims.sp4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children:  [
                       Text("Info Discount", style: TypoSty.caption),
                       Text("10%", style: TypoSty.captionBold),
                     ],

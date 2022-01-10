@@ -8,6 +8,7 @@ class ButtonLogin extends StatelessWidget {
   final String? icon;
   final Color bgColors;
   final String title;
+  final String? boldTitle;
   final Function() onPressed;
 
   const ButtonLogin({
@@ -17,8 +18,6 @@ class ButtonLogin extends StatelessWidget {
     required this.bgColors,
     required this.title, required this.onPressed,
   }) : super(key: key);
-
-  final String? boldTitle;
 
   @override
   Widget build(BuildContext context) {

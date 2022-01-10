@@ -104,8 +104,8 @@ class ProfilePage extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(left: SpaceDims.sp32),
+                      Padding(
+                        padding: const EdgeInsets.only(left: SpaceDims.sp32),
                         child: Text("Info Akun", style: TypoSty.titlePrimary),
                       ),
                       Container(
@@ -216,8 +216,8 @@ class ProfilePage extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(left: SpaceDims.sp32),
+                      Padding(
+                        padding: const EdgeInsets.only(left: SpaceDims.sp32),
                         child:
                             Text("Info Lainnya", style: TypoSty.titlePrimary),
                       ),
@@ -256,7 +256,7 @@ class ProfilePage extends StatelessWidget {
                     children: [
                       ElevatedButton(
                         onPressed: () {},
-                        child: const SizedBox(
+                        child:  SizedBox(
                           width: 204,
                           child: Align(
                             alignment: Alignment.center,
@@ -445,7 +445,7 @@ class _ChangeLagSheetState extends State<ChangeLagSheet> {
                     children: [
                       Image.asset("assert/image/ind-flag.png"),
                       const SizedBox(width: SpaceDims.sp12),
-                      const Text("Indonesia", style: TypoSty.button)
+                      Text("Indonesia", style: TypoSty.button)
                     ],
                   ),
                 ),
@@ -467,7 +467,7 @@ class _ChangeLagSheetState extends State<ChangeLagSheet> {
                     children: [
                       Image.asset("assert/image/eng-flag.png", height: 40),
                       const SizedBox(width: SpaceDims.sp12),
-                      const Text("English", style: TypoSty.button)
+                      Text("English", style: TypoSty.button)
                     ],
                   ),
                 ),
@@ -515,7 +515,7 @@ class _ChangeRoleSheetState extends State<ChangeRoleSheet> {
                         borderRadius: BorderRadius.circular(30.0),
                       ),
                     ),
-                    child: const Align(
+                    child: Align(
                       alignment: Alignment.center,
                       child: Text("Kasir", style: TypoSty.button),
                     ),
@@ -536,7 +536,7 @@ class _ChangeRoleSheetState extends State<ChangeRoleSheet> {
                         borderRadius: BorderRadius.circular(30.0),
                       ),
                     ),
-                    child: const Align(
+                    child: Align(
                       alignment: Alignment.center,
                       child: Text("Pelanggan", style: TypoSty.button),
                     ),

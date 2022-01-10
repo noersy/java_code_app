@@ -261,7 +261,7 @@ class _DetailMenuState extends State<DetailMenu> {
                               borderRadius: BorderRadius.circular(30.0),
                             ),
                           ),
-                          child: const SizedBox(
+                          child: SizedBox(
                             width: double.infinity,
                             child: Align(
                               alignment: Alignment.center,

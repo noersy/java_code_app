@@ -83,7 +83,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
-                          children: const [
+                          children:  [
                             Text(
                               "Total Pesanan ",
                               style: TypoSty.captionSemiBold,
@@ -190,8 +190,8 @@ class _CheckOutPageState extends State<CheckOutPage> {
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
+                          children:  [
+                            const Text(
                               "Total Pembayaran",
                               style: TextStyle(color: ColorSty.black60),
                             ),
@@ -216,7 +216,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                           ),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         "Pesan Sekarang",
                         style: TypoSty.button,
                       ),

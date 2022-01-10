@@ -104,9 +104,9 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
-                              children: const [
-                                Icon(IconsCs.uiw_date, color: ColorSty.primary),
-                                SizedBox(width: SpaceDims.sp12),
+                              children: [
+                                const Icon(IconsCs.uiw_date, color: ColorSty.primary),
+                                const SizedBox(width: SpaceDims.sp12),
                                 Text("Valid Date", style: TypoSty.button),
                               ],
                             ),
@@ -173,7 +173,7 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
                 ),
               ),
             ),
-            child: const Text("Pakai Voucher", style: TypoSty.button),
+            child: Text("Pakai Voucher", style: TypoSty.button),
           ),
         ),
       ),

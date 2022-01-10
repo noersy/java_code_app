@@ -3,83 +3,83 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/theme/colors.dart';
 
 class TypoSty {
-  static const TextStyle heading = TextStyle(
+  static TextStyle heading = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.w700,
-    fontSize: 36.0,
+    fontSize: ScreenUtil().setSp(26.0),
   );
 
   static TextStyle title = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.bold,
     color: ColorSty.black,
-    fontSize: ScreenUtil().setSp(16),
+    fontSize: ScreenUtil().setSp(16.0),
   );
 
-  static const TextStyle titlePrimary = TextStyle(
+  static TextStyle titlePrimary = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.bold,
     color: ColorSty.primary,
-    fontSize: 20.0,
+    fontSize: ScreenUtil().setSp(16.0),
   );
 
-  static const TextStyle subtitle = TextStyle(
+  static TextStyle subtitle = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.bold,
-    fontSize: 16.0,
+    fontSize: ScreenUtil().setSp(16.0),
   );
 
-  static const TextStyle subtitle2 = TextStyle(
+  static TextStyle subtitle2 = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.w600,
-    fontSize: 16.0,
+    fontSize: ScreenUtil().setSp(16.0),
   );
 
-  static const TextStyle title2 = TextStyle(
+  static TextStyle title2 = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.normal,
-    fontSize: 20.0,
+    fontSize: ScreenUtil().setSp(20.0),
   );
 
-  static const TextStyle caption = TextStyle(
+  static TextStyle caption = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.normal,
-    fontSize: 16.0,
+    fontSize: ScreenUtil().setSp(16.0),
   );
 
-  static const TextStyle captionSemiBold = TextStyle(
+  static TextStyle captionSemiBold = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.w600,
-    fontSize: 16.0,
+    fontSize: ScreenUtil().setSp(13.0),
   );
 
-  static const TextStyle captionBold = TextStyle(
+  static TextStyle captionBold = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.bold,
-    fontSize: 16.0,
+    fontSize: ScreenUtil().setSp(13.0),
   );
 
-  static const TextStyle caption2 = TextStyle(
+  static TextStyle caption2 = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.bold,
     color: Colors.grey,
-    fontSize: 14.0,
+    fontSize: ScreenUtil().setSp(13.0),
   );
 
-  static const TextStyle button = TextStyle(
+  static TextStyle button = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.w600,
-    fontSize: 14.0,
+    fontSize: ScreenUtil().setSp(12.0),
   );
 
-  static const TextStyle button2 = TextStyle(
+  static TextStyle button2 = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.w600,
-    fontSize: 12.0,
+    fontSize: ScreenUtil().setSp(12.0),
   );
 
-  static const TextStyle mini = TextStyle(
+  static TextStyle mini = TextStyle(
     fontWeight: FontWeight.normal,
-    fontSize: 11.0,
+    fontSize: ScreenUtil().setSp(11.0),
   );
 }

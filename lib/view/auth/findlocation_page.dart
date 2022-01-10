@@ -43,7 +43,7 @@ class _FindLocationPageState extends State<FindLocationPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     "Mencari Lokasimu ...",
                     textAlign: TextAlign.center,
                     style: TypoSty.title2,

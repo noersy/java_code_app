@@ -64,8 +64,8 @@ class LoginPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 40.0),
                       Row(
-                        children: const [
-                          Expanded(
+                        children: [
+                          const Expanded(
                             child: DecoratedBox(
                               decoration: BoxDecoration(color: ColorSty.grey),
                               child: SizedBox(height: 1),
@@ -73,10 +73,10 @@ class LoginPage extends StatelessWidget {
                           ),
                           Padding(
                             padding:
-                                EdgeInsets.symmetric(horizontal: SpaceDims.sp8),
+                                const EdgeInsets.symmetric(horizontal: SpaceDims.sp8),
                             child: Text("atau", style: TypoSty.caption2),
                           ),
-                          Expanded(
+                          const Expanded(
                             child: DecoratedBox(
                               decoration: BoxDecoration(color: ColorSty.grey),
                               child: SizedBox(height: 1),

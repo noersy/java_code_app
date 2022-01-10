@@ -5,7 +5,6 @@ import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/card_coupun.dart';
-import 'package:java_code_app/widget/silver_appbar.dart';
 
 class PromoPage extends StatelessWidget {
   const PromoPage({Key? key}) : super(key: key);
@@ -75,9 +74,11 @@ class PromoPage extends StatelessWidget {
                             color: ColorSty.primary, size: 32.0),
                         const SizedBox(width: SpaceDims.sp12),
                         Column(
-                          children: const [
-                            Text("Syarat dan Ketentuan",
-                                style: TypoSty.subtitle),
+                          children: [
+                            Text(
+                              "Syarat dan Ketentuan",
+                              style: TypoSty.subtitle,
+                            ),
                           ],
                         )
                       ],
@@ -97,7 +98,7 @@ class PromoPage extends StatelessWidget {
                           ),
                           Padding(
                             padding:
-                            const EdgeInsets.only(left: SpaceDims.sp12),
+                                const EdgeInsets.only(left: SpaceDims.sp12),
                             child: Column(
                               children: const [
                                 Text(

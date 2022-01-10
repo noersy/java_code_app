@@ -99,11 +99,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 Image.asset("assert/image/bg_findlocation.png"),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(IconsCs.order_icon, size: 120, color: ColorSty.primary),
-                    SizedBox(height: SpaceDims.sp22),
+                  children: [
+                    const Icon(IconsCs.order_icon, size: 120, color: ColorSty.primary),
+                    const SizedBox(height: SpaceDims.sp22),
                     Text("Mulai buat pesanan.", textAlign: TextAlign.center, style: TypoSty.title2),
-                    SizedBox(height: SpaceDims.sp12),
+                    const SizedBox(height: SpaceDims.sp12),
                     Text("Makanan yang kamu pesan\nakan muncul di sini agar\nkamu bisa menemukan\nmenu favoritmu lagi!.", textAlign: TextAlign.center, style: TypoSty.title2),
                   ],
                 )
@@ -127,7 +127,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("Total Pesanan", style: TypoSty.title),
-            const Text("Rp. 40.000", style: TypoSty.titlePrimary),
+            Text("Rp. 40.000", style: TypoSty.titlePrimary),
           ],
         ),
       ),

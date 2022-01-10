@@ -85,7 +85,7 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
-                          children: const [
+                          children: [
                             Text(
                               "Total Pesanan ",
                               style: TypoSty.captionSemiBold,

@@ -46,7 +46,7 @@ class VFingerPrintDialog extends StatelessWidget {
                         const Expanded(child: Divider(thickness: 3)),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 14.w),
-                          child: const Text("Atau", style: TypoSty.caption2),
+                          child:  Text("Atau", style: TypoSty.caption2),
                         ),
                         const Expanded(child: Divider(thickness: 3)),
                       ],
