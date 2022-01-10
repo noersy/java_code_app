@@ -16,14 +16,14 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
   final safeTopPadding = MediaQuery.of(context).padding.vertical;
-
+  final height = MediaQuery.of(context).size.height;
     return ScreenUtilInit(
       builder: () {
         return Scaffold(
           body: SafeArea(
             child: SingleChildScrollView(
               child: SizedBox(
-                height: MediaQuery.of(context).size.height,
+                height: height <= 780 ? height+safeTopPadding+20 : height ,
                 child: Stack(
                   alignment: Alignment.topCenter,
                   children: [
