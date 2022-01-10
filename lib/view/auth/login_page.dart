@@ -90,7 +90,7 @@ class LoginPage extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: SpaceDims.sp16),
+                          SizedBox(height: SpaceDims.sp16.h),
                           ButtonLogin(
                             title: 'Masuk menggunakan',
                             boldTitle: "Google",
@@ -98,7 +98,7 @@ class LoginPage extends StatelessWidget {
                             icon: "assert/image/icon_google.png",
                             onPressed: () {},
                           ),
-                          const SizedBox(height: SpaceDims.sp8),
+                          SizedBox(height: SpaceDims.sp8.h),
                           ButtonLogin(
                             title: 'Masuk menggunakan',
                             boldTitle: "Apple",
@@ -106,7 +106,7 @@ class LoginPage extends StatelessWidget {
                             bgColors: ColorSty.black,
                             onPressed: () {},
                           ),
-                          const SizedBox(height: SpaceDims.sp22)
+                          SizedBox(height: SpaceDims.sp22.h)
                         ],
                       ),
                     ),
