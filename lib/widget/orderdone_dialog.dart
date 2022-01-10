@@ -90,7 +90,7 @@ class OrderDoneDialog extends StatelessWidget {
   }
 
   _submit(context, {Map<String, dynamic>? voucher}) async{
-    await Provider.of<OrderProvider>(context, listen: false).submitOrder(voucher);
+    await Provider.of<OrderProviders>(context, listen: false).submitOrder(voucher);
     Navigator.pop(context);
     Navigator.pop(context);
 

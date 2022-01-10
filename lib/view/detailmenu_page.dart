@@ -249,7 +249,7 @@ class _DetailMenuState extends State<DetailMenu> {
                         const SizedBox(height: SpaceDims.sp12),
                         ElevatedButton(
                           onPressed: () {
-                            Provider.of<OrderProvider>(context, listen: false).addOrder(data : widget.data, jumlahOrder: _jumlahOrder);
+                            Provider.of<OrderProviders>(context, listen: false).addOrder(data : widget.data, jumlahOrder: _jumlahOrder);
 
                             Navigator.of(context).pop();
                           },

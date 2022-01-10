@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/providers/order_providers.dart';
+import 'package:java_code_app/providers/profile_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/view/dashboard_page.dart';
 import 'package:java_code_app/view/login_page.dart';
@@ -17,8 +18,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (BuildContext context) => OrderProvider(),
+    return MultiProvider(
+      providers: [
+        Provider<OrderProviders>(create: (BuildContext context) => OrderProviders()),
+        Provider<ProfileProviders>(create: (BuildContext context) => ProfileProviders())
+      ],
       child: ScreenUtilInit(
         builder: () => MaterialApp(
           title: 'Java Code App',

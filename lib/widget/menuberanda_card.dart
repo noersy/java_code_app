@@ -115,12 +115,12 @@ class _CardMenuState extends State<CardMenu> {
                           onPressed: () async {
                             setState(() => _jumlahOrder--);
                             if(_jumlahOrder != 0) {
-                              Provider.of<OrderProvider>(context, listen: false).addOrder(
+                              Provider.of<OrderProviders>(context, listen: false).addOrder(
                               jumlahOrder: _jumlahOrder,
                               data: widget.data,
                             );
                             }else{
-                              Provider.of<OrderProvider>(context, listen: false).deleteOrder(id: widget.data["id"]);
+                              Provider.of<OrderProviders>(context, listen: false).deleteOrder(id: widget.data["id"]);
                             }
                           },
                           style: TextButton.styleFrom(
@@ -137,7 +137,7 @@ class _CardMenuState extends State<CardMenu> {
                       TextButton(
                         onPressed: () async {
                           setState(() => _jumlahOrder++);
-                          Provider.of<OrderProvider>(context, listen: false).addOrder(
+                          Provider.of<OrderProviders>(context, listen: false).addOrder(
                             jumlahOrder: _jumlahOrder,
                             data: widget.data,
                           );

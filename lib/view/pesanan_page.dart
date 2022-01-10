@@ -90,9 +90,9 @@ class OngoingScreen extends StatelessWidget {
           top: SpaceDims.sp12,
         ),
         child: AnimatedBuilder(
-          animation: OrderProvider(),
+          animation: OrderProviders(),
           builder: (BuildContext context, Widget? child) {
-            final _orderOngoing = Provider.of<OrderProvider>(context).orderProgress;
+            final _orderOngoing = Provider.of<OrderProviders>(context).orderProgress;
 
             return SizedBox(
               height: MediaQuery.of(context).size.height - 120,

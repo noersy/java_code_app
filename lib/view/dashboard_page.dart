@@ -49,9 +49,9 @@ class _DashboardPageState extends State<DashboardPage> {
                   top: 0.0,
                   right: 0.0,
                   child: AnimatedBuilder(
-                    animation: OrderProvider(),
+                    animation: OrderProviders(),
                     builder: (BuildContext context, Widget? child) {
-                       int _orderOngoing = Provider.of<OrderProvider>(context).orderProgress.length;
+                       int _orderOngoing = Provider.of<OrderProviders>(context).orderProgress.length;
                        // print(Provider.of<OrderProvider>(context).orderProgress.first);
                       if (_orderOngoing > 0) {
                         return Container(
@@ -98,9 +98,9 @@ class _DashboardPageState extends State<DashboardPage> {
         ],
       ),
       floatingActionButton: AnimatedBuilder(
-        animation: OrderProvider(),
+        animation: OrderProviders(),
         builder: (BuildContext context, Widget? child) {
-          final _order = Provider.of<OrderProvider>(context).checkOrder.length;
+          final _order = Provider.of<OrderProviders>(context).checkOrder.length;
           if (_order > 0) {
             return FloatingActionButton(
               backgroundColor: ColorSty.primary,

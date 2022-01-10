@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:java_code_app/tools/random_string.dart';
 
-class OrderProvider extends ChangeNotifier {
+class OrderProviders extends ChangeNotifier {
   // static int _orderInProgress = 0;
   // static int _checkOrder = 0;
   static Map<String, dynamic> _checkOrder = {};

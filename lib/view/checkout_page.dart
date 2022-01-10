@@ -23,7 +23,7 @@ class CheckOutPage extends StatefulWidget {
 }
 
 class _CheckOutPageState extends State<CheckOutPage> {
-  Map<String, dynamic> get _orders => Provider.of<OrderProvider>(context, listen: false).checkOrder;
+  Map<String, dynamic> get _orders => Provider.of<OrderProviders>(context, listen: false).checkOrder;
   Map<String, dynamic> _selectedVoucher = {};
 
   @override
