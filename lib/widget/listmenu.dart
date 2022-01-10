@@ -25,9 +25,9 @@ class ListMenu extends StatelessWidget {
             children: [
               type == "makanan"
                   ? SvgPicture.asset("assert/image/icons/ep_food.svg",
-                      height: 22)
+                      height: 22,)
                   : SvgPicture.asset("assert/image/icons/ep_coffee.svg",
-                      height: 26),
+                      height: 26,),
               const SizedBox(width: SpaceDims.sp4),
               Text(
                 title,

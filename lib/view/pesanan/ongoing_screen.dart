@@ -78,8 +78,6 @@ class OrderMenuCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(urlImage);
-
     return Card(
       elevation: 4,
       color: ColorSty.white80,

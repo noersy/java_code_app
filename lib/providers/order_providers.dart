@@ -8,9 +8,11 @@ class OrderProviders extends ChangeNotifier {
   static List<Map<String, dynamic>> _orderInProgress = [];
 
   Map<String, dynamic> get checkOrder => _checkOrder;
+
   List<Map<String, dynamic>> get orderProgress => _orderInProgress;
 
-  addOrder({required Map<String, dynamic> data, required int jumlahOrder}) async {
+  addOrder(
+      {required Map<String, dynamic> data, required int jumlahOrder}) async {
     _checkOrder.addAll({
       data["id"]: {
         "jenis": data["jenis"],
@@ -33,15 +35,17 @@ class OrderProviders extends ChangeNotifier {
     required Map<String, dynamic> data,
     required int jumlahOrder,
   }) async {
-    _checkOrder.update(data["id"], (value) =>
-    {
-      "jenis": value["jenis"],
-      "image": value["image"],
-      "harga": value["harga"],
-      "amount": value["amount"],
-      "name": value["name"],
-      "countOrder": jumlahOrder,
-    });
+    _checkOrder.update(
+      data["id"],
+      (value) => {
+        "jenis": value["jenis"],
+        "image": value["image"],
+        "harga": value["harga"],
+        "amount": value["amount"],
+        "name": value["name"],
+        "countOrder": jumlahOrder,
+      },
+    );
     notifyListeners();
   }
 

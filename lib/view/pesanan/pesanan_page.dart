@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/providers/profile_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
+import 'package:java_code_app/theme/icons_cs_icons.dart';
+import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/view/pesanan/history_screen.dart';
 import 'package:java_code_app/view/pesanan/ongoing_screen.dart';
@@ -50,7 +53,7 @@ class _PesananPageState extends State<PesananPage>
                 final role = Provider.of<ProfileProviders>(context).isKasir;
                 return Tab(
                   child: Text(
-                      role ? "Pesanan" : "Sedang Berjalan" ,
+                    role ? "Pesanan" : "Sedang Berjalan",
                   ),
                 );
               },
@@ -60,17 +63,16 @@ class _PesananPageState extends State<PesananPage>
         ),
       ),
       body: AnimatedBuilder(
-        animation: ProfileProviders(),
-        builder: (context, snapshot) {
-          final role = Provider.of<ProfileProviders>(context).isKasir;
-          return TabBarView(
-            controller: _tabController,
-            children: role 
-                ? [const OrdersScreen(), const OrderHistoryScreen()]
-                : [const OngoingScreen(), const HistoryScreen()],
-          );
-        }
-      ),
+          animation: ProfileProviders(),
+          builder: (context, snapshot) {
+            final role = Provider.of<ProfileProviders>(context).isKasir;
+            return TabBarView(
+              controller: _tabController,
+              children: role
+                  ? [const OrdersScreen(), const OrderHistoryScreen()]
+                  : [const OngoingScreen(), const HistoryScreen()],
+            );
+          }),
     );
   }
 }
@@ -83,18 +85,298 @@ class OrdersScreen extends StatefulWidget {
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
+  final PageController _pageController = PageController();
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Padding(
+      padding: const EdgeInsets.only(
+        right: SpaceDims.sp18,
+        left: SpaceDims.sp18,
+        top: SpaceDims.sp12,
+      ),
+      child: AnimatedBuilder(
+        animation: OrderProviders(),
+        builder: (BuildContext context, Widget? child) {
+          final _queue = [
+            {
+              "id": "1",
+              "orders": [
+                {
+                  "jenis": "makanan",
+                  "image": "assert/image/menu/1637916792.png",
+                  "harga": "Rp 10.000",
+                  "name": "Chicken Katsu",
+                  "countOrder": 1,
+                }
+              ],
+              "voucher": {},
+            }
+          ];
+
+          return SizedBox(
+            height: MediaQuery.of(context).size.height - 120,
+            child: _queue.isNotEmpty
+                ? Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
+                        child: SwitchButton(
+                          left: "Antrian",
+                          right: "Disiapkan",
+                          onChanged: (bool value){
+                            if(value){
+                              _pageController.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                            }else{
+                              _pageController.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                            }
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: SpaceDims.sp12),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height - 200,
+                        child: PageView(
+                          controller: _pageController,
+                          children: [
+                            SingleChildScrollView(
+                              primary: true,
+                              child: Column(
+                                children: [
+                                  for (Map<String, dynamic> item in _queue)
+                                    OrdersCard(
+                                      onPressed: () {},
+                                    ),
+                                ],
+                              ),
+                            ),
+                            SingleChildScrollView(
+                              primary: true,
+                              child: Column(
+                                children: [
+                                  for (Map<String, dynamic> item in _queue)
+                                    OrdersCard(
+                                      onPressed: () {},
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  )
+                : Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Image.asset("assert/image/bg_findlocation.png"),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(IconsCs.order_icon,
+                              size: 120, color: ColorSty.primary,),
+                          SizedBox(height: SpaceDims.sp22),
+                          Text(
+                            "Sudah Pesan?\nLacak pesananmu\ndi sini.",
+                            textAlign: TextAlign.center,
+                            style: TypoSty.title2,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+          );
+        },
+      ),
+    );
   }
 }
 
+class SwitchButton extends StatefulWidget {
+  final String left, right;
+  final ValueChanged<bool> onChanged;
+
+  const SwitchButton(
+      {Key? key,
+      required this.left,
+      required this.right,
+      required this.onChanged})
+      : super(key: key);
+
+  @override
+  State<SwitchButton> createState() => _SwitchButtonState();
+}
+
+class _SwitchButtonState extends State<SwitchButton> {
+  bool _isActive = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: _isActive ? ColorSty.primary : ColorSty.white,
+              onPrimary: _isActive ? ColorSty.white : ColorSty.black,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0)
+              )
+            ),
+            onPressed: () {
+              setState(() => _isActive = true);
+              widget.onChanged(true);
+            },
+            child: Text(widget.left, style: TypoSty.button),
+          ),
+        ),
+        const SizedBox(width: SpaceDims.sp12),
+        Expanded(
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                primary: !_isActive ? ColorSty.primary : ColorSty.white,
+                onPrimary: !_isActive ? ColorSty.white : ColorSty.black,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0)
+                )
+            ),
+            onPressed: () {
+              setState(() => _isActive = false);
+              widget.onChanged(false);
+            },
+            child: Text(widget.right, style: TypoSty.button),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class OrdersCard extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const OrdersCard({Key? key, required this.onPressed}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4,
+      color: ColorSty.white80,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Container(
+        height: 138,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(10.0),
+          ),
+        ),
+        child: InkWell(
+          onTap: onPressed,
+          child: Row(
+            children: [
+              Container(
+                width: 120,
+                height: 120,
+                padding: const EdgeInsets.all(SpaceDims.sp14),
+                margin: const EdgeInsets.all(SpaceDims.sp8),
+                decoration: BoxDecoration(
+                  color: ColorSty.grey60,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Image.asset("assert/image/menu/1637916792.png"),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: SpaceDims.sp18),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.access_time,
+                                  size: 18.0,
+                                  color: Colors.blue,
+                                ),
+                                const SizedBox(width: SpaceDims.sp4),
+                                Text(
+                                  "Dalam Antrean",
+                                  style:
+                                      TypoSty.mini.copyWith(color: Colors.blue),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              "20 Des 2021",
+                              style: TypoSty.mini.copyWith(color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: SpaceDims.sp12),
+                      Text("Fried Rice, Chicken Katsu", style: TypoSty.title),
+                      const SizedBox(height: SpaceDims.sp12),
+                      Row(
+                        children: [
+                          Text(
+                            "Rp 20.000",
+                            style: TypoSty.mini.copyWith(
+                                fontSize: 14.0, color: ColorSty.primary),
+                          ),
+                          const SizedBox(width: SpaceDims.sp8),
+                          Text(
+                            "(3 Menu)",
+                            style: TypoSty.mini.copyWith(
+                              fontSize: 12.0,
+                              color: ColorSty.grey,
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class OrderHistoryScreen extends StatelessWidget {
   const OrderHistoryScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return SizedBox(
+      height: MediaQuery.of(context).size.height - 80,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Image.asset("assert/image/bg_findlocation.png"),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Icon(IconsCs.order_icon, size: 120, color: ColorSty.primary),
+              SizedBox(height: SpaceDims.sp22),
+              Text("Pesanan selesai\nmuncul di sini.",
+                  textAlign: TextAlign.center, style: TypoSty.title2),
+              SizedBox(height: SpaceDims.sp12),
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
