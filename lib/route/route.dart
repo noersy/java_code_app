@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:java_code_app/transision/route_transisition.dart';
-import 'package:java_code_app/view/checkout_page.dart';
+import 'package:java_code_app/view/orders/checkout_page.dart';
 import 'package:java_code_app/view/dashboard_page.dart';
-import 'package:java_code_app/view/detailmenu_page.dart';
-import 'package:java_code_app/view/detailvoucher_page.dart';
-import 'package:java_code_app/view/editorder_page.dart';
-import 'package:java_code_app/view/findlocation_page.dart';
-import 'package:java_code_app/view/ongoingorder_page.dart';
-import 'package:java_code_app/view/promo_page.dart';
-import 'package:java_code_app/view/selection_vocher_page.dart';
+import 'package:java_code_app/view/orders/detailmenu_page.dart';
+import 'package:java_code_app/view/orders/detailvoucher_page.dart';
+import 'package:java_code_app/view/orders/editorder_page.dart';
+import 'package:java_code_app/view/auth/findlocation_page.dart';
+import 'package:java_code_app/view/pesanan/ongoingorder_page.dart';
+import 'package:java_code_app/view/branda/promo_page.dart';
+import 'package:java_code_app/view/orders/selection_vocher_page.dart';
 import 'package:java_code_app/widget/vp_pin_dialog.dart';
 
 class Navigate {

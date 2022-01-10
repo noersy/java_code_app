@@ -4,9 +4,9 @@ import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:java_code_app/view/beranda_page.dart';
-import 'package:java_code_app/view/pesanan_page.dart';
-import 'package:java_code_app/view/profile_page.dart';
+import 'package:java_code_app/view/branda/beranda_page.dart';
+import 'package:java_code_app/view/pesanan/pesanan_page.dart';
+import 'package:java_code_app/view/profile/profile_page.dart';
 import 'package:provider/provider.dart';
 
 class DashboardPage extends StatefulWidget {

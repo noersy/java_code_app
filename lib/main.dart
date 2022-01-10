@@ -4,7 +4,7 @@ import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/providers/profile_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/view/dashboard_page.dart';
-import 'package:java_code_app/view/login_page.dart';
+import 'package:java_code_app/view/auth/login_page.dart';
 import 'package:provider/provider.dart';
 
 void main() {
