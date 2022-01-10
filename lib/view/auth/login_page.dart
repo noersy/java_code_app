@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
@@ -16,99 +17,106 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
   final safeTopPadding = MediaQuery.of(context).padding.vertical;
 
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height - safeTopPadding,
-            child: Stack(
-              alignment: Alignment.topCenter,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(35.0),
-                  child: Image.asset("assert/image/bg_login.png"),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 46.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      const SizedBox(height: 80.0),
-                      Image.asset("assert/image/javacode_logo.png"),
-                      const SizedBox(height: 90.0),
-                       SizedBox(
-                        width: 339.0,
-                        child: Text('Masuk untuk melanjutkan!',
-                            style: TypoSty.title,
-                        ),
+    return ScreenUtilInit(
+      builder: () {
+        return Scaffold(
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Stack(
+                  alignment: Alignment.topCenter,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 35.0.w,
+                          vertical: 35.0.h,
                       ),
-                      const SizedBox(height: 30.0),
-                      FormLogin(
-                        title: 'Alamat Email',
-                        hint: 'Lorem.ipsum@gmail.com',
-                        type: TextInputType.emailAddress,
-                        editingController: _controllerEmail,
-                      ),
-                      const SizedBox(height: 30.0),
-                      FormLogin(
-                        title: 'Kata Sandi',
-                        hint: '****************',
-                        type: TextInputType.visiblePassword,
-                        editingController: _controllerPassword,
-                      ),
-                      const SizedBox(height: 30.0),
-                      ButtonLogin(
-                        title: 'Masuk',
-                        onPressed: ()=> Navigate.toFindLocation(context),
-                        bgColors: ColorSty.primary,
-                      ),
-                      const SizedBox(height: 40.0),
-                      Row(
+                      child: Image.asset("assert/image/bg_login.png"),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 26.0.w),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          const Expanded(
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(color: ColorSty.grey),
-                              child: SizedBox(height: 1),
+                          SizedBox(height: 70.0.h),
+                          Image.asset("assert/image/javacode_logo.png"),
+                          SizedBox(height: 80.0.h),
+                           SizedBox(
+                            width: 339.0.w,
+                            child: Text('Masuk untuk melanjutkan!',
+                                style: TypoSty.title,
                             ),
                           ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: SpaceDims.sp8),
-                            child: Text("atau", style: TypoSty.caption2),
+                          SizedBox(height: 25.0.h),
+                          FormLogin(
+                            title: 'Alamat Email',
+                            hint: 'Lorem.ipsum@gmail.com',
+                            type: TextInputType.emailAddress,
+                            editingController: _controllerEmail,
                           ),
-                          const Expanded(
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(color: ColorSty.grey),
-                              child: SizedBox(height: 1),
-                            ),
+                          SizedBox(height: 25.0.h),
+                          FormLogin(
+                            title: 'Kata Sandi',
+                            hint: '****************',
+                            type: TextInputType.visiblePassword,
+                            editingController: _controllerPassword,
                           ),
+                          SizedBox(height: 25.0.h),
+                          ButtonLogin(
+                            title: 'Masuk',
+                            onPressed: ()=> Navigate.toFindLocation(context),
+                            bgColors: ColorSty.primary,
+                          ),
+                          SizedBox(height: 40.0.h),
+                          Row(
+                            children: [
+                              const Expanded(
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(color: ColorSty.grey),
+                                  child: SizedBox(height: 1),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: SpaceDims.sp8),
+                                child: Text("atau", style: TypoSty.caption2),
+                              ),
+                              const Expanded(
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(color: ColorSty.grey),
+                                  child: SizedBox(height: 1),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: SpaceDims.sp16),
+                          ButtonLogin(
+                            title: 'Masuk menggunakan',
+                            boldTitle: "Google",
+                            bgColors: ColorSty.white,
+                            icon: "assert/image/icon_google.png",
+                            onPressed: () {},
+                          ),
+                          const SizedBox(height: SpaceDims.sp8),
+                          ButtonLogin(
+                            title: 'Masuk menggunakan',
+                            boldTitle: "Apple",
+                            icon: "assert/image/icon_apple.png",
+                            bgColors: ColorSty.black,
+                            onPressed: () {},
+                          ),
+                          const SizedBox(height: SpaceDims.sp22)
                         ],
                       ),
-                      const SizedBox(height: SpaceDims.sp16),
-                      ButtonLogin(
-                        title: 'Masuk menggunakan',
-                        boldTitle: "Google",
-                        bgColors: ColorSty.white,
-                        icon: "assert/image/icon_google.png",
-                        onPressed: () {},
-                      ),
-                      const SizedBox(height: SpaceDims.sp8),
-                      ButtonLogin(
-                        title: 'Masuk menggunakan',
-                        boldTitle: "Apple",
-                        icon: "assert/image/icon_apple.png",
-                        bgColors: ColorSty.black,
-                        onPressed: () {},
-                      ),
-                      const SizedBox(height: SpaceDims.sp22)
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      }
     );
   }
 }
