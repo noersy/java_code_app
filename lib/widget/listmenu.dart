@@ -39,15 +39,18 @@ class ListMenu extends StatelessWidget {
         const SizedBox(height: SpaceDims.sp12),
         SizedBox(
           width: double.infinity,
-          child: Column(
-            children: [
-              if (type == "makanan")
-                for (Map<String, dynamic> item in datafakeMakanan)
-                  CardMenu(data: item),
-              if (type == "minuman")
-                for (Map<String, dynamic> item in datafakeMinuman)
-                  CardMenu(data: item),
-            ],
+          child: SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            child: Column(
+              children: [
+                if (type == "makanan")
+                  for (Map<String, dynamic> item in datafakeMakanan)
+                    CardMenu(data: item),
+                if (type == "minuman")
+                  for (Map<String, dynamic> item in datafakeMinuman)
+                    CardMenu(data: item),
+              ],
+            ),
           ),
         ),
       ],

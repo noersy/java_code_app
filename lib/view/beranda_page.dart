@@ -118,7 +118,7 @@ class _ContentBerandaState extends State<ContentBeranda> {
               ],
             ),
           ),
-          const SizedBox(height: SpaceDims.sp22),
+          const SizedBox(height: SpaceDims.sp32),
           SingleChildScrollView(
             controller: _controller,
             scrollDirection: Axis.horizontal,
@@ -158,21 +158,22 @@ class _ContentBerandaState extends State<ContentBeranda> {
               ],
             ),
           ),
-          const SizedBox(height: SpaceDims.sp12),
           SizedBox(
-            height: MediaQuery.of(context).size.height,
+            height: MediaQuery.of(context).size.height - 200,
             child: PageView(
               controller: _pageController,
               children: [
-                Column(
-                  children: const [
-                    ListMenu(type: "makanan", title: "Makanan"),
-                    ListMenu(type: "minuman", title: "Minuman"),
-                  ],
+                SingleChildScrollView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  child: Column(
+                    children: const [
+                      ListMenu(type: "makanan", title: "Makanan"),
+                      ListMenu(type: "minuman", title: "Minuman"),
+                    ],
+                  ),
                 ),
                 const ListMenu(type: "makanan", title: "Makanan"),
                 const ListMenu(type: "minuman", title: "Minuman"),
-
               ],
             ),
           ),
