@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/providers/profile_providers.dart';
@@ -15,13 +14,16 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<OrderProviders>(create: (BuildContext context) => OrderProviders()),
-        Provider<ProfileProviders>(create: (BuildContext context) => ProfileProviders())
+        ChangeNotifierProvider(
+          create: (_) => OrderProviders(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ProfileProviders(),
+        ),
       ],
       child: ScreenUtilInit(
         builder: () => MaterialApp(
