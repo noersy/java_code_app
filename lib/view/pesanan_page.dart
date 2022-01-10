@@ -257,95 +257,116 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      primary: true,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: SpaceDims.sp18,
-          vertical: SpaceDims.sp14,
-        ),
-        child: false ? Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(
-                    right: SpaceDims.sp8,
-                    left: SpaceDims.sp12,
-                    bottom: SpaceDims.sp4,
-                    top: SpaceDims.sp4,
-                  ),
-                  width: 160.0,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      color: ColorSty.grey60,
-                      border: Border.all(color: ColorSty.primary),
-                      borderRadius: BorderRadius.circular(30.0)
-                  ),
-                  child: DropdownButton<String>(
-                    isDense: true,
-                    value: _dropdownValue,
-                    alignment: Alignment.topCenter,
-                    borderRadius: BorderRadius.circular(30.0),
-                    icon: const Icon(Icons.arrow_drop_down),
-                    style: TypoSty.caption2.copyWith(fontSize: 14.0, fontWeight: FontWeight.w600, color: ColorSty.black),
-                    onChanged: (String? newValue) {
-                      setState(() => _dropdownValue = newValue!);
-                    },
-                    items: [
-                      for(String item in _item)
-                        DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(item),
-                        ),
-                    ],
-                  ),
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: ColorSty.grey60,
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(color: ColorSty.primary),
-                      borderRadius: BorderRadius.circular(30.0)
-                    )
-                  ),
-                  onPressed: null,
-                  child: SizedBox(
+    return Scaffold(
+      body: SingleChildScrollView(
+        primary: true,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: SpaceDims.sp18,
+            vertical: SpaceDims.sp14,
+          ),
+          child: true ? Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(
+                      right: SpaceDims.sp8,
+                      left: SpaceDims.sp12,
+                      bottom: SpaceDims.sp4,
+                      top: SpaceDims.sp4,
+                    ),
                     width: 160.0,
-                    child: Row(
-                      children:  [
-                        const SizedBox(width: SpaceDims.sp12),
-                        Text("25/12/21 - 30/12/21", style: TypoSty.caption2.copyWith(fontSize: 13.0, fontWeight: FontWeight.w600)),
-                        const SizedBox(width: SpaceDims.sp8),
-                        const Icon(IconsCs.uiw_date, size: 18.0, color: ColorSty.primary),
-                        const SizedBox(width: SpaceDims.sp8),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: ColorSty.grey60,
+                        border: Border.all(color: ColorSty.primary),
+                        borderRadius: BorderRadius.circular(30.0)
+                    ),
+                    child: DropdownButton<String>(
+                      isDense: true,
+                      value: _dropdownValue,
+                      alignment: Alignment.topCenter,
+                      borderRadius: BorderRadius.circular(30.0),
+                      icon: const Icon(Icons.arrow_drop_down),
+                      style: TypoSty.caption2.copyWith(fontSize: 14.0, fontWeight: FontWeight.w600, color: ColorSty.black),
+                      onChanged: (String? newValue) {
+                        setState(() => _dropdownValue = newValue!);
+                      },
+                      items: [
+                        for(String item in _item)
+                          DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(item),
+                          ),
                       ],
                     ),
                   ),
-                ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: ColorSty.grey60,
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(color: ColorSty.primary),
+                        borderRadius: BorderRadius.circular(30.0)
+                      )
+                    ),
+                    onPressed: null,
+                    child: SizedBox(
+                      width: 160.0,
+                      child: Row(
+                        children:  [
+                          const SizedBox(width: SpaceDims.sp12),
+                          Text("25/12/21 - 30/12/21", style: TypoSty.caption2.copyWith(fontSize: 13.0, fontWeight: FontWeight.w600)),
+                          const SizedBox(width: SpaceDims.sp8),
+                          const Icon(IconsCs.uiw_date, size: 18.0, color: ColorSty.primary),
+                          const SizedBox(width: SpaceDims.sp8),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              OrderHistoryCard(onPressed: () {}),
+            ],
+          ) : SizedBox(
+            height: MediaQuery.of(context).size.height - 80,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Image.asset("assert/image/bg_findlocation.png"),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(IconsCs.order_icon, size: 120, color: ColorSty.primary),
+                    SizedBox(height: SpaceDims.sp22),
+                    Text("Mulai buat pesanan.", textAlign: TextAlign.center, style: TypoSty.title2),
+                    SizedBox(height: SpaceDims.sp12),
+                    Text("Makanan yang kamu pesan\nakan muncul di sini agar\nkamu bisa menemukan\nmenu favoritmu lagi!.", textAlign: TextAlign.center, style: TypoSty.title2),
+                  ],
+                )
               ],
             ),
-            OrderHistoryCard(onPressed: () {}),
-          ],
-        ) : SizedBox(
-          height: MediaQuery.of(context).size.height - 80,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Image.asset("assert/image/bg_findlocation.png"),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(IconsCs.order_icon, size: 120, color: ColorSty.primary),
-                  SizedBox(height: SpaceDims.sp22),
-                  Text("Mulai buat pesanan.", textAlign: TextAlign.center, style: TypoSty.title2),
-                  SizedBox(height: SpaceDims.sp12),
-                  Text("Makanan yang kamu pesan\nakan muncul di sini agar\nkamu bisa menemukan\nmenu favoritmu lagi!.", textAlign: TextAlign.center, style: TypoSty.title2),
-                ],
-              )
-            ],
           ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        height: 110,
+        padding: const EdgeInsets.symmetric(horizontal : SpaceDims.sp22, vertical: SpaceDims.sp14),
+        decoration: const BoxDecoration(
+          color: ColorSty.grey60,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30.0),
+            topRight: Radius.circular(30.0)
+          ),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("Total Pesanan", style: TypoSty.title),
+            const Text("Rp. 40.000", style: TypoSty.titlePrimary),
+          ],
         ),
       ),
     );

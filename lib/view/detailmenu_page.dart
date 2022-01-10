@@ -160,8 +160,14 @@ class _DetailMenuState extends State<DetailMenu> {
                             title: "Topping",
                             onPressed: () {
                               showModalBottomSheet(
-                                isScrollControlled: true,
                                 barrierColor: ColorSty.grey.withOpacity(0.2),
+                                elevation: 5,
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(30.0),
+                                        topRight: Radius.circular(30.0)
+                                    )
+                                ),
                                 context: context,
                                 builder: (_) => BottomSheetDetailMenu(
                                   title: "Pilih Toping",
@@ -199,8 +205,14 @@ class _DetailMenuState extends State<DetailMenu> {
                           title: "Catatan",
                           prefix: "Lorem Ipsum sit aaasss",
                           onPressed: () => showModalBottomSheet(
-                            isScrollControlled: true,
                             barrierColor: ColorSty.grey.withOpacity(0.2),
+                            elevation: 5,
+                            shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30.0),
+                                    topRight: Radius.circular(30.0)
+                                )
+                            ),
                             context: context,
                             builder: (BuildContext context) =>
                                 BottomSheetDetailMenu(
@@ -275,9 +287,14 @@ class _DetailMenuState extends State<DetailMenu> {
   _showDialogLevel(List<String> _listLevel) async {
     String _value = "1";
     _value = await showModalBottomSheet(
-      isScrollControlled: true,
       barrierColor: ColorSty.grey.withOpacity(0.2),
-      context: context,
+      elevation: 5,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30.0),
+              topRight: Radius.circular(30.0)
+          )
+      ),      context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (_, setState) {
