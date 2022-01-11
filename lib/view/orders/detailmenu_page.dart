@@ -26,7 +26,7 @@ class DetailMenu extends StatefulWidget {
 }
 
 class _DetailMenuState extends State<DetailMenu> {
-  late final String urlImage, name, harga;
+  late final String urlImage, name, harga, id;
   late final int amount;
   int _jumlahOrder = 0;
   String _selectedLevel = "1";
@@ -39,6 +39,10 @@ class _DetailMenuState extends State<DetailMenu> {
     urlImage = widget.data["image"] ?? "";
     harga = widget.data["harga"] ?? "";
     amount = widget.data["amount"] ?? 0;
+    id = widget.data["id"];
+
+    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    if(orders.keys.contains(id)) _jumlahOrder = orders[id]["countOrder"];
 
     super.initState();
   }
@@ -248,7 +252,13 @@ class _DetailMenuState extends State<DetailMenu> {
                         const SizedBox(height: SpaceDims.sp12),
                         ElevatedButton(
                           onPressed: () {
-                            Provider.of<OrderProviders>(context, listen: false).addOrder(data : widget.data, jumlahOrder: _jumlahOrder);
+                            final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+
+                            if(orders.keys.contains(id)) {
+                              Provider.of<OrderProviders>(context, listen: false).editOrder(data : widget.data, jumlahOrder: _jumlahOrder);
+                            }else{
+                              Provider.of<OrderProviders>(context, listen: false).addOrder(data : widget.data, jumlahOrder: _jumlahOrder);
+                            }
 
                             Navigator.of(context).pop();
                           },

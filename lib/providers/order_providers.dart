@@ -11,8 +11,10 @@ class OrderProviders extends ChangeNotifier {
 
   List<Map<String, dynamic>> get orderProgress => _orderInProgress;
 
-  addOrder(
-      {required Map<String, dynamic> data, required int jumlahOrder}) async {
+  addOrder({
+    required Map<String, dynamic> data,
+    required int jumlahOrder,
+  }) async {
     _checkOrder.addAll({
       data["id"]: {
         "jenis": data["jenis"],

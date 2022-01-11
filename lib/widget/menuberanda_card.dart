@@ -139,7 +139,7 @@ class _CardMenuState extends State<CardMenu> {
                       if (_jumlahOrder != 0)
                         Text("$_jumlahOrder", style: TypoSty.subtitle),
                       TextButton(
-                        onPressed: () async {
+                        onPressed: (){
                           setState(() => _jumlahOrder++);
                           Provider.of<OrderProviders>(context, listen: false).addOrder(
                             jumlahOrder: _jumlahOrder,

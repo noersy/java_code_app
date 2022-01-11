@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/shadows.dart';
@@ -9,6 +10,7 @@ import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/detailmenu_sheet.dart';
 import 'package:java_code_app/widget/labellevel_selection.dart';
 import 'package:java_code_app/widget/listmenu_tile.dart';
+import 'package:provider/provider.dart';
 
 class EditOrderPage extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -26,7 +28,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
   String _selectedLevel = "1";
   List<String> _selectedTopping = [];
 
-  late final String urlImage, name, harga;
+  late final String urlImage, name, harga, id;
   late final int amount;
   int _jumlahOrder = 0;
 
@@ -37,6 +39,10 @@ class _EditOrderPageState extends State<EditOrderPage> {
     urlImage = widget.data["image"] ?? "";
     harga = widget.data["harga"] ?? "";
     amount = widget.data["amount"] ?? 0;
+    id = widget.data["id"];
+
+    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    if(orders.keys.contains(id)) _jumlahOrder = orders[id]["countOrder"];
 
     super.initState();
   }
