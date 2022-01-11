@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
@@ -6,57 +8,83 @@ import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class OngoingScreen extends StatelessWidget {
+class OngoingScreen extends StatefulWidget {
   const OngoingScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      primary: true,
-      child: Padding(
-        padding: const EdgeInsets.only(
-          right: SpaceDims.sp18,
-          left: SpaceDims.sp18,
-          top: SpaceDims.sp12,
-        ),
-        child: AnimatedBuilder(
-          animation: OrderProviders(),
-          builder: (BuildContext context, Widget? child) {
-            final _orderOngoing = Provider.of<OrderProviders>(context).orderProgress;
+  State<OngoingScreen> createState() => _OngoingScreenState();
+}
 
-            return SizedBox(
-              height: MediaQuery.of(context).size.height - 120,
-              child: _orderOngoing.isNotEmpty ? Column(
-                children: [
-                  for(Map<String, dynamic> item in _orderOngoing)
-                    OrderMenuCard(
-                      onPressed: () => Navigate.toViewOrder(
-                        context,
-                        dataOrders: item,
+class _OngoingScreenState extends State<OngoingScreen> {
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  bool _loading = false;
+
+  Future<void> _onRefresh() async {
+    var _duration = const Duration(seconds: 3);
+
+    if(mounted) {
+      setState(() => _loading = true);
+      Timer(_duration, () {
+        setState(() => _loading = false);
+        _refreshController.refreshCompleted();
+      });
+    }
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return SmartRefresher(
+      onRefresh: _onRefresh,
+      controller: _refreshController,
+      child: SingleChildScrollView(
+        primary: true,
+        child: Padding(
+          padding: const EdgeInsets.only(
+            right: SpaceDims.sp18,
+            left: SpaceDims.sp18,
+            top: SpaceDims.sp12,
+          ),
+          child: AnimatedBuilder(
+            animation: OrderProviders(),
+            builder: (BuildContext context, Widget? child) {
+              final _orderOngoing = Provider.of<OrderProviders>(context).orderProgress;
+
+              return SizedBox(
+                height: MediaQuery.of(context).size.height - 120,
+                child: _orderOngoing.isNotEmpty ? Column(
+                  children: [
+                    for(Map<String, dynamic> item in _orderOngoing)
+                      OrderMenuCard(
+                        onPressed: () => Navigate.toViewOrder(
+                          context,
+                          dataOrders: item,
+                        ),
+                        date: "date",
+                        harga: item["orders"][0]["harga"],
+                        title: item["orders"][0]["image"],
+                        urlImage: item["orders"][0]["harga"],
                       ),
-                      date: "date",
-                      harga: item["orders"][0]["harga"],
-                      title: item["orders"][0]["image"],
-                      urlImage: item["orders"][0]["harga"],
-                    ),
-                ],
-              ) : Stack(
-                alignment: Alignment.center,
-                children: [
-                  Image.asset("assert/image/bg_findlocation.png"),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(IconsCs.order, size: 120, color: ColorSty.primary),
-                      const SizedBox(height: SpaceDims.sp22),
-                      Text("Sudah Pesan?\nLacak pesananmu\ndi sini.", textAlign: TextAlign.center, style: TypoSty.title2),
-                    ],
-                  )
-                ],
-              ),
-            );
-          },
+                  ],
+                ) : Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Image.asset("assert/image/bg_findlocation.png"),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(IconsCs.order, size: 120, color: ColorSty.primary),
+                        const SizedBox(height: SpaceDims.sp22),
+                        Text("Sudah Pesan?\nLacak pesananmu\ndi sini.", textAlign: TextAlign.center, style: TypoSty.title2),
+                      ],
+                    )
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

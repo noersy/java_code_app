@@ -38,6 +38,8 @@ dependencies:
   google_sign_in: any
   skeleton_animation: any
   pull_to_refresh: any
+  shimmer: any
+  geolocator: any
 
 dev_dependencies:
   flutter_test:
