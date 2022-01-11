@@ -81,7 +81,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           const SizedBox(width: SpaceDims.sp12),
                           Text("25/12/21 - 30/12/21", style: TypoSty.caption2.copyWith(fontSize: 13.0, fontWeight: FontWeight.w600)),
                           const SizedBox(width: SpaceDims.sp8),
-                          const Icon(IconsCs.uiw_date, size: 18.0, color: ColorSty.primary),
+                          const Icon(IconsCs.date, size: 18.0, color: ColorSty.primary),
                           const SizedBox(width: SpaceDims.sp8),
                         ],
                       ),
@@ -100,7 +100,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(IconsCs.order_icon, size: 120, color: ColorSty.primary),
+                    const Icon(IconsCs.order, size: 120, color: ColorSty.primary),
                     const SizedBox(height: SpaceDims.sp22),
                     Text("Mulai buat pesanan.", textAlign: TextAlign.center, style: TypoSty.title2),
                     const SizedBox(height: SpaceDims.sp12),

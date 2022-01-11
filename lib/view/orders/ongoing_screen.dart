@@ -48,7 +48,7 @@ class OngoingScreen extends StatelessWidget {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(IconsCs.order_icon, size: 120, color: ColorSty.primary),
+                      const Icon(IconsCs.order, size: 120, color: ColorSty.primary),
                       const SizedBox(height: SpaceDims.sp22),
                       Text("Sudah Pesan?\nLacak pesananmu\ndi sini.", textAlign: TextAlign.center, style: TypoSty.title2),
                     ],

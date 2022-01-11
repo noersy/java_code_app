@@ -134,7 +134,7 @@ class OrderDetailPage extends StatelessWidget {
                               ],
                             ],
                           ),
-                          icon: IconsCs.voucher_icon_line,
+                          icon: IconsCs.voucher,
                           onPressed: () {},
                         ),
                         Stack(children: [
@@ -142,7 +142,7 @@ class OrderDetailPage extends StatelessWidget {
                             dense: true,
                             title: "Pembayaran",
                             prefix: "Pay Leter",
-                            icon: IconsCs.la_coins,
+                            icon: IconsCs.coins,
                             onPressed: () {},
                           ),
                         ]),

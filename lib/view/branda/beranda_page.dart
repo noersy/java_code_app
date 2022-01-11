@@ -43,7 +43,7 @@ class _BerandaPageState extends State<BerandaPage> {
               isDense: true,
               hintText: "Pencarian",
               prefixIcon: const Icon(
-                IconsCs.search_icon,
+                IconsCs.search,
                 color: ColorSty.primary,
               ),
               contentPadding: const EdgeInsets.only(
@@ -187,7 +187,7 @@ class _ContentBerandaState extends State<ContentBeranda> {
                                 duration: _duration, curve: Curves.ease);
                           },
                           title: "Minuman",
-                          icon: IconsCs.ep_coffee,
+                          icon: IconsCs.coffee,
                         ),
                       ],
                     ),

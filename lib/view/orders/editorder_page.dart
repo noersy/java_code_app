@@ -9,8 +9,6 @@ import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/detailmenu_sheet.dart';
 import 'package:java_code_app/widget/labellevel_selection.dart';
 import 'package:java_code_app/widget/listmenu_tile.dart';
-import 'package:java_code_app/widget/silver_appbar.dart';
-import 'package:java_code_app/widget/vp_fingerprint_dialog.dart';
 
 class EditOrderPage extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -125,7 +123,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
                       child: Column(
                         children: [
                           TileListDMenu(
-                            icon: IconsCs.bi_cash_coin,
+                            icon: IconsCs.cash,
                             title: "Harga",
                             prefix: harga,
                             onPressed: () {},
@@ -139,7 +137,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
                           ),
                           TileListDMenu(
                             prefixIcon: true,
-                            icon: IconsCs.topping_icon,
+                            icon: IconsCs.topping,
                             title: "Topping",
                             prefix: "Morizela",
                             onPressed: () => showModalBottomSheet(
@@ -165,7 +163,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
                           ),
                           TileListDMenu(
                             prefixIcon: true,
-                            icon: IconsCs.note_icon,
+                            icon: IconsCs.note,
                             title: "Catatan",
                             prefix: "Lorem Ipsum sit aaasss",
                             onPressed: () => showModalBottomSheet(

@@ -105,7 +105,7 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
                           children: [
                             Row(
                               children: [
-                                const Icon(IconsCs.uiw_date, color: ColorSty.primary),
+                                const Icon(IconsCs.date, color: ColorSty.primary),
                                 const SizedBox(width: SpaceDims.sp12),
                                 Text("Valid Date", style: TypoSty.button),
                               ],

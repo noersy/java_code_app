@@ -117,7 +117,7 @@ class _DashboardPageState extends State<DashboardPage> {
               },
               child: const Padding(
                 padding: EdgeInsets.only(right: 3.0),
-                child: Icon(IconsCs.shopingbag_icon),
+                child: Icon(IconsCs.shopingbag),
               ),
             );
           } else {

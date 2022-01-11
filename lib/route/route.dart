@@ -10,7 +10,6 @@ import 'package:java_code_app/view/orders/ordersdetail_page.dart';
 import 'package:java_code_app/view/orders/ongoingorder_page.dart';
 import 'package:java_code_app/view/branda/promo_page.dart';
 import 'package:java_code_app/view/orders/selection_vocher_page.dart';
-import 'package:java_code_app/widget/vp_pin_dialog.dart';
 
 class Navigate {
   static void toFindLocation(context) => Navigator.of(context).pushReplacement(routeTransition(const FindLocationPage()));

@@ -58,7 +58,7 @@ class OrderProviders extends ChangeNotifier {
       "voucher": voucher,
     });
 
-    print(_orderInProgress);
+    // print(_orderInProgress);
     _checkOrder = {};
     notifyListeners();
   }

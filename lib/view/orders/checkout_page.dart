@@ -10,8 +10,6 @@ import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/infodiscount_dialog.dart';
 import 'package:java_code_app/widget/listmenu_tile.dart';
-import 'package:java_code_app/widget/menuberanda_card.dart';
-import 'package:java_code_app/widget/silver_appbar.dart';
 import 'package:java_code_app/widget/vp_fingerprint_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -141,7 +139,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             prefix: _selectedVoucher.isEmpty
                                 ? "Pilih Voucher"
                                 : null,
-                            icon: IconsCs.voucher_icon_line,
+                            icon: IconsCs.voucher,
                             onPressed: () async {
                               _selectedVoucher =
                               await Navigate.toSelectionVoucherPage(
@@ -154,7 +152,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             dense: true,
                             title: "Pembayaran",
                             prefix: "Pay Leter",
-                            icon: IconsCs.la_coins,
+                            icon: IconsCs.coins,
                             onPressed: () {},
                           ),
                         ]),
@@ -183,7 +181,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     Row(
                       children: [
                         const Icon(
-                          IconsCs.shopingbag_icon,
+                          IconsCs.shopingbag,
                           color: ColorSty.primary,
                         ),
                         const SizedBox(width: SpaceDims.sp14),

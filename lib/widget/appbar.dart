@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:java_code_app/theme/colors.dart';
-import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 

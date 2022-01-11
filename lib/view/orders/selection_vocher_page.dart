@@ -36,7 +36,7 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
         back: true,
         title: Row(
           children: [
-            const Icon(IconsCs.voucher_icon_line, color: ColorSty.primary),
+            const Icon(IconsCs.voucher, color: ColorSty.primary),
             const SizedBox(width: SpaceDims.sp18),
             Text("Pilih Voucher", style: TypoSty.title),
           ],

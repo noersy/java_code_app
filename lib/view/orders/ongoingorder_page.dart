@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
@@ -7,7 +6,6 @@ import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/widget/listmenu_tile.dart';
 import 'package:java_code_app/widget/listongoing_card.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
-import 'package:provider/provider.dart';
 
 class OngoingOrderPage extends StatefulWidget {
   final Map<String, dynamic> dataOrder;
@@ -121,7 +119,7 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                               Text(widget.dataOrder["voucher"]["title"], style: TypoSty.mini, overflow: TextOverflow.ellipsis, textAlign: TextAlign.right)
                             ],
                           ),
-                          icon: IconsCs.voucher_icon_line,
+                          icon: IconsCs.voucher,
                           onPressed: () {},
                         ),
                         Stack(children: [
@@ -129,7 +127,7 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                             dense: true,
                             title: "Pembayaran",
                             prefix: "Pay Leter",
-                            icon: IconsCs.la_coins,
+                            icon: IconsCs.coins,
                             onPressed: () {},
                           ),
                         ]),

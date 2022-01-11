@@ -184,7 +184,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Icon(
-                            IconsCs.order_icon,
+                            IconsCs.order,
                             size: 120,
                             color: ColorSty.primary,
                           ),
@@ -527,7 +527,7 @@ class OrderHistoryScreen extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(IconsCs.order_icon, size: 120, color: ColorSty.primary),
+              const Icon(IconsCs.order, size: 120, color: ColorSty.primary),
               const SizedBox(height: SpaceDims.sp22),
               Text("Pesanan selesai\nmuncul di sini.",
                   textAlign: TextAlign.center, style: TypoSty.title2),

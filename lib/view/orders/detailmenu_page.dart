@@ -4,7 +4,6 @@ import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:java_code_app/tools/random_string.dart';
 import 'package:java_code_app/widget/addorder_button.dart';
 import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/detailmenu_sheet.dart';
@@ -124,7 +123,7 @@ class _DetailMenuState extends State<DetailMenu> {
                     child: Column(
                       children: [
                         TileListDMenu(
-                          icon: IconsCs.bi_cash_coin,
+                          icon: IconsCs.cash,
                           title: "Harga",
                           prefix: harga,
                           onPressed: () {},
@@ -138,7 +137,7 @@ class _DetailMenuState extends State<DetailMenu> {
                         ),
                         TileListDMenu(
                             prefixIcon: true,
-                            icon: IconsCs.topping_icon,
+                            icon: IconsCs.topping,
                             prefixCostume: RichText(
                               textAlign: TextAlign.end,
                               overflow: TextOverflow.ellipsis,
@@ -201,7 +200,7 @@ class _DetailMenuState extends State<DetailMenu> {
                             }),
                         TileListDMenu(
                           prefixIcon: true,
-                          icon: IconsCs.note_icon,
+                          icon: IconsCs.note,
                           title: "Catatan",
                           prefix: "Lorem Ipsum sit aaasss",
                           onPressed: () => showModalBottomSheet(
