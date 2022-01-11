@@ -17,7 +17,6 @@ class ListOrderOngoing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(orders);
     return Column(
       children: [
         const SizedBox(height: SpaceDims.sp22),
