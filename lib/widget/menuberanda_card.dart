@@ -20,7 +20,7 @@ class CardMenu extends StatefulWidget {
 
 class _CardMenuState extends State<CardMenu> {
   int _jumlahOrder = 0;
-  late final String nama, harga, url;
+  late final String nama, harga, url, id;
   late final int amount;
 
   @override
@@ -30,6 +30,10 @@ class _CardMenuState extends State<CardMenu> {
     url = widget.data["image"] ?? "";
     harga = widget.data["harga"] ?? "";
     amount = widget.data["amount"] ?? 0;
+    id = widget.data["id"];
+
+    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    if(orders.keys.contains(id)) _jumlahOrder = orders[id]["countOrder"];
 
     super.initState();
   }

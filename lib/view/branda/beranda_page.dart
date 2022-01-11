@@ -155,6 +155,8 @@ class _ContentBerandaState extends State<ContentBeranda> {
                               : ColorSty.primary,
                           onPressed: () {
                             setState(() => _selectedIndex = 0);
+                            final max = _controller.position.minScrollExtent;
+                            _controller.animateTo(max, duration: _duration, curve: Curves.ease);
                             _pageController.animateToPage(0,
                                 duration: _duration, curve: Curves.ease);
                           },
@@ -183,6 +185,8 @@ class _ContentBerandaState extends State<ContentBeranda> {
                               : ColorSty.primary,
                           onPressed: () {
                             setState(() => _selectedIndex = 2);
+                            final max = _controller.position.maxScrollExtent;
+                            _controller.animateTo(max, duration: _duration, curve: Curves.ease);
                             _pageController.animateToPage(2,
                                 duration: _duration, curve: Curves.ease);
                           },
