@@ -9,6 +9,7 @@ import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:skeleton_animation/skeleton_animation.dart';
 
 class OngoingScreen extends StatefulWidget {
   const OngoingScreen({Key? key}) : super(key: key);
@@ -18,13 +19,14 @@ class OngoingScreen extends StatefulWidget {
 }
 
 class _OngoingScreenState extends State<OngoingScreen> {
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   bool _loading = false;
 
   Future<void> _onRefresh() async {
     var _duration = const Duration(seconds: 3);
 
-    if(mounted) {
+    if (mounted) {
       setState(() => _loading = true);
       Timer(_duration, () {
         setState(() => _loading = false);
@@ -32,7 +34,6 @@ class _OngoingScreenState extends State<OngoingScreen> {
       });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -52,37 +53,41 @@ class _OngoingScreenState extends State<OngoingScreen> {
             builder: (BuildContext context, Widget? child) {
               final _orderOngoing = Provider.of<OrderProviders>(context).orderProgress;
 
-              return SizedBox(
-                height: MediaQuery.of(context).size.height - 120,
-                child: _orderOngoing.isNotEmpty ? Column(
-                  children: [
-                    for(Map<String, dynamic> item in _orderOngoing)
-                      OrderMenuCard(
-                        onPressed: () => Navigate.toViewOrder(
-                          context,
-                          dataOrders: item,
-                        ),
-                        date: "date",
-                        harga: item["orders"][0]["harga"],
-                        title: item["orders"][0]["image"],
-                        urlImage: item["orders"][0]["harga"],
-                      ),
-                  ],
-                ) : Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Image.asset("assert/image/bg_findlocation.png"),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+              return _orderOngoing.isNotEmpty
+                  ? _loading
+                      ? const SkeletonOrderMenuCard()
+                      : Column(
+                          children: [
+                            for (Map<String, dynamic> item in _orderOngoing)
+                              OrderMenuCard(
+                                onPressed: () => Navigate.toViewOrder(
+                                  context,
+                                  dataOrders: item,
+                                ),
+                                date: "date",
+                                harga: item["orders"][0]["harga"],
+                                title: item["orders"][0]["image"],
+                                urlImage: item["orders"][0]["harga"],
+                              ),
+                          ],
+                        )
+                  : Stack(
+                      alignment: Alignment.center,
                       children: [
-                        const Icon(IconsCs.order, size: 120, color: ColorSty.primary),
-                        const SizedBox(height: SpaceDims.sp22),
-                        Text("Sudah Pesan?\nLacak pesananmu\ndi sini.", textAlign: TextAlign.center, style: TypoSty.title2),
+                        Image.asset("assert/image/bg_findlocation.png"),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(IconsCs.order,
+                                size: 120, color: ColorSty.primary),
+                            const SizedBox(height: SpaceDims.sp22),
+                            Text("Sudah Pesan?\nLacak pesananmu\ndi sini.",
+                                textAlign: TextAlign.center,
+                                style: TypoSty.title2),
+                          ],
+                        )
                       ],
-                    )
-                  ],
-                ),
-              );
+                    );
             },
           ),
         ),
@@ -156,8 +161,8 @@ class OrderMenuCard extends StatelessWidget {
                                 const SizedBox(width: SpaceDims.sp4),
                                 Text(
                                   "Sedang disiapkan",
-                                  style:
-                                  TypoSty.mini.copyWith(color: Colors.orange),
+                                  style: TypoSty.mini
+                                      .copyWith(color: Colors.orange),
                                 ),
                               ],
                             ),
@@ -194,6 +199,98 @@ class OrderMenuCard extends StatelessWidget {
               )
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class SkeletonOrderMenuCard extends StatelessWidget {
+  const SkeletonOrderMenuCard({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4,
+      color: ColorSty.white80,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Container(
+        height: 138,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(10.0),
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 120,
+              height: 120,
+              margin: const EdgeInsets.all(SpaceDims.sp8),
+              decoration: BoxDecoration(
+                color: ColorSty.grey60,
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Skeleton(),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: SpaceDims.sp18),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: const [
+                              SizedBox(
+                                width: 14.0,
+                                child: SkeletonText(height: 14.0),
+                              ),
+                              SizedBox(width: SpaceDims.sp4),
+                              SizedBox(
+                                width: 90.0,
+                                child: SkeletonText(height: 11.0),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            width: 56.0,
+                            child: SkeletonText(height: 11.0),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: SpaceDims.sp14),
+                    const SkeletonText(height: 26.0),
+                    const SizedBox(height: SpaceDims.sp24),
+                    Row(
+                      children: const [
+                        SizedBox(
+                          width: 60.0,
+                          child: SkeletonText(height: 14.0),
+                        ),
+                        SizedBox(width: SpaceDims.sp8),
+                        SizedBox(
+                          width: 40.0,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: SkeletonText(height: 12.0),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );

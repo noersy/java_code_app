@@ -8,7 +8,7 @@ import 'package:java_code_app/theme/text_style.dart';
 class ListOrderOngoing extends StatelessWidget {
 
   final String type, title;
-  final List<Map<String, dynamic>> orders;
+  final List<dynamic> orders;
   const ListOrderOngoing({
     Key? key,
     required this.type,
@@ -17,6 +17,7 @@ class ListOrderOngoing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(orders);
     return Column(
       children: [
         const SizedBox(height: SpaceDims.sp22),
