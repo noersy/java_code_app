@@ -11,6 +11,7 @@ class TileListDMenu extends StatelessWidget {
   final IconData? icon;
   final SvgPicture? svgPicture;
   final bool? prefixIcon;
+  final SvgPicture? iconSvg;
   final TextStyle? textStylePrefix;
   final Function() onPressed;
   final bool? dense;
@@ -24,7 +25,7 @@ class TileListDMenu extends StatelessWidget {
     required this.onPressed,
     this.textStylePrefix,
     this.dense,
-    this.prefixCostume, this.svgPicture,
+    this.prefixCostume, this.svgPicture, this.iconSvg,
   }) : super(key: key);
 
   @override
@@ -36,7 +37,7 @@ class TileListDMenu extends StatelessWidget {
           onTap: prefixIcon ?? false ? onPressed : null,
           leading: Padding(
             padding: const EdgeInsets.only(top: SpaceDims.sp2),
-            child: Icon(icon, color: ColorSty.primary, size: 22.0),
+            child: iconSvg == null ? Icon(icon, color: ColorSty.primary, size: 22.0) : iconSvg!,
           ),
           contentPadding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp8),
           horizontalTitleGap: 0,

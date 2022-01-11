@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
@@ -21,7 +22,8 @@ class CheckOutPage extends StatefulWidget {
 }
 
 class _CheckOutPageState extends State<CheckOutPage> {
-  Map<String, dynamic> get _orders => Provider.of<OrderProviders>(context, listen: false).checkOrder;
+  Map<String, dynamic> get _orders =>
+      Provider.of<OrderProviders>(context, listen: false).checkOrder;
   Map<String, dynamic> _selectedVoucher = {};
 
   @override
@@ -32,30 +34,36 @@ class _CheckOutPageState extends State<CheckOutPage> {
         icon: Icon(IconsCs.pesanan, size: 28.0, color: ColorSty.primary),
         title: 'Pesanan',
       ),
-      body: SingleChildScrollView(
-        primary: true,
-        child: Column(
-          children: [
-            Column(
-              children: [
-                if(_orders.values.where((element) => element["jenis"] == "makanan").isNotEmpty)
-                  ListOrder(
-                    orders: _orders,
-                    title: 'Makanan',
-                    type: 'makanan',
-                  ),
-                if(_orders.values.where((element) => element["jenis"] == "minuman").isNotEmpty)
-                  ListOrder(
-                    orders: _orders,
-                    title: 'Minuman',
-                    type: 'minuman',
-                  ),
-              ],
-            ),
-            const SizedBox(height: SpaceDims.sp24),
-          ],
-        ),
-      ),
+      body: ScreenUtilInit(builder: () {
+        return SingleChildScrollView(
+          primary: true,
+          child: Column(
+            children: [
+              Column(
+                children: [
+                  if (_orders.values
+                      .where((element) => element["jenis"] == "makanan")
+                      .isNotEmpty)
+                    ListOrder(
+                      orders: _orders,
+                      title: 'Makanan',
+                      type: 'makanan',
+                    ),
+                  if (_orders.values
+                      .where((element) => element["jenis"] == "minuman")
+                      .isNotEmpty)
+                    ListOrder(
+                      orders: _orders,
+                      title: 'Minuman',
+                      type: 'minuman',
+                    ),
+                ],
+              ),
+              const SizedBox(height: SpaceDims.sp24),
+            ],
+          ),
+        );
+      }),
       bottomNavigationBar: Container(
         width: double.infinity,
         height: _selectedVoucher.isEmpty ? 300 : 240,
@@ -69,19 +77,20 @@ class _CheckOutPageState extends State<CheckOutPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: SpaceDims.sp24),
+            SizedBox(height: SpaceDims.sp24.h),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: SpaceDims.sp24),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: SpaceDims.sp24.w,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
-                          children:  [
+                          children: [
                             Text(
                               "Total Pesanan ",
                               style: TypoSty.captionSemiBold,
@@ -98,14 +107,14 @@ class _CheckOutPageState extends State<CheckOutPage> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: SpaceDims.sp14),
+                  SizedBox(height: SpaceDims.sp14.h),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: SpaceDims.sp24,
                     ),
                     child: Column(
                       children: [
-                        if(_selectedVoucher.isEmpty)
+                        if (_selectedVoucher.isEmpty)
                           TileListDMenu(
                             dense: true,
                             prefixIcon: true,
@@ -113,10 +122,9 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             prefix: "Rp 4.000",
                             textStylePrefix: const TextStyle(color: Colors.red),
                             icon: Icons.wine_bar,
-                            onPressed: () =>
-                                showDialog(
-                                    context: context,
-                                    builder: (_) => const InfoDiscountDialog()),
+                            onPressed: () => showDialog(
+                                context: context,
+                                builder: (_) => const InfoDiscountDialog()),
                           ),
                         TileListDMenu(
                             dense: true,
@@ -125,34 +133,41 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             prefixCostume: _selectedVoucher.isEmpty
                                 ? null
                                 : Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(_selectedVoucher["harga"],
-                                    style: TypoSty.captionSemiBold.copyWith(
-                                        color: Colors.red)),
-                                Text(_selectedVoucher["title"],
-                                    style: TypoSty.mini,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.end)
-                              ],
-                            ),
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        _selectedVoucher["harga"],
+                                        style: TypoSty.captionSemiBold
+                                            .copyWith(color: Colors.red),
+                                      ),
+                                      Text(
+                                        _selectedVoucher["title"],
+                                        style: TypoSty.mini,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.end,
+                                      )
+                                    ],
+                                  ),
                             prefix: _selectedVoucher.isEmpty
                                 ? "Pilih Voucher"
                                 : null,
-                            icon: IconsCs.voucher,
+                            // icon: IconsCs.voucher,
+                            iconSvg: SvgPicture.asset(
+                                "assert/image/icons/voucher-icon-line.svg"),
                             onPressed: () async {
                               _selectedVoucher =
-                              await Navigate.toSelectionVoucherPage(
-                                  context, initialData: _selectedVoucher);
+                                  await Navigate.toSelectionVoucherPage(context,
+                                      initialData: _selectedVoucher);
                               setState(() {});
-                            }
-                        ),
+                            }),
                         Stack(children: [
                           TileListDMenu(
                             dense: true,
                             title: "Pembayaran",
                             prefix: "Pay Leter",
-                            icon: IconsCs.coins,
+                            // icon: IconsCs.coins,
+                            iconSvg: SvgPicture.asset(
+                                "assert/image/icons/la_coins.svg"),
                             onPressed: () {},
                           ),
                         ]),
@@ -174,7 +189,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                 boxShadow: ShadowsB.boxShadow1,
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp24),
+                padding: EdgeInsets.symmetric(horizontal: SpaceDims.sp24.h),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -184,11 +199,11 @@ class _CheckOutPageState extends State<CheckOutPage> {
                           IconsCs.shopingbag,
                           color: ColorSty.primary,
                         ),
-                        const SizedBox(width: SpaceDims.sp14),
+                        SizedBox(width: SpaceDims.sp14.w),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children:  [
+                          children: [
                             const Text(
                               "Total Pembayaran",
                               style: TextStyle(color: ColorSty.black60),
@@ -202,9 +217,8 @@ class _CheckOutPageState extends State<CheckOutPage> {
                       onPressed: () {
                         showDialog(
                           context: context,
-                          builder: (_) =>
-                              VFingerPrintDialog(
-                                  ctx: context, voucher: _selectedVoucher),
+                          builder: (_) => VFingerPrintDialog(
+                              ctx: context, voucher: _selectedVoucher),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -230,7 +244,6 @@ class _CheckOutPageState extends State<CheckOutPage> {
   }
 }
 
-
 class ListOrder extends StatelessWidget {
   final String type, title;
   final Map<String, dynamic> orders;
@@ -238,7 +251,8 @@ class ListOrder extends StatelessWidget {
   const ListOrder({
     Key? key,
     required this.type,
-    required this.title, required this.orders,
+    required this.title,
+    required this.orders,
   }) : super(key: key);
 
   @override
@@ -251,10 +265,10 @@ class ListOrder extends StatelessWidget {
           child: Row(
             children: [
               type.compareTo("makanan") == 0
-                  ? SvgPicture.asset(
-                  "assert/image/icons/ep_food.svg", height: 22)
-                  : SvgPicture.asset(
-                  "assert/image/icons/ep_coffee.svg", height: 26),
+                  ? SvgPicture.asset("assert/image/icons/ep_food.svg",
+                      height: 22)
+                  : SvgPicture.asset("assert/image/icons/ep_coffee.svg",
+                      height: 26),
               const SizedBox(width: SpaceDims.sp4),
               Text(
                 title,
@@ -280,7 +294,6 @@ class ListOrder extends StatelessWidget {
     );
   }
 }
-
 
 class CardMenuCheckout extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -323,11 +336,8 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
         ),
         child: TextButton(
           onPressed: () {
-            Navigate.toEditOrderMenu(
-                context,
-                data: widget.data,
-                countOrder: _jumlahOrder
-            );
+            Navigate.toEditOrderMenu(context,
+                data: widget.data, countOrder: _jumlahOrder);
           },
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
@@ -394,7 +404,8 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
                             padding: EdgeInsets.zero,
                             minimumSize: const Size(25, 25),
                             side: const BorderSide(
-                              color: ColorSty.primary, width: 2,
+                              color: ColorSty.primary,
+                              width: 2,
                             ),
                           ),
                           child: const Icon(Icons.remove),
@@ -420,9 +431,13 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
                     alignment: Alignment.bottomRight,
                     height: 70,
                     padding:
-                    const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
-                    child: Text("Stok Habis",
-                      style: TypoSty.caption.copyWith(color: ColorSty.grey,),),
+                        const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
+                    child: Text(
+                      "Stok Habis",
+                      style: TypoSty.caption.copyWith(
+                        color: ColorSty.grey,
+                      ),
+                    ),
                   ),
                 )
             ],
