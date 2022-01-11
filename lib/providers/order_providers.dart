@@ -17,6 +17,7 @@ class OrderProviders extends ChangeNotifier {
   }) async {
     _checkOrder.addAll({
       data["id"]: {
+        "id": data["id"],
         "jenis": data["jenis"],
         "image": data["image"],
         "harga": data["harga"],
@@ -40,6 +41,7 @@ class OrderProviders extends ChangeNotifier {
     _checkOrder.update(
       data["id"],
       (value) => {
+        "id": value["id"],
         "jenis": value["jenis"],
         "image": value["image"],
         "harga": value["harga"],

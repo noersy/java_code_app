@@ -22,12 +22,12 @@ class CheckOutPage extends StatefulWidget {
 }
 
 class _CheckOutPageState extends State<CheckOutPage> {
-  Map<String, dynamic> get _orders =>
-      Provider.of<OrderProviders>(context, listen: false).checkOrder;
   Map<String, dynamic> _selectedVoucher = {};
 
   @override
   Widget build(BuildContext context) {
+    final _orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+
     return Scaffold(
       appBar: const CostumeAppBar(
         back: true,
@@ -399,7 +399,17 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
                     children: [
                       if (_jumlahOrder != 0)
                         TextButton(
-                          onPressed: () => setState(() => _jumlahOrder--),
+                          onPressed: (){
+                            setState(() => _jumlahOrder--);
+                            if(_jumlahOrder != 0) {
+                              Provider.of<OrderProviders>(context, listen: false).addOrder(
+                                jumlahOrder: _jumlahOrder,
+                                data: widget.data,
+                              );
+                            }else{
+                              Provider.of<OrderProviders>(context, listen: false).deleteOrder(id: widget.data["id"]);
+                            }
+                          },
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.zero,
                             minimumSize: const Size(25, 25),
@@ -413,7 +423,13 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
                       if (_jumlahOrder != 0)
                         Text("$_jumlahOrder", style: TypoSty.subtitle),
                       TextButton(
-                        onPressed: () => setState(() => _jumlahOrder++),
+                        onPressed: (){
+                          setState(() => _jumlahOrder++);
+                          Provider.of<OrderProviders>(context, listen: false).addOrder(
+                            jumlahOrder: _jumlahOrder,
+                            data: widget.data,
+                          );
+                        },
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero,
                           minimumSize: const Size(25, 25),
