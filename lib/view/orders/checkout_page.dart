@@ -170,7 +170,8 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                 "assert/image/icons/la_coins.svg"),
                             onPressed: () {},
                           ),
-                        ]),
+                        ],
+                        ),
                       ],
                     ),
                   )

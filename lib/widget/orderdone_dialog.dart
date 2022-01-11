@@ -7,7 +7,7 @@ import 'package:java_code_app/theme/text_style.dart';
 import 'package:provider/provider.dart';
 
 class OrderDoneDialog extends StatelessWidget {
-  final Map<String, dynamic> voucher;
+  final Map<String, dynamic>? voucher;
   const OrderDoneDialog({Key? key, required this.voucher}) : super(key: key);
 
   @override

@@ -11,7 +11,12 @@ class VPinDialog extends StatefulWidget {
   final String? title;
   final ValueChanged<void>? onComplete;
 
-  const VPinDialog({Key? key, this.voucher, this.title = "Verifikasi Pesanan", this.onComplete}) : super(key: key);
+  const VPinDialog(
+      {Key? key,
+      this.voucher,
+      this.title = "Verifikasi Pesanan",
+      this.onComplete})
+      : super(key: key);
 
   @override
   State<VPinDialog> createState() => _VPinDialogState();
@@ -75,15 +80,12 @@ class _VPinDialogState extends State<VPinDialog> {
                             minHeight: 30.0, minWidth: 30.0),
                         onSubmit: (_) {
                           Navigator.pop(context);
-                          if(widget.onComplete != null) widget.onComplete!(null);
-                          if (widget.voucher != null) {
-                            if (widget.voucher!.isNotEmpty) {
-                              showDialog(
-                                  context: context,
-                                  builder: (_) =>
-                                      OrderDoneDialog(voucher: widget.voucher!));
-                            }
-                          }
+                          if (widget.onComplete != null) widget.onComplete!(null);
+                          showDialog(
+                            context: context,
+                            builder: (_) =>
+                                OrderDoneDialog(voucher: widget.voucher),
+                          );
                         },
                         separator: Padding(
                           padding: const EdgeInsets.all(SpaceDims.sp4),
