@@ -16,268 +16,276 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: MainSilverAppBar(
-        floating: true,
-        pinned: true,
-        isExpand: true,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Profil",
-              style: TypoSty.title.copyWith(color: ColorSty.primary),
+    return AnimatedBuilder(
+      animation: LangProviders(),
+      builder: (context, snapshot) {
+        final lang = Provider.of<LangProviders>(context).lang;
+
+        return Scaffold(
+          body: MainSilverAppBar(
+            floating: true,
+            pinned: true,
+            isExpand: true,
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  lang.profile.title,
+                  style: TypoSty.title.copyWith(color: ColorSty.primary),
+                ),
+                const SizedBox(
+                  width: 65,
+                  child: Divider(
+                    thickness: 2,
+                    color: ColorSty.primary,
+                  ),
+                )
+              ],
             ),
-            const SizedBox(
-              width: 65,
-              child: Divider(
-                thickness: 2,
-                color: ColorSty.primary,
-              ),
-            )
-          ],
-        ),
-        body: Stack(
-          children: [
-            Image.asset("assert/image/bg_findlocation.png"),
-            SingleChildScrollView(
-              primary: true,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
+            body: Stack(
+              children: [
+                Image.asset("assert/image/bg_findlocation.png"),
+                SingleChildScrollView(
+                  primary: true,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: SpaceDims.sp22),
-                      SizedBox(
-                        height: 171,
-                        width: 171,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(300.0),
-                          child: Stack(
-                            alignment: Alignment.bottomCenter,
-                            children: [
-                              SvgPicture.asset(
-                                "assert/image/icons/user-icon.svg",
-                              ),
-                              Positioned(
-                                bottom: -10,
-                                child: TextButton(
-                                  onPressed: () {},
-                                  style: TextButton.styleFrom(
-                                    backgroundColor: ColorSty.primary,
-                                    primary: ColorSty.white,
+                      Column(
+                        children: [
+                          const SizedBox(height: SpaceDims.sp22),
+                          SizedBox(
+                            height: 171,
+                            width: 171,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(300.0),
+                              child: Stack(
+                                alignment: Alignment.bottomCenter,
+                                children: [
+                                  SvgPicture.asset(
+                                    "assert/image/icons/user-icon.svg",
                                   ),
-                                  child: const SizedBox(
-                                    width: 160,
-                                    height: 25,
-                                    child: Align(
-                                      alignment: Alignment.topCenter,
-                                      child: Text("Ubah"),
+                                  Positioned(
+                                    bottom: -10,
+                                    child: TextButton(
+                                      onPressed: () {},
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: ColorSty.primary,
+                                        primary: ColorSty.white,
+                                      ),
+                                      child: SizedBox(
+                                        width: 160,
+                                        height: 25,
+                                        child: Align(
+                                          alignment: Alignment.topCenter,
+                                          child: Text(lang.profile.ub),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              )
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: SpaceDims.sp22),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.check,
+                                color: ColorSty.primary,
+                                size: 18.0,
+                              ),
+                              const SizedBox(width: SpaceDims.sp2),
+                              Text(
+                                lang.profile.caption,
+                                style: const TextStyle(color: ColorSty.primary),
+                              ),
                             ],
                           ),
-                        ),
+                          const SizedBox(height: SpaceDims.sp22),
+                        ],
                       ),
-                      const SizedBox(height: SpaceDims.sp22),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: SpaceDims.sp32),
+                            child: Text(lang.profile.subtitle, style: TypoSty.titlePrimary),
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: SpaceDims.sp24,
+                              vertical: SpaceDims.sp12,
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: SpaceDims.sp22,
+                            ),
+                            decoration: BoxDecoration(
+                              color: ColorSty.grey60,
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            child: Column(
+                              children: [
+                                TileListProfile(
+                                  top: false,
+                                  title: lang.profile.nam,
+                                  suffix: 'Fajar',
+                                ),
+                                TileListProfile(
+                                  title: lang.profile.tgl,
+                                  suffix: '01/03/1993',
+                                ),
+                                TileListProfile(
+                                  title: lang.profile.tlp,
+                                  suffix: '0822-4111-400',
+                                ),
+                                const TileListProfile(
+                                  title: 'Email',
+                                  suffix: 'lorem.ipsum@gmail.com',
+                                ),
+                                TileListProfile(
+                                  title: '${lang.profile.ub} PIN',
+                                  suffix: '*********',
+                                  onPreseed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) => VPinDialog(
+                                        title: lang.profile.lm,
+                                        onComplete: (_){
+                                          showDialog(
+                                            context: context,
+                                            builder: (_) => VPinDialog(
+                                              title: lang.profile.br,
+                                              onComplete: (_){
+
+                                              },
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  },
+                                ),
+                                AnimatedBuilder(
+                                  animation: LangProviders(),
+                                  builder: (context, snapshot) {
+                                    bool _isIndo = Provider.of<LangProviders>(context).isIndo;
+                                    return TileListProfile(
+                                      title: lang.profile.bhs,
+                                      suffix: _isIndo ? 'Indonesia' : 'English',
+                                      onPreseed: () => showModalBottomSheet(
+                                        barrierColor: ColorSty.grey.withOpacity(0.2),
+                                        elevation: 5,
+                                        shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(30.0),
+                                                topRight: Radius.circular(30.0))),
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            const ChangeLagSheet(),
+                                      ),
+                                    );
+                                  }
+                                ),
+                                AnimatedBuilder(
+                                    animation: OrderProviders(),
+                                    builder: (context, snapshot) {
+                                      final role =
+                                          Provider.of<ProfileProviders>(context)
+                                              .isKasir;
+                                      return TileListProfile(
+                                        title: lang.profile.ro,
+                                        suffix: role ? lang.profile.role : lang.profile.role2,
+                                        onPreseed: () => showModalBottomSheet(
+                                          barrierColor:
+                                              ColorSty.grey.withOpacity(0.2),
+                                          elevation: 5,
+                                          shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(30.0),
+                                                  topRight: Radius.circular(30.0)),
+                                          ),
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              const ChangeRoleSheet(),
+                                        ),
+                                      );
+                                    }),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: SpaceDims.sp22),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: SpaceDims.sp32),
+                            child:
+                                Text(lang.profile.subtitle2, style: TypoSty.titlePrimary),
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: SpaceDims.sp24,
+                              vertical: SpaceDims.sp12,
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: SpaceDims.sp22,
+                            ),
+                            decoration: BoxDecoration(
+                              color: ColorSty.grey60,
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            child: Column(
+                              children: const [
+                                TileListProfile(
+                                  top: false,
+                                  title: 'Device Info',
+                                  suffix: 'Iphone 13',
+                                ),
+                                TileListProfile(
+                                  title: 'Version',
+                                  suffix: '1.3',
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: SpaceDims.sp22),
+                        ],
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(
-                            Icons.check,
-                            color: ColorSty.primary,
-                            size: 18.0,
-                          ),
-                          SizedBox(width: SpaceDims.sp2),
-                          Text(
-                            "Kamu sudah verifikasi KTP",
-                            style: TextStyle(color: ColorSty.primary),
-                          ),
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {},
+                            child:  SizedBox(
+                              width: 204,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text("Log Out", style: TypoSty.button),
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                            ),
+                          )
                         ],
                       ),
                       const SizedBox(height: SpaceDims.sp22),
                     ],
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: SpaceDims.sp32),
-                        child: Text("Info Akun", style: TypoSty.titlePrimary),
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: SpaceDims.sp24,
-                          vertical: SpaceDims.sp12,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: SpaceDims.sp22,
-                        ),
-                        decoration: BoxDecoration(
-                          color: ColorSty.grey60,
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        child: Column(
-                          children: [
-                            const TileListProfile(
-                              top: false,
-                              title: 'Nama',
-                              suffix: 'Fajar',
-                            ),
-                            const TileListProfile(
-                              title: 'Tanggal Lahir',
-                              suffix: '01/03/1993',
-                            ),
-                            const TileListProfile(
-                              title: 'No.Telepon',
-                              suffix: '0822-4111-400',
-                            ),
-                            const TileListProfile(
-                              title: 'Email',
-                              suffix: 'lorem.ipsum@gmail.com',
-                            ),
-                            TileListProfile(
-                              title: 'Ubah PIN',
-                              suffix: '*********',
-                              onPreseed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (_) => VPinDialog(
-                                    title: "Pin Lama",
-                                    onComplete: (_){
-                                      showDialog(
-                                        context: context,
-                                        builder: (_) => VPinDialog(
-                                          title: "Pin Baru",
-                                          onComplete: (_){
-
-                                          },
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                );
-                              },
-                            ),
-                            AnimatedBuilder(
-                              animation: LangProviders(),
-                              builder: (context, snapshot) {
-                                bool _isIndo = Provider.of<LangProviders>(context).isIndo;
-                                return TileListProfile(
-                                  title: 'Ganti Bahasa',
-                                  suffix: _isIndo ? 'Indonesia' : 'English',
-                                  onPreseed: () => showModalBottomSheet(
-                                    barrierColor: ColorSty.grey.withOpacity(0.2),
-                                    elevation: 5,
-                                    shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(30.0),
-                                            topRight: Radius.circular(30.0))),
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        const ChangeLagSheet(),
-                                  ),
-                                );
-                              }
-                            ),
-                            AnimatedBuilder(
-                                animation: OrderProviders(),
-                                builder: (context, snapshot) {
-                                  final role =
-                                      Provider.of<ProfileProviders>(context)
-                                          .isKasir;
-                                  return TileListProfile(
-                                    title: 'Role',
-                                    suffix: role ? 'Kasir' : 'Pelanggan',
-                                    onPreseed: () => showModalBottomSheet(
-                                      barrierColor:
-                                          ColorSty.grey.withOpacity(0.2),
-                                      elevation: 5,
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(30.0),
-                                              topRight: Radius.circular(30.0))),
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          const ChangeRoleSheet(),
-                                    ),
-                                  );
-                                }),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: SpaceDims.sp22),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: SpaceDims.sp32),
-                        child:
-                            Text("Info Lainnya", style: TypoSty.titlePrimary),
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: SpaceDims.sp24,
-                          vertical: SpaceDims.sp12,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: SpaceDims.sp22,
-                        ),
-                        decoration: BoxDecoration(
-                          color: ColorSty.grey60,
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        child: Column(
-                          children: const [
-                            TileListProfile(
-                              top: false,
-                              title: 'Device Info',
-                              suffix: 'Iphone 13',
-                            ),
-                            TileListProfile(
-                              title: 'Version',
-                              suffix: '1.3',
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: SpaceDims.sp22),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {},
-                        child:  SizedBox(
-                          width: 204,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text("Log Out", style: TypoSty.button),
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: SpaceDims.sp22),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      }
     );
   }
 }

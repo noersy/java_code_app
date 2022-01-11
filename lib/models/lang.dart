@@ -50,29 +50,41 @@ class BottomNav {
 }
 
 class LangProfile {
-  final String nam, tgl, tlp, ub, role;
-  final String title, title2, caption;
+  final String nam, tgl, tlp, ub, ro, role, role2, br, lm, bhs;
+  final String title, subtitle, subtitle2, caption;
 
   LangProfile({
     required this.nam,
     required this.tgl,
     required this.tlp,
     required this.ub,
+    required this.ro,
     required this.role,
-    required this.title,
-    required this.title2,
+    required this.role2,
+    required this.subtitle,
+    required this.subtitle2,
     required this.caption,
+    required this.title,
+    required this.br,
+    required this.lm,
+    required this.bhs,
   });
 
   factory LangProfile.fromJson(Map<String, dynamic> json) => LangProfile(
         nam: json["nam"],
         tgl: json["tgl"],
         tlp: json["tlp"],
+        ro: json["ro"],
         role: json["role"],
+        role2: json["role2"],
         ub: json["ub"],
         title: json["title"],
-        title2: json["title2"],
+        subtitle: json["subtitle"],
+        subtitle2: json["subtitle2"],
         caption: json["caption"],
+        br: json["br"],
+        lm: json["lm"],
+        bhs: json["bhs"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -80,10 +92,16 @@ class LangProfile {
         "tgl": tgl,
         "tlp": tlp,
         "ub": ub,
+        "ro": ro,
         "role": role,
+        "role2": role2,
         "title": title,
-        "title2": title2,
+        "subtitle": subtitle,
+        "subtitle2": subtitle2,
         "caption": caption,
+        "br": br,
+        "lm": lm,
+        "bhs": bhs,
       };
 }
 
