@@ -239,7 +239,15 @@ class _EditOrderPageState extends State<EditOrderPage> {
           ),
           child: ElevatedButton(
             onPressed: () {
-              Navigator.pop(context);
+              final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+
+              if(orders.keys.contains(id)) {
+                Provider.of<OrderProviders>(context, listen: false).editOrder(data : widget.data, jumlahOrder: _jumlahOrder);
+              }else{
+                Provider.of<OrderProviders>(context, listen: false).addOrder(data : widget.data, jumlahOrder: _jumlahOrder);
+              }
+
+              Navigator.of(context).pop();
             },
             style: ElevatedButton.styleFrom(
               shape: const RoundedRectangleBorder(

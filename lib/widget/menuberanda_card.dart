@@ -167,8 +167,6 @@ class _CardMenuState extends State<CardMenu> {
                   child: Container(
                     alignment: Alignment.bottomRight,
                     height: 70,
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
                     child: Text(
                       "Stok Habis",
                       style: TypoSty.caption.copyWith(

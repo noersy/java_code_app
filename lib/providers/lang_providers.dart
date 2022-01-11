@@ -4,8 +4,8 @@ import 'package:java_code_app/models/lang.dart';
 
 class LangProviders extends ChangeNotifier {
   static final List<Lang> languages = [
-    Lang(bottomNav: ConstLang.ind),
-    Lang(bottomNav: ConstLang.eng)
+    ConstLang.ind,
+    ConstLang.eng,
   ];
   static int _indexLang = 0;
 
