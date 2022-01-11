@@ -19,7 +19,6 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.dataOrder["orders"]);
     return Scaffold(
       backgroundColor: ColorSty.white,
       body: SilverAppBar(
@@ -116,8 +115,8 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                           prefixCostume: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Text(widget.dataOrder["voucher"]["harga"], style: TypoSty.captionSemiBold.copyWith(fontWeight: FontWeight.normal, color: Colors.red), textAlign: TextAlign.right),
-                              Text(widget.dataOrder["voucher"]["title"], style: TypoSty.mini, overflow: TextOverflow.ellipsis, textAlign: TextAlign.right)
+                              Text(widget.dataOrder["voucher"]["harga"] ?? "Rp 0", style: TypoSty.captionSemiBold.copyWith(fontWeight: FontWeight.normal, color: Colors.red), textAlign: TextAlign.right),
+                              Text(widget.dataOrder["voucher"]["title"] ?? "-", style: TypoSty.mini, overflow: TextOverflow.ellipsis, textAlign: TextAlign.right)
                             ],
                           ),
                           icon: IconsCs.voucher,

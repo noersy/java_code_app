@@ -59,7 +59,7 @@ class OrderProviders extends ChangeNotifier {
     _orderInProgress.add({
       "id": _id,
       "orders": _checkOrder.values.toList(),
-      "voucher": voucher,
+      "voucher": voucher ?? {},
     });
 
     // print(_orderInProgress);
