@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -12,12 +13,19 @@ class LoginPage extends StatelessWidget {
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
 
+  checkConnectivity() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    print(connectivityResult);
+  }
 
   @override
   Widget build(BuildContext context) {
   final safeTopPadding = MediaQuery.of(context).padding.vertical;
   final height = MediaQuery.of(context).size.height;
-    return ScreenUtilInit(
+
+  checkConnectivity();
+
+  return ScreenUtilInit(
       builder: () {
         return Scaffold(
           body: SafeArea(

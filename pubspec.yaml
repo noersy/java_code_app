@@ -34,6 +34,9 @@ dependencies:
   pinput: any
   flutter_screenutil: any
   cupertino_icons: any
+  connectivity: any
+  google_sign_in: any
+  skeleton_animation: any
 
 dev_dependencies:
   flutter_test:
