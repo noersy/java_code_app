@@ -7,20 +7,23 @@ String lagToJson(Lang data) => json.encode(data.toJson());
 class Lang {
   final BottomNav bottomNav;
   final LangProfile profile;
-
+  final LangPesanan pesanan;
   Lang({
     required this.bottomNav,
     required this.profile,
+    required this.pesanan,
   });
 
   factory Lang.fromJson(Map<String, dynamic> json) => Lang(
         bottomNav: json["bottomNav"],
         profile: json["profile"],
+        pesanan: json["pesanan"],
       );
 
   Map<String, dynamic> toJson() => {
         "bottomNav": bottomNav.toJson(),
         "profile": profile.toJson(),
+        "pesanan": pesanan.toJson(),
       };
 }
 
@@ -85,23 +88,34 @@ class LangProfile {
 }
 
 class LangPesanan {
-  final String tap, tap2, ongoingCaption;
+  final String tap, tap2;
+  final String mini, ongoingCaption;
+  final String riwayatCaption, riwayatCaption2;
 
   LangPesanan({
     required this.tap,
     required this.tap2,
     required this.ongoingCaption,
+    required this.mini,
+    required this.riwayatCaption,
+    required this.riwayatCaption2,
   });
 
   factory LangPesanan.fromJson(Map<String, dynamic> json) => LangPesanan(
         tap: json["tap"],
         tap2: json["tap2"],
+        mini: json["mini"],
         ongoingCaption: json["ongoingTitle"],
+        riwayatCaption: json["riwayatCaption"],
+        riwayatCaption2: json["riwayatCaption2"],
       );
 
   Map<String, dynamic> toJson() => {
         "tap": tap,
         "tap2": tap2,
+        "mini": mini,
         "ongoingTitle": ongoingCaption,
+        "riwayatCaption": riwayatCaption,
+        "riwayatCaption2": riwayatCaption2,
       };
 }
