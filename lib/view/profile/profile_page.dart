@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
-import 'package:java_code_app/providers/order_providers.dart';
-import 'package:java_code_app/providers/profile_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
@@ -448,74 +446,5 @@ class _ChangeLagSheetState extends State<ChangeLagSheet> {
             );
           }),
     );
-  }
-}
-
-class ChangeRoleSheet extends StatefulWidget {
-  const ChangeRoleSheet({Key? key}) : super(key: key);
-
-  @override
-  _ChangeRoleSheetState createState() => _ChangeRoleSheetState();
-}
-
-class _ChangeRoleSheetState extends State<ChangeRoleSheet> {
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-        animation: ProfileProviders(),
-        builder: (context, snapshot) {
-          final _role = Provider.of<ProfileProviders>(context).isKasir;
-
-          return BottomSheetDetailMenu(
-            title: "Genti Role",
-            heightGp: SpaceDims.sp12,
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () =>
-                        Provider.of<ProfileProviders>(context, listen: false)
-                            .changeRole(true),
-                    style: ElevatedButton.styleFrom(
-                      primary: _role ? ColorSty.primary : ColorSty.white,
-                      onPrimary: _role ? ColorSty.white : ColorSty.black,
-                      padding: const EdgeInsets.all(SpaceDims.sp12),
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(color: ColorSty.primary),
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                    ),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text("Kasir", style: TypoSty.button),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: SpaceDims.sp14),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () =>
-                        Provider.of<ProfileProviders>(context, listen: false)
-                            .changeRole(false),
-                    style: ElevatedButton.styleFrom(
-                      primary: !_role ? ColorSty.primary : ColorSty.white,
-                      onPrimary: !_role ? ColorSty.white : ColorSty.black,
-                      padding: const EdgeInsets.all(SpaceDims.sp12),
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(color: ColorSty.primary),
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                    ),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text("Pelanggan", style: TypoSty.button),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        });
   }
 }

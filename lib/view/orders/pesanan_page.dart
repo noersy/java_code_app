@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:java_code_app/providers/order_providers.dart';
-import 'package:java_code_app/providers/profile_providers.dart';
-import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
-import 'package:java_code_app/theme/icons_cs_icons.dart';
-import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/view/orders/history_screen.dart';
 import 'package:java_code_app/view/orders/ongoing_screen.dart';
-import 'package:provider/provider.dart';
 
 class PesananPage extends StatefulWidget {
   const PesananPage({Key? key}) : super(key: key);
@@ -53,16 +47,10 @@ class _PesananPageState extends State<PesananPage>
           ],
         ),
       ),
-      body: AnimatedBuilder(
-          animation: ProfileProviders(),
-          builder: (context, snapshot) {
-            final role = Provider.of<ProfileProviders>(context).isKasir;
-            return TabBarView(
-              controller: _tabController,
-              children: const [OngoingScreen(), HistoryScreen()],
-            );
-          }),
+      body: TabBarView(
+        controller: _tabController,
+        children: const [OngoingScreen(), HistoryScreen()],
+      ),
     );
   }
 }
-

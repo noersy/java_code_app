@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/providers/order_providers.dart';
-import 'package:java_code_app/providers/profile_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/view/dashboard_page.dart';
 import 'package:java_code_app/view/auth/login_page.dart';
@@ -21,9 +20,6 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => OrderProviders(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => ProfileProviders(),
         ),
         ChangeNotifierProvider(
           create: (_) => LangProviders(),
