@@ -37,6 +37,7 @@ dependencies:
   connectivity: any
   google_sign_in: any
   skeleton_animation: any
+  pull_to_refresh: any
 
 dev_dependencies:
   flutter_test:

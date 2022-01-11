@@ -23,7 +23,7 @@ class LabelButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp8),
+      padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp4),
       child: icon != null
           ? ElevatedButton.icon(
               onPressed: onPressed,
