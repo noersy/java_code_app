@@ -20,7 +20,7 @@ class OrderDoneDialog extends StatelessWidget {
           ),
         ),
         child: SizedBox(
-          height: 420,
+          height: 0.555.sh,
           child: Padding(
             padding: EdgeInsets.only(top: 42.h),
             child: Column(
