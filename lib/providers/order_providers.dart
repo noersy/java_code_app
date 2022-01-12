@@ -54,7 +54,7 @@ class OrderProviders extends ChangeNotifier {
   }
 
   submitOrder(Map<String, dynamic>? voucher) async {
-    final _id = getRandomString(5);
+    final _id = RanString.getInstance().getRandomString(5);
 
     _orderInProgress.add({
       "id": _id,

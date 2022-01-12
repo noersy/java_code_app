@@ -7,6 +7,7 @@ class GeolocationProvider extends ChangeNotifier {
   Position? _position;
 
   getCurrentPosition() async {
+
     try {
       LocationPermission permission = await Geolocator.requestPermission();
 
@@ -14,7 +15,7 @@ class GeolocationProvider extends ChangeNotifier {
         _position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
       }
 
-      print(permission);
+      print(_position);
       notifyListeners();
       return;
     } on TimeoutException {

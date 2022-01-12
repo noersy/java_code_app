@@ -1,13 +1,24 @@
 import 'dart:math';
 
-const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-Random _rnd = Random();
+class RanString {
+  final _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  final Random _rnd = Random();
 
-String getRandomString(int length) => String.fromCharCodes(
-      Iterable.generate(
-        length,
-        (_) => _chars.codeUnitAt(
-          _rnd.nextInt(_chars.length),
+  //This creates the single instance by calling the `_internal` constructor specified below
+  static final RanString _singleton = RanString._internal();
+  RanString._internal();
+
+  //This is what's used to retrieve the instance through the app
+  static RanString getInstance() => _singleton;
+
+
+  String getRandomString(int length) => String.fromCharCodes(
+        Iterable.generate(
+          length,
+          (_) => _chars.codeUnitAt(
+            _rnd.nextInt(_chars.length),
+          ),
         ),
-      ),
-    );
+      );
+}
+

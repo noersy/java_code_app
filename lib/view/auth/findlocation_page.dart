@@ -2,11 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:java_code_app/providers/geolocation_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:provider/provider.dart';
 
 class FindLocationPage extends StatefulWidget {
   const FindLocationPage({Key? key}) : super(key: key);
