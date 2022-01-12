@@ -350,7 +350,6 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
               data: widget.data,
               countOrder: _jumlahOrder,
             )) ?? false;
-            print(_isEmpty);
             if(_isEmpty) Navigator.pop(context);
           },
           style: ElevatedButton.styleFrom(
@@ -506,7 +505,7 @@ class DeleteMenuInCheckoutDialog extends StatelessWidget {
           ),
         ),
         child: SizedBox(
-          height: 420,
+          height: 0.5.sh,
           child: Padding(
             padding: EdgeInsets.only(top: 42.h),
             child: Column(
@@ -542,7 +541,7 @@ class DeleteMenuInCheckoutDialog extends StatelessWidget {
                     child: Column(
                       children: [
                         Text(
-                          "Hilangakan Pesanan?",
+                          "Hapus Item?",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: "Montserrat",
@@ -556,6 +555,7 @@ class DeleteMenuInCheckoutDialog extends StatelessWidget {
                             text: 'Kamu akan mengeluarkan menu ini dari ',
                             style: TypoSty.caption2.copyWith(
                               fontWeight: FontWeight.normal,
+                              fontSize: 16.0,
                             ),
                             children: const <TextSpan>[
                               TextSpan(

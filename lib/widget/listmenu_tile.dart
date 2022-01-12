@@ -50,7 +50,7 @@ class TileListDMenu extends StatelessWidget {
               Row(
                 children: [
                   SizedBox(
-                    width: prefixCostume != null ? 165 : 108,
+                    width: prefixCostume != null ? 165 : 118,
                     child: prefixCostume ?? Text(
                       prefix ?? "",
                       style: prefixIcon ?? false

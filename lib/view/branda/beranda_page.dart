@@ -46,6 +46,7 @@ class _BerandaPageState extends State<BerandaPage> {
             decoration: InputDecoration(
               isDense: true,
               hintText: "Pencarian",
+              hintStyle: TypoSty.captionSemiBold.copyWith(color: ColorSty.grey),
               prefixIcon: const Icon(
                 IconsCs.search,
                 color: ColorSty.primary,
@@ -105,21 +106,21 @@ class _ContentBerandaState extends State<ContentBeranda> {
   final ScrollController _controller = ScrollController();
   final PageController _pageController = PageController();
   final Duration _duration = const Duration(milliseconds: 500);
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   bool _loading = false;
 
   Future<void> _onRefresh() async {
     var _duration = const Duration(seconds: 3);
 
-    if(mounted) {
+    if (mounted) {
       setState(() => _loading = true);
       Timer(_duration, () {
-      setState(() => _loading = false);
-      _refreshController.refreshCompleted();
-    });
+        setState(() => _loading = false);
+        _refreshController.refreshCompleted();
+      });
     }
   }
-
 
   @override
   void initState() {
@@ -131,132 +132,129 @@ class _ContentBerandaState extends State<ContentBeranda> {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(builder: () {
-      return SmartRefresher(
-        controller: _refreshController,
-        onRefresh: _onRefresh,
-        child: SingleChildScrollView(
-          child: widget.result.isEmpty
-              ? _loading
-                  ? const BerandaSkeleton()
-                  : Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: SpaceDims.sp22.h),
-                        Padding(
-                          padding: const EdgeInsets.only(left: SpaceDims.sp24),
-                          child: Row(
-                            children: [
-                              const Icon(
-                                IconsCs.coupon,
-                                color: ColorSty.primary,
-                                size: 22.0,
-                              ),
-                              const SizedBox(width: SpaceDims.sp22),
-                              Text(
-                                "Promo yang Tersedia",
-                                style: TypoSty.title
-                                    .copyWith(color: ColorSty.primary),
-                              ),
-                            ],
-                          ),
+    return SmartRefresher(
+      controller: _refreshController,
+      onRefresh: _onRefresh,
+      child: SingleChildScrollView(
+        child: widget.result.isEmpty
+            ? _loading
+                ? const BerandaSkeleton()
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: SpaceDims.sp22),
+                      Padding(
+                        padding: const EdgeInsets.only(left: SpaceDims.sp24),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              IconsCs.coupon,
+                              color: ColorSty.primary,
+                              size: 22.0,
+                            ),
+                            const SizedBox(width: SpaceDims.sp22),
+                            Text(
+                              "Promo yang Tersedia",
+                              style: TypoSty.title,
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: SpaceDims.sp22),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              SizedBox(width: 10.h),
-                              const CardCoupon(),
-                              const CardCoupon(),
-                              const CardCoupon(),
-                            ],
-                          ),
+                      ),
+                      const SizedBox(height: SpaceDims.sp22),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: const [
+                            SizedBox(width: 10),
+                            CardCoupon(),
+                            CardCoupon(),
+                            CardCoupon(),
+                          ],
                         ),
-                        const SizedBox(height: SpaceDims.sp32),
-                        SingleChildScrollView(
-                          controller: _controller,
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              const SizedBox(width: SpaceDims.sp12),
-                              LabelButton(
-                                color: _selectedIndex == 0
-                                    ? ColorSty.black
-                                    : ColorSty.primary,
-                                onPressed: () {
-                                  setState(() => _selectedIndex = 0);
-                                  final max =
-                                      _controller.position.minScrollExtent;
-                                  _controller.animateTo(max,
-                                      duration: _duration, curve: Curves.ease);
-                                  _pageController.animateToPage(0,
-                                      duration: _duration, curve: Curves.ease);
-                                },
-                                title: "Semua Menu",
-                                icon: Icons.list,
+                      ),
+                      const SizedBox(height: SpaceDims.sp12),
+                      SingleChildScrollView(
+                        controller: _controller,
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            const SizedBox(width: SpaceDims.sp12),
+                            LabelButton(
+                              color: _selectedIndex == 0
+                                  ? ColorSty.black
+                                  : ColorSty.primary,
+                              onPressed: () {
+                                setState(() => _selectedIndex = 0);
+                                final max =
+                                    _controller.position.minScrollExtent;
+                                _controller.animateTo(max,
+                                    duration: _duration, curve: Curves.ease);
+                                _pageController.animateToPage(0,
+                                    duration: _duration, curve: Curves.ease);
+                              },
+                              title: "Semua Menu",
+                              icon: Icons.list,
+                            ),
+                            LabelButton(
+                              color: _selectedIndex == 1
+                                  ? ColorSty.black
+                                  : ColorSty.primary,
+                              onPressed: () {
+                                setState(() => _selectedIndex = 1);
+                                _pageController.animateToPage(1,
+                                    duration: _duration, curve: Curves.ease);
+                              },
+                              title: "Makanan",
+                              svgPicture: SvgPicture.asset(
+                                "assert/image/icons/ep_food.svg",
+                                color: ColorSty.white,
+                                width: 24,
                               ),
-                              LabelButton(
-                                color: _selectedIndex == 1
-                                    ? ColorSty.black
-                                    : ColorSty.primary,
-                                onPressed: () {
-                                  setState(() => _selectedIndex = 1);
-                                  _pageController.animateToPage(1,
-                                      duration: _duration, curve: Curves.ease);
-                                },
-                                title: "Makanan",
-                                svgPicture: SvgPicture.asset(
-                                  "assert/image/icons/ep_food.svg",
-                                  color: ColorSty.white,
-                                  width: 24,
-                                ),
-                              ),
-                              LabelButton(
-                                color: _selectedIndex == 2
-                                    ? ColorSty.black
-                                    : ColorSty.primary,
-                                onPressed: () {
-                                  setState(() => _selectedIndex = 2);
-                                  final max =
-                                      _controller.position.maxScrollExtent;
-                                  _controller.animateTo(max,
-                                      duration: _duration, curve: Curves.ease);
-                                  _pageController.animateToPage(2,
-                                      duration: _duration, curve: Curves.ease);
-                                },
-                                title: "Minuman",
-                                icon: IconsCs.coffee,
-                              ),
-                            ],
-                          ),
+                            ),
+                            LabelButton(
+                              color: _selectedIndex == 2
+                                  ? ColorSty.black
+                                  : ColorSty.primary,
+                              onPressed: () {
+                                setState(() => _selectedIndex = 2);
+                                final max =
+                                    _controller.position.maxScrollExtent;
+                                _controller.animateTo(max,
+                                    duration: _duration, curve: Curves.ease);
+                                _pageController.animateToPage(2,
+                                    duration: _duration, curve: Curves.ease);
+                              },
+                              title: "Minuman",
+                              icon: IconsCs.coffee,
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height - 200,
-                          child: PageView(
-                            controller: _pageController,
-                            children: [
-                              SingleChildScrollView(
-                                physics: const NeverScrollableScrollPhysics(),
-                                child: Column(
-                                  children: const [
-                                    ListMenu(type: "makanan", title: "Makanan"),
-                                    ListMenu(type: "minuman", title: "Minuman"),
-                                  ],
-                                ),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height - 130,
+                        child: PageView(
+                          controller: _pageController,
+                          children: [
+                            SingleChildScrollView(
+                              physics: const NeverScrollableScrollPhysics(),
+                              child: Column(
+                                children: const [
+                                  ListMenu(type: "makanan", title: "Makanan"),
+                                  ListMenu(type: "minuman", title: "Minuman"),
+                                ],
                               ),
-                              const ListMenu(type: "makanan", title: "Makanan"),
-                              const ListMenu(type: "minuman", title: "Minuman"),
-                            ],
-                          ),
+                            ),
+                            const ListMenu(type: "makanan", title: "Makanan"),
+                            const ListMenu(type: "minuman", title: "Minuman"),
+                          ],
                         ),
-                      ],
-                    )
-              : SearchScreen(result: widget.result),
-        ),
-      );
-    });
+                      ),
+                    ],
+                  )
+            : SearchScreen(result: widget.result),
+      ),
+    );
   }
 }
 
@@ -281,7 +279,7 @@ class BerandaSkeleton extends StatelessWidget {
               const SizedBox(width: SpaceDims.sp22),
               Text(
                 "Promo yang Tersedia",
-                style: TypoSty.title.copyWith(color: ColorSty.primary),
+                style: TypoSty.title,
               ),
             ],
           ),
@@ -291,14 +289,14 @@ class BerandaSkeleton extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              SizedBox(width: 10.h),
+              const SizedBox(width: 10),
               Container(
                 height: 158.0,
                 width: 282.0,
-                padding : const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
+                padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
                 margin: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
                 child: TextButton(
-                  onPressed: (){},
+                  onPressed: () {},
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -338,11 +336,12 @@ class BerandaSkeleton extends StatelessWidget {
               Container(
                 height: 158.0,
                 width: 260.0,
-                padding : const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
+                padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
                 margin: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
                 child: Padding(
-                  padding : const EdgeInsets.symmetric(vertical: SpaceDims.sp12),
-                  child: Skeleton(height: 120,  borderRadius: BorderRadius.circular(7.0)),
+                  padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp12),
+                  child: Skeleton(
+                      height: 120, borderRadius: BorderRadius.circular(7.0)),
                 ),
                 decoration: BoxDecoration(
                   color: ColorSty.primary,
@@ -359,7 +358,7 @@ class BerandaSkeleton extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: SpaceDims.sp32),
+        const SizedBox(height: SpaceDims.sp12),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -413,101 +412,116 @@ class BerandaSkeleton extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: SingleChildScrollView(
-                physics: const NeverScrollableScrollPhysics(),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12, vertical: SpaceDims.sp2),
-                      child: Card(
-                        elevation: 4,
-                        color: ColorSty.white80,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: TextButton(
-                          onPressed: (){},
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
+                  physics: const NeverScrollableScrollPhysics(),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: SpaceDims.sp12,
+                            vertical: SpaceDims.sp2),
+                        child: Card(
+                          elevation: 4,
+                          color: ColorSty.white80,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
-                          child: Row(
-                            children: [
-                              Container(
-                                height: 74,
-                                width: 74,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(SpaceDims.sp4),
-                                  child: Skeleton(height: 100,  borderRadius: BorderRadius.circular(7.0)),
-                                ),
-                                decoration: BoxDecoration(
-                                  color: ColorSty.grey60,
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
+                          child: TextButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
                               ),
-                              const SizedBox(width: SpaceDims.sp8),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SkeletonText(height: 12.0),
-                                  const SkeletonText(height: 12.0),
-                                  Row(
-                                    children: const [
-                                      Icon(
-                                        Icons.playlist_add_check,
-                                        color: ColorSty.primary,
-                                      ),
-                                      SizedBox(width: SpaceDims.sp4),
-                                      SkeletonText(height: 12.0),
-                                    ],
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  height: 74,
+                                  width: 74,
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.all(SpaceDims.sp4),
+                                    child: Skeleton(
+                                        height: 100,
+                                        borderRadius:
+                                            BorderRadius.circular(7.0)),
                                   ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12, vertical: SpaceDims.sp2),
-                      child: Card(
-                        elevation: 4,
-                        color: ColorSty.white80,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: TextButton(
-                          onPressed: (){},
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
+                                  decoration: BoxDecoration(
+                                    color: ColorSty.grey60,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                ),
+                                const SizedBox(width: SpaceDims.sp8),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SkeletonText(height: 12.0),
+                                    const SkeletonText(height: 12.0),
+                                    Row(
+                                      children: const [
+                                        Icon(
+                                          Icons.playlist_add_check,
+                                          color: ColorSty.primary,
+                                        ),
+                                        SizedBox(width: SpaceDims.sp4),
+                                        SkeletonText(height: 12.0),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                          child: Row(
-                            children: [
-                              Container(
-                                height: 74,
-                                width: 74,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(SpaceDims.sp4),
-                                  child: Skeleton(height: 100,  borderRadius: BorderRadius.circular(7.0)),
-                                ),
-                                decoration: BoxDecoration(
-                                  color: ColorSty.grey60,
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: SpaceDims.sp12,
+                            vertical: SpaceDims.sp2),
+                        child: Card(
+                          elevation: 4,
+                          color: ColorSty.white80,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: TextButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
                               ),
-                              const SizedBox(width: SpaceDims.sp8),
-                              Expanded(child: Skeleton(height: 60.0, borderRadius: BorderRadius.circular(7.0))),
-                              const SizedBox(width: SpaceDims.sp8),
-                            ],
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  height: 74,
+                                  width: 74,
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.all(SpaceDims.sp4),
+                                    child: Skeleton(
+                                        height: 100,
+                                        borderRadius:
+                                            BorderRadius.circular(7.0)),
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: ColorSty.grey60,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                ),
+                                const SizedBox(width: SpaceDims.sp8),
+                                Expanded(
+                                    child: Skeleton(
+                                        height: 60.0,
+                                        borderRadius:
+                                            BorderRadius.circular(7.0))),
+                                const SizedBox(width: SpaceDims.sp8),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                )
-              ),
+                    ],
+                  )),
             ),
           ],
         ),
@@ -536,7 +550,9 @@ class BerandaSkeleton extends StatelessWidget {
               child: SingleChildScrollView(
                   physics: const NeverScrollableScrollPhysics(),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12, vertical: SpaceDims.sp2),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: SpaceDims.sp12, vertical: SpaceDims.sp2,
+                    ),
                     child: Card(
                       elevation: 4,
                       color: ColorSty.white80,
@@ -544,7 +560,7 @@ class BerandaSkeleton extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: TextButton(
-                        onPressed: (){},
+                        onPressed: () {},
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -586,8 +602,7 @@ class BerandaSkeleton extends StatelessWidget {
                         ),
                       ),
                     ),
-                  )
-              ),
+                  )),
             ),
           ],
         ),
