@@ -506,6 +506,7 @@ class DeleteMenuInCheckoutDialog extends StatelessWidget {
         ),
         child: SizedBox(
           height: 0.5.sh,
+          width: double.infinity,
           child: Padding(
             padding: EdgeInsets.only(top: 42.h),
             child: Column(

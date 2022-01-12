@@ -21,6 +21,7 @@ class OrderDoneDialog extends StatelessWidget {
         ),
         child: SizedBox(
           height: 0.555.sh,
+          width: double.infinity,
           child: Padding(
             padding: EdgeInsets.only(top: 42.h),
             child: Column(
@@ -93,6 +94,5 @@ class OrderDoneDialog extends StatelessWidget {
     await Provider.of<OrderProviders>(context, listen: false).submitOrder(voucher);
     Navigator.pop(context);
     Navigator.pop(context);
-
   }
 }
