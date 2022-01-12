@@ -3,13 +3,13 @@ import 'dart:async'; //For StreamController/Stream
 
 import 'package:connectivity/connectivity.dart';
 
-class ConnectionStatusSingleton {
+class ConnectionStatus {
   //This creates the single instance by calling the `_internal` constructor specified below
-  static final ConnectionStatusSingleton _singleton = ConnectionStatusSingleton._internal();
-  ConnectionStatusSingleton._internal();
+  static final ConnectionStatus _singleton = ConnectionStatus._internal();
+  ConnectionStatus._internal();
 
   //This is what's used to retrieve the instance through the app
-  static ConnectionStatusSingleton getInstance() => _singleton;
+  static ConnectionStatus getInstance() => _singleton;
 
   //This tracks the current connection status
   bool hasConnection = false;

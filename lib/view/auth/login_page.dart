@@ -8,6 +8,7 @@ import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/tools/check_connectivity.dart';
+import 'package:java_code_app/tools/check_location.dart';
 import 'package:java_code_app/widget/button_login.dart';
 import 'package:java_code_app/widget/form_login.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +23,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
-  final ConnectionStatusSingleton _connectionStatus = ConnectionStatusSingleton.getInstance();
+  final ConnectionStatus _connectionStatus = ConnectionStatus.getInstance();
+  final GeolocationStatus _geolocationStatus = GeolocationStatus.getInstance();
   final _duration = const Duration(seconds: 2);
 
   bool _loading = false;
