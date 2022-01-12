@@ -126,7 +126,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             title: "Diskon 20%",
                             prefix: "Rp 4.000",
                             textStylePrefix: const TextStyle(color: Colors.red),
-                            icon: Icons.wine_bar,
+                            iconSvg: SvgPicture.asset("assert/image/icons/discount-icon.svg", height: 24.0),
                             onPressed: () => showDialog(
                                 context: context,
                                 builder: (_) => const InfoDiscountDialog()),

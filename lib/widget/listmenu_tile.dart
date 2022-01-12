@@ -37,7 +37,7 @@ class TileListDMenu extends StatelessWidget {
           onTap: prefixIcon ?? false ? onPressed : null,
           leading: Padding(
             padding: const EdgeInsets.only(top: SpaceDims.sp2),
-            child: iconSvg == null ? Icon(icon, color: ColorSty.primary, size: 22.0) : iconSvg!,
+            child: iconSvg == null ? Icon(icon, color: ColorSty.primary, size: 23.0) : iconSvg!,
           ),
           contentPadding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp8),
           horizontalTitleGap: 0,

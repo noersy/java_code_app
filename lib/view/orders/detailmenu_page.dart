@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
@@ -141,7 +142,7 @@ class _DetailMenuState extends State<DetailMenu> {
                         ),
                         TileListDMenu(
                             prefixIcon: true,
-                            icon: IconsCs.topping,
+                            iconSvg: SvgPicture.asset("assert/image/icons/topping-icon.svg", height: 22.0,),
                             prefixCostume: RichText(
                               textAlign: TextAlign.end,
                               overflow: TextOverflow.ellipsis,

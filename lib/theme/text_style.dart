@@ -50,20 +50,20 @@ class TypoSty {
   static TextStyle captionSemiBold = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.w600,
-    fontSize: ScreenUtil().setSp(13.0),
+    fontSize: ScreenUtil().setSp(16.0),
   );
 
   static TextStyle captionBold = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.bold,
-    fontSize: ScreenUtil().setSp(13.0),
+    fontSize: ScreenUtil().setSp(16.0),
   );
 
   static TextStyle caption2 = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.bold,
     color: Colors.grey,
-    fontSize: ScreenUtil().setSp(13.0),
+    fontSize: ScreenUtil().setSp(16.0),
   );
 
   static TextStyle button = TextStyle(

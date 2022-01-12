@@ -5,6 +5,7 @@ import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
+import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/view/branda/beranda_page.dart';
 import 'package:java_code_app/view/orders/pesanan_page.dart';
@@ -50,7 +51,10 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 BottomNavigationBarItem(
                   icon: Stack(children: [
-                    const Icon(IconsCs.pesanan, size: 32.0),
+                    const Padding(
+                      padding: EdgeInsets.only(right: SpaceDims.sp4),
+                      child: Icon(IconsCs.pesanan, size: 32.0),
+                    ),
                     Positioned(
                       top: 0.0,
                       right: 0.0,
