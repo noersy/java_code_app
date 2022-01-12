@@ -1,30 +1,25 @@
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:java_code_app/providers/geolocation_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/route/route.dart';
+import 'package:java_code_app/tools/check_connectivity.dart';
 import 'package:java_code_app/widget/button_login.dart';
 import 'package:java_code_app/widget/form_login.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
-
-  checkConnectivity() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    print(connectivityResult);
-  }
+  final ConnectionStatusSingleton _connectionStatus = ConnectionStatusSingleton.getInstance();
 
   @override
   Widget build(BuildContext context) {
   final safeTopPadding = MediaQuery.of(context).padding.vertical;
   final height = MediaQuery.of(context).size.height;
-
-  checkConnectivity();
-
   return ScreenUtilInit(
       builder: () {
         return Scaffold(
@@ -53,7 +48,7 @@ class LoginPage extends StatelessWidget {
                            SizedBox(
                             width: 339.0.w,
                             child: Text('Masuk untuk melanjutkan!',
-                                style: TypoSty.title,
+                                style: TypoSty.heading.copyWith(fontSize: 20.0.sp),
                             ),
                           ),
                           SizedBox(height: 25.0.h),
@@ -73,7 +68,10 @@ class LoginPage extends StatelessWidget {
                           SizedBox(height: 25.0.h),
                           ButtonLogin(
                             title: 'Masuk',
-                            onPressed: ()=> Navigate.toFindLocation(context),
+                            onPressed: () async {
+                              final isConnect = await _connectionStatus.checkConnection();
+                              if(isConnect) Navigate.toFindLocation(context);
+                            },
                             bgColors: ColorSty.primary,
                           ),
                           SizedBox(height: 40.0.h),
@@ -86,8 +84,7 @@ class LoginPage extends StatelessWidget {
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: SpaceDims.sp8),
+                                padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp8),
                                 child: Text("atau", style: TypoSty.caption2),
                               ),
                               const Expanded(
@@ -104,7 +101,10 @@ class LoginPage extends StatelessWidget {
                             boldTitle: "Google",
                             bgColors: ColorSty.white,
                             icon: "assert/image/icon_google.png",
-                            onPressed: () {},
+                            onPressed: () {
+                              Provider.of<GeolocationProvider>(context, listen: false).getCurrentPosition();
+
+                            },
                           ),
                           SizedBox(height: SpaceDims.sp8.h),
                           ButtonLogin(

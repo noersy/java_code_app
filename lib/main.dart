@@ -4,6 +4,7 @@ import 'package:java_code_app/providers/geolocation_providers.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
+import 'package:java_code_app/tools/check_connectivity.dart';
 import 'package:java_code_app/view/dashboard_page.dart';
 import 'package:java_code_app/view/auth/login_page.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ConnectionStatusSingleton connectionStatus = ConnectionStatusSingleton.getInstance();
+    connectionStatus.initialize();
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(

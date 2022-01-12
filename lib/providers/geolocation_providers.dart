@@ -8,16 +8,18 @@ class GeolocationProvider extends ChangeNotifier {
 
   getCurrentPosition() async {
     try {
-      LocationPermission permission = await Geolocator.checkPermission();
+      LocationPermission permission = await Geolocator.requestPermission();
 
-      if (permission != LocationPermission.denied) {
-        _position = await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high);
+      if (permission != LocationPermission.denied || permission != LocationPermission.deniedForever) {
+        _position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
       }
-      print(_position.toString());
+
+      print(permission);
       notifyListeners();
+      return;
     } on TimeoutException {
       print("Lokasi tidak ditemukan.");
     } catch (e) {}
+    print("Lokasi tidak ditemukan.");
   }
 }

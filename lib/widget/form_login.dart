@@ -42,7 +42,7 @@ class _FormLoginState extends State<FormLogin> {
               decoration: InputDecoration(
                 isDense: true,
                 hintText: widget.hint,
-                hintStyle: TypoSty.caption2,
+                hintStyle: TypoSty.caption,
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 contentPadding:
                 const EdgeInsets.symmetric(vertical: SpaceDims.sp8),

@@ -26,7 +26,6 @@ class _FindLocationPageState extends State<FindLocationPage> {
   @override
   void initState() {
     _startTime();
-    Provider.of<GeolocationProvider>(context, listen: false).getCurrentPosition();
     super.initState();
   }
 
