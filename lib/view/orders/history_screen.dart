@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
@@ -69,6 +70,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               isDense: true,
                               value: _dropdownValue,
                               alignment: Alignment.topCenter,
+                              underline: const SizedBox.shrink(),
                               borderRadius: BorderRadius.circular(30.0),
                               icon: const Icon(Icons.arrow_drop_down),
                               style: TypoSty.caption2.copyWith(

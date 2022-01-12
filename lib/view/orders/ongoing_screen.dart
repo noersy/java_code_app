@@ -26,13 +26,12 @@ class _OngoingScreenState extends State<OngoingScreen> {
   Future<void> _onRefresh() async {
     var _duration = const Duration(seconds: 3);
 
-    if (mounted) {
-      setState(() => _loading = true);
+     if(mounted) setState(() => _loading = true);
       Timer(_duration, () {
-        setState(() => _loading = false);
+        if(mounted) setState(() => _loading = false);
         _refreshController.refreshCompleted();
       });
-    }
+
   }
 
   @override

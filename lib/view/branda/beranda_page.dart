@@ -371,48 +371,22 @@ class BerandaSkeleton extends StatelessWidget {
                 title: "Semua Menu",
                 icon: Icons.list,
               ),
-              const SizedBox(width: SpaceDims.sp4),
-              ElevatedButton(
+              LabelButton(
+                color: ColorSty.primary,
                 onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      "assert/image/icons/ep_food.svg",
-                      color: ColorSty.white,
-                      width: 24,
-                    ),
-                    const SizedBox(width: SpaceDims.sp8),
-                    Text("Makanan", style: TypoSty.subtitle),
-                  ],
+                title: "Makanan",
+                svgPicture: SvgPicture.asset(
+                  "assert/image/icons/ep_food.svg",
+                  color: ColorSty.white,
+                  width: 24,
                 ),
               ),
-              const SizedBox(width: SpaceDims.sp4),
-              const SizedBox(width: SpaceDims.sp4),
-              ElevatedButton(
+              LabelButton(
+                color: ColorSty.primary,
                 onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      "assert/image/icons/ep_coffee.svg",
-                      color: ColorSty.white,
-                      width: 24,
-                    ),
-                    const SizedBox(width: SpaceDims.sp8),
-                    Text("Minuman", style: TypoSty.subtitle),
-                  ],
-                ),
+                title: "Minuman",
+                icon: IconsCs.coffee,
               ),
-              const SizedBox(width: SpaceDims.sp8),
             ],
           ),
         ),
