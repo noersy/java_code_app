@@ -3,6 +3,7 @@ import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
+import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
 
 class DetailVoucherPage extends StatefulWidget {
@@ -23,105 +24,102 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorSty.bg2,
-      body: SilverAppBar(
+      appBar: const CostumeAppBar(
+        title: "Detail Voucher",
         back: true,
-        pinned: true,
-        floating: true,
-        notScrolled: false,
-        title: Text("Detail Voucher", style: TypoSty.title),
-        body: Column(
-          children: [
-            const SizedBox(height: SpaceDims.sp12),
-            CardDetailVoucher(urlImage: widget.urlImage, title: widget.title),
-            const SizedBox(height: SpaceDims.sp12),
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: const BorderRadius.only(
-                      topRight: Radius.circular(30.0),
-                      topLeft: Radius.circular(30.0),
+      ),
+      body: Column(
+        children: [
+          const SizedBox(height: SpaceDims.sp12),
+          CardDetailVoucher(urlImage: widget.urlImage, title: widget.title),
+          const SizedBox(height: SpaceDims.sp12),
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(30.0),
+                    topLeft: Radius.circular(30.0),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      offset: const Offset(0, -0.9),
+                      color: ColorSty.grey80.withOpacity(0.05),
+                      spreadRadius: 10,
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        offset: const Offset(0, -0.9),
-                        color: ColorSty.grey80.withOpacity(0.05),
-                        spreadRadius: 10,
+                    BoxShadow(
+                      offset: const Offset(0, -0.9),
+                      color: ColorSty.grey80.withOpacity(0.05),
+                      spreadRadius: 8,
+                    ),
+                    BoxShadow(
+                      offset: const Offset(0, -0.9),
+                      color: ColorSty.grey80.withOpacity(0.1),
+                      spreadRadius: 7,
+                    ),
+                    BoxShadow(
+                      offset: const Offset(0, -0.9),
+                      color: ColorSty.grey80.withOpacity(0.1),
+                      spreadRadius: 3,
+                    ),
+                    BoxShadow(
+                      offset: const Offset(0, -0.9),
+                      color: ColorSty.grey80.withOpacity(0.1),
+                      spreadRadius: 2,
+                    ),
+                  ]),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: SpaceDims.sp42,
+                  left: SpaceDims.sp24,
+                  right: SpaceDims.sp24,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 230,
+                      child: Text(
+                        widget.title,
+                        style: TypoSty.titlePrimary,
                       ),
-                      BoxShadow(
-                        offset: const Offset(0, -0.9),
-                        color: ColorSty.grey80.withOpacity(0.05),
-                        spreadRadius: 8,
+                    ),
+                    const SizedBox(height: SpaceDims.sp8),
+                    const SizedBox(
+                      width: 290,
+                      child: Text(
+                        "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                       ),
-                      BoxShadow(
-                        offset: const Offset(0, -0.9),
-                        color: ColorSty.grey80.withOpacity(0.1),
-                        spreadRadius: 7,
+                    ),
+                    const SizedBox(height: SpaceDims.sp42),
+                    const Divider(thickness: 2),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: SpaceDims.sp12,
+                        vertical: SpaceDims.sp2,
                       ),
-                      BoxShadow(
-                        offset: const Offset(0, -0.9),
-                        color: ColorSty.grey80.withOpacity(0.1),
-                        spreadRadius: 3,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(IconsCs.date, color: ColorSty.primary),
+                              const SizedBox(width: SpaceDims.sp12),
+                              Text("Valid Date", style: TypoSty.button),
+                            ],
+                          ),
+                          const Text("31/12/2021 - 31/12/2021"),
+                        ],
                       ),
-                      BoxShadow(
-                        offset: const Offset(0, -0.9),
-                        color: ColorSty.grey80.withOpacity(0.1),
-                        spreadRadius: 2,
-                      ),
-                    ]),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    top: SpaceDims.sp42,
-                    left: SpaceDims.sp24,
-                    right: SpaceDims.sp24,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 230,
-                        child: Text(
-                          widget.title,
-                          style: TypoSty.titlePrimary,
-                        ),
-                      ),
-                      const SizedBox(height: SpaceDims.sp8),
-                      const SizedBox(
-                        width: 290,
-                        child: Text(
-                          "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                        ),
-                      ),
-                      const SizedBox(height: SpaceDims.sp42),
-                      const Divider(thickness: 2),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: SpaceDims.sp12,
-                          vertical: SpaceDims.sp2,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                const Icon(IconsCs.date, color: ColorSty.primary),
-                                const SizedBox(width: SpaceDims.sp12),
-                                Text("Valid Date", style: TypoSty.button),
-                              ],
-                            ),
-                            const Text("31/12/2021 - 31/12/2021"),
-                          ],
-                        ),
-                      ),
-                      const Divider(thickness: 2),
-                    ],
-                  ),
+                    ),
+                    const Divider(thickness: 2),
+                  ],
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       bottomNavigationBar: Container(
         height: 50,

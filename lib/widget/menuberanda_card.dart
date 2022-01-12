@@ -37,7 +37,8 @@ class _CardMenuState extends State<CardMenu> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12, vertical: SpaceDims.sp2),
+      padding: const EdgeInsets.symmetric(
+          horizontal: SpaceDims.sp12, vertical: SpaceDims.sp2),
       child: Card(
         elevation: 4,
         color: ColorSty.white80,
@@ -45,13 +46,13 @@ class _CardMenuState extends State<CardMenu> {
           borderRadius: BorderRadius.circular(10.0),
         ),
         child: TextButton(
-          onPressed: () async {
-            await Navigate.toDetailMenu(
+          onPressed: amount == 0 ? null: () {
+            Navigate.toDetailMenu(
               context,
               data: widget.data,
-              countOrder: _jumlahOrder
+              countOrder: _jumlahOrder,
             );
-            },
+          },
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
@@ -108,59 +109,68 @@ class _CardMenuState extends State<CardMenu> {
               if (amount != 0)
                 Expanded(
                   child: AnimatedBuilder(
-                    animation: OrderProviders(),
-                    builder: (context, snapshot) {
-                      final orders = Provider.of<OrderProviders>(context).checkOrder;
-                      if(orders.keys.contains(id)) _jumlahOrder = orders[id]["countOrder"];
-                      if(!orders.keys.contains(id))  _jumlahOrder = 0;
+                      animation: OrderProviders(),
+                      builder: (context, snapshot) {
+                        final orders =
+                            Provider.of<OrderProviders>(context).checkOrder;
+                        if (orders.keys.contains(id))
+                          _jumlahOrder = orders[id]["countOrder"];
+                        if (!orders.keys.contains(id)) _jumlahOrder = 0;
 
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          if (_jumlahOrder != 0)
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            if (_jumlahOrder != 0)
+                              TextButton(
+                                onPressed: () {
+                                  setState(() => _jumlahOrder--);
+                                  if (_jumlahOrder != 0) {
+                                    Provider.of<OrderProviders>(context,
+                                            listen: false)
+                                        .addOrder(
+                                      jumlahOrder: _jumlahOrder,
+                                      data: widget.data,
+                                    );
+                                  } else {
+                                    Provider.of<OrderProviders>(context,
+                                            listen: false)
+                                        .deleteOrder(id: widget.data["id"]);
+                                  }
+                                },
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  minimumSize: const Size(25, 25),
+                                  side: const BorderSide(
+                                    color: ColorSty.primary,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: const Icon(Icons.remove),
+                              ),
+                            if (_jumlahOrder != 0)
+                              Text("$_jumlahOrder", style: TypoSty.subtitle),
                             TextButton(
                               onPressed: () {
-                                setState(() => _jumlahOrder--);
-                                if(_jumlahOrder != 0) {
-                                  Provider.of<OrderProviders>(context, listen: false).addOrder(
+                                setState(() => _jumlahOrder++);
+                                Provider.of<OrderProviders>(context,
+                                        listen: false)
+                                    .addOrder(
                                   jumlahOrder: _jumlahOrder,
                                   data: widget.data,
                                 );
-                                }else{
-                                  Provider.of<OrderProviders>(context, listen: false).deleteOrder(id: widget.data["id"]);
-                                }
                               },
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,
                                 minimumSize: const Size(25, 25),
-                                side: const BorderSide(
-                                    color: ColorSty.primary, width: 2,
-                                ),
+                                primary: ColorSty.white,
+                                backgroundColor: ColorSty.primary,
                               ),
-                              child: const Icon(Icons.remove),
-                            ),
-                          if (_jumlahOrder != 0)
-                            Text("$_jumlahOrder", style: TypoSty.subtitle),
-                          TextButton(
-                            onPressed: (){
-                              setState(() => _jumlahOrder++);
-                              Provider.of<OrderProviders>(context, listen: false).addOrder(
-                                jumlahOrder: _jumlahOrder,
-                                data: widget.data,
-                              );
-                            },
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              minimumSize: const Size(25, 25),
-                              primary: ColorSty.white,
-                              backgroundColor: ColorSty.primary,
-                            ),
-                            child: const Icon(Icons.add, color: ColorSty.white),
-                          )
-                        ],
-                      );
-                    }
-                  ),
+                              child:
+                                  const Icon(Icons.add, color: ColorSty.white),
+                            )
+                          ],
+                        );
+                      }),
                 )
               else
                 Expanded(
