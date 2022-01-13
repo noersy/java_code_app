@@ -6,6 +6,7 @@ import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/shadows.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
+import 'package:java_code_app/view/orders/detailmenu_page.dart';
 import 'package:java_code_app/widget/addorder_button.dart';
 import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/detailmenu_sheet.dart';
@@ -27,14 +28,20 @@ class EditOrderPage extends StatefulWidget {
 
 class _EditOrderPageState extends State<EditOrderPage> {
   String _selectedLevel = "1";
-  List<String> _selectedTopping = [];
+  List<String> _selectedTopping = ["Mozarella"];
 
   late final String urlImage, name, harga, id;
   late final int amount;
   int _jumlahOrder = 0;
+  final List<String> _listLevel = ["1", "2", "3"];
+  final List<String> _listTopping = ["Mozarella", "Sausagge", "Dimsum"];
+  final TextEditingController _editingController = TextEditingController();
+  String _catatan = "";
 
   @override
   void initState() {
+    // print(widget.data);
+
     _jumlahOrder = widget.countOrder;
     name = widget.data["name"] ?? "";
     urlImage = widget.data["image"] ?? "";
@@ -42,16 +49,50 @@ class _EditOrderPageState extends State<EditOrderPage> {
     amount = widget.data["amount"] ?? 0;
     id = widget.data["id"] ?? '-';
 
+    _catatan = widget.data["catatan"] ?? "";
+    _selectedTopping = widget.data["topping"] ?? _selectedTopping;
+    _selectedLevel = widget.data["level"] ?? "1";
+
     final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
-    if(orders.keys.contains(id)) _jumlahOrder = orders[id]["countOrder"];
+    if(orders.keys.contains(id)) {
+      _jumlahOrder = orders[id]["countOrder"];
+      _catatan = orders[id]["catatan"] ?? "";
+      _selectedTopping = orders[id]["topping"] ?? _selectedTopping;
+      _selectedLevel = orders[id]["level"] ?? "1";
+    }
+
 
     super.initState();
   }
 
+  void _editPesanan(){
+    // final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    final data = widget.data;
+
+    data["level"] = _selectedLevel;
+    data["topping"] = _selectedTopping;
+    data["catatan"] = _catatan;
+
+    if (_jumlahOrder <= 0) {
+      Provider.of<OrderProviders>(context, listen: false).deleteOrder(id: id);
+    } else {
+      Provider.of<OrderProviders>(context, listen: false).editOrder(
+        data: data,
+        jumlahOrder: _jumlahOrder,
+        level: _selectedLevel,
+        catatan: _catatan,
+        topping: _selectedTopping,
+      );
+    }
+
+    Navigator.of(context).pop();
+  }
 
 
-  final List<String> _listLevel = ["1", "2", "3"];
-  final List<String> _listTopping = ["Mozarella", "Sausagge", "Dimsum"];
+  void _addCatatan(){
+    setState(() => _catatan = _editingController.text);
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -152,33 +193,64 @@ class _EditOrderPageState extends State<EditOrderPage> {
                             prefixIcon: true,
                             icon: IconsCs.topping,
                             title: "Topping",
-                            prefix: "Morizela",
-                            onPressed: () => showModalBottomSheet(
-                              isScrollControlled: true,
-                              barrierColor: ColorSty.grey.withOpacity(0.2),
-                              context: context,
-                              builder: (_) => BottomSheetDetailMenu(
-                                title: "Pilih Toping",
-                                content: Expanded(
-                                  child: ListView(
-                                    scrollDirection: Axis.horizontal,
-                                    children: [
-                                      for (String item in _listTopping)
-                                        LabelToppingSelection(
-                                          title: item,
-                                          onSelection: (value) {},
-                                        )
-                                    ],
+                            prefixCostume: RichText(
+                              textAlign: TextAlign.end,
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                  style: TypoSty.captionSemiBold.copyWith(color: ColorSty.black),
+                                  text: _selectedTopping.isEmpty ? "" : _selectedTopping[0],
+                                  children: [
+                                    for (var i = 0; i < _selectedTopping.length; i++)
+                                      if(i > 0)
+                                      TextSpan(
+                                        text: ", " +_selectedTopping[i],
+                                        style: TypoSty.captionSemiBold.copyWith(
+                                          color: ColorSty.black,
+                                        ),
+                                      )
+                                  ]),
+                            ),
+                            onPressed: () {
+                              showModalBottomSheet(
+                                barrierColor: ColorSty.grey.withOpacity(0.2),
+                                elevation: 5,
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(30.0),
+                                        topRight: Radius.circular(30.0)
+                                    )
+                                ),
+                                context: context,
+                                builder: (_) => BottomSheetDetailMenu(
+                                  title: "Pilih Toping",
+                                  content: Expanded(
+                                    child: ListView(
+                                      scrollDirection: Axis.horizontal,
+                                      children: [
+                                        for (String item in _listTopping)
+                                          LabelToppingSelection(
+                                            title: item,
+                                            initial: _selectedTopping.where((e) => e == item).isNotEmpty,
+                                            onSelection: (value) {
+                                              if (_selectedTopping.where((e) => e == value).isNotEmpty) {
+                                                setState(() => _selectedTopping.remove(value));
+                                              } else {
+                                                setState(() => _selectedTopping.add(value));
+                                              }
+                                            },
+                                          )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
+                              );
+                            },
                           ),
                           TileListDMenu(
                             prefixIcon: true,
                             icon: IconsCs.note,
                             title: "Catatan",
-                            prefix: "Lorem Ipsum sit aaasss",
+                            prefix: _catatan.isEmpty ? "Lorem Ipsum sit aaasss" : _catatan,
                             onPressed: () => showModalBottomSheet(
                               isScrollControlled: true,
                               barrierColor: ColorSty.grey.withOpacity(0.2),
@@ -190,6 +262,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
                                       children: [
                                         Expanded(
                                           child: TextFormField(
+                                            controller: _editingController,
                                             maxLength: 100,
                                             decoration: const InputDecoration(
                                               contentPadding:
@@ -199,7 +272,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
                                           ),
                                         ),
                                         ElevatedButton(
-                                          onPressed: () {},
+                                          onPressed: _addCatatan,
                                           style: ElevatedButton.styleFrom(
                                             padding: const EdgeInsets.all(0),
                                             minimumSize: const Size(25.0, 25.0),
@@ -245,19 +318,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
             vertical: SpaceDims.sp8,
           ),
           child: ElevatedButton(
-            onPressed: () {
-              final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
-
-              if(_jumlahOrder == 0){
-                Provider.of<OrderProviders>(context, listen: false).deleteOrder(id: widget.data["id"]);
-              } else if(orders.keys.contains(id)) {
-                Provider.of<OrderProviders>(context, listen: false).editOrder(data : widget.data, jumlahOrder: _jumlahOrder);
-              }else{
-                Provider.of<OrderProviders>(context, listen: false).addOrder(data : widget.data, jumlahOrder: _jumlahOrder);
-              }
-
-              Navigator.of(context).pop(orders.isEmpty);
-            },
+            onPressed: _editPesanan,
             style: ElevatedButton.styleFrom(
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
@@ -314,65 +375,5 @@ class _EditOrderPageState extends State<EditOrderPage> {
       },
     );
     setState(() => _selectedLevel = _value);
-  }
-}
-
-class LabelToppingSelection extends StatefulWidget {
-  final String title;
-  final bool? initial;
-  final ValueChanged<bool> onSelection;
-
-  const LabelToppingSelection({
-    Key? key,
-    required this.title,
-    required this.onSelection,
-    this.initial,
-  }) : super(key: key);
-
-  @override
-  State<LabelToppingSelection> createState() => _LabelToppingSelectionState();
-}
-
-class _LabelToppingSelectionState extends State<LabelToppingSelection> {
-  bool _isSelected = false;
-
-  @override
-  void initState() {
-    _isSelected = widget.initial ?? false;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(
-        vertical: SpaceDims.sp20,
-        horizontal: SpaceDims.sp4,
-      ),
-      child: TextButton(
-        style: TextButton.styleFrom(
-          backgroundColor: _isSelected ? ColorSty.primary : ColorSty.white,
-          primary: !_isSelected ? ColorSty.primary : ColorSty.white,
-          padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
-          minimumSize: Size.zero,
-          shape: RoundedRectangleBorder(
-            side: const BorderSide(color: ColorSty.primary),
-            borderRadius: BorderRadius.circular(30.0),
-          ),
-        ),
-        onPressed: () {
-          setState(() => _isSelected = !_isSelected);
-          widget.onSelection(_isSelected);
-        },
-        child: Row(
-          children: [
-            const SizedBox(width: SpaceDims.sp4),
-            Text(widget.title),
-            const SizedBox(width: SpaceDims.sp4),
-            if (_isSelected) const Icon(Icons.check, size: 18.0),
-          ],
-        ),
-      ),
-    );
   }
 }

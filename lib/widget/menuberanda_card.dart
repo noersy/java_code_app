@@ -4,6 +4,7 @@ import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
+import 'package:java_code_app/view/orders/checkout_page.dart';
 import 'package:provider/provider.dart';
 
 class CardMenu extends StatefulWidget {
@@ -23,14 +24,63 @@ class _CardMenuState extends State<CardMenu> {
   late final String nama, harga, url, id;
   late final int amount;
 
+  void  _add(){
+    setState(() => _jumlahOrder++);
+    if(_jumlahOrder == 1){
+      Provider.of<OrderProviders>(context, listen: false).addOrder(
+        jumlahOrder: _jumlahOrder,
+        data: widget.data,
+        catatan: '',
+        topping: [],
+        level: '',
+      );
+    }else{
+      Provider.of<OrderProviders>(context, listen: false).editOrder(
+        jumlahOrder: _jumlahOrder,
+        data: widget.data,
+        catatan: '',
+        topping: [],
+        level: '',
+      );
+    }
+  }
+
+  void _min() async {
+    setState(() => _jumlahOrder--);
+    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    if(_jumlahOrder >= 1){
+      Provider.of<OrderProviders>(context, listen: false).editOrder(
+        jumlahOrder: _jumlahOrder,
+        data: widget.data,
+        catatan: '',
+        topping: [],
+        level: '',
+      );
+    } else if (_jumlahOrder != 0) {
+      Provider.of<OrderProviders>(context, listen: false).addOrder(
+        jumlahOrder: _jumlahOrder,
+        data: widget.data,
+        catatan: '',
+        topping: [],
+        level: '',
+      );
+    }else{
+      await showDialog(context: context,
+        builder: (_) => DeleteMenuInCheckoutDialog(id: widget.data["id"]),
+      );
+    }
+  }
+
   @override
   void initState() {
+    amount = widget.data["amount"] ?? 0;
+    id = widget.data["id"];
+
     _jumlahOrder = widget.data["countOrder"] ?? 0;
     nama = widget.data["name"] ?? "";
     url = widget.data["image"] ?? "";
     harga = widget.data["harga"] ?? "";
-    amount = widget.data["amount"] ?? 0;
-    id = widget.data["id"];
+
     super.initState();
   }
 
@@ -94,13 +144,25 @@ class _CardMenuState extends State<CardMenu> {
                         color: ColorSty.primary,
                       ),
                       const SizedBox(width: SpaceDims.sp4),
-                      Text(
-                        "Tambahkan Catatan",
-                        style: TypoSty.caption2.copyWith(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12.0,
-                          color: ColorSty.grey,
-                        ),
+                      AnimatedBuilder(
+                        animation: OrderProviders(),
+                        builder: (context, snapshot) {
+                          final _orders = Provider.of<OrderProviders>(context).checkOrder;
+                          String _catatan = "";
+
+                          if(_orders.containsKey(id)) {
+                            _catatan = _orders[id]["catatan"] ?? "";
+                          }
+
+                          return Text(
+                            _catatan.isEmpty ? "Tambahkan Catatan" : _catatan,
+                            style: TypoSty.caption2.copyWith(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12.0,
+                              color: ColorSty.grey,
+                            ),
+                          );
+                        }
                       ),
                     ],
                   ),
@@ -111,10 +173,10 @@ class _CardMenuState extends State<CardMenu> {
                   child: AnimatedBuilder(
                       animation: OrderProviders(),
                       builder: (context, snapshot) {
-                        final orders =
-                            Provider.of<OrderProviders>(context).checkOrder;
-                        if (orders.keys.contains(id))
+                        final orders = Provider.of<OrderProviders>(context).checkOrder;
+                        if (orders.keys.contains(id)) {
                           _jumlahOrder = orders[id]["countOrder"];
+                        }
                         if (!orders.keys.contains(id)) _jumlahOrder = 0;
 
                         return Row(
@@ -122,21 +184,7 @@ class _CardMenuState extends State<CardMenu> {
                           children: [
                             if (_jumlahOrder != 0)
                               TextButton(
-                                onPressed: () {
-                                  setState(() => _jumlahOrder--);
-                                  if (_jumlahOrder != 0) {
-                                    Provider.of<OrderProviders>(context,
-                                            listen: false)
-                                        .addOrder(
-                                      jumlahOrder: _jumlahOrder,
-                                      data: widget.data,
-                                    );
-                                  } else {
-                                    Provider.of<OrderProviders>(context,
-                                            listen: false)
-                                        .deleteOrder(id: widget.data["id"]);
-                                  }
-                                },
+                                onPressed: _min,
                                 style: TextButton.styleFrom(
                                   padding: EdgeInsets.zero,
                                   minimumSize: const Size(25, 25),
@@ -150,15 +198,7 @@ class _CardMenuState extends State<CardMenu> {
                             if (_jumlahOrder != 0)
                               Text("$_jumlahOrder", style: TypoSty.subtitle),
                             TextButton(
-                              onPressed: () {
-                                setState(() => _jumlahOrder++);
-                                Provider.of<OrderProviders>(context,
-                                        listen: false)
-                                    .addOrder(
-                                  jumlahOrder: _jumlahOrder,
-                                  data: widget.data,
-                                );
-                              },
+                              onPressed: _add,
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,
                                 minimumSize: const Size(25, 25),

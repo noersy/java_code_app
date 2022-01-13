@@ -319,6 +319,56 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
   late final String nama, harga, url;
   late final int amount;
 
+
+  void  _add(){
+    setState(() => _jumlahOrder++);
+    if(_jumlahOrder == 1){
+      Provider.of<OrderProviders>(context, listen: false).addOrder(
+        jumlahOrder: _jumlahOrder,
+        data: widget.data,
+        catatan: '',
+        topping: [],
+        level: '',
+      );
+    }else{
+      Provider.of<OrderProviders>(context, listen: false).editOrder(
+        jumlahOrder: _jumlahOrder,
+        data: widget.data,
+        catatan: '',
+        topping: [],
+        level: '',
+      );
+    }
+  }
+
+  void _min() async {
+    setState(() => _jumlahOrder--);
+    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    if(_jumlahOrder >= 1){
+      Provider.of<OrderProviders>(context, listen: false).editOrder(
+        jumlahOrder: _jumlahOrder,
+        data: widget.data,
+        catatan: '',
+        topping: [],
+        level: '',
+      );
+    } else if (_jumlahOrder != 0) {
+      Provider.of<OrderProviders>(context, listen: false).addOrder(
+        jumlahOrder: _jumlahOrder,
+        data: widget.data,
+        catatan: '',
+        topping: [],
+        level: '',
+      );
+    }else{
+      await showDialog(context: context,
+          builder: (_) => DeleteMenuInCheckoutDialog(id: widget.data["id"]),
+    );
+
+    if(orders.isEmpty) Navigator.pop(context);
+    }
+  }
+
   @override
   void initState() {
     _jumlahOrder = widget.data["countOrder"] ?? 0;
@@ -345,12 +395,12 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
         ),
         child: TextButton(
           onPressed: () async {
-            final _isEmpty = (await Navigate.toEditOrderMenu(
+            var _isEmpty = await Navigate.toEditOrderMenu(
               context,
               data: widget.data,
               countOrder: _jumlahOrder,
-            )) ?? false;
-            if(_isEmpty) Navigator.pop(context);
+            );
+            if(_isEmpty ?? false) Navigator.pop(context);
           },
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
@@ -393,12 +443,16 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
                         color: ColorSty.primary,
                       ),
                       const SizedBox(width: SpaceDims.sp4),
-                      Text(
-                        "Tambahkan Catatan",
-                        style: TypoSty.caption2.copyWith(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12.0,
-                          color: ColorSty.grey,
+                      SizedBox(
+                        width: 120.0,
+                        child: Text(
+                          widget.data["catatan"] ?? "Tambahkan Catatan",
+                          overflow: TextOverflow.ellipsis,
+                          style: TypoSty.caption2.copyWith(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12.0,
+                            color: ColorSty.grey,
+                          ),
                         ),
                       ),
                     ],
@@ -420,20 +474,7 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
                         children: [
                           if (_jumlahOrder != 0)
                             TextButton(
-                              onPressed: () async {
-                                setState(() => _jumlahOrder--);
-                                if(_jumlahOrder != 0) {
-                                  Provider.of<OrderProviders>(context, listen: false).addOrder(
-                                    jumlahOrder: _jumlahOrder,
-                                    data: widget.data,
-                                  );
-                                }else{
-                                  await showDialog(context: context,
-                                      builder: (_) => DeleteMenuInCheckoutDialog(id: widget.data["id"]),
-                                  );
-                                  if(orders.isEmpty) Navigator.pop(context);
-                                }
-                              },
+                              onPressed: _min,
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,
                                 minimumSize: const Size(25, 25),
@@ -447,13 +488,7 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
                           if (_jumlahOrder != 0)
                             Text("$_jumlahOrder", style: TypoSty.subtitle),
                           TextButton(
-                            onPressed: (){
-                              setState(() => _jumlahOrder++);
-                              Provider.of<OrderProviders>(context, listen: false).addOrder(
-                                jumlahOrder: _jumlahOrder,
-                                data: widget.data,
-                              );
-                            },
+                            onPressed: _add,
                             style: TextButton.styleFrom(
                               padding: EdgeInsets.zero,
                               minimumSize: const Size(25, 25),

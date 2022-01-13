@@ -34,6 +34,10 @@ class _DetailMenuState extends State<DetailMenu> {
   int _jumlahOrder = 0;
   String _selectedLevel = "1";
   List<String> _selectedTopping = ["Mozarella"];
+  final List<String> _listLevel = ["1", "2", "3"];
+  final List<String> _listTopping = ["Mozarella", "Sausagge", "Dimsum"];
+  String _catatan = "";
+  static final TextEditingController _editingController = TextEditingController();
 
   @override
   void initState() {
@@ -44,14 +48,21 @@ class _DetailMenuState extends State<DetailMenu> {
     amount = widget.data["amount"] ?? 0;
     id = widget.data["id"];
 
+    _catatan = widget.data["catatan"] ?? "";
+    _selectedTopping = widget.data["topping"] ?? _selectedTopping;
+    _selectedLevel = widget.data["level"] ?? "1";
+
+
     final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
-    if(orders.keys.contains(id)) _jumlahOrder = orders[id]["countOrder"];
+    if(orders.keys.contains(id)) {
+      _jumlahOrder = orders[id]["countOrder"];
+      _catatan = orders[id]["catatan"] ?? "";
+      _selectedTopping = orders[id]["topping"] ?? _selectedTopping;
+      _selectedLevel = orders[id]["level"] ?? "1";
+    }
 
     super.initState();
   }
-
-  final List<String> _listLevel = ["1", "2", "3"];
-  final List<String> _listTopping = ["Mozarella", "Sausagge", "Dimsum"];
 
   _showDialogLevel(List<String> _listLevel) async {
     String _value = "1";
@@ -93,15 +104,38 @@ class _DetailMenuState extends State<DetailMenu> {
     setState(() => _selectedLevel = _value);
   }
 
-  void _viewImage(){
-    // showDialog(
-    //     context: context,
-    //     barrierColor: Colors.transparent,
-    //     builder: (_){
-    //       return ViewImage(urlImage: urlImage,
-    //   );
-    // });
-    Navigate.toViewImage(context, urlImage: urlImage);
+  void _viewImage() => Navigate.toViewImage(context, urlImage: urlImage);
+  void _addCatatan(){
+    setState(() => _catatan = _editingController.text);
+    Navigator.pop(context);
+  }
+  void _tambahkanPesanan(){
+    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    final data = widget.data;
+
+    data.putIfAbsent("level", () => _selectedLevel);
+    data.putIfAbsent("topping", () => _selectedTopping);
+    data.putIfAbsent("catatan", () => _catatan);
+
+    if(_jumlahOrder > 0) {
+      if (orders.keys.contains(id)) {
+        Provider.of<OrderProviders>(context, listen: false).editOrder(
+          data: data,
+          jumlahOrder: _jumlahOrder,
+          topping: _selectedTopping,
+          level: _selectedLevel,
+          catatan: _catatan,
+        );
+      } else {
+        Provider.of<OrderProviders>(context, listen: false).addOrder(
+          data: data, jumlahOrder: _jumlahOrder,
+          topping: _selectedTopping,
+          level: _selectedLevel,
+          catatan: _catatan,
+        );
+      }
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -241,18 +275,12 @@ class _DetailMenuState extends State<DetailMenu> {
                                         for (String item in _listTopping)
                                           LabelToppingSelection(
                                             title: item,
-                                            initial: _selectedTopping
-                                                .where((e) => e == item)
-                                                .isNotEmpty,
+                                            initial: _selectedTopping.where((e) => e == item).isNotEmpty,
                                             onSelection: (value) {
-                                              if (_selectedTopping
-                                                  .where((e) => e == value)
-                                                  .isNotEmpty) {
-                                                setState(() => _selectedTopping
-                                                    .remove(value));
+                                              if (_selectedTopping.where((e) => e == value).isNotEmpty) {
+                                                setState(() => _selectedTopping.remove(value));
                                               } else {
-                                                setState(() => _selectedTopping
-                                                    .add(value));
+                                                setState(() => _selectedTopping.add(value));
                                               }
                                             },
                                           )
@@ -261,12 +289,13 @@ class _DetailMenuState extends State<DetailMenu> {
                                   ),
                                 ),
                               );
-                            }),
+                            },
+                        ),
                         TileListDMenu(
                           prefixIcon: true,
                           icon: IconsCs.note,
                           title: "Catatan",
-                          prefix: "Lorem Ipsum sit aaasss",
+                          prefix: _catatan.isEmpty ? "Lorem Ipsum sit aaasss" : _catatan,
                           onPressed: () => showModalBottomSheet(
                             barrierColor: ColorSty.grey.withOpacity(0.2),
                             elevation: 5,
@@ -277,22 +306,24 @@ class _DetailMenuState extends State<DetailMenu> {
                                 )
                             ),
                             context: context,
-                            builder: (BuildContext context) =>
-                                BottomSheetDetailMenu(
+                            builder: (BuildContext context) => BottomSheetDetailMenu(
                               title: "Buat Catatan",
                               content: Row(
                                 children: [
                                   Expanded(
                                     child: TextFormField(
                                       maxLength: 100,
+                                      controller: _editingController,
                                       decoration: const InputDecoration(
                                         contentPadding: EdgeInsets.symmetric(
-                                            horizontal: 0, vertical: 0),
+                                          horizontal: 0,
+                                          vertical: 0,
+                                        ),
                                       ),
                                     ),
                                   ),
                                   ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: _addCatatan,
                                     style: ElevatedButton.styleFrom(
                                       padding: const EdgeInsets.all(0),
                                       minimumSize: const Size(25.0, 25.0),
@@ -311,17 +342,7 @@ class _DetailMenuState extends State<DetailMenu> {
                         const Divider(thickness: 1.5),
                         const SizedBox(height: SpaceDims.sp12),
                         ElevatedButton(
-                          onPressed: () {
-                            final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
-
-                            if(orders.keys.contains(id)) {
-                              Provider.of<OrderProviders>(context, listen: false).editOrder(data : widget.data, jumlahOrder: _jumlahOrder);
-                            }else{
-                              Provider.of<OrderProviders>(context, listen: false).addOrder(data : widget.data, jumlahOrder: _jumlahOrder);
-                            }
-
-                            Navigator.of(context).pop();
-                          },
+                          onPressed: _tambahkanPesanan,
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
                               vertical: SpaceDims.sp2,

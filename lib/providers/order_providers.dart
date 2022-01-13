@@ -14,6 +14,9 @@ class OrderProviders extends ChangeNotifier {
   addOrder({
     required Map<String, dynamic> data,
     required int jumlahOrder,
+    required String catatan,
+    required String level,
+    required List<String> topping,
   }) async {
     _checkOrder.addAll({
       data["id"]: {
@@ -23,6 +26,9 @@ class OrderProviders extends ChangeNotifier {
         "harga": data["harga"],
         "amount": data["amount"],
         "name": data["name"],
+        "level": level,
+        "topping": topping,
+        "catatan": catatan,
         "countOrder": jumlahOrder,
       }
     });
@@ -37,6 +43,9 @@ class OrderProviders extends ChangeNotifier {
   editOrder({
     required Map<String, dynamic> data,
     required int jumlahOrder,
+    required String catatan,
+    required String level,
+    required List<String> topping,
   }) async {
     _checkOrder.update(
       data["id"],
@@ -47,6 +56,9 @@ class OrderProviders extends ChangeNotifier {
         "harga": value["harga"],
         "amount": value["amount"],
         "name": value["name"],
+        "level": level.isEmpty ? value["level"] : level,
+        "topping": topping.isEmpty ? value["topping"] : topping,
+        "catatan": catatan.isEmpty ? value["catatan"] : catatan,
         "countOrder": jumlahOrder,
       },
     );
