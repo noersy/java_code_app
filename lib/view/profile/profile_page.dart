@@ -1,16 +1,40 @@
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
+import 'package:java_code_app/tools/shared_preferences.dart';
 import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/detailmenu_sheet.dart';
 import 'package:java_code_app/widget/vp_pin_dialog.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  static final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  static AndroidDeviceInfo? _androidInfo;
+  static PackageInfo? _packageInfo;
+
+  getInfoDevice() async {
+    _androidInfo = await deviceInfo.androidInfo;
+    _packageInfo = await PackageInfo.fromPlatform();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    getInfoDevice();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,8 +116,10 @@ class ProfilePage extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(left: SpaceDims.sp32),
-                          child: Text(lang.profile.subtitle,
-                              style: TypoSty.titlePrimary),
+                          child: Text(
+                              lang.profile.subtitle,
+                              style: TypoSty.titlePrimary,
+                          ),
                         ),
                         Container(
                           alignment: Alignment.center,
@@ -130,7 +156,7 @@ class ProfilePage extends StatelessWidget {
                               TileListProfile(
                                 title: '${lang.profile.ub} PIN',
                                 suffix: '*********',
-                                onPreseed: () {
+                                onPressed: () {
                                   showDialog(
                                     context: context,
                                     builder: (_) => VPinDialog(
@@ -149,29 +175,29 @@ class ProfilePage extends StatelessWidget {
                                 },
                               ),
                               AnimatedBuilder(
-                                  animation: LangProviders(),
-                                  builder: (context, snapshot) {
-                                    bool _isIndo =
-                                        Provider.of<LangProviders>(context)
-                                            .isIndo;
-                                    return TileListProfile(
-                                      title: lang.profile.bhs,
-                                      suffix: _isIndo ? 'Indonesia' : 'English',
-                                      onPreseed: () => showModalBottomSheet(
-                                        barrierColor:
-                                            ColorSty.grey.withOpacity(0.2),
-                                        elevation: 5,
-                                        shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(30.0),
-                                                topRight:
-                                                    Radius.circular(30.0))),
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            const ChangeLagSheet(),
+                                animation: LangProviders(),
+                                builder: (context, snapshot) {
+                                  bool _isIndo =
+                                      Provider.of<LangProviders>(context)
+                                          .isIndo;
+                                  return TileListProfile(
+                                    title: lang.profile.bhs,
+                                    suffix: _isIndo ? 'Indonesia' : 'English',
+                                    onPressed: () => showModalBottomSheet(
+                                      barrierColor: ColorSty.grey.withOpacity(0.2),
+                                      elevation: 5,
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(30.0),
+                                              topRight: Radius.circular(30.0),
+                                          ),
                                       ),
-                                    );
-                                  },
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          const ChangeLagSheet(),
+                                    ),
+                                  );
+                                },
                               ),
                             ],
                           ),
@@ -184,8 +210,10 @@ class ProfilePage extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(left: SpaceDims.sp32),
-                          child: Text(lang.profile.subtitle2,
-                              style: TypoSty.titlePrimary),
+                          child: Text(
+                            lang.profile.subtitle2,
+                            style: TypoSty.titlePrimary,
+                          ),
                         ),
                         Container(
                           alignment: Alignment.center,
@@ -201,15 +229,17 @@ class ProfilePage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(30.0),
                           ),
                           child: Column(
-                            children: const [
+                            children: [
                               TileListProfile(
                                 top: false,
+                                enable: false,
                                 title: 'Device Info',
-                                suffix: 'Iphone 13',
+                                suffix: _androidInfo?.device ?? "",
                               ),
                               TileListProfile(
+                                enable: false,
                                 title: 'Version',
-                                suffix: '1.3',
+                                suffix: _packageInfo?.version ?? '',
                               ),
                             ],
                           ),
@@ -221,7 +251,10 @@ class ProfilePage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: (){
+                            Navigator.pushReplacementNamed(context, "/");
+                            Preferences.getInstance().clear();
+                          },
                           child: SizedBox(
                             width: 204,
                             child: Align(
@@ -237,7 +270,7 @@ class ProfilePage extends StatelessWidget {
                         )
                       ],
                     ),
-                    const SizedBox(height: SpaceDims.sp22),
+                    const SizedBox(height: 65),
                   ],
                 ),
               ),
@@ -249,19 +282,11 @@ class ProfilePage extends StatelessWidget {
   }
 }
 
-class InfoSheet extends StatelessWidget {
-  const InfoSheet({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
 
 class TileListProfile extends StatefulWidget {
-  final bool? top, bottom;
+  final bool? top, bottom, enable;
   final String title, suffix;
-  final Function()? onPreseed;
+  final Function()? onPressed;
 
   const TileListProfile({
     Key? key,
@@ -269,7 +294,7 @@ class TileListProfile extends StatefulWidget {
     this.bottom = false,
     required this.title,
     required this.suffix,
-    this.onPreseed,
+    this.onPressed, this.enable = true,
   }) : super(key: key);
 
   @override
@@ -296,15 +321,17 @@ class _TileListProfileState extends State<TileListProfile> {
             horizontal: SpaceDims.sp18,
           ),
           child: TextButton(
-            onPressed: widget.onPreseed ??
+            onPressed: widget.onPressed ??
                 () => showModalBottomSheet(
                       isScrollControlled: true,
                       barrierColor: ColorSty.grey.withOpacity(0.2),
                       elevation: 5,
                       shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(30.0),
-                              topRight: Radius.circular(30.0))),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0),
+                        ),
+                      ),
                       context: context,
                       builder: (BuildContext context) => BottomSheetDetailMenu(
                         title: widget.title,
@@ -313,6 +340,7 @@ class _TileListProfileState extends State<TileListProfile> {
                             Expanded(
                               child: TextFormField(
                                 maxLength: 100,
+                                enabled: widget.enable,
                                 controller: _editingController,
                                 decoration: InputDecoration(
                                   hintText: widget.suffix,
@@ -320,7 +348,8 @@ class _TileListProfileState extends State<TileListProfile> {
                                 ),
                               ),
                             ),
-                            ElevatedButton(
+                            if(widget.enable!)
+                              ElevatedButton(
                               onPressed: () {},
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.all(0),
@@ -345,10 +374,18 @@ class _TileListProfileState extends State<TileListProfile> {
               children: [
                 Text(widget.title, style: TypoSty.captionSemiBold),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
-                      widget.suffix,
-                      style: TypoSty.caption.copyWith(fontSize: 14.0),
+                    SizedBox(
+                      width: 150.0,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          widget.suffix,
+                          overflow: TextOverflow.ellipsis,
+                          style: TypoSty.caption.copyWith(fontSize: 14.0),
+                        ),
+                      ),
                     ),
                     const Icon(
                       Icons.arrow_forward_ios,

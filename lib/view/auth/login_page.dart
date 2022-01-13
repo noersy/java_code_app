@@ -2,19 +2,19 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:java_code_app/providers/geolocation_providers.dart';
+import 'package:java_code_app/constans/key_prefens.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/tools/check_connectivity.dart';
 import 'package:java_code_app/tools/check_location.dart';
+import 'package:java_code_app/tools/shared_preferences.dart';
 import 'package:java_code_app/widget/button_login.dart';
 import 'package:java_code_app/widget/form_login.dart';
-import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key? key}) : super(key: key);
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -24,26 +24,32 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
   final ConnectionStatus _connectionStatus = ConnectionStatus.getInstance();
-  final GeolocationStatus _geolocationStatus = GeolocationStatus.getInstance();
-  final _duration = const Duration(seconds: 2);
+  // final GeolocationStatus _geolocationStatus = GeolocationStatus.getInstance();
+  final Preferences _preferences = Preferences.getInstance();
+  final _duration = const Duration(seconds: 1);
 
   bool _loading = false;
 
   void _navigationPage() {
     setState(() => _loading = true);
-    Timer(_duration, checkInternet);
+    Timer(_duration, _checkInternet);
   }
 
-  checkInternet() async {
-    // await Provider.of<GeolocationProvider>(context, listen: false).getCurrentPosition();
-    final isConnect = await _connectionStatus.checkConnection();
+  _checkInternet() async {
+    final _isConnected = await _connectionStatus.checkConnection();
     setState(() => _loading = false);
-    if(isConnect )Navigate.toFindLocation(context);
+    _preferences.setBoolValue(KeyPrefens.login, true);
+    if(_isConnected)Navigate.toFindLocation(context);
+  }
+
+  _checkPrefens() async{
+    bool _isAlreadyLogin = await _preferences.getBoolValue(KeyPrefens.login);
+    if(_isAlreadyLogin) _navigationPage();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
+    _checkPrefens();
     super.initState();
   }
 
@@ -131,9 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                           bgColors: ColorSty.white,
                           icon: "assert/image/icon_google.png",
                           onPressed: () {
-                            Provider.of<GeolocationProvider>(context,
-                                    listen: false)
-                                .getCurrentPosition();
+
                           },
                         ),
                         SizedBox(height: SpaceDims.sp8.h),

@@ -40,6 +40,10 @@ dependencies:
   pull_to_refresh: any
   shimmer: any
   geolocator: any
+  device_info: any
+  package_info_plus: any
+  shared_preferences: ^2.0.12
+  local_auth: ^1.1.10
 
 dev_dependencies:
   flutter_test:
