@@ -17,7 +17,6 @@ class Preferences {
     _prefs = await SharedPreferences.getInstance();
   }
 
-  //The test to actually see if there is a connection
   Future<bool> setBoolValue(String key, bool value) async {
     try {
       if (_prefs == null) throw Exception("prefs not initialize yet.");

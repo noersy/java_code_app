@@ -373,26 +373,27 @@ class _TileListProfileState extends State<TileListProfile> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(widget.title, style: TypoSty.captionSemiBold),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SizedBox(
-                      width: 150.0,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          widget.suffix,
-                          overflow: TextOverflow.ellipsis,
-                          style: TypoSty.caption.copyWith(fontSize: 14.0),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            widget.suffix,
+                            overflow: TextOverflow.ellipsis,
+                            style: TypoSty.caption.copyWith(fontSize: 14.0),
+                          ),
                         ),
                       ),
-                    ),
-                    const Icon(
-                      Icons.arrow_forward_ios,
-                      color: ColorSty.grey,
-                      size: 16.0,
-                    )
-                  ],
+                      const Icon(
+                        Icons.arrow_forward_ios,
+                        color: ColorSty.grey,
+                        size: 16.0,
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -433,9 +434,7 @@ class _ChangeLagSheetState extends State<ChangeLagSheet> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () =>
-                      Provider.of<LangProviders>(context, listen: false)
-                          .changeLang(true),
+                  onPressed: () => Provider.of<LangProviders>(context, listen: false).changeLang(true),
                   style: ElevatedButton.styleFrom(
                     primary: _isIndo ? ColorSty.primary : ColorSty.white,
                     onPrimary: _isIndo ? ColorSty.white : ColorSty.black,
@@ -457,9 +456,7 @@ class _ChangeLagSheetState extends State<ChangeLagSheet> {
                 ),
                 const SizedBox(width: SpaceDims.sp14),
                 ElevatedButton(
-                  onPressed: () =>
-                      Provider.of<LangProviders>(context, listen: false)
-                          .changeLang(false),
+                  onPressed: () => Provider.of<LangProviders>(context, listen: false).changeLang(false),
                   style: ElevatedButton.styleFrom(
                     primary: !_isIndo ? ColorSty.primary : ColorSty.white,
                     onPrimary: !_isIndo ? ColorSty.white : ColorSty.black,
