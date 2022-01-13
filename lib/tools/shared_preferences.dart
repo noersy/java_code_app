@@ -24,7 +24,6 @@ class Preferences {
 
       return await _prefs!.setBool(key, value);
     } catch (e) {
-      print(e);
       return false;
     }
   }
@@ -34,13 +33,8 @@ class Preferences {
       if (_prefs == null) await initialize();
       if (_prefs == null) throw Exception("prefs not initialize yet.");
 
-      var _islogin = _prefs!.getBool(key);
-
-      print(_islogin);
-
-      return _islogin ?? false;
+      return _prefs!.getBool(key) ?? false;
     } catch (e) {
-      print(e);
       return false;
     }
   }

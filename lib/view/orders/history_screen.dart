@@ -1,13 +1,15 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:intl/intl.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({Key? key}) : super(key: key);
@@ -19,8 +21,14 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   String _dropdownValue = 'Semua Status';
   final List<String> _item = ["Semua Status", "Selesai", "Dibatalkan"];
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  static final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  static final DateFormat _dateFormat = DateFormat('dd/MM/yy');
+  static final DateTime _dateNow = DateTime.now();
+  String _dateRange =
+      _dateFormat.format(_dateNow) + " - " + _dateFormat.format(
+          DateTime(_dateNow.year, _dateNow.month, _dateNow.day+7),
+      );
+
   bool _loading = false;
 
   Future<void> _onRefresh() async {
@@ -32,6 +40,31 @@ class _HistoryScreenState extends State<HistoryScreen> {
         setState(() => _loading = false);
         _refreshController.refreshCompleted();
       });
+    }
+  }
+
+  void _pickDateRange() async {
+    // final DateTimeRange? picked = await showDateRangePicker(
+    //     context: context,
+    //     firstDate: DateTime(2020),
+    //     lastDate: DateTime(DateTime.now().year + 2),
+    // );
+
+    // if (picked != null && picked.start != picked.end) {
+    //   print(picked);
+    // }
+
+    final value = await showDialog(
+      barrierColor: ColorSty.grey.withOpacity(0.2),
+      context: context, builder: (_)=>const DateRangePickerDialog(),
+    );
+
+    if(value != null) {
+      final val = (value as PickerDateRange);
+      _dateRange =
+        _dateFormat.format(val.startDate!)
+            + " - " + _dateFormat.format(val.endDate!);
+      setState(() {});
     }
   }
 
@@ -60,12 +93,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               bottom: SpaceDims.sp4,
                               top: SpaceDims.sp4,
                             ),
-                            width: 160.0,
+                            width: 170.0,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                                 color: ColorSty.grey60,
                                 border: Border.all(color: ColorSty.primary),
-                                borderRadius: BorderRadius.circular(30.0)),
+                                borderRadius: BorderRadius.circular(30.0),
+                            ),
                             child: DropdownButton<String>(
                               isDense: true,
                               value: _dropdownValue,
@@ -92,20 +126,25 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           TextButton(
                             style: TextButton.styleFrom(
                                 backgroundColor: ColorSty.grey60,
+                                minimumSize: const Size(0, 0),
+                                padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp8+0.5),
                                 shape: RoundedRectangleBorder(
-                                    side: const BorderSide(
-                                        color: ColorSty.primary),
-                                    borderRadius: BorderRadius.circular(30.0))),
-                            onPressed: null,
+                                    side: const BorderSide(color: ColorSty.primary),
+                                    borderRadius: BorderRadius.circular(30.0),
+                                ),
+                            ),
+                            onPressed: _pickDateRange,
                             child: SizedBox(
-                              width: 160.0,
+                              width: 170.0,
                               child: Row(
                                 children: [
                                   const SizedBox(width: SpaceDims.sp12),
-                                  Text("25/12/21 - 30/12/21",
+                                  Text(_dateRange,
                                       style: TypoSty.caption2.copyWith(
                                           fontSize: 13.0,
-                                          fontWeight: FontWeight.w600)),
+                                          fontWeight: FontWeight.w600,
+                                      ),
+                                  ),
                                   const SizedBox(width: SpaceDims.sp8),
                                   const Icon(IconsCs.date,
                                       size: 18.0, color: ColorSty.primary),
@@ -179,6 +218,43 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
   }
 }
+
+class DateRangePickerDialog extends StatelessWidget {
+  const DateRangePickerDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ScreenUtilInit(
+      builder: () {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+            child: Padding(
+              padding: const EdgeInsets.all(SpaceDims.sp12),
+              child: SizedBox(
+                height: 0.5.sh,
+                width: double.infinity,
+                child: SfDateRangePicker(
+                  onSubmit: (value) {
+                    if(value.runtimeType == PickerDateRange && (value as PickerDateRange).endDate != null) {
+                      Navigator.pop(context, value);
+                    }
+                  },
+                  onCancel: () => Navigator.pop(context),
+                  showActionButtons: true,
+                  selectionMode: DateRangePickerSelectionMode.range,
+                  extendableRangeSelectionDirection: ExtendableRangeSelectionDirection.both,
+                  view: DateRangePickerView.month,
+                ),
+              ),
+            ),
+        );
+      }
+    );
+  }
+}
+
 
 class OrderHistoryCard extends StatelessWidget {
   final VoidCallback onPressed;

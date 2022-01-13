@@ -8,10 +8,11 @@ import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/tools/check_connectivity.dart';
-import 'package:java_code_app/tools/check_location.dart';
+// import 'package:java_code_app/tools/check_location.dart';
 import 'package:java_code_app/tools/shared_preferences.dart';
 import 'package:java_code_app/widget/button_login.dart';
 import 'package:java_code_app/widget/form_login.dart';
+import 'package:local_auth/local_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -26,6 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   final ConnectionStatus _connectionStatus = ConnectionStatus.getInstance();
   // final GeolocationStatus _geolocationStatus = GeolocationStatus.getInstance();
   final Preferences _preferences = Preferences.getInstance();
+  final localAuth = LocalAuthentication();
   final _duration = const Duration(seconds: 1);
 
   bool _loading = false;
@@ -45,6 +47,19 @@ class _LoginPageState extends State<LoginPage> {
   _checkPrefens() async{
     bool _isAlreadyLogin = await _preferences.getBoolValue(KeyPrefens.login);
     if(_isAlreadyLogin) _navigationPage();
+  }
+
+  _loginByFingerprint() async {
+    bool canCheckBiometrics = await localAuth.canCheckBiometrics;
+    final availableBiometrics = await localAuth.getAvailableBiometrics();
+    print(availableBiometrics);
+
+    if(canCheckBiometrics){
+      bool didAuthenticate = await localAuth.authenticate(
+        localizedReason: 'Please authenticate to continue',
+      );
+      if(didAuthenticate) _navigationPage();
+    }
   }
 
   @override
@@ -137,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                           bgColors: ColorSty.white,
                           icon: "assert/image/icon_google.png",
                           onPressed: () {
-
+                            _loginByFingerprint();
                           },
                         ),
                         SizedBox(height: SpaceDims.sp8.h),

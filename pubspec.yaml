@@ -42,8 +42,9 @@ dependencies:
   geolocator: any
   device_info: any
   package_info_plus: any
-  shared_preferences: ^2.0.12
-  local_auth: ^1.1.10
+  shared_preferences: any
+  local_auth: any
+  syncfusion_flutter_datepicker: ^19.4.42
 
 dev_dependencies:
   flutter_test:
