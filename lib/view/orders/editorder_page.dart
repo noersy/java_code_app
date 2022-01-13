@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:java_code_app/providers/order_providers.dart';
+import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/shadows.dart';
@@ -63,10 +64,16 @@ class _EditOrderPageState extends State<EditOrderPage> {
       body: Column(
         children: [
           const SizedBox(height: SpaceDims.sp24),
-          SizedBox(
-            width: 234.0,
-            height: 182.4,
-            child: Image.asset(urlImage),
+          GestureDetector(
+            onTap: ()=> Navigate.toViewImage(context, urlImage: urlImage),
+            child: SizedBox(
+              width: 234.0,
+              height: 182.4,
+              child: Hero(
+                  tag: 'image',
+                  child: Image.asset(urlImage),
+              ),
+            ),
           ),
           const SizedBox(height: SpaceDims.sp24),
           Expanded(

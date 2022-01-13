@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   final ConnectionStatus _connectionStatus = ConnectionStatus.getInstance();
   // final GeolocationStatus _geolocationStatus = GeolocationStatus.getInstance();
   final Preferences _preferences = Preferences.getInstance();
-  final localAuth = LocalAuthentication();
+  static final localAuth = LocalAuthentication();
   final _duration = const Duration(seconds: 1);
 
   bool _loading = false;

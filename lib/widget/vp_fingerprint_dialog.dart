@@ -3,12 +3,37 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/text_style.dart';
+import 'package:java_code_app/widget/orderdone_dialog.dart';
 import 'package:java_code_app/widget/vp_pin_dialog.dart';
+import 'package:local_auth/local_auth.dart';
 
 class VFingerPrintDialog extends StatelessWidget {
   final BuildContext ctx;  final Map<String, dynamic> voucher;
 
   const VFingerPrintDialog({Key? key, required this.ctx, required this.voucher}) : super(key: key);
+
+  static final localAuth = LocalAuthentication();
+
+  void _chekFingerPrint(context) async {
+    bool canCheckBiometrics = await localAuth.canCheckBiometrics;
+    // final availableBiometrics = await localAuth.getAvailableBiometrics();
+    // print(availableBiometrics);
+
+    if(canCheckBiometrics){
+      bool didAuthenticate = await localAuth.authenticate(
+        biometricOnly: true,
+        localizedReason: 'Please authenticate to continue',
+      );
+
+      if(didAuthenticate) {
+        await showDialog(
+          context: context,
+          builder: (_) => OrderDoneDialog(voucher: voucher),
+        );
+        Navigator.pop(context);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +61,16 @@ class VFingerPrintDialog extends StatelessWidget {
                       fontWeight: FontWeight.normal,
                     ),
                   ),
-                  SizedBox(height: 28.h),
-                  SvgPicture.asset("assert/image/icons/Finger-print.svg"),
-                  SizedBox(height: 20.w),
+                  GestureDetector(
+                    onTap: ()=> _chekFingerPrint(context),
+                    child: Column(
+                      children: [
+                        SizedBox(height: 28.h),
+                        SvgPicture.asset("assert/image/icons/Finger-print.svg"),
+                        SizedBox(height: 20.w),
+                      ],
+                    ),
+                  ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 42.w),
                     child: Row(
