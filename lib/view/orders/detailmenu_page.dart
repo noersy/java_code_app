@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/providers/order_providers.dart';
+import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
@@ -10,6 +11,7 @@ import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/detailmenu_sheet.dart';
 import 'package:java_code_app/widget/labellevel_selection.dart';
 import 'package:java_code_app/widget/listmenu_tile.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 
 class DetailMenu extends StatefulWidget {
@@ -51,6 +53,57 @@ class _DetailMenuState extends State<DetailMenu> {
   final List<String> _listLevel = ["1", "2", "3"];
   final List<String> _listTopping = ["Mozarella", "Sausagge", "Dimsum"];
 
+  _showDialogLevel(List<String> _listLevel) async {
+    String _value = "1";
+    _value = await showModalBottomSheet(
+      barrierColor: ColorSty.grey.withOpacity(0.2),
+      elevation: 5,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30.0),
+              topRight: Radius.circular(30.0)
+          )
+      ),      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (_, setState) {
+            return BottomSheetDetailMenu(
+              title: "Pilih Level",
+              content: Expanded(
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    for (String item in _listLevel)
+                      LabelLevelSelection(
+                        title: item,
+                        isSelected: item == _selectedLevel,
+                        onSelection: (String value) {
+                          setState(() => _selectedLevel = value);
+                          Navigator.of(context).pop(value);
+                        },
+                      ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+    setState(() => _selectedLevel = _value);
+  }
+
+  void _viewImage(){
+    // showDialog(
+    //     context: context,
+    //     barrierColor: Colors.transparent,
+    //     builder: (_){
+    //       return ViewImage(urlImage: urlImage,
+    //   );
+    // });
+    Navigate.toViewImage(context, urlImage: urlImage);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,10 +117,16 @@ class _DetailMenuState extends State<DetailMenu> {
         child: Column(
           children: [
             const SizedBox(height: SpaceDims.sp24),
-            SizedBox(
-              width: 234.0,
-              height: 182.4,
-              child: Image.asset(urlImage),
+            GestureDetector(
+              onTap: _viewImage,
+              child: SizedBox(
+                width: 234.0,
+                height: 182.4,
+                child: Hero(
+                    tag: "image",
+                    child: Image.asset(urlImage),
+                ),
+              ),
             ),
             const SizedBox(height: SpaceDims.sp24),
             Container(
@@ -294,45 +353,6 @@ class _DetailMenuState extends State<DetailMenu> {
     );
   }
 
-  _showDialogLevel(List<String> _listLevel) async {
-    String _value = "1";
-    _value = await showModalBottomSheet(
-      barrierColor: ColorSty.grey.withOpacity(0.2),
-      elevation: 5,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30.0),
-              topRight: Radius.circular(30.0)
-          )
-      ),      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (_, setState) {
-            return BottomSheetDetailMenu(
-              title: "Pilih Level",
-              content: Expanded(
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    for (String item in _listLevel)
-                      LabelLevelSelection(
-                        title: item,
-                        isSelected: item == _selectedLevel,
-                        onSelection: (String value) {
-                          setState(() => _selectedLevel = value);
-                          Navigator.of(context).pop(value);
-                        },
-                      ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-    setState(() => _selectedLevel = _value);
-  }
 }
 
 class LabelToppingSelection extends StatefulWidget {
@@ -394,3 +414,5 @@ class _LabelToppingSelectionState extends State<LabelToppingSelection> {
     );
   }
 }
+
+

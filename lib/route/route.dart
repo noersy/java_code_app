@@ -10,6 +10,7 @@ import 'package:java_code_app/view/orders/ordersdetail_page.dart';
 import 'package:java_code_app/view/orders/ongoingorder_page.dart';
 import 'package:java_code_app/view/branda/promo_page.dart';
 import 'package:java_code_app/view/orders/selection_vocher_page.dart';
+import 'package:java_code_app/widget/view_image.dart';
 
 class Navigate {
   static void toFindLocation(context) => Navigator.of(context).pushReplacement(routeTransition(const FindLocationPage()));
@@ -22,4 +23,14 @@ class Navigate {
   static Future<bool>? toEditOrderMenu(context, {required Map<String, dynamic> data, required int countOrder}) async => await Navigator.of(context).push(routeTransition(EditOrderPage(data:data, countOrder: countOrder)));
   static void toViewOrder(context, {required Map<String, dynamic> dataOrders}) => Navigator.of(context).push(routeTransition( OngoingOrderPage(dataOrder: dataOrders)));
   static void toViewOrderKasir(context, {required Map<String, dynamic> dataOrders, bool? preparing}) => Navigator.of(context).push(routeTransition(OrderDetailPage(dataOrder: dataOrders, preparing: preparing)));
+
+  //Costume route
+  static void toViewImage(context, {required String urlImage}) =>    Navigator.push(context, PageRouteBuilder(
+      fullscreenDialog: true,
+      opaque: false,
+      barrierDismissible:true,
+      pageBuilder: (BuildContext context, _, __) {
+        return ViewImage(urlImage: urlImage);
+      }
+  ));
 }

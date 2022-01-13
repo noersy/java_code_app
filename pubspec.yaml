@@ -44,7 +44,8 @@ dependencies:
   package_info_plus: any
   shared_preferences: any
   local_auth: any
-  syncfusion_flutter_datepicker: ^19.4.42
+  syncfusion_flutter_datepicker: any
+  photo_view: any
 
 dev_dependencies:
   flutter_test:
