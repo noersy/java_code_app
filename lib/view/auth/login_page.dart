@@ -27,7 +27,6 @@ class _LoginPageState extends State<LoginPage> {
   final ConnectionStatus _connectionStatus = ConnectionStatus.getInstance();
   // final GeolocationStatus _geolocationStatus = GeolocationStatus.getInstance();
   final Preferences _preferences = Preferences.getInstance();
-  static final localAuth = LocalAuthentication();
   final _duration = const Duration(seconds: 1);
 
   bool _loading = false;
@@ -49,19 +48,6 @@ class _LoginPageState extends State<LoginPage> {
     if(_isAlreadyLogin) _navigationPage();
   }
 
-  _loginByFingerprint() async {
-    bool canCheckBiometrics = await localAuth.canCheckBiometrics;
-    final availableBiometrics = await localAuth.getAvailableBiometrics();
-    print(availableBiometrics);
-
-    if(canCheckBiometrics){
-      bool didAuthenticate = await localAuth.authenticate(
-        localizedReason: 'Please authenticate to continue',
-      );
-      if(didAuthenticate) _navigationPage();
-    }
-  }
-
   @override
   void initState() {
     _checkPrefens();
@@ -81,12 +67,14 @@ class _LoginPageState extends State<LoginPage> {
               child: Stack(
                 alignment: Alignment.topCenter,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 35.0.w,
-                      vertical: 35.0.h,
+                  Positioned.fill(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 35.0.w,
+                        vertical: 35.0.h,
+                      ),
+                      child: Image.asset("assert/image/bg_login.png"),
                     ),
-                    child: Image.asset("assert/image/bg_login.png"),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 26.0.w),
@@ -152,7 +140,6 @@ class _LoginPageState extends State<LoginPage> {
                           bgColors: ColorSty.white,
                           icon: "assert/image/icon_google.png",
                           onPressed: () {
-                            _loginByFingerprint();
                           },
                         ),
                         SizedBox(height: SpaceDims.sp8.h),
