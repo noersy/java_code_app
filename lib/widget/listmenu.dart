@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/models/menulist.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
@@ -10,11 +11,13 @@ import 'package:skeleton_animation/skeleton_animation.dart';
 
 class ListMenu extends StatefulWidget {
   final String type, title;
+  final MenuList data;
 
   const ListMenu({
     Key? key,
     required this.type,
     required this.title,
+    required this.data,
   }) : super(key: key);
 
   @override
@@ -56,11 +59,8 @@ class _ListMenuState extends State<ListMenu> {
             physics: const NeverScrollableScrollPhysics(),
             child: Column(
               children: [
-                  if (widget.type == "makanan")
-                    for (Map<String, dynamic> item in datafakeMakanan)
-                      CardMenu(data: item),
-                  if (widget.type == "minuman")
-                    for (Map<String, dynamic> item in datafakeMinuman)
+                for (final item in widget.data.data)
+                  if (widget.type == item.kategori)
                       CardMenu(data: item),
               ],
             ),

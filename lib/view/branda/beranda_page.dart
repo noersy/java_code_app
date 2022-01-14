@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/models/menulist.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
@@ -9,8 +11,8 @@ import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/widget/card_coupun.dart';
 import 'package:java_code_app/widget/label_button.dart';
 import 'package:java_code_app/widget/listmenu.dart';
-import 'package:java_code_app/widget/menuberanda_card.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
@@ -134,125 +136,155 @@ class _ContentBerandaState extends State<ContentBeranda> {
     return SmartRefresher(
       controller: _refreshController,
       onRefresh: _onRefresh,
-      child: SingleChildScrollView(
-        child: widget.result.isEmpty
-            ? _loading
-                ? const BerandaSkeleton()
-                : Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: SpaceDims.sp22),
-                      Padding(
-                        padding: const EdgeInsets.only(left: SpaceDims.sp24),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              IconsCs.coupon,
-                              color: ColorSty.primary,
-                              size: 22.0,
-                            ),
-                            const SizedBox(width: SpaceDims.sp22),
-                            Text(
-                              "Promo yang Tersedia",
-                              style: TypoSty.title,
-                            ),
-                          ],
-                        ),
+      child: FutureBuilder<MenuList?>(
+          future: Provider.of<OrderProviders>(context).getMenuList(),
+          builder: (_, snapshot) {
+            if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
+              return SingleChildScrollView(
+                child: widget.result.isEmpty
+                    ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: SpaceDims.sp22),
+                    Padding(
+                      padding:
+                      const EdgeInsets.only(left: SpaceDims.sp24),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            IconsCs.coupon,
+                            color: ColorSty.primary,
+                            size: 22.0,
+                          ),
+                          const SizedBox(width: SpaceDims.sp22),
+                          Text(
+                            "Promo yang Tersedia",
+                            style: TypoSty.title,
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: SpaceDims.sp22),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: const [
-                            SizedBox(width: 10),
-                            CardCoupon(),
-                            CardCoupon(),
-                            CardCoupon(),
-                          ],
-                        ),
+                    ),
+                    const SizedBox(height: SpaceDims.sp22),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: const [
+                          SizedBox(width: 10),
+                          CardCoupon(),
+                          CardCoupon(),
+                          CardCoupon(),
+                        ],
                       ),
-                      const SizedBox(height: SpaceDims.sp12),
-                      SingleChildScrollView(
-                        controller: _controller,
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            const SizedBox(width: SpaceDims.sp12),
-                            LabelButton(
-                              color: _selectedIndex == 0
-                                  ? ColorSty.black
-                                  : ColorSty.primary,
-                              onPressed: () {
-                                setState(() => _selectedIndex = 0);
-                                final max =
-                                    _controller.position.minScrollExtent;
-                                _controller.animateTo(max,
-                                    duration: _duration, curve: Curves.ease);
-                                _pageController.animateToPage(0,
-                                    duration: _duration, curve: Curves.ease);
-                              },
-                              title: "Semua Menu",
-                              icon: Icons.list,
+                    ),
+                    const SizedBox(height: SpaceDims.sp12),
+                    SingleChildScrollView(
+                      controller: _controller,
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          const SizedBox(width: SpaceDims.sp12),
+                          LabelButton(
+                            color: _selectedIndex == 0
+                                ? ColorSty.black
+                                : ColorSty.primary,
+                            onPressed: () {
+                              setState(() => _selectedIndex = 0);
+                              final max = _controller
+                                  .position.minScrollExtent;
+                              _controller.animateTo(max,
+                                  duration: _duration,
+                                  curve: Curves.ease);
+                              _pageController.animateToPage(0,
+                                  duration: _duration,
+                                  curve: Curves.ease);
+                            },
+                            title: "Semua Menu",
+                            icon: Icons.list,
+                          ),
+                          LabelButton(
+                            color: _selectedIndex == 1
+                                ? ColorSty.black
+                                : ColorSty.primary,
+                            onPressed: () {
+                              setState(() => _selectedIndex = 1);
+                              _pageController.animateToPage(1,
+                                  duration: _duration,
+                                  curve: Curves.ease);
+                            },
+                            title: "Makanan",
+                            svgPicture: SvgPicture.asset(
+                              "assert/image/icons/ep_food.svg",
+                              color: ColorSty.white,
+                              width: 24,
                             ),
-                            LabelButton(
-                              color: _selectedIndex == 1
-                                  ? ColorSty.black
-                                  : ColorSty.primary,
-                              onPressed: () {
-                                setState(() => _selectedIndex = 1);
-                                _pageController.animateToPage(1,
-                                    duration: _duration, curve: Curves.ease);
-                              },
-                              title: "Makanan",
-                              svgPicture: SvgPicture.asset(
-                                "assert/image/icons/ep_food.svg",
-                                color: ColorSty.white,
-                                width: 24,
-                              ),
-                            ),
-                            LabelButton(
-                              color: _selectedIndex == 2
-                                  ? ColorSty.black
-                                  : ColorSty.primary,
-                              onPressed: () {
-                                setState(() => _selectedIndex = 2);
-                                final max =
-                                    _controller.position.maxScrollExtent;
-                                _controller.animateTo(max,
-                                    duration: _duration, curve: Curves.ease);
-                                _pageController.animateToPage(2,
-                                    duration: _duration, curve: Curves.ease);
-                              },
-                              title: "Minuman",
-                              icon: IconsCs.coffee,
-                            ),
-                          ],
-                        ),
+                          ),
+                          LabelButton(
+                            color: _selectedIndex == 2
+                                ? ColorSty.black
+                                : ColorSty.primary,
+                            onPressed: () {
+                              setState(() => _selectedIndex = 2);
+                              final max = _controller
+                                  .position.maxScrollExtent;
+                              _controller.animateTo(max,
+                                  duration: _duration,
+                                  curve: Curves.ease);
+                              _pageController.animateToPage(2,
+                                  duration: _duration,
+                                  curve: Curves.ease);
+                            },
+                            title: "Minuman",
+                            icon: IconsCs.coffee,
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height - 130,
-                        child: PageView(
-                          controller: _pageController,
-                          children: [
-                            SingleChildScrollView(
-                              physics: const NeverScrollableScrollPhysics(),
-                              child: Column(
-                                children: const [
-                                  ListMenu(type: "makanan", title: "Makanan"),
-                                  ListMenu(type: "minuman", title: "Minuman"),
-                                ],
-                              ),
+                    ),
+                    SizedBox(
+                      height:
+                      MediaQuery.of(context).size.height - 130,
+                      child: PageView(
+                        controller: _pageController,
+                        children: [
+                          SingleChildScrollView(
+                            physics:
+                            const NeverScrollableScrollPhysics(),
+                            child: Column(
+                              children: [
+                                ListMenu(
+                                  type: "makanan",
+                                  title: "Makanan",
+                                  data: snapshot.data!,
+                                ),
+                                ListMenu(
+                                  type: "minuman",
+                                  title: "Minuman",
+                                  data: snapshot.data!,
+                                ),
+                              ],
                             ),
-                            const ListMenu(type: "makanan", title: "Makanan"),
-                            const ListMenu(type: "minuman", title: "Minuman"),
-                          ],
-                        ),
+                          ),
+                          ListMenu(
+                            type: "makanan",
+                            title: "Makanan",
+                            data: snapshot.data!,
+                          ),
+                          ListMenu(
+                            type: "minuman",
+                            title: "Minuman",
+                            data: snapshot.data!,
+                          ),
+                        ],
                       ),
-                    ],
-                  )
-            : SearchScreen(result: widget.result),
-      ),
+                    ),
+                  ],
+                )
+                    : SearchScreen(result: widget.result),
+              );
+            }
+
+            return const SingleChildScrollView(child: BerandaSkeleton());
+          }),
     );
   }
 }
@@ -550,7 +582,8 @@ class BerandaSkeleton extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: SpaceDims.sp12, vertical: SpaceDims.sp2,
+                      horizontal: SpaceDims.sp12,
+                      vertical: SpaceDims.sp2,
                     ),
                     child: Card(
                       elevation: 4,
@@ -633,9 +666,9 @@ class _SearchScreenState extends State<SearchScreen> {
           child: SingleChildScrollView(
             physics: const NeverScrollableScrollPhysics(),
             child: Column(
-              children: [
-                for (Map<String, dynamic> item in widget.result)
-                  CardMenu(data: item),
+              children: const [
+                // for (Map<String, dynamic> item in widget.result)
+                // CardMenu(data: item),
               ],
             ),
           ),

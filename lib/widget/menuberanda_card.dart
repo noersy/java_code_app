@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/models/menulist.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -8,7 +9,7 @@ import 'package:java_code_app/view/orders/checkout_page.dart';
 import 'package:provider/provider.dart';
 
 class CardMenu extends StatefulWidget {
-  final Map<String, dynamic> data;
+  final MenuCard data;
 
   const CardMenu({
     Key? key,
@@ -21,65 +22,65 @@ class CardMenu extends StatefulWidget {
 
 class _CardMenuState extends State<CardMenu> {
   int _jumlahOrder = 0;
-  late final String nama, harga, url, id;
-  late final int amount;
+  late final String nama, url;
+  late final int status, id, harga;
 
   void  _add(){
-    setState(() => _jumlahOrder++);
-    if(_jumlahOrder == 1){
-      Provider.of<OrderProviders>(context, listen: false).addOrder(
-        jumlahOrder: _jumlahOrder,
-        data: widget.data,
-        catatan: '',
-        topping: [],
-        level: '',
-      );
-    }else{
-      Provider.of<OrderProviders>(context, listen: false).editOrder(
-        jumlahOrder: _jumlahOrder,
-        data: widget.data,
-        catatan: '',
-        topping: [],
-        level: '',
-      );
-    }
+    // setState(() => _jumlahOrder++);
+    // if(_jumlahOrder == 1){
+    //   Provider.of<OrderProviders>(context, listen: false).addOrder(
+    //     jumlahOrder: _jumlahOrder,
+    //     data: widget.data,
+    //     catatan: '',
+    //     topping: [],
+    //     level: '',
+    //   );
+    // }else{
+    //   Provider.of<OrderProviders>(context, listen: false).editOrder(
+    //     jumlahOrder: _jumlahOrder,
+    //     data: widget.data,
+    //     catatan: '',
+    //     topping: [],
+    //     level: '',
+    //   );
+    // }
   }
 
   void _min() async {
     setState(() => _jumlahOrder--);
-    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
-    if(_jumlahOrder >= 1){
-      Provider.of<OrderProviders>(context, listen: false).editOrder(
-        jumlahOrder: _jumlahOrder,
-        data: widget.data,
-        catatan: '',
-        topping: [],
-        level: '',
-      );
-    } else if (_jumlahOrder != 0) {
-      Provider.of<OrderProviders>(context, listen: false).addOrder(
-        jumlahOrder: _jumlahOrder,
-        data: widget.data,
-        catatan: '',
-        topping: [],
-        level: '',
-      );
-    }else{
-      await showDialog(context: context,
-        builder: (_) => DeleteMenuInCheckoutDialog(id: widget.data["id"]),
-      );
-    }
+    // final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    // if(_jumlahOrder >= 1){
+    //   Provider.of<OrderProviders>(context, listen: false).editOrder(
+    //     jumlahOrder: _jumlahOrder,
+    //     data: widget.data,
+    //     catatan: '',
+    //     topping: [],
+    //     level: '',
+    //   );
+    // } else if (_jumlahOrder != 0) {
+    //   Provider.of<OrderProviders>(context, listen: false).addOrder(
+    //     jumlahOrder: _jumlahOrder,
+    //     data: widget.data,
+    //     catatan: '',
+    //     topping: [],
+    //     level: '',
+    //   );
+    // }else{
+    //   await showDialog(context: context,
+    //     builder: (_) => DeleteMenuInCheckoutDialog(id: widget.data["id"]),
+    //   );
+    // }
   }
 
   @override
   void initState() {
-    amount = widget.data["amount"] ?? 0;
-    id = widget.data["id"];
+    status = widget.data.status;
+    id = widget.data.idMenu;
 
-    _jumlahOrder = widget.data["countOrder"] ?? 0;
-    nama = widget.data["name"] ?? "";
-    url = widget.data["image"] ?? "";
-    harga = widget.data["harga"] ?? "";
+    _jumlahOrder =  0;
+    nama = widget.data.nama;
+    url = "";
+    harga = widget.data.harga;
 
     super.initState();
   }
@@ -96,12 +97,12 @@ class _CardMenuState extends State<CardMenu> {
           borderRadius: BorderRadius.circular(10.0),
         ),
         child: TextButton(
-          onPressed: amount == 0 ? null: () {
-            Navigate.toDetailMenu(
-              context,
-              data: widget.data,
-              countOrder: _jumlahOrder,
-            );
+          onPressed: status == 0 ? null: () {
+            // Navigate.toDetailMenu(
+            //   context,
+            //   data: widget.data,
+            //   countOrder: _jumlahOrder,
+            // );
           },
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
@@ -115,7 +116,9 @@ class _CardMenuState extends State<CardMenu> {
                 width: 74,
                 child: Padding(
                   padding: const EdgeInsets.all(SpaceDims.sp4),
-                  child: Image.asset(url),
+                  child: url.isNotEmpty
+                      ? Image.network(url)
+                      : const Icon(Icons.image_not_supported_outlined, color: Colors.grey),
                 ),
                 decoration: BoxDecoration(
                   color: ColorSty.grey60,
@@ -134,7 +137,7 @@ class _CardMenuState extends State<CardMenu> {
                     ),
                   ),
                   Text(
-                    harga,
+                    "Rp $harga",
                     style: TypoSty.title.copyWith(color: ColorSty.primary),
                   ),
                   Row(
@@ -168,16 +171,16 @@ class _CardMenuState extends State<CardMenu> {
                   ),
                 ],
               ),
-              if (amount != 0)
+              if (status != 0)
                 Expanded(
                   child: AnimatedBuilder(
                       animation: OrderProviders(),
                       builder: (context, snapshot) {
                         final orders = Provider.of<OrderProviders>(context).checkOrder;
-                        if (orders.keys.contains(id)) {
-                          _jumlahOrder = orders[id]["countOrder"];
+                        if (orders.keys.contains("$id")) {
+                          _jumlahOrder = orders["$id"]["countOrder"];
                         }
-                        if (!orders.keys.contains(id)) _jumlahOrder = 0;
+                        if (!orders.keys.contains("$id")) _jumlahOrder = 0;
 
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.end,

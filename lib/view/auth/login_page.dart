@@ -55,7 +55,14 @@ class _LoginPageState extends State<LoginPage> {
 
   _checkPrefens() async{
     bool _isAlreadyLogin = await _preferences.getBoolValue(KeyPrefens.login);
-    if(_isAlreadyLogin) _login();
+    if(_isAlreadyLogin) {
+      setState(() => _loading = true);
+
+      Timer(_duration,(){
+      Navigate.toFindLocation(context);
+      setState(() => _loading = false);}
+      );
+    }
   }
 
   @override
