@@ -33,7 +33,10 @@ class _LoginPageState extends State<LoginPage> {
   void _login() async {
     setState(() => _loading = true);
 
-    final isLogin = await Provider.of<AuthProviders>(context, listen: false).login();
+    final isLogin = await Provider.of<AuthProviders>(context, listen: false).login(
+      _controllerEmail.text,
+      _controllerPassword.text
+    );
 
     if(isLogin) {
       Timer(_duration,(){

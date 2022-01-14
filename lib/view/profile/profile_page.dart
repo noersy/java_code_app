@@ -1,20 +1,18 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
-import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/tools/shared_preferences.dart';
 import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/detailmenu_sheet.dart';
-import 'package:java_code_app/widget/view_image.dart';
 import 'package:java_code_app/widget/vp_pin_dialog.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
@@ -38,15 +36,23 @@ class _ProfilePageState extends State<ProfilePage> {
     _packageInfo = await PackageInfo.fromPlatform();
     setState(() {});
   }
-  
-  _camera() async { 
-    final _image = await _picker.pickImage(source: ImageSource.camera);
+
+  _camera() async {
+    final _image = await _picker.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 75,
+    );
+
     Navigator.pop(context);
     _saveImage(_image);
   }
-  
+
   _galley() async {
-    final _image = await _picker.pickImage(source: ImageSource.gallery);
+    final _image = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 75,
+    );
+
     Navigator.pop(context);
     _saveImage(_image);
   }
@@ -56,12 +62,10 @@ class _ProfilePageState extends State<ProfilePage> {
       barrierColor: Colors.grey.withOpacity(0.2),
       elevation: 4,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30.0),
-          topRight: Radius.circular(30.0)
-        )
-      ),
-      context: context, builder: (BuildContext context) {
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
+      context: context,
+      builder: (BuildContext context) {
         return SizedBox(
           height: 65.0,
           child: Row(
@@ -70,10 +74,9 @@ class _ProfilePageState extends State<ProfilePage> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
-                      side: const BorderSide(color: ColorSty.primary),
-                      borderRadius: BorderRadius.circular(30.0),
-                    )
-                ),
+                  side: const BorderSide(color: ColorSty.primary),
+                  borderRadius: BorderRadius.circular(30.0),
+                )),
                 onPressed: _galley,
                 child: SizedBox(
                   width: 120,
@@ -87,10 +90,9 @@ class _ProfilePageState extends State<ProfilePage> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    )
-                ),
-                onPressed:_camera,
+                  borderRadius: BorderRadius.circular(30.0),
+                )),
+                onPressed: _camera,
                 child: SizedBox(
                   width: 120,
                   height: 40.0,
@@ -105,14 +107,10 @@ class _ProfilePageState extends State<ProfilePage> {
         );
       },
     );
-    
   }
 
   _saveImage(_image) async {
-    if(_image != null){
-      // _fileImage = File(_image.path);
-      // final _imageCrop = await Navigate.toViewImage(context, file: _fileImage);
-
+    if (_image != null) {
       _fileImage = await ImageCropper.cropImage(
           sourcePath: _image.path,
           cropStyle: CropStyle.circle,
@@ -128,10 +126,16 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           iosUiSettings: const IOSUiSettings(
             minimumAspectRatio: 1.0,
-          )
-      );
-
-
+          ));
+      if(_fileImage != null){
+        File compressedFile = await FlutterNativeImage.compressImage(
+          _fileImage!.path,
+          quality: 5,
+        );
+        print(_fileImage!.lengthSync());
+        print(compressedFile.lengthSync());
+        _fileImage = compressedFile;
+      }
       setState(() {});
     }
   }
@@ -176,7 +180,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 if (_fileImage != null)
                                   Image.file(_fileImage!)
                                 else
-                                  SvgPicture.asset("assert/image/icons/user-icon.svg"),
+                                  SvgPicture.asset(
+                                      "assert/image/icons/user-icon.svg"),
                                 Positioned(
                                   bottom: -10,
                                   child: TextButton(
@@ -224,8 +229,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         Padding(
                           padding: const EdgeInsets.only(left: SpaceDims.sp32),
                           child: Text(
-                              lang.profile.subtitle,
-                              style: TypoSty.titlePrimary,
+                            lang.profile.subtitle,
+                            style: TypoSty.titlePrimary,
                           ),
                         ),
                         Container(
@@ -291,13 +296,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                     title: lang.profile.bhs,
                                     suffix: _isIndo ? 'Indonesia' : 'English',
                                     onPressed: () => showModalBottomSheet(
-                                      barrierColor: ColorSty.grey.withOpacity(0.2),
+                                      barrierColor:
+                                          ColorSty.grey.withOpacity(0.2),
                                       elevation: 5,
                                       shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(30.0),
-                                              topRight: Radius.circular(30.0),
-                                          ),
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(30.0),
+                                          topRight: Radius.circular(30.0),
+                                        ),
                                       ),
                                       context: context,
                                       builder: (BuildContext context) =>
@@ -358,7 +364,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
-                          onPressed: (){
+                          onPressed: () {
                             Navigator.pushReplacementNamed(context, "/");
                             Preferences.getInstance().clear();
                           },
@@ -389,7 +395,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-
 class TileListProfile extends StatefulWidget {
   final bool? top, bottom, enable;
   final String title, suffix;
@@ -401,7 +406,8 @@ class TileListProfile extends StatefulWidget {
     this.bottom = false,
     required this.title,
     required this.suffix,
-    this.onPressed, this.enable = true,
+    this.onPressed,
+    this.enable = true,
   }) : super(key: key);
 
   @override
@@ -455,18 +461,18 @@ class _TileListProfileState extends State<TileListProfile> {
                                 ),
                               ),
                             ),
-                            if(widget.enable!)
+                            if (widget.enable!)
                               ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.all(0),
-                                minimumSize: const Size(25.0, 25.0),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(100.0),
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.all(0),
+                                  minimumSize: const Size(25.0, 25.0),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100.0),
+                                  ),
                                 ),
+                                child: const Icon(Icons.check, size: 26.0),
                               ),
-                              child: const Icon(Icons.check, size: 26.0),
-                            ),
                           ],
                         ),
                       ),
@@ -541,7 +547,9 @@ class _ChangeLagSheetState extends State<ChangeLagSheet> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () => Provider.of<LangProviders>(context, listen: false).changeLang(true),
+                  onPressed: () =>
+                      Provider.of<LangProviders>(context, listen: false)
+                          .changeLang(true),
                   style: ElevatedButton.styleFrom(
                     primary: _isIndo ? ColorSty.primary : ColorSty.white,
                     onPrimary: _isIndo ? ColorSty.white : ColorSty.black,
@@ -563,7 +571,9 @@ class _ChangeLagSheetState extends State<ChangeLagSheet> {
                 ),
                 const SizedBox(width: SpaceDims.sp14),
                 ElevatedButton(
-                  onPressed: () => Provider.of<LangProviders>(context, listen: false).changeLang(false),
+                  onPressed: () =>
+                      Provider.of<LangProviders>(context, listen: false)
+                          .changeLang(false),
                   style: ElevatedButton.styleFrom(
                     primary: !_isIndo ? ColorSty.primary : ColorSty.white,
                     onPrimary: !_isIndo ? ColorSty.white : ColorSty.black,
