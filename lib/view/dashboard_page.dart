@@ -23,6 +23,21 @@ class _DashboardPageState extends State<DashboardPage> {
   int _bottomNavBarSelectedIndex = 0;
   final PageController _pageController = PageController();
 
+  _onItemTapped(index) {
+    if (index != _bottomNavBarSelectedIndex) {
+      if (index != 3) {
+        _pageController.animateToPage(
+          index,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.fastOutSlowIn,
+        );
+        setState(() {
+          _bottomNavBarSelectedIndex = index;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -130,20 +145,5 @@ class _DashboardPageState extends State<DashboardPage> {
         },
       ),
     );
-  }
-
-  _onItemTapped(index) {
-    if (index != _bottomNavBarSelectedIndex) {
-      if (index != 3) {
-        _pageController.animateToPage(
-          index,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.fastOutSlowIn,
-        );
-        setState(() {
-          _bottomNavBarSelectedIndex = index;
-        });
-      }
-    }
   }
 }

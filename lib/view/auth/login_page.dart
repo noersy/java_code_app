@@ -3,16 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/constans/key_prefens.dart';
+import 'package:java_code_app/providers/auth_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/tools/check_connectivity.dart';
-// import 'package:java_code_app/tools/check_location.dart';
 import 'package:java_code_app/tools/shared_preferences.dart';
 import 'package:java_code_app/widget/button_login.dart';
 import 'package:java_code_app/widget/form_login.dart';
-import 'package:local_auth/local_auth.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -25,31 +25,39 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
   final ConnectionStatus _connectionStatus = ConnectionStatus.getInstance();
-  // final GeolocationStatus _geolocationStatus = GeolocationStatus.getInstance();
   final Preferences _preferences = Preferences.getInstance();
   final _duration = const Duration(seconds: 1);
 
   bool _loading = false;
 
-  void _navigationPage() {
+  void _login() async {
     setState(() => _loading = true);
-    Timer(_duration, _checkInternet);
+
+    final isLogin = await Provider.of<AuthProviders>(context, listen: false).login();
+
+    if(isLogin) {
+      Timer(_duration,(){
+      Navigate.toFindLocation(context);
+      setState(() => _loading = false);});
+      return;
+    }
+
+    setState(() => _loading = false);
   }
 
   _checkInternet() async {
     final _isConnected = await _connectionStatus.checkConnection();
-    setState(() => _loading = false);
     _preferences.setBoolValue(KeyPrefens.login, true);
-    if(_isConnected)Navigate.toFindLocation(context);
   }
 
   _checkPrefens() async{
     bool _isAlreadyLogin = await _preferences.getBoolValue(KeyPrefens.login);
-    if(_isAlreadyLogin) _navigationPage();
+    if(_isAlreadyLogin) _login();
   }
 
   @override
   void initState() {
+    _checkInternet();
     _checkPrefens();
     super.initState();
   }
@@ -108,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                         SizedBox(height: 25.0.h),
                         ButtonLogin(
                           title: 'Masuk',
-                          onPressed: _navigationPage,
+                          onPressed: _login,
                           bgColors: ColorSty.primary,
                         ),
                         SizedBox(height: 40.0.h),

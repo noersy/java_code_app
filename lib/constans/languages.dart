@@ -38,7 +38,7 @@ class ConstLang {
     bottomNav: BottomNav(
       nav1: "Beranda",
       nav2: "Pesanan",
-      nav3: "Profile",
+      nav3: "Profil",
     ),
     profile: LangProfile(
       nam: "Nama",

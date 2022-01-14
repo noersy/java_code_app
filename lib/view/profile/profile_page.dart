@@ -1,13 +1,20 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
+import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/tools/shared_preferences.dart';
 import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/detailmenu_sheet.dart';
+import 'package:java_code_app/widget/view_image.dart';
 import 'package:java_code_app/widget/vp_pin_dialog.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
@@ -23,11 +30,110 @@ class _ProfilePageState extends State<ProfilePage> {
   static final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   static AndroidDeviceInfo? _androidInfo;
   static PackageInfo? _packageInfo;
+  static final ImagePicker _picker = ImagePicker();
+  static File? _fileImage;
 
   getInfoDevice() async {
     _androidInfo = await deviceInfo.androidInfo;
     _packageInfo = await PackageInfo.fromPlatform();
     setState(() {});
+  }
+  
+  _camera() async { 
+    final _image = await _picker.pickImage(source: ImageSource.camera);
+    Navigator.pop(context);
+    _saveImage(_image);
+  }
+  
+  _galley() async {
+    final _image = await _picker.pickImage(source: ImageSource.gallery);
+    Navigator.pop(context);
+    _saveImage(_image);
+  }
+
+  _changeImageProfile() {
+    showModalBottomSheet(
+      barrierColor: Colors.grey.withOpacity(0.2),
+      elevation: 4,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0)
+        )
+      ),
+      context: context, builder: (BuildContext context) {
+        return SizedBox(
+          height: 65.0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      side: const BorderSide(color: ColorSty.primary),
+                      borderRadius: BorderRadius.circular(30.0),
+                    )
+                ),
+                onPressed: _galley,
+                child: SizedBox(
+                  width: 120,
+                  height: 40.0,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text("Gallery", style: TypoSty.button),
+                  ),
+                ),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    )
+                ),
+                onPressed:_camera,
+                child: SizedBox(
+                  width: 120,
+                  height: 40.0,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text("Camera", style: TypoSty.button),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+    
+  }
+
+  _saveImage(_image) async {
+    if(_image != null){
+      // _fileImage = File(_image.path);
+      // final _imageCrop = await Navigate.toViewImage(context, file: _fileImage);
+
+      _fileImage = await ImageCropper.cropImage(
+          sourcePath: _image.path,
+          cropStyle: CropStyle.circle,
+          aspectRatioPresets: [
+            CropAspectRatioPreset.square,
+          ],
+          androidUiSettings: const AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            toolbarColor: ColorSty.white,
+            toolbarWidgetColor: ColorSty.primary,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false,
+          ),
+          iosUiSettings: const IOSUiSettings(
+            minimumAspectRatio: 1.0,
+          )
+      );
+
+
+      setState(() {});
+    }
   }
 
   @override
@@ -67,13 +173,14 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: Stack(
                               alignment: Alignment.bottomCenter,
                               children: [
-                                SvgPicture.asset(
-                                  "assert/image/icons/user-icon.svg",
-                                ),
+                                if (_fileImage != null)
+                                  Image.file(_fileImage!)
+                                else
+                                  SvgPicture.asset("assert/image/icons/user-icon.svg"),
                                 Positioned(
                                   bottom: -10,
                                   child: TextButton(
-                                    onPressed: () {},
+                                    onPressed: _changeImageProfile,
                                     style: TextButton.styleFrom(
                                       backgroundColor: ColorSty.primary,
                                       primary: ColorSty.white,

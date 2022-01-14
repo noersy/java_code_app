@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:java_code_app/transision/route_transisition.dart';
 import 'package:java_code_app/view/orders/checkout_page.dart';
 import 'package:java_code_app/view/dashboard_page.dart';
-import 'package:java_code_app/view/orders/detailmenu_page.dart';
+import 'package:java_code_app/view/branda/detailmenu_page.dart';
 import 'package:java_code_app/view/orders/detailvoucher_page.dart';
 import 'package:java_code_app/view/orders/editorder_page.dart';
 import 'package:java_code_app/view/auth/findlocation_page.dart';
@@ -27,12 +28,12 @@ class Navigate {
   static void toViewOrderKasir(context, {required Map<String, dynamic> dataOrders, bool? preparing}) => Navigator.of(context).push(routeTransition(OrderDetailPage(dataOrder: dataOrders, preparing: preparing)));
 
   //Costume route
-  static void toViewImage(context, {required String urlImage}) =>    Navigator.push(context, PageRouteBuilder(
+  static Future? toViewImage(context, {String? urlImage, File? file}) async => await Navigator.push(context, PageRouteBuilder(
       fullscreenDialog: true,
       opaque: false,
       barrierDismissible:true,
       pageBuilder: (BuildContext context, _, __) {
-        return ViewImage(urlImage: urlImage);
+        return ViewImage(urlImage: urlImage, file: file);
       }
   ));
 }

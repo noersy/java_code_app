@@ -6,7 +6,7 @@ import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/shadows.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:java_code_app/view/orders/detailmenu_page.dart';
+import 'package:java_code_app/view/branda/detailmenu_page.dart';
 import 'package:java_code_app/widget/addorder_button.dart';
 import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/detailmenu_sheet.dart';
