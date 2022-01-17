@@ -66,9 +66,9 @@ class _OngoingScreenState extends State<OngoingScreen> {
                                   dataOrders: item,
                                 ),
                                 date: "date",
-                                harga: item["orders"][0]["harga"],
+                                harga: "Rp ${item["orders"][0]["harga"]}",
                                 title: item["orders"][0]["name"],
-                                urlImage: item["orders"][0]["image"],
+                                urlImage: item["orders"][0]["image"] ?? "",
                               ),
                           ],
                         )
@@ -140,7 +140,7 @@ class OrderMenuCard extends StatelessWidget {
                   color: ColorSty.grey60,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                child: Image.asset(urlImage),
+                child: urlImage.isNotEmpty ? Image.asset(urlImage) : const Icon(Icons.image_not_supported, color: ColorSty.grey),
               ),
               Expanded(
                 child: Padding(
