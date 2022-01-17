@@ -93,7 +93,7 @@ class OrderProviders extends ChangeNotifier {
 
         final response = await http.get(_api, headers: headers);
 
-        print(response.body);
+        // print(response.body);
 
         if(response.statusCode == 200){
           final MenuList data = menuListFromJson(response.body);

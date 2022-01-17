@@ -28,6 +28,7 @@ class ListMenu extends StatefulWidget {
 class _ListMenuState extends State<ListMenu> {
   @override
   Widget build(BuildContext context) {
+    print(widget.data.data.first.kategori == widget.type);
     return Column(
       children: [
         const SizedBox(height: SpaceDims.sp22),

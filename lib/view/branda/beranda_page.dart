@@ -49,7 +49,7 @@ class _BerandaPageState extends State<BerandaPage> {
           child: TextFormField(
             controller: _editingController,
             onChanged: (value) {
-              // setState(() {});
+              setState(() {});
             },
             decoration: InputDecoration(
               isDense: true,
@@ -97,8 +97,8 @@ class _BerandaPageState extends State<BerandaPage> {
           child: FutureBuilder<MenuList?>(
               future: Provider.of<OrderProviders>(context).getMenuList(),
               builder: (_, snapshot) {
-                if (snapshot.hasData &&
-                    snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
+                  print(snapshot.data);
                   return SingleChildScrollView(
                     child: ContentBeranda(result: result, data: snapshot.data),
                   );

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -16,21 +15,42 @@ class ContentBeranda extends StatefulWidget {
 
   const ContentBeranda({
     Key? key,
-    required this.result, this.data,
+    required this.result,
+    this.data,
   }) : super(key: key);
 
   @override
   State<ContentBeranda> createState() => _ContentBerandaState();
 }
 
-class _ContentBerandaState extends State<ContentBeranda> with AutomaticKeepAliveClientMixin<ContentBeranda>{
+class _ContentBerandaState extends State<ContentBeranda>
+    with AutomaticKeepAliveClientMixin<ContentBeranda> {
   final PageController _pageController = PageController();
   final ScrollController _scrollController = ScrollController();
   final Duration _duration = const Duration(milliseconds: 500);
-  int _selectedIndex = 0;
+  int _sIndex = 0;
 
   @override
   bool get wantKeepAlive => true;
+
+  _setAll() {
+    setState(() => _sIndex = 0);
+    final max = _scrollController.position.minScrollExtent;
+    _scrollController.animateTo(max, duration: _duration, curve: Curves.ease);
+    _pageController.animateToPage(0, duration: _duration, curve: Curves.ease);
+  }
+
+  _setMakanan() {
+    setState(() => _sIndex = 1);
+    _pageController.animateToPage(1, duration: _duration, curve: Curves.ease);
+  }
+
+  _setMenuman() {
+    setState(() => _sIndex = 2);
+    final max = _scrollController.position.maxScrollExtent;
+    _scrollController.animateTo(max, duration: _duration, curve: Curves.ease);
+    _pageController.animateToPage(2, duration: _duration, curve: Curves.ease);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +61,7 @@ class _ContentBerandaState extends State<ContentBeranda> with AutomaticKeepAlive
         children: [
           const SizedBox(height: SpaceDims.sp22),
           Padding(
-            padding:
-            const EdgeInsets.only(left: SpaceDims.sp24),
+            padding: const EdgeInsets.only(left: SpaceDims.sp24),
             child: Row(
               children: [
                 const Icon(
@@ -78,33 +97,14 @@ class _ContentBerandaState extends State<ContentBeranda> with AutomaticKeepAlive
               children: [
                 const SizedBox(width: SpaceDims.sp12),
                 LabelButton(
-                  color: _selectedIndex == 0
-                      ? ColorSty.black
-                      : ColorSty.primary,
-                  onPressed: () {
-                    setState(() => _selectedIndex = 0);
-                    final max = _scrollController
-                        .position.minScrollExtent;
-                    _scrollController.animateTo(max,
-                        duration: _duration,
-                        curve: Curves.ease);
-                    _pageController.animateToPage(0,
-                        duration: _duration,
-                        curve: Curves.ease);
-                  },
+                  color: _sIndex == 0 ? ColorSty.black : ColorSty.primary,
+                  onPressed: _setAll,
                   title: "Semua Menu",
                   icon: Icons.list,
                 ),
                 LabelButton(
-                  color: _selectedIndex == 1
-                      ? ColorSty.black
-                      : ColorSty.primary,
-                  onPressed: () {
-                    setState(() => _selectedIndex = 1);
-                    _pageController.animateToPage(1,
-                        duration: _duration,
-                        curve: Curves.ease);
-                  },
+                  color: _sIndex == 1 ? ColorSty.black : ColorSty.primary,
+                  onPressed: _setMakanan,
                   title: "Makanan",
                   svgPicture: SvgPicture.asset(
                     "assert/image/icons/ep_food.svg",
@@ -113,20 +113,8 @@ class _ContentBerandaState extends State<ContentBeranda> with AutomaticKeepAlive
                   ),
                 ),
                 LabelButton(
-                  color: _selectedIndex == 2
-                      ? ColorSty.black
-                      : ColorSty.primary,
-                  onPressed: () {
-                    setState(() => _selectedIndex = 2);
-                    final max = _scrollController
-                        .position.maxScrollExtent;
-                    _scrollController.animateTo(max,
-                        duration: _duration,
-                        curve: Curves.ease);
-                    _pageController.animateToPage(2,
-                        duration: _duration,
-                        curve: Curves.ease);
-                  },
+                  color: _sIndex == 2 ? ColorSty.black : ColorSty.primary,
+                  onPressed: _setMenuman,
                   title: "Minuman",
                   icon: IconsCs.coffee,
                 ),
@@ -134,17 +122,12 @@ class _ContentBerandaState extends State<ContentBeranda> with AutomaticKeepAlive
             ),
           ),
           SizedBox(
-            height:
-            MediaQuery
-                .of(context)
-                .size
-                .height - 130,
+            height: MediaQuery.of(context).size.height - 130,
             child: PageView(
               controller: _pageController,
               children: [
                 SingleChildScrollView(
-                  physics:
-                  const NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   child: Column(
                     children: [
                       ListMenu(
@@ -172,7 +155,8 @@ class _ContentBerandaState extends State<ContentBeranda> with AutomaticKeepAlive
                 ),
               ],
             ),
-          ),        ],
+          ),
+        ],
       );
     } else {
       return SearchScreen(result: widget.result);
