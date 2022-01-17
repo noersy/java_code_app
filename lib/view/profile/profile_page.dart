@@ -6,7 +6,9 @@ import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:java_code_app/providers/auth_providers.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
@@ -63,7 +65,9 @@ class _ProfilePageState extends State<ProfilePage> {
       elevation: 4,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
+              topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0),
+          ),
+      ),
       context: context,
       builder: (BuildContext context) {
         return SizedBox(
@@ -158,236 +162,244 @@ class _ProfilePageState extends State<ProfilePage> {
             title: "",
             profileTitle: lang.profile.title,
           ),
-          body: Stack(
-            children: [
-              Image.asset("assert/image/bg_findlocation.png"),
-              SingleChildScrollView(
-                primary: true,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
+          body: AnimatedBuilder(
+            animation: AuthProviders(),
+            builder: (_, __) {
+              final _user = Provider.of<AuthProviders>(context).user();
+
+              return Stack(
+                children: [
+                  Image.asset("assert/image/bg_findlocation.png"),
+                  SingleChildScrollView(
+                    primary: true,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: SpaceDims.sp22),
-                        SizedBox(
-                          height: 171,
-                          width: 171,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(300.0),
-                            child: Stack(
-                              alignment: Alignment.bottomCenter,
-                              children: [
-                                if (_fileImage != null)
-                                  Image.file(_fileImage!)
-                                else
-                                  SvgPicture.asset(
-                                      "assert/image/icons/user-icon.svg"),
-                                Positioned(
-                                  bottom: -10,
-                                  child: TextButton(
-                                    onPressed: _changeImageProfile,
-                                    style: TextButton.styleFrom(
-                                      backgroundColor: ColorSty.primary,
-                                      primary: ColorSty.white,
-                                    ),
-                                    child: SizedBox(
-                                      width: 160,
-                                      height: 25,
-                                      child: Align(
-                                        alignment: Alignment.topCenter,
-                                        child: Text(lang.profile.ub),
+                        Column(
+                          children: [
+                            const SizedBox(height: SpaceDims.sp22),
+                            SizedBox(
+                              height: 171,
+                              width: 171,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(300.0),
+                                child: Stack(
+                                  alignment: Alignment.bottomCenter,
+                                  children: [
+                                    if (_fileImage != null)
+                                      Image.file(_fileImage!)
+                                    else
+                                      SvgPicture.asset(
+                                          "assert/image/icons/user-icon.svg",
                                       ),
-                                    ),
-                                  ),
-                                )
+                                    Positioned(
+                                      bottom: -10,
+                                      child: TextButton(
+                                        onPressed: _changeImageProfile,
+                                        style: TextButton.styleFrom(
+                                          backgroundColor: ColorSty.primary,
+                                          primary: ColorSty.white,
+                                        ),
+                                        child: SizedBox(
+                                          width: 160,
+                                          height: 25,
+                                          child: Align(
+                                            alignment: Alignment.topCenter,
+                                            child: Text(lang.profile.ub),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: SpaceDims.sp22),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.check,
+                                  color: ColorSty.primary,
+                                  size: 18.0,
+                                ),
+                                const SizedBox(width: SpaceDims.sp2),
+                                Text(
+                                  lang.profile.caption,
+                                  style: const TextStyle(color: ColorSty.primary),
+                                ),
                               ],
                             ),
-                          ),
+                            const SizedBox(height: SpaceDims.sp22),
+                          ],
                         ),
-                        const SizedBox(height: SpaceDims.sp22),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: SpaceDims.sp32),
+                              child: Text(
+                                lang.profile.subtitle,
+                                style: TypoSty.titlePrimary,
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.center,
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: SpaceDims.sp24,
+                                vertical: SpaceDims.sp12,
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: SpaceDims.sp22,
+                              ),
+                              decoration: BoxDecoration(
+                                color: ColorSty.grey60,
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                              child: Column(
+                                children: [
+                                  TileListProfile(
+                                    top: false,
+                                    title: lang.profile.nam,
+                                    suffix: _user?.nama ?? " ",
+                                  ),
+                                  TileListProfile(
+                                    title: lang.profile.tgl,
+                                    suffix: _user?.tglLahir ?? ' ',
+                                  ),
+                                  TileListProfile(
+                                    title: lang.profile.tlp,
+                                    suffix: _user?.telepon ?? ' ',
+                                  ),
+                                  TileListProfile(
+                                    title: 'Email',
+                                    suffix: _user?.email ?? ' ',
+                                  ),
+                                  TileListProfile(
+                                    title: '${lang.profile.ub} PIN',
+                                    suffix: '*********',
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (_) => VPinDialog(
+                                          title: lang.profile.lm,
+                                          onComplete: (_) {
+                                            showDialog(
+                                              context: context,
+                                              builder: (_) => VPinDialog(
+                                                title: lang.profile.br,
+                                                onComplete: (_) {},
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  AnimatedBuilder(
+                                    animation: LangProviders(),
+                                    builder: (context, snapshot) {
+                                      bool _isIndo =
+                                          Provider.of<LangProviders>(context)
+                                              .isIndo;
+                                      return TileListProfile(
+                                        title: lang.profile.bhs,
+                                        suffix: _isIndo ? 'Indonesia' : 'English',
+                                        onPressed: () => showModalBottomSheet(
+                                          barrierColor:
+                                              ColorSty.grey.withOpacity(0.2),
+                                          elevation: 5,
+                                          shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(30.0),
+                                              topRight: Radius.circular(30.0),
+                                            ),
+                                          ),
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              const ChangeLagSheet(),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: SpaceDims.sp22),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: SpaceDims.sp32),
+                              child: Text(
+                                lang.profile.subtitle2,
+                                style: TypoSty.titlePrimary,
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.center,
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: SpaceDims.sp24,
+                                vertical: SpaceDims.sp12,
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: SpaceDims.sp22,
+                              ),
+                              decoration: BoxDecoration(
+                                color: ColorSty.grey60,
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                              child: Column(
+                                children: [
+                                  TileListProfile(
+                                    top: false,
+                                    enable: false,
+                                    title: 'Device Info',
+                                    suffix: _androidInfo?.device ?? "",
+                                  ),
+                                  TileListProfile(
+                                    enable: false,
+                                    title: 'Version',
+                                    suffix: _packageInfo?.version ?? '',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: SpaceDims.sp22),
+                          ],
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
-                              Icons.check,
-                              color: ColorSty.primary,
-                              size: 18.0,
-                            ),
-                            const SizedBox(width: SpaceDims.sp2),
-                            Text(
-                              lang.profile.caption,
-                              style: const TextStyle(color: ColorSty.primary),
-                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushReplacementNamed(context, "/");
+                                Preferences.getInstance().clear();
+                              },
+                              child: SizedBox(
+                                width: 204,
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text("Log Out", style: TypoSty.button),
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                ),
+                              ),
+                            )
                           ],
                         ),
-                        const SizedBox(height: SpaceDims.sp22),
+                        const SizedBox(height: 65),
                       ],
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: SpaceDims.sp32),
-                          child: Text(
-                            lang.profile.subtitle,
-                            style: TypoSty.titlePrimary,
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.center,
-                          margin: const EdgeInsets.symmetric(
-                            horizontal: SpaceDims.sp24,
-                            vertical: SpaceDims.sp12,
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            vertical: SpaceDims.sp22,
-                          ),
-                          decoration: BoxDecoration(
-                            color: ColorSty.grey60,
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          child: Column(
-                            children: [
-                              TileListProfile(
-                                top: false,
-                                title: lang.profile.nam,
-                                suffix: 'Fajar',
-                              ),
-                              TileListProfile(
-                                title: lang.profile.tgl,
-                                suffix: '01/03/1993',
-                              ),
-                              TileListProfile(
-                                title: lang.profile.tlp,
-                                suffix: '0822-4111-400',
-                              ),
-                              const TileListProfile(
-                                title: 'Email',
-                                suffix: 'lorem.ipsum@gmail.com',
-                              ),
-                              TileListProfile(
-                                title: '${lang.profile.ub} PIN',
-                                suffix: '*********',
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (_) => VPinDialog(
-                                      title: lang.profile.lm,
-                                      onComplete: (_) {
-                                        showDialog(
-                                          context: context,
-                                          builder: (_) => VPinDialog(
-                                            title: lang.profile.br,
-                                            onComplete: (_) {},
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  );
-                                },
-                              ),
-                              AnimatedBuilder(
-                                animation: LangProviders(),
-                                builder: (context, snapshot) {
-                                  bool _isIndo =
-                                      Provider.of<LangProviders>(context)
-                                          .isIndo;
-                                  return TileListProfile(
-                                    title: lang.profile.bhs,
-                                    suffix: _isIndo ? 'Indonesia' : 'English',
-                                    onPressed: () => showModalBottomSheet(
-                                      barrierColor:
-                                          ColorSty.grey.withOpacity(0.2),
-                                      elevation: 5,
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(30.0),
-                                          topRight: Radius.circular(30.0),
-                                        ),
-                                      ),
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          const ChangeLagSheet(),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: SpaceDims.sp22),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: SpaceDims.sp32),
-                          child: Text(
-                            lang.profile.subtitle2,
-                            style: TypoSty.titlePrimary,
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.center,
-                          margin: const EdgeInsets.symmetric(
-                            horizontal: SpaceDims.sp24,
-                            vertical: SpaceDims.sp12,
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            vertical: SpaceDims.sp22,
-                          ),
-                          decoration: BoxDecoration(
-                            color: ColorSty.grey60,
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          child: Column(
-                            children: [
-                              TileListProfile(
-                                top: false,
-                                enable: false,
-                                title: 'Device Info',
-                                suffix: _androidInfo?.device ?? "",
-                              ),
-                              TileListProfile(
-                                enable: false,
-                                title: 'Version',
-                                suffix: _packageInfo?.version ?? '',
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: SpaceDims.sp22),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushReplacementNamed(context, "/");
-                            Preferences.getInstance().clear();
-                          },
-                          child: SizedBox(
-                            width: 204,
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Text("Log Out", style: TypoSty.button),
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 65),
-                  ],
-                ),
-              ),
-            ],
+                  ),
+                ],
+              );
+            }
           ),
         );
       },

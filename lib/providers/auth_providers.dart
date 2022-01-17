@@ -2,11 +2,22 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:java_code_app/models/loginuser.dart';
+import 'package:java_code_app/models/userdetail.dart';
 
 class AuthProviders extends ChangeNotifier {
-  static final Uri _api = Uri.https("javacode.ngodingin.com", "/api/auth/login");
+  static const String _domain = "javacode.ngodingin.com";
+  static LoginUser? _loginUser;
+  static UserDetail? _user;
+
+  DUser? user() {
+    if(_user != null) return _user!.data;
+    return null;
+  }
 
   Future<bool> login(String username, String password) async {
+    final Uri _api = Uri.https(_domain, "/api/auth/login");
+
     try {
 
       final body = {
@@ -16,15 +27,40 @@ class AuthProviders extends ChangeNotifier {
 
       final response = await http.post(_api, body: body);
 
-      print(response.body);
+      // print(response.body);
 
       final data = json.decode(response.body);
-
       if(data["status_code"] == 200){
+        _loginUser = loginUserFromJson(response.body);
+        getUser();
+        notifyListeners();
         return true;
       }
     } catch (e) {
-      print(e);
+      // print(e);
+      // return false;
+    }
+
+    return false;
+  }
+
+  Future<bool> getUser() async {
+    final Uri _api = Uri.https(_domain, "/api/user/detail/${_loginUser!.data.user.idUser}");
+
+    try {
+      final headers = {
+        "token" : "m_app"
+      };
+
+      final response = await http.get(_api, headers: headers);
+
+      if(response.statusCode == 200){
+        _user = userDetailFromJson(response.body);
+        notifyListeners();
+        return true;
+      }
+    } catch (e) {
+      // print(e);
       // return false;
     }
 
