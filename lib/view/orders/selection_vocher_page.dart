@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:java_code_app/models/list_voucher.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:java_code_app/widget/silver_appbar.dart';
+import 'package:java_code_app/widget/appbar.dart';
+import 'package:provider/provider.dart';
+import 'package:skeleton_animation/skeleton_animation.dart';
 
 class SelectionVoucherPage extends StatefulWidget {
-  final Map<String, dynamic>? initialData;
+  final LVoucher? initialData;
 
   const SelectionVoucherPage({Key? key, this.initialData}) : super(key: key);
 
@@ -16,13 +21,13 @@ class SelectionVoucherPage extends StatefulWidget {
 }
 
 class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
-  Map<String, dynamic> _selectedVoucher = {};
+  LVoucher? _selectedVoucher;
+  static List<LVoucher> _listVoucher = [];
 
   @override
   void initState() {
-    if (widget.initialData != null) {
-      _selectedVoucher.addAll(widget.initialData!);
-    }
+    Provider.of<OrderProviders>(context, listen: false).getListVoucher();
+    _selectedVoucher = widget.initialData;
     super.initState();
   }
 
@@ -30,50 +35,46 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorSty.white,
-      body: SilverAppBar(
-        pinned: true,
-        floating: true,
+      appBar: const CostumeAppBar(
         back: true,
-        title: Row(
-          children: [
-            const Icon(IconsCs.voucher, color: ColorSty.primary),
-            const SizedBox(width: SpaceDims.sp18),
-            Text("Pilih Voucher", style: TypoSty.title),
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: SpaceDims.sp24,
-              horizontal: SpaceDims.sp24,
-            ),
-            child: Column(
-              children: [
-                if (_selectedVoucher.isEmpty)
-                  for (Map<String, dynamic> item in dataVoucher)
-                    VoucherCard(
-                      isChecked: false,
-                      onChanged: (String value){
-                        setState(() => _selectedVoucher.addAll(item));
-                      },
-                      onPressed: (String value) {
-                        setState(() => _selectedVoucher.addAll(item));
-                      },
-                      urlImage: item["urlImage"] ?? "",
-                      title: item["title"] ?? "",
-                    ),
-                if (_selectedVoucher.isNotEmpty)
-                  VoucherCard(
-                    isChecked: true,
-                    onPressed: (String value) {
-                      setState(() => _selectedVoucher.clear());
-                    },
-                    urlImage: _selectedVoucher["urlImage"] ?? "",
-                    title: _selectedVoucher["title"] ?? "",
-                  )
-              ],
-            ),
+        title: "Pilih Voucher",
+        icon: Icon(IconsCs.voucher, color: ColorSty.primary),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: SpaceDims.sp24,
+            horizontal: SpaceDims.sp24,
           ),
+          child: AnimatedBuilder(
+              animation: OrderProviders(),
+              builder: (context, snapshot) {
+                _listVoucher = Provider.of<OrderProviders>(context).listVoucher;
+                return Column(
+                  children: [
+                    if (_selectedVoucher == null)
+                      for (LVoucher item in _listVoucher)
+                        VoucherCard(
+                          isChecked: false,
+                          voucher: item,
+                          onChanged: (String value) {
+                            setState(() => _selectedVoucher = item);
+                          },
+                          onPressed: (String value) {
+                            setState(() => _selectedVoucher = item);
+                          },
+                        ),
+                    if (_selectedVoucher != null)
+                      VoucherCard(
+                        voucher: _selectedVoucher!,
+                        isChecked: true,
+                        onPressed: (String value) {
+                          setState(() => _selectedVoucher = null);
+                        },
+                      )
+                  ],
+                );
+              }),
         ),
       ),
       bottomNavigationBar: Container(
@@ -148,17 +149,16 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
 
 class VoucherCard extends StatefulWidget {
   final bool isChecked;
-  final String urlImage, title;
+  final LVoucher voucher;
   final Function(String string) onPressed;
   final ValueChanged<String>? onChanged;
 
   const VoucherCard({
     Key? key,
-    required this.urlImage,
-    required this.title,
     required this.onPressed,
     required this.isChecked,
     this.onChanged,
+    required this.voucher,
   }) : super(key: key);
 
   @override
@@ -167,6 +167,7 @@ class VoucherCard extends StatefulWidget {
 
 class _VoucherCardState extends State<VoucherCard> {
   bool _isSelected = false;
+  DateFormat _format = DateFormat('dd/MM/yy');
 
   @override
   void initState() {
@@ -180,14 +181,14 @@ class _VoucherCardState extends State<VoucherCard> {
       padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp8),
       child: ElevatedButton(
         clipBehavior: Clip.antiAlias,
-        onPressed: () async{
-          _isSelected = (await Navigate.toDetailVoucherPage(
-            context,
-            title: widget.title,
-            urlImage: widget.urlImage,
-          )) ?? false;
+        onPressed: () async {
+          _isSelected = (await Navigate.toDetailVoucherPage(context,
+                  voucher: widget.voucher)) ??
+              false;
 
-          if(_isSelected && widget.onChanged != null) widget.onChanged!(widget.title);
+          if (_isSelected && widget.onChanged != null) {
+            widget.onChanged!(widget.voucher.nama);
+          }
         },
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.all(0),
@@ -207,13 +208,13 @@ class _VoucherCardState extends State<VoucherCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    widget.title,
+                    widget.voucher.nama,
                     style: TypoSty.button.copyWith(color: ColorSty.black60),
                   ),
                   IconButton(
                     onPressed: () {
                       setState(() => _isSelected = !_isSelected);
-                      widget.onPressed(widget.title);
+                      widget.onPressed(widget.voucher.nama);
                     },
                     icon: widget.isChecked
                         ? const Icon(
@@ -228,9 +229,60 @@ class _VoucherCardState extends State<VoucherCard> {
                 ],
               ),
             ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20.0),
-              child: Image.asset(widget.urlImage, filterQuality: FilterQuality.medium),
+            SizedBox(
+              height: 160,
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20.0),
+                    child: Image.network(
+                      widget.voucher.infoVoucher,
+                      loadingBuilder:
+                          (_, child, ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress != null) {
+                          return Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Skeleton(height: 160, width: double.infinity),
+                              Text(
+                                loadingProgress.toStringShort(),
+                                style: const TextStyle(color: Colors.grey),
+                              )
+                            ],
+                          );
+                        } else {
+                          return child;
+                        }
+                      },
+                    ),
+                  ),
+                  Positioned(
+                    right: 12.0,
+                    bottom: 0.0,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        const Text(
+                          "Valid Date:",
+                          style:
+                              TextStyle(color: ColorSty.black, fontSize: 12.0),
+                        ),
+                        Text(
+                          """(${widget.voucher.periodeSelesai.difference(widget.voucher.periodeMulai).inDays} Month) ${_format.format(widget.voucher.periodeMulai)} - ${_format.format(widget.voucher.periodeSelesai)} 
+                          """,
+                          style: TypoSty.mini
+                              .copyWith(color: ColorSty.black60, fontSize: 9.0),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 10.0,
+                    left: 8.0,
+                    child: Text("Catatan...", style: TypoSty.mini),
+                  )
+                ],
+              ),
             ),
           ],
         ),
@@ -239,7 +291,7 @@ class _VoucherCardState extends State<VoucherCard> {
   }
 }
 
-List<Map<String, dynamic>> dataVoucher = [
+List<Map<String, dynamic>> _dataVoucher = [
   {
     "title": "Friend Referral Retention",
     "urlImage": "assert/image/voucher/Voucher Java Code app-01.jpg",

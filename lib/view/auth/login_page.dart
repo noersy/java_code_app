@@ -58,6 +58,9 @@ class _LoginPageState extends State<LoginPage> {
     if(_isAlreadyLogin) {
       setState(() => _loading = true);
 
+      await Provider.of<AuthProviders>(context, listen: false).getUser();
+
+
       Timer(_duration,(){
       Navigate.toFindLocation(context);
       setState(() => _loading = false);}

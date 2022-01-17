@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/models/list_voucher.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:provider/provider.dart';
 
 class OrderDoneDialog extends StatelessWidget {
-  final Map<String, dynamic>? voucher;
+  final LVoucher? voucher;
   const OrderDoneDialog({Key? key, required this.voucher}) : super(key: key);
 
   @override
@@ -90,7 +91,7 @@ class OrderDoneDialog extends StatelessWidget {
     );
   }
 
-  _submit(context, {Map<String, dynamic>? voucher}) async{
+  _submit(context, {LVoucher? voucher}) async{
     await Provider.of<OrderProviders>(context, listen: false).submitOrder(voucher);
     Navigator.pop(context);
     Navigator.pop(context);

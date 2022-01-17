@@ -28,7 +28,7 @@ class CostumeAppBar extends StatelessWidget implements PreferredSizeWidget{
       ),
       leading: back != null ? IconButton(
         icon: const Icon(Icons.arrow_back_ios, color: ColorSty.primary),
-        onPressed: () => Navigator.of(context).pop(false),
+        onPressed: () => Navigator.of(context).pop(),
       ) : null,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.center,

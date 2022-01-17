@@ -49,7 +49,7 @@ class _DetailMenuState extends State<DetailMenu> {
       _data = data.data.menu;
       _isLoading = false;
     }
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   @override
@@ -64,10 +64,10 @@ class _DetailMenuState extends State<DetailMenu> {
     final orders =
         Provider.of<OrderProviders>(context, listen: false).checkOrder;
     if (orders.keys.contains("${widget.id}")) {
-      _jumlahOrder = orders[widget.id]["countOrder"];
-      _catatan = orders[widget.id]["catatan"] ?? "";
-      _selectedTopping = orders[widget.id]["topping"] ?? _selectedTopping;
-      _selectedLevel = orders[widget.id]["level"] ?? "1";
+      _jumlahOrder = orders["${widget.id}"]["countOrder"];
+      _catatan = orders["${widget.id}"]["catatan"] ?? "";
+      _selectedTopping = orders["${widget.id}"]["topping"] ?? _selectedTopping;
+      _selectedLevel = orders["${widget.id}"]["level"] ?? "1";
     }
 
     super.initState();
@@ -122,33 +122,43 @@ class _DetailMenuState extends State<DetailMenu> {
   }
 
   void _tambahkanPesanan() {
-    // final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
-    // final data = widget.data;
-    //
-    // data.putIfAbsent("level", () => _selectedLevel);
-    // data.putIfAbsent("topping", () => _selectedTopping);
-    // data.putIfAbsent("catatan", () => _catatan);
-    //
-    // if (_jumlahOrder > 0) {
-    //   if (orders.keys.contains(id)) {
-    //     Provider.of<OrderProviders>(context, listen: false).editOrder(
-    //       data: data,
-    //       jumlahOrder: _jumlahOrder,
-    //       topping: _selectedTopping,
-    //       level: _selectedLevel,
-    //       catatan: _catatan,
-    //     );
-    //   } else {
-    //     Provider.of<OrderProviders>(context, listen: false).addOrder(
-    //       data: data,
-    //       jumlahOrder: _jumlahOrder,
-    //       topping: _selectedTopping,
-    //       level: _selectedLevel,
-    //       catatan: _catatan,
-    //     );
-    //   }
-    //   Navigator.of(context).pop();
-    // }
+    if (_data == null) return;
+
+    final orders =
+        Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    final data = {
+      "id": "${widget.id}",
+      "jenis": _data!.kategori,
+      "image": _data!.foto,
+      "harga": _data!.harga,
+      "amount": _data!.status,
+      "name": _data!.nama,
+      "level": _selectedLevel,
+      "topping": _selectedTopping,
+      "catatan": _catatan,
+      "countOrder": _jumlahOrder,
+    };
+
+    if (_jumlahOrder > 0) {
+      if (orders.keys.contains("${widget.id}")) {
+        Provider.of<OrderProviders>(context, listen: false).editOrder(
+          data: data,
+          jumlahOrder: _jumlahOrder,
+          topping: _selectedTopping,
+          level: _selectedLevel,
+          catatan: _catatan,
+        );
+      } else {
+        Provider.of<OrderProviders>(context, listen: false).addOrder(
+          data: data,
+          jumlahOrder: _jumlahOrder,
+          topping: _selectedTopping,
+          level: _selectedLevel,
+          catatan: _catatan,
+        );
+      }
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -243,13 +253,15 @@ class _DetailMenuState extends State<DetailMenu> {
                                 child: SkeletonText(height: 12.0),
                               ),
                               SizedBox(
-                                  width: 120,
-                                  child: SkeletonText(height: 12.0),
+                                width: 120,
+                                child: SkeletonText(height: 12.0),
                               ),
                             ],
                           )
-                        : const Text(
-                            "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
+                        : SizedBox(
+                            height: 100.0,
+                            child: Text(_data?.deskripsi ?? "", overflow: TextOverflow.fade,),
+                          ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
@@ -304,10 +316,10 @@ class _DetailMenuState extends State<DetailMenu> {
                               barrierColor: ColorSty.grey.withOpacity(0.2),
                               elevation: 5,
                               shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(30.0),
-                                      topRight: Radius.circular(30.0),
-                                  ),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(30.0),
+                                  topRight: Radius.circular(30.0),
+                                ),
                               ),
                               context: context,
                               builder: (_) => BottomSheetDetailMenu(
@@ -359,7 +371,8 @@ class _DetailMenuState extends State<DetailMenu> {
                               ),
                             ),
                             context: context,
-                            builder: (BuildContext context) => BottomSheetDetailMenu(
+                            builder: (BuildContext context) =>
+                                BottomSheetDetailMenu(
                               title: "Buat Catatan",
                               content: Row(
                                 children: [

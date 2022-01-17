@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
+import 'package:java_code_app/models/list_voucher.dart';
 import 'package:java_code_app/models/menudetail.dart';
 import 'package:java_code_app/models/menulist.dart';
 import 'package:java_code_app/tools/random_string.dart';
-import 'package:http/http.dart' as http;
-
 
 class OrderProviders extends ChangeNotifier {
   // static int _orderInProgress = 0;
@@ -12,9 +12,13 @@ class OrderProviders extends ChangeNotifier {
 
   static Map<String, dynamic> _checkOrder = {};
   static List<Map<String, dynamic>> _orderInProgress = [];
+  static List<LVoucher> _listVoucher = [];
 
   Map<String, dynamic> get checkOrder => _checkOrder;
+
   List<Map<String, dynamic>> get orderProgress => _orderInProgress;
+
+  List<LVoucher> get listVoucher => _listVoucher;
 
   addOrder({
     required Map<String, dynamic> data,
@@ -70,7 +74,7 @@ class OrderProviders extends ChangeNotifier {
     notifyListeners();
   }
 
-  submitOrder(Map<String, dynamic>? voucher) async {
+  submitOrder(LVoucher? voucher) async {
     final _id = RanString.getInstance().getRandomString(5);
 
     _orderInProgress.add({
@@ -84,50 +88,59 @@ class OrderProviders extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<MenuList?> getMenuList() async{
-      try {
+  Future<MenuList?> getMenuList() async {
+    try {
+      final _api = Uri.https(_domain, "/api/menu/all");
+      final headers = {"token": "m_app"};
 
-        final _api = Uri.https(_domain, "/api/menu/all");
-        final headers = {
-          "token" : "m_app"
-        };
+      final response = await http.get(_api, headers: headers);
 
-        final response = await http.get(_api, headers: headers);
+      // print(response.body);
 
-        // print(response.body);
-
-        if(response.statusCode == 200){
-          return menuListFromJson(response.body);
-        }
-        return null;
-      } catch (e) {
-        return null;
+      if (response.statusCode == 200) {
+        return menuListFromJson(response.body);
       }
+      return null;
+    } catch (e) {
+      return null;
     }
+  }
 
+  Future<MenuDetail?> getDetailMenu({required int id}) async {
+    try {
+      final _api = Uri.https(_domain, "/api/menu/detail/$id");
 
-    Future<MenuDetail?> getDetailMenu({required int id}) async{
-      try {
+      final headers = {"token": "m_app"};
 
-        final _api = Uri.https(_domain, "/api/menu/detail/$id");
+      final response = await http.get(_api, headers: headers);
 
-        final headers = {
-          "token" : "m_app"
-        };
-
-        // final body = { "id_menu": 1 };
-
-        final response = await http.get(_api, headers: headers);
-
-
-        print(response.body);
-
-        if(response.statusCode == 200){
-          return menuDetailFromJson(response.body);
-        }
-        return null;
-      } catch (e) {
-        return null;
+      if (response.statusCode == 200) {
+        return menuDetailFromJson(response.body);
       }
+      return null;
+    } catch (e) {
+      return null;
     }
+  }
+
+  Future<bool> getListVoucher() async {
+    try {
+      final _api = Uri.https(_domain, "/api/voucher/all");
+
+      final headers = {"token": "m_app"};
+
+      final response = await http.get(_api, headers: headers);
+
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        _listVoucher = listVoucherFromJson(response.body).data;
+        notifyListeners();
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
 }

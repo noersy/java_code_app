@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/models/list_voucher.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
+import 'package:skeleton_animation/skeleton_animation.dart';
 
 class DetailVoucherPage extends StatefulWidget {
-  final String urlImage, title;
+  final LVoucher voucher;
 
   const DetailVoucherPage({
     Key? key,
-    required this.urlImage,
-    required this.title,
+    required this.voucher,
   }) : super(key: key);
 
   @override
@@ -31,7 +32,7 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
       body: Column(
         children: [
           const SizedBox(height: SpaceDims.sp12),
-          CardDetailVoucher(urlImage: widget.urlImage, title: widget.title),
+          CardDetailVoucher(urlImage: widget.voucher.infoVoucher, title: widget.voucher.nama),
           const SizedBox(height: SpaceDims.sp12),
           Expanded(
             child: Container(
@@ -81,7 +82,7 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
                     SizedBox(
                       width: 230,
                       child: Text(
-                        widget.title,
+                        widget.voucher.nama,
                         style: TypoSty.titlePrimary,
                       ),
                     ),
@@ -206,7 +207,25 @@ class CardDetailVoucher extends StatelessWidget {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20.0),
-          child: Image.asset(urlImage),
+          child: Image.network(
+            urlImage,
+            loadingBuilder: (_, child, ImageChunkEvent? loadingProgress) {
+              if (loadingProgress != null) {
+                return Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Skeleton(height: 160, width: double.infinity),
+                    Text(
+                      loadingProgress.toStringShort(),
+                      style: const TextStyle(color: Colors.grey),
+                    )
+                  ],
+                );
+              } else {
+                return child;
+              }
+            },
+          ),
         ),
       ),
     );

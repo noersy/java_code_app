@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/models/list_voucher.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -22,7 +23,7 @@ class CheckOutPage extends StatefulWidget {
 }
 
 class _CheckOutPageState extends State<CheckOutPage> {
-  Map<String, dynamic> _selectedVoucher = {};
+  LVoucher? _selectedVoucher;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +72,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
       }),
       bottomNavigationBar: Container(
         width: double.infinity,
-        height: _selectedVoucher.isEmpty ? 300 : 240,
+        height: _selectedVoucher == null ? 300 : 240,
         decoration: const BoxDecoration(
           color: ColorSty.grey80,
           borderRadius: BorderRadius.only(
@@ -119,7 +120,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     ),
                     child: Column(
                       children: [
-                        if (_selectedVoucher.isEmpty)
+                        if (_selectedVoucher == null)
                           TileListDMenu(
                             dense: true,
                             prefixIcon: true,
@@ -135,34 +136,32 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             dense: true,
                             prefixIcon: true,
                             title: "Voucher",
-                            prefixCostume: _selectedVoucher.isEmpty
+                            prefixCostume: _selectedVoucher == null
                                 ? null
                                 : Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Text(
-                                        _selectedVoucher["harga"],
+                                        "Rp ${_selectedVoucher!.nominal}",
                                         style: TypoSty.captionSemiBold
                                             .copyWith(color: Colors.red),
                                       ),
                                       Text(
-                                        _selectedVoucher["title"],
+                                        _selectedVoucher!.nama,
                                         style: TypoSty.mini,
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.end,
                                       )
                                     ],
                                   ),
-                            prefix: _selectedVoucher.isEmpty
+                            prefix: _selectedVoucher == null
                                 ? "Pilih Voucher"
                                 : null,
                             // icon: IconsCs.voucher,
                             iconSvg: SvgPicture.asset(
                                 "assert/image/icons/voucher-icon-line.svg"),
                             onPressed: () async {
-                              _selectedVoucher =
-                                  await Navigate.toSelectionVoucherPage(context,
-                                      initialData: _selectedVoucher);
+                              _selectedVoucher = await Navigate.toSelectionVoucherPage(context, initialData: _selectedVoucher);
                               setState(() {});
                             }),
                         Stack(children: [
@@ -222,11 +221,12 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        showDialog(
+                        if(_selectedVoucher != null) {
+                          showDialog(
                           context: context,
-                          builder: (_) => VFingerPrintDialog(
-                              ctx: context, voucher: _selectedVoucher),
+                          builder: (_) => VFingerPrintDialog(ctx: context, voucher: _selectedVoucher!),
                         );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         shape: const RoundedRectangleBorder(
@@ -374,7 +374,7 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
     _jumlahOrder = widget.data["countOrder"] ?? 0;
     nama = widget.data["name"] ?? "";
     url = widget.data["image"] ?? "";
-    harga = widget.data["harga"] ?? "";
+    harga = "${widget.data["harga"]}";
     amount = widget.data["amount"] ?? 0;
 
     super.initState();
@@ -414,7 +414,9 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
                 width: 74,
                 child: Padding(
                   padding: const EdgeInsets.all(SpaceDims.sp4),
-                  child: Image.asset(url),
+                  child: url.isNotEmpty
+                      ? Image.asset(url)
+                      : const Icon(Icons.image_not_supported, color: ColorSty.grey),
                 ),
                 decoration: BoxDecoration(
                   color: ColorSty.grey60,
