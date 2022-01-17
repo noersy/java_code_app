@@ -1,0 +1,181 @@
+
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/theme/colors.dart';
+import 'package:java_code_app/theme/icons_cs_icons.dart';
+import 'package:java_code_app/theme/spacing.dart';
+import 'package:java_code_app/theme/text_style.dart';
+import 'package:java_code_app/view/branda/component/search_screen.dart';
+import 'package:java_code_app/widget/card_coupun.dart';
+import 'package:java_code_app/widget/label_button.dart';
+import 'package:java_code_app/widget/listmenu.dart';
+
+class ContentBeranda extends StatefulWidget {
+  final List result;
+  final data;
+
+  const ContentBeranda({
+    Key? key,
+    required this.result, this.data,
+  }) : super(key: key);
+
+  @override
+  State<ContentBeranda> createState() => _ContentBerandaState();
+}
+
+class _ContentBerandaState extends State<ContentBeranda> with AutomaticKeepAliveClientMixin<ContentBeranda>{
+  final PageController _pageController = PageController();
+  final ScrollController _scrollController = ScrollController();
+  final Duration _duration = const Duration(milliseconds: 500);
+  int _selectedIndex = 0;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.result.isEmpty) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: SpaceDims.sp22),
+          Padding(
+            padding:
+            const EdgeInsets.only(left: SpaceDims.sp24),
+            child: Row(
+              children: [
+                const Icon(
+                  IconsCs.coupon,
+                  color: ColorSty.primary,
+                  size: 22.0,
+                ),
+                const SizedBox(width: SpaceDims.sp22),
+                Text(
+                  "Promo yang Tersedia",
+                  style: TypoSty.title,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: SpaceDims.sp22),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: const [
+                SizedBox(width: 10),
+                CardCoupon(),
+                CardCoupon(),
+                CardCoupon(),
+              ],
+            ),
+          ),
+          const SizedBox(height: SpaceDims.sp12),
+          SingleChildScrollView(
+            controller: _scrollController,
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                const SizedBox(width: SpaceDims.sp12),
+                LabelButton(
+                  color: _selectedIndex == 0
+                      ? ColorSty.black
+                      : ColorSty.primary,
+                  onPressed: () {
+                    setState(() => _selectedIndex = 0);
+                    final max = _scrollController
+                        .position.minScrollExtent;
+                    _scrollController.animateTo(max,
+                        duration: _duration,
+                        curve: Curves.ease);
+                    _pageController.animateToPage(0,
+                        duration: _duration,
+                        curve: Curves.ease);
+                  },
+                  title: "Semua Menu",
+                  icon: Icons.list,
+                ),
+                LabelButton(
+                  color: _selectedIndex == 1
+                      ? ColorSty.black
+                      : ColorSty.primary,
+                  onPressed: () {
+                    setState(() => _selectedIndex = 1);
+                    _pageController.animateToPage(1,
+                        duration: _duration,
+                        curve: Curves.ease);
+                  },
+                  title: "Makanan",
+                  svgPicture: SvgPicture.asset(
+                    "assert/image/icons/ep_food.svg",
+                    color: ColorSty.white,
+                    width: 24,
+                  ),
+                ),
+                LabelButton(
+                  color: _selectedIndex == 2
+                      ? ColorSty.black
+                      : ColorSty.primary,
+                  onPressed: () {
+                    setState(() => _selectedIndex = 2);
+                    final max = _scrollController
+                        .position.maxScrollExtent;
+                    _scrollController.animateTo(max,
+                        duration: _duration,
+                        curve: Curves.ease);
+                    _pageController.animateToPage(2,
+                        duration: _duration,
+                        curve: Curves.ease);
+                  },
+                  title: "Minuman",
+                  icon: IconsCs.coffee,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height:
+            MediaQuery
+                .of(context)
+                .size
+                .height - 130,
+            child: PageView(
+              controller: _pageController,
+              children: [
+                SingleChildScrollView(
+                  physics:
+                  const NeverScrollableScrollPhysics(),
+                  child: Column(
+                    children: [
+                      ListMenu(
+                        type: "makanan",
+                        title: "Makanan",
+                        data: widget.data!,
+                      ),
+                      ListMenu(
+                        type: "minuman",
+                        title: "Minuman",
+                        data: widget.data!,
+                      ),
+                    ],
+                  ),
+                ),
+                ListMenu(
+                  type: "makanan",
+                  title: "Makanan",
+                  data: widget.data!,
+                ),
+                ListMenu(
+                  type: "minuman",
+                  title: "Minuman",
+                  data: widget.data!,
+                ),
+              ],
+            ),
+          ),        ],
+      );
+    } else {
+      return SearchScreen(result: widget.result);
+    }
+  }
+}
