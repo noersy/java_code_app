@@ -6,7 +6,10 @@ import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 
 class CardCoupon extends StatelessWidget {
-  const CardCoupon({Key? key}) : super(key: key);
+  final int discount;
+  final String title;
+
+  const CardCoupon({Key? key, required this.discount, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +33,7 @@ class CardCoupon extends StatelessWidget {
                 ),
                 const SizedBox(width: SpaceDims.sp12),
                 Text(
-                  "10 %",
+                  "$discount %",
                   style: TypoSty.heading.copyWith(
                     fontSize: 36.0,
                     foreground: Paint()
@@ -42,7 +45,7 @@ class CardCoupon extends StatelessWidget {
               ],
             ),
             Text(
-              "Lorem ipsum dolor sit amet",
+              title,
               style: TypoSty.caption.copyWith(color: ColorSty.white),
             )
           ],

@@ -50,17 +50,18 @@ class _LoginPageState extends State<LoginPage> {
 
   _checkInternet() async {
     final _isConnected = await _connectionStatus.checkConnection();
-    _preferences.setBoolValue(KeyPrefens.login, true);
+    // _preferences.setBoolValue(KeyPrefens.login, true);
   }
 
   _checkPrefens() async{
     bool _isAlreadyLogin = await _preferences.getBoolValue(KeyPrefens.login);
+    print(_isAlreadyLogin);
     if(_isAlreadyLogin) {
       setState(() => _loading = true);
 
       await Provider.of<AuthProviders>(context, listen: false).getUser();
 
-
+      await _preferences.setBoolValue(KeyPrefens.login, true);
       Timer(_duration,(){
       Navigate.toFindLocation(context);
       setState(() => _loading = false);}

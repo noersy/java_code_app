@@ -69,6 +69,7 @@ class _OngoingScreenState extends State<OngoingScreen> {
                                 harga: "Rp ${item["orders"][0]["harga"]}",
                                 title: item["orders"][0]["name"],
                                 urlImage: item["orders"][0]["image"] ?? "",
+                                jumlah: "${item["orders"].length}",
                               ),
                           ],
                         )
@@ -99,7 +100,7 @@ class _OngoingScreenState extends State<OngoingScreen> {
 }
 
 class OrderMenuCard extends StatelessWidget {
-  final String urlImage, title, date, harga;
+  final String urlImage, title, date, harga, jumlah;
   final VoidCallback onPressed;
 
   const OrderMenuCard({
@@ -108,7 +109,7 @@ class OrderMenuCard extends StatelessWidget {
     required this.title,
     required this.date,
     required this.harga,
-    required this.onPressed,
+    required this.onPressed, required this.jumlah,
   }) : super(key: key);
 
   @override
@@ -140,7 +141,9 @@ class OrderMenuCard extends StatelessWidget {
                   color: ColorSty.grey60,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                child: urlImage.isNotEmpty ? Image.asset(urlImage) : const Icon(Icons.image_not_supported, color: ColorSty.grey),
+                child: urlImage.isNotEmpty
+                    ? Image.asset(urlImage)
+                    : const Icon(Icons.image_not_supported, color: ColorSty.grey),
               ),
               Expanded(
                 child: Padding(
@@ -187,7 +190,7 @@ class OrderMenuCard extends StatelessWidget {
                           ),
                           const SizedBox(width: SpaceDims.sp8),
                           Text(
-                            "(3 Menu)",
+                            "($jumlah Menu)",
                             style: TypoSty.mini.copyWith(
                               fontSize: 12.0,
                               color: ColorSty.grey,

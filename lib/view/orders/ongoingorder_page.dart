@@ -88,7 +88,7 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                               "Total Pesanan ",
                               style: TypoSty.captionSemiBold,
                             ),
-                            Text("(3 Menu) :", style: TypoSty.caption),
+                            Text("(${widget.dataOrder["orders"].length} Menu) :", style: TypoSty.caption),
                           ],
                         ),
                         Text(

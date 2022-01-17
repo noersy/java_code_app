@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/models/listdiscount.dart';
+import 'package:java_code_app/models/menulist.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
@@ -8,15 +11,17 @@ import 'package:java_code_app/view/branda/component/search_screen.dart';
 import 'package:java_code_app/widget/card_coupun.dart';
 import 'package:java_code_app/widget/label_button.dart';
 import 'package:java_code_app/widget/listmenu.dart';
+import 'package:provider/provider.dart';
 
 class ContentBeranda extends StatefulWidget {
   final List result;
-  final data;
+  final MenuList data;
+  final List<Discount> listDiscount;
 
   const ContentBeranda({
     Key? key,
     required this.result,
-    this.data,
+    required this.data, required this.listDiscount,
   }) : super(key: key);
 
   @override
@@ -81,11 +86,21 @@ class _ContentBerandaState extends State<ContentBeranda>
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: const [
-                SizedBox(width: 10),
-                CardCoupon(),
-                CardCoupon(),
-                CardCoupon(),
+              children: [
+                const SizedBox(width: 10),
+                for(final item in widget.listDiscount)
+                  CardCoupon(
+                    title: item.nama,
+                    discount: item.diskon,
+                  ),
+                const CardCoupon(
+                  title: "Lorem ipsum dolor sit amet",
+                  discount: 10,
+                ),
+                const CardCoupon(
+                  title: "Lorem ipsum dolor sit amet",
+                  discount: 10,
+                ),
               ],
             ),
           ),
@@ -133,12 +148,12 @@ class _ContentBerandaState extends State<ContentBeranda>
                       ListMenu(
                         type: "makanan",
                         title: "Makanan",
-                        data: widget.data!,
+                        data: widget.data,
                       ),
                       ListMenu(
                         type: "minuman",
                         title: "Minuman",
-                        data: widget.data!,
+                        data: widget.data,
                       ),
                     ],
                   ),
@@ -146,12 +161,12 @@ class _ContentBerandaState extends State<ContentBeranda>
                 ListMenu(
                   type: "makanan",
                   title: "Makanan",
-                  data: widget.data!,
+                  data: widget.data,
                 ),
                 ListMenu(
                   type: "minuman",
                   title: "Minuman",
-                  data: widget.data!,
+                  data: widget.data,
                 ),
               ],
             ),

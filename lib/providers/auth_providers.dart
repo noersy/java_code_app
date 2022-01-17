@@ -45,6 +45,7 @@ class AuthProviders extends ChangeNotifier {
   }
 
   Future<bool> getUser() async {
+    if(_loginUser == null ) return false;
     final Uri _api = Uri.https(_domain, "/api/user/detail/${_loginUser!.data.user.idUser}");
 
     try {
@@ -53,6 +54,7 @@ class AuthProviders extends ChangeNotifier {
       };
 
       final response = await http.get(_api, headers: headers);
+      print(response.body);
 
       if(response.statusCode == 200){
         _user = userDetailFromJson(response.body);

@@ -167,7 +167,7 @@ class VoucherCard extends StatefulWidget {
 
 class _VoucherCardState extends State<VoucherCard> {
   bool _isSelected = false;
-  DateFormat _format = DateFormat('dd/MM/yy');
+  final DateFormat _format = DateFormat('dd/MM/yy');
 
   @override
   void initState() {
@@ -244,10 +244,10 @@ class _VoucherCardState extends State<VoucherCard> {
                             alignment: Alignment.center,
                             children: [
                               Skeleton(height: 160, width: double.infinity),
-                              Text(
-                                loadingProgress.toStringShort(),
-                                style: const TextStyle(color: Colors.grey),
-                              )
+                              // Text(
+                              //   loadingProgress.toStringShort(),
+                              //   style: const TextStyle(color: Colors.grey),
+                              // )
                             ],
                           );
                         } else {

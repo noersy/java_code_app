@@ -24,7 +24,7 @@ class PromoPage extends StatelessWidget {
         return Column(
           children: [
             SizedBox(height: SpaceDims.sp24.h),
-            const CardCoupon(),
+            // const CardCoupon(), @todo
             SizedBox(height: SpaceDims.sp24.h),
             Expanded(
               child: Container(

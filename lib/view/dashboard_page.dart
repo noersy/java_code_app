@@ -39,6 +39,13 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   @override
+  void initState() {
+    Provider.of<OrderProviders>(context, listen: false).getMenuList();
+    Provider.of<OrderProviders>(context, listen: false).getListDisCount();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,

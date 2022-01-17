@@ -28,10 +28,13 @@ class _BerandaPageState extends State<BerandaPage> {
   bool _loading = false;
 
   Future<void> _onRefresh() async {
-    var _duration = const Duration(seconds: 3);
+    if(mounted) setState(() => _loading = true);
+    var _duration = const Duration(seconds: 0);
+
+    await Provider.of<OrderProviders>(context, listen: false).getMenuList();
+    Provider.of<OrderProviders>(context, listen: false).getListDisCount();
 
     if (mounted) {
-      setState(() => _loading = true);
       Timer(_duration, () {
         setState(() => _loading = false);
         _refreshController.refreshCompleted();
@@ -94,12 +97,20 @@ class _BerandaPageState extends State<BerandaPage> {
         body: SmartRefresher(
           controller: _refreshController,
           onRefresh: _onRefresh,
-          child: FutureBuilder<MenuList?>(
-              future: Provider.of<OrderProviders>(context).getMenuList(),
+          child: AnimatedBuilder(
+              animation: OrderProviders(),
               builder: (_, snapshot) {
-                if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
+                final provider = Provider.of<OrderProviders>(context);
+                final menuList = provider.listMenu;
+                final discountList = provider.listDiscount;
+
+                if (menuList != null && !_loading) {
                   return SingleChildScrollView(
-                    child: ContentBeranda(result: result, data: snapshot.data),
+                    child: ContentBeranda(
+                      result: result,
+                      data: menuList,
+                      listDiscount: discountList,
+                    ),
                   );
                 }
 

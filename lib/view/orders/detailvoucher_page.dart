@@ -7,6 +7,8 @@ import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
+import 'package:intl/intl.dart';
+
 
 class DetailVoucherPage extends StatefulWidget {
   final LVoucher voucher;
@@ -21,6 +23,8 @@ class DetailVoucherPage extends StatefulWidget {
 }
 
 class _DetailVoucherPageState extends State<DetailVoucherPage> {
+  final DateFormat _format = DateFormat('dd/MM/yy');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,7 +114,7 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
                               Text("Valid Date", style: TypoSty.button),
                             ],
                           ),
-                          const Text("31/12/2021 - 31/12/2021"),
+                          Text("${_format.format(widget.voucher.periodeMulai)} - ${_format.format(widget.voucher.periodeSelesai)}"),
                         ],
                       ),
                     ),
