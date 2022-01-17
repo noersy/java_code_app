@@ -98,11 +98,11 @@ class _CardMenuState extends State<CardMenu> {
         ),
         child: TextButton(
           onPressed: status == 0 ? null: () {
-            // Navigate.toDetailMenu(
-            //   context,
-            //   data: widget.data,
-            //   countOrder: _jumlahOrder,
-            // );
+            Navigate.toDetailMenu(
+              context,
+              id: widget.data.idMenu,
+              countOrder: _jumlahOrder,
+            );
           },
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(

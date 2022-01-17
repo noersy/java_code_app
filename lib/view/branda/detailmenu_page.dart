@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/models/menudetail.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -9,19 +10,19 @@ import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/widget/addorder_button.dart';
 import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/detailmenu_sheet.dart';
+import 'package:java_code_app/widget/label_toppingselection.dart';
 import 'package:java_code_app/widget/labellevel_selection.dart';
 import 'package:java_code_app/widget/listmenu_tile.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
+import 'package:skeleton_animation/skeleton_animation.dart';
 
 class DetailMenu extends StatefulWidget {
-  final Map<String, dynamic> data;
-  final int countOrder;
+  final int countOrder, id;
 
   const DetailMenu({
     Key? key,
-    required this.data,
     required this.countOrder,
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -29,36 +30,44 @@ class DetailMenu extends StatefulWidget {
 }
 
 class _DetailMenuState extends State<DetailMenu> {
-  late final String urlImage, name, harga, id;
-  late final int amount;
   int _jumlahOrder = 0;
   String _selectedLevel = "1";
   List<String> _selectedTopping = ["Mozarella"];
   final List<String> _listLevel = ["1", "2", "3"];
   final List<String> _listTopping = ["Mozarella", "Sausagge", "Dimsum"];
   String _catatan = "";
-  static final TextEditingController _editingController = TextEditingController();
+  static final TextEditingController _editingController =
+      TextEditingController();
+  static bool _isLoading = true;
+
+  Menu? _data;
+
+  getMenu() async {
+    final data = await Provider.of<OrderProviders>(context, listen: false)
+        .getDetailMenu(id: widget.id);
+    if (data != null) {
+      _data = data.data.menu;
+      _isLoading = false;
+    }
+    setState(() {});
+  }
 
   @override
   void initState() {
+    _isLoading = true;
     _jumlahOrder = widget.countOrder;
-    name = widget.data["name"] ?? "";
-    urlImage = widget.data["image"] ?? "";
-    harga = widget.data["harga"] ?? "";
-    amount = widget.data["amount"] ?? 0;
-    id = widget.data["id"];
+    getMenu();
+    // _catatan = widget.data["catatan"] ?? "";
+    // _selectedTopping = widget.data["topping"] ?? _selectedTopping;
+    // _selectedLevel = widget.data["level"] ?? "1";
 
-    _catatan = widget.data["catatan"] ?? "";
-    _selectedTopping = widget.data["topping"] ?? _selectedTopping;
-    _selectedLevel = widget.data["level"] ?? "1";
-
-
-    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
-    if(orders.keys.contains(id)) {
-      _jumlahOrder = orders[id]["countOrder"];
-      _catatan = orders[id]["catatan"] ?? "";
-      _selectedTopping = orders[id]["topping"] ?? _selectedTopping;
-      _selectedLevel = orders[id]["level"] ?? "1";
+    final orders =
+        Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    if (orders.keys.contains("${widget.id}")) {
+      _jumlahOrder = orders[widget.id]["countOrder"];
+      _catatan = orders[widget.id]["catatan"] ?? "";
+      _selectedTopping = orders[widget.id]["topping"] ?? _selectedTopping;
+      _selectedLevel = orders[widget.id]["level"] ?? "1";
     }
 
     super.initState();
@@ -70,11 +79,12 @@ class _DetailMenuState extends State<DetailMenu> {
       barrierColor: ColorSty.grey.withOpacity(0.2),
       elevation: 5,
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30.0),
-              topRight: Radius.circular(30.0)
-          )
-      ),      context: context,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0),
+        ),
+      ),
+      context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (_, setState) {
@@ -104,38 +114,41 @@ class _DetailMenuState extends State<DetailMenu> {
     setState(() => _selectedLevel = _value);
   }
 
-  void _viewImage() => Navigate.toViewImage(context, urlImage: urlImage);
-  void _addCatatan(){
+  void _viewImage() => Navigate.toViewImage(context, urlImage: "urlImage");
+
+  void _addCatatan() {
     setState(() => _catatan = _editingController.text);
     Navigator.pop(context);
   }
-  void _tambahkanPesanan(){
-    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
-    final data = widget.data;
 
-    data.putIfAbsent("level", () => _selectedLevel);
-    data.putIfAbsent("topping", () => _selectedTopping);
-    data.putIfAbsent("catatan", () => _catatan);
-
-    if(_jumlahOrder > 0) {
-      if (orders.keys.contains(id)) {
-        Provider.of<OrderProviders>(context, listen: false).editOrder(
-          data: data,
-          jumlahOrder: _jumlahOrder,
-          topping: _selectedTopping,
-          level: _selectedLevel,
-          catatan: _catatan,
-        );
-      } else {
-        Provider.of<OrderProviders>(context, listen: false).addOrder(
-          data: data, jumlahOrder: _jumlahOrder,
-          topping: _selectedTopping,
-          level: _selectedLevel,
-          catatan: _catatan,
-        );
-      }
-      Navigator.of(context).pop();
-    }
+  void _tambahkanPesanan() {
+    // final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    // final data = widget.data;
+    //
+    // data.putIfAbsent("level", () => _selectedLevel);
+    // data.putIfAbsent("topping", () => _selectedTopping);
+    // data.putIfAbsent("catatan", () => _catatan);
+    //
+    // if (_jumlahOrder > 0) {
+    //   if (orders.keys.contains(id)) {
+    //     Provider.of<OrderProviders>(context, listen: false).editOrder(
+    //       data: data,
+    //       jumlahOrder: _jumlahOrder,
+    //       topping: _selectedTopping,
+    //       level: _selectedLevel,
+    //       catatan: _catatan,
+    //     );
+    //   } else {
+    //     Provider.of<OrderProviders>(context, listen: false).addOrder(
+    //       data: data,
+    //       jumlahOrder: _jumlahOrder,
+    //       topping: _selectedTopping,
+    //       level: _selectedLevel,
+    //       catatan: _catatan,
+    //     );
+    //   }
+    //   Navigator.of(context).pop();
+    // }
   }
 
   @override
@@ -157,8 +170,14 @@ class _DetailMenuState extends State<DetailMenu> {
                 width: 234.0,
                 height: 182.4,
                 child: Hero(
-                    tag: "image",
-                    child: Image.asset(urlImage),
+                  tag: "image",
+                  child: _data?.foto != null
+                      ? Image.network(_data!.foto)
+                      : const Icon(
+                          Icons.image_not_supported,
+                          size: 32.0,
+                          color: ColorSty.grey,
+                        ),
                 ),
               ),
             ),
@@ -173,12 +192,14 @@ class _DetailMenuState extends State<DetailMenu> {
                 boxShadow: [
                   BoxShadow(
                     offset: const Offset(0, -1),
-                    color: ColorSty.grey.withOpacity(0.01),
+                    color: ColorSty.grey.withOpacity(0.02),
+                    blurRadius: 1,
                     spreadRadius: 1,
                   )
                 ],
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(
@@ -189,12 +210,14 @@ class _DetailMenuState extends State<DetailMenu> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          name,
-                          style: TypoSty.title.copyWith(
-                            color: ColorSty.primary,
-                          ),
-                        ),
+                        _isLoading
+                            ? const SkeletonText(height: 16.0)
+                            : Text(
+                                _data!.nama,
+                                style: TypoSty.title.copyWith(
+                                  color: ColorSty.primary,
+                                ),
+                              ),
                         AddOrderButton(
                           initCount: _jumlahOrder,
                           onChange: (int value) {
@@ -204,14 +227,29 @@ class _DetailMenuState extends State<DetailMenu> {
                       ],
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(
+                  Padding(
+                    padding: const EdgeInsets.only(
                       bottom: SpaceDims.sp12,
                       left: SpaceDims.sp24,
                       right: 108.0,
                     ),
-                    child: Text(
-                        "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
+                    child: _isLoading
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              SkeletonText(height: 12.0),
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 4.0),
+                                child: SkeletonText(height: 12.0),
+                              ),
+                              SizedBox(
+                                  width: 120,
+                                  child: SkeletonText(height: 12.0),
+                              ),
+                            ],
+                          )
+                        : const Text(
+                            "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
@@ -222,88 +260,103 @@ class _DetailMenuState extends State<DetailMenu> {
                       children: [
                         TileListDMenu(
                           icon: IconsCs.cash,
+                          isLoading: _isLoading,
                           title: "Harga",
-                          prefix: harga,
+                          prefix: !_isLoading ? "Rp ${_data!.harga}" : "Rp 0",
                           onPressed: () {},
                         ),
                         TileListDMenu(
                           prefixIcon: true,
+                          isLoading: _isLoading,
                           icon: IconsCs.fire,
                           title: "Level",
                           prefix: _selectedLevel,
                           onPressed: () => _showDialogLevel(_listLevel),
                         ),
                         TileListDMenu(
-                            prefixIcon: true,
-                            iconSvg: SvgPicture.asset("assert/image/icons/topping-icon.svg", height: 22.0,),
-                            prefixCostume: RichText(
-                              textAlign: TextAlign.end,
-                              overflow: TextOverflow.ellipsis,
-                              text: TextSpan(
-                                  style: TypoSty.captionSemiBold
-                                      .copyWith(color: ColorSty.black),
-                                  text: _selectedTopping.isEmpty
-                                      ? _listTopping[0]
-                                      : "",
-                                  children: [
-                                    for (final item in _selectedTopping)
-                                      TextSpan(
-                                        text: item + " ",
-                                        style: TypoSty.captionSemiBold
-                                            .copyWith(color: ColorSty.black),
-                                      )
-                                  ]),
-                            ),
-                            title: "Topping",
-                            onPressed: () {
-                              showModalBottomSheet(
-                                barrierColor: ColorSty.grey.withOpacity(0.2),
-                                elevation: 5,
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(30.0),
-                                        topRight: Radius.circular(30.0)
+                          prefixIcon: true,
+                          isLoading: _isLoading,
+                          iconSvg: SvgPicture.asset(
+                            "assert/image/icons/topping-icon.svg",
+                            height: 22.0,
+                          ),
+                          prefixCostume: RichText(
+                            textAlign: TextAlign.end,
+                            overflow: TextOverflow.ellipsis,
+                            text: TextSpan(
+                                style: TypoSty.captionSemiBold
+                                    .copyWith(color: ColorSty.black),
+                                text: _selectedTopping.isEmpty
+                                    ? _listTopping[0]
+                                    : "",
+                                children: [
+                                  for (final item in _selectedTopping)
+                                    TextSpan(
+                                      text: item + " ",
+                                      style: TypoSty.captionSemiBold
+                                          .copyWith(color: ColorSty.black),
                                     )
-                                ),
-                                context: context,
-                                builder: (_) => BottomSheetDetailMenu(
-                                  title: "Pilih Toping",
-                                  content: Expanded(
-                                    child: ListView(
-                                      scrollDirection: Axis.horizontal,
-                                      children: [
-                                        for (String item in _listTopping)
-                                          LabelToppingSelection(
-                                            title: item,
-                                            initial: _selectedTopping.where((e) => e == item).isNotEmpty,
-                                            onSelection: (value) {
-                                              if (_selectedTopping.where((e) => e == value).isNotEmpty) {
-                                                setState(() => _selectedTopping.remove(value));
-                                              } else {
-                                                setState(() => _selectedTopping.add(value));
-                                              }
-                                            },
-                                          )
-                                      ],
-                                    ),
+                                ]),
+                          ),
+                          title: "Topping",
+                          onPressed: () {
+                            showModalBottomSheet(
+                              barrierColor: ColorSty.grey.withOpacity(0.2),
+                              elevation: 5,
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(30.0),
+                                      topRight: Radius.circular(30.0),
+                                  ),
+                              ),
+                              context: context,
+                              builder: (_) => BottomSheetDetailMenu(
+                                title: "Pilih Toping",
+                                content: Expanded(
+                                  child: ListView(
+                                    scrollDirection: Axis.horizontal,
+                                    children: [
+                                      for (String item in _listTopping)
+                                        LabelToppingSelection(
+                                          title: item,
+                                          initial: _selectedTopping
+                                              .where((e) => e == item)
+                                              .isNotEmpty,
+                                          onSelection: (value) {
+                                            if (_selectedTopping
+                                                .where((e) => e == value)
+                                                .isNotEmpty) {
+                                              setState(() => _selectedTopping
+                                                  .remove(value));
+                                            } else {
+                                              setState(() =>
+                                                  _selectedTopping.add(value));
+                                            }
+                                          },
+                                        )
+                                    ],
                                   ),
                                 ),
-                              );
-                            },
+                              ),
+                            );
+                          },
                         ),
                         TileListDMenu(
                           prefixIcon: true,
                           icon: IconsCs.note,
+                          isLoading: _isLoading,
                           title: "Catatan",
-                          prefix: _catatan.isEmpty ? "Lorem Ipsum sit aaasss" : _catatan,
+                          prefix: _catatan.isEmpty
+                              ? "Lorem Ipsum sit aaasss"
+                              : _catatan,
                           onPressed: () => showModalBottomSheet(
                             barrierColor: ColorSty.grey.withOpacity(0.2),
                             elevation: 5,
                             shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(30.0),
-                                    topRight: Radius.circular(30.0)
-                                )
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30.0),
+                                topRight: Radius.circular(30.0),
+                              ),
                             ),
                             context: context,
                             builder: (BuildContext context) => BottomSheetDetailMenu(
@@ -373,67 +426,4 @@ class _DetailMenuState extends State<DetailMenu> {
       ),
     );
   }
-
 }
-
-class LabelToppingSelection extends StatefulWidget {
-  final String title;
-  final bool? initial;
-  final ValueChanged<String> onSelection;
-
-  const LabelToppingSelection({
-    Key? key,
-    required this.title,
-    required this.onSelection,
-    this.initial,
-  }) : super(key: key);
-
-  @override
-  State<LabelToppingSelection> createState() => _LabelToppingSelectionState();
-}
-
-class _LabelToppingSelectionState extends State<LabelToppingSelection> {
-  bool _isSelected = false;
-
-  @override
-  void initState() {
-    _isSelected = widget.initial ?? false;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(
-        vertical: SpaceDims.sp20,
-        horizontal: SpaceDims.sp4,
-      ),
-      child: TextButton(
-        style: TextButton.styleFrom(
-          backgroundColor: _isSelected ? ColorSty.primary : ColorSty.white,
-          primary: !_isSelected ? ColorSty.primary : ColorSty.white,
-          padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
-          minimumSize: Size.zero,
-          shape: RoundedRectangleBorder(
-            side: const BorderSide(color: ColorSty.primary),
-            borderRadius: BorderRadius.circular(30.0),
-          ),
-        ),
-        onPressed: () {
-          setState(() => _isSelected = !_isSelected);
-          widget.onSelection(widget.title);
-        },
-        child: Row(
-          children: [
-            const SizedBox(width: SpaceDims.sp4),
-            Text(widget.title),
-            const SizedBox(width: SpaceDims.sp4),
-            if (_isSelected) const Icon(Icons.check, size: 18.0),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-

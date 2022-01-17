@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:java_code_app/models/menudetail.dart';
 import 'package:java_code_app/models/menulist.dart';
 import 'package:java_code_app/tools/random_string.dart';
 import 'package:http/http.dart' as http;
@@ -86,7 +87,7 @@ class OrderProviders extends ChangeNotifier {
   Future<MenuList?> getMenuList() async{
       try {
 
-        final _api = Uri.https(_domain, "/api/menu");
+        final _api = Uri.https(_domain, "/api/menu/all");
         final headers = {
           "token" : "m_app"
         };
@@ -96,8 +97,33 @@ class OrderProviders extends ChangeNotifier {
         // print(response.body);
 
         if(response.statusCode == 200){
-          final MenuList data = menuListFromJson(response.body);
           return menuListFromJson(response.body);
+        }
+        return null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+
+    Future<MenuDetail?> getDetailMenu({required int id}) async{
+      try {
+
+        final _api = Uri.https(_domain, "/api/menu/detail/$id");
+
+        final headers = {
+          "token" : "m_app"
+        };
+
+        // final body = { "id_menu": 1 };
+
+        final response = await http.get(_api, headers: headers);
+
+
+        print(response.body);
+
+        if(response.statusCode == 200){
+          return menuDetailFromJson(response.body);
         }
         return null;
       } catch (e) {

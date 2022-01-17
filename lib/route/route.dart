@@ -22,7 +22,7 @@ class Navigate {
   static void toChekOut(context) => Navigator.of(context).push(routeTransition(const CheckOutPage()));
   static Future toSelectionVoucherPage(context, {Map<String, dynamic>? initialData}) async => await Navigator.of(context).push(routeTransition(SelectionVoucherPage(initialData: initialData)));
   static Future<bool>? toDetailVoucherPage(context, {required String urlImage, required String title}) async => await Navigator.of(context).push(routeTransition(DetailVoucherPage(urlImage: urlImage, title: title,))) ?? false;
-  static Future toDetailMenu(context, {required Map<String, dynamic> data, required int countOrder}) async => await Navigator.of(context).push(routeTransition(DetailMenu(data:data, countOrder: countOrder)));
+  static Future toDetailMenu(context, {required int id, required int countOrder}) async => await Navigator.of(context).push(routeTransition(DetailMenu(countOrder: countOrder, id: id)));
   static Future toEditOrderMenu(context, {required Map<String, dynamic> data, required int countOrder}) async => await Navigator.of(context).push(routeTransition(EditOrderPage(data:data, countOrder: countOrder)));
   static void toViewOrder(context, {required Map<String, dynamic> dataOrders}) => Navigator.of(context).push(routeTransition( OngoingOrderPage(dataOrder: dataOrders)));
   static void toViewOrderKasir(context, {required Map<String, dynamic> dataOrders, bool? preparing}) => Navigator.of(context).push(routeTransition(OrderDetailPage(dataOrder: dataOrders, preparing: preparing)));

@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
+import 'package:skeleton_animation/skeleton_animation.dart';
 
 class TileListDMenu extends StatelessWidget {
   final String title;
@@ -14,7 +15,7 @@ class TileListDMenu extends StatelessWidget {
   final SvgPicture? iconSvg;
   final TextStyle? textStylePrefix;
   final Function() onPressed;
-  final bool? dense;
+  final bool? dense, isLoading;
 
   const TileListDMenu({
     Key? key,
@@ -25,7 +26,10 @@ class TileListDMenu extends StatelessWidget {
     required this.onPressed,
     this.textStylePrefix,
     this.dense,
-    this.prefixCostume, this.svgPicture, this.iconSvg,
+    this.prefixCostume,
+    this.svgPicture,
+    this.iconSvg,
+    this.isLoading = false,
   }) : super(key: key);
 
   @override
@@ -37,7 +41,9 @@ class TileListDMenu extends StatelessWidget {
           onTap: prefixIcon ?? false ? onPressed : null,
           leading: Padding(
             padding: const EdgeInsets.only(top: SpaceDims.sp2),
-            child: iconSvg == null ? Icon(icon, color: ColorSty.primary, size: 23.0) : iconSvg!,
+            child: iconSvg == null
+                ? Icon(icon, color: ColorSty.primary, size: 23.0)
+                : iconSvg!,
           ),
           contentPadding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp8),
           horizontalTitleGap: 0,
@@ -50,17 +56,27 @@ class TileListDMenu extends StatelessWidget {
               Row(
                 children: [
                   SizedBox(
-                    width: prefixCostume != null ? 165 : 118,
-                    child: prefixCostume ?? Text(
-                      prefix ?? "",
-                      style: prefixIcon ?? false
-                          ? TypoSty.captionSemiBold.copyWith(fontWeight: FontWeight.normal).merge(textStylePrefix)
-                            : dense ?? false
-                            ? TypoSty.captionSemiBold.copyWith(fontWeight: FontWeight.normal).merge(textStylePrefix)
-                          : TypoSty.title.copyWith(color: ColorSty.primary).merge(textStylePrefix),
-                      textAlign: TextAlign.right,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    width: (prefixCostume != null || isLoading!) ? 165 : 118,
+                    child: isLoading!
+                        ? const SkeletonText(height: 20.0)
+                        : prefixCostume ??
+                            Text(
+                              prefix ?? "",
+                              style: prefixIcon ?? false
+                                  ? TypoSty.captionSemiBold
+                                      .copyWith(fontWeight: FontWeight.normal)
+                                      .merge(textStylePrefix)
+                                  : dense ?? false
+                                      ? TypoSty.captionSemiBold
+                                          .copyWith(
+                                              fontWeight: FontWeight.normal)
+                                          .merge(textStylePrefix)
+                                      : TypoSty.title
+                                          .copyWith(color: ColorSty.primary)
+                                          .merge(textStylePrefix),
+                              textAlign: TextAlign.right,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                   ),
                   if (prefixIcon ?? false)
                     Padding(
