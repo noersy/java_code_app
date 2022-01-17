@@ -97,8 +97,6 @@ class OrderProviders extends ChangeNotifier {
 
         if(response.statusCode == 200){
           final MenuList data = menuListFromJson(response.body);
-          print(data.data.length);
-
           return menuListFromJson(response.body);
         }
         return null;

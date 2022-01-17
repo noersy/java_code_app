@@ -98,7 +98,6 @@ class _BerandaPageState extends State<BerandaPage> {
               future: Provider.of<OrderProviders>(context).getMenuList(),
               builder: (_, snapshot) {
                 if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
-                  print(snapshot.data);
                   return SingleChildScrollView(
                     child: ContentBeranda(result: result, data: snapshot.data),
                   );
