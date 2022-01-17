@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 class OrderProviders extends ChangeNotifier {
   // static int _orderInProgress = 0;
   // static int _checkOrder = 0;
-  static const String _domain = "192.168.1.35:8080";
+  static const String _domain = "javacode.ngodingin.com";
 
   static Map<String, dynamic> _checkOrder = {};
   static List<Map<String, dynamic>> _orderInProgress = [];
@@ -85,9 +85,13 @@ class OrderProviders extends ChangeNotifier {
 
   Future<MenuList?> getMenuList() async{
       try {
-        final _api = Uri.http("192.168.1.35:8080", "/landa_db/api/menu");
 
-        final response = await http.get(_api);
+        final _api = Uri.https(_domain, "/api/menu");
+        final headers = {
+          "token" : "m_app"
+        };
+
+        final response = await http.get(_api, headers: headers);
 
         print(response.body);
 

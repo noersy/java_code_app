@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class AuthProviders extends ChangeNotifier {
-  static final Uri _api = Uri.http("192.168.1.35:8080", "/landa_db/api/auth/login");
+  static final Uri _api = Uri.https("javacode.ngodingin.com", "/api/auth/login");
 
   Future<bool> login(String username, String password) async {
     try {
