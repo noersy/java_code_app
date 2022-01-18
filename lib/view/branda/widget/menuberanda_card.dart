@@ -5,7 +5,7 @@ import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:java_code_app/view/orders/checkout_page.dart';
+import 'package:java_code_app/view/chekout/checkout_page.dart';
 import 'package:provider/provider.dart';
 
 class CardMenu extends StatefulWidget {

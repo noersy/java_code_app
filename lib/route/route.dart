@@ -4,16 +4,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:java_code_app/models/listvoucher.dart';
 import 'package:java_code_app/transision/route_transisition.dart';
-import 'package:java_code_app/view/orders/checkout_page.dart';
+import 'package:java_code_app/view/chekout/checkout_page.dart';
 import 'package:java_code_app/view/dashboard_page.dart';
 import 'package:java_code_app/view/branda/detailmenu_page.dart';
-import 'package:java_code_app/view/orders/detailvoucher_page.dart';
+import 'package:java_code_app/view/chekout/detailvoucher_page.dart';
 import 'package:java_code_app/view/orders/editorder_page.dart';
 import 'package:java_code_app/view/auth/findlocation_page.dart';
 import 'package:java_code_app/view/orders/ordersdetail_page.dart';
 import 'package:java_code_app/view/orders/ongoingorder_page.dart';
 import 'package:java_code_app/view/branda/promo_page.dart';
-import 'package:java_code_app/view/orders/selection_vocher_page.dart';
+import 'package:java_code_app/view/chekout/selection_vocher_page.dart';
 import 'package:java_code_app/widget/view_image.dart';
 
 class Navigate {

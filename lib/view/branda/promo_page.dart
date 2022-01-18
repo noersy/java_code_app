@@ -4,7 +4,7 @@ import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:java_code_app/view/orders/selection_vocher_page.dart';
+import 'package:java_code_app/view/chekout/selection_vocher_page.dart';
 import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/card_coupun.dart';
 
