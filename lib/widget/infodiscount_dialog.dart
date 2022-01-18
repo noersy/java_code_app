@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
+import 'package:provider/provider.dart';
 
 class InfoDiscountDialog extends StatelessWidget {
   const InfoDiscountDialog({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _discount = Provider
+        .of<OrderProviders>(context, listen: false)
+        .listDiscount;
     return Dialog(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(30.0))
+      ),
       child: SizedBox(
         height: 195.0,
         child: Padding(
@@ -19,21 +27,16 @@ class InfoDiscountDialog extends StatelessWidget {
               Column(
                 children: [
                   const SizedBox(height: SpaceDims.sp24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children:  [
-                      Text("Info Discount", style: TypoSty.caption),
-                      Text("10%", style: TypoSty.captionBold),
-                    ],
-                  ),
-                  const SizedBox(height: SpaceDims.sp4),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children:  [
-                      Text("Info Discount", style: TypoSty.caption),
-                      Text("10%", style: TypoSty.captionBold),
-                    ],
-                  ),
+                  for(final item in _discount) ...[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(item.nama, style: TypoSty.caption),
+                        Text("${item.diskon} %", style: TypoSty.captionBold),
+                      ],
+                    ),
+                    const SizedBox(height: SpaceDims.sp4),
+                  ],
                 ],
               ),
               const SizedBox(height: SpaceDims.sp22),
@@ -58,3 +61,4 @@ class InfoDiscountDialog extends StatelessWidget {
     );
   }
 }
+

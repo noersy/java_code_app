@@ -25,10 +25,25 @@ class CheckOutPage extends StatefulWidget {
 
 class _CheckOutPageState extends State<CheckOutPage> {
   LVoucher? _selectedVoucher;
+  int totalDiscout = 0, totalOrders = 0, totalPay = 0, totalDisP = 0, numOrders = 0;
+
+  @override
+  void initState() {
+    final _orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    final _discount = Provider.of<OrderProviders>(context, listen: false).listDiscount;
+    totalDiscout = _discount.isNotEmpty
+        ? _discount.map((e) => e.diskon).reduce((a, b) => a+b)
+        : totalDiscout;
+    totalOrders = _orders.values.map((e) => e["harga"]).reduce((a, b) => a+b);
+    totalDisP = (totalOrders*(totalDiscout/100)).toInt();
+    totalPay = totalOrders - totalDisP;
+    numOrders = _orders.length;
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: const CostumeAppBar(
         back: true,
@@ -44,6 +59,15 @@ class _CheckOutPageState extends State<CheckOutPage> {
                 animation: OrderProviders(),
                 builder: (context, snapshot) {
                   final _orders = Provider.of<OrderProviders>(context).checkOrder;
+                  final _discount = Provider.of<OrderProviders>(context).listDiscount;
+                  totalDiscout = _discount.isNotEmpty
+                      ? _discount.map((e) => e.diskon).reduce((a, b) => a+b)
+                      : totalDiscout;
+                  totalOrders = _orders.values.map((e) => e["harga"]).reduce((a, b) => a+b);
+                  totalDisP = (totalOrders*(totalDiscout/100)).toInt();
+                  totalPay = totalOrders - totalDisP;
+                  numOrders = _orders.length;
+
                   return Column(
                     children: [
                       if (_orders.values
@@ -102,11 +126,11 @@ class _CheckOutPageState extends State<CheckOutPage> {
                               "Total Pesanan ",
                               style: TypoSty.captionSemiBold,
                             ),
-                            Text("(3 Menu) :", style: TypoSty.caption),
+                            Text("($numOrders Menu) :", style: TypoSty.caption),
                           ],
                         ),
                         Text(
-                          "Rp 30.000",
+                          "Rp $totalOrders",
                           style: TypoSty.subtitle.copyWith(
                             color: ColorSty.primary,
                           ),
@@ -125,13 +149,14 @@ class _CheckOutPageState extends State<CheckOutPage> {
                           TileListDMenu(
                             dense: true,
                             prefixIcon: true,
-                            title: "Diskon 20%",
-                            prefix: "Rp 4.000",
+                            title: "Diskon $totalDiscout%",
+                            prefix: "Rp $totalDisP",
                             textStylePrefix: const TextStyle(color: Colors.red),
                             iconSvg: SvgPicture.asset("assert/image/icons/discount-icon.svg", height: 24.0),
                             onPressed: () => showDialog(
                                 context: context,
-                                builder: (_) => const InfoDiscountDialog()),
+                                builder: (_) => const InfoDiscountDialog(),
+                            ),
                           ),
                         TileListDMenu(
                             dense: true,
@@ -160,7 +185,8 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                 : null,
                             // icon: IconsCs.voucher,
                             iconSvg: SvgPicture.asset(
-                                "assert/image/icons/voucher-icon-line.svg"),
+                                "assert/image/icons/voucher-icon-line.svg",
+                            ),
                             onPressed: () async {
                               _selectedVoucher = await Navigate.toSelectionVoucherPage(context, initialData: _selectedVoucher);
                               setState(() {});
@@ -169,7 +195,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                           TileListDMenu(
                             dense: true,
                             title: "Pembayaran",
-                            prefix: "Pay Leter",
+                            prefix: "Pay Later",
                             // icon: IconsCs.coins,
                             iconSvg: SvgPicture.asset(
                                 "assert/image/icons/la_coins.svg",
@@ -215,7 +241,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                               "Total Pembayaran",
                               style: TextStyle(color: ColorSty.black60),
                             ),
-                            Text("Rp 27.000", style: TypoSty.titlePrimary),
+                            Text("Rp $totalPay", style: TypoSty.titlePrimary),
                           ],
                         ),
                       ],

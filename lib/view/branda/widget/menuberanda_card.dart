@@ -104,7 +104,9 @@ class _CardMenuState extends State<CardMenu> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-          horizontal: SpaceDims.sp12, vertical: SpaceDims.sp2),
+        horizontal: SpaceDims.sp12,
+        vertical: SpaceDims.sp2,
+      ),
       child: Card(
         elevation: 4,
         color: ColorSty.white80,
@@ -168,8 +170,8 @@ class _CardMenuState extends State<CardMenu> {
                           final _orders = Provider.of<OrderProviders>(context).checkOrder;
                           String _catatan = "";
 
-                          if(_orders.containsKey(id)) {
-                            _catatan = _orders[id]["catatan"] ?? "";
+                          if(_orders.containsKey("$id")) {
+                            _catatan = _orders["$id"]["catatan"] ?? "";
                           }
 
                           return Text(
