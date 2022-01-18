@@ -52,12 +52,10 @@ class _LoginPageState extends State<LoginPage> {
 
   _checkInternet() async {
     final _isConnected = await _connectionStatus.checkConnection();
-    // _preferences.setBoolValue(KeyPrefens.login, true);
   }
 
   _checkPrefens() async{
     bool _isAlreadyLogin = await _preferences.getBoolValue(KeyPrefens.login);
-    print(_isAlreadyLogin);
     if(_isAlreadyLogin) {
       setState(() => _loading = true);
       final id = await _preferences.getIntValue(KeyPrefens.loginID);

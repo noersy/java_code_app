@@ -52,21 +52,21 @@ class Data {
 class User {
   User({
     required this.idUser,
-    required this.username,
+    required this.email,
     required this.nama,
     required this.mRolesId,
     required this.akses,
   });
 
   final int idUser;
-  final String username;
+  final String email;
   final String nama;
   final int mRolesId;
   final Akses akses;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
     idUser: json["id_user"],
-    username: json["username"],
+    email: json["email"],
     nama: json["nama"],
     mRolesId: json["m_roles_id"],
     akses: Akses.fromJson(json["akses"]),
@@ -74,7 +74,7 @@ class User {
 
   Map<String, dynamic> toJson() => {
     "id_user": idUser,
-    "username": username,
+    "email": email,
     "nama": nama,
     "m_roles_id": mRolesId,
     "akses": akses.toJson(),

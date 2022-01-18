@@ -17,12 +17,12 @@ class AuthProviders extends ChangeNotifier {
     return null;
   }
 
-  Future<bool> login(String username, String password) async {
+  Future<bool> login(String email, String password) async {
     final Uri _api = Uri.https(_domain, "/api/auth/login");
     try {
 
       final body = {
-        "username" : username,
+        "email" : email,
         "password" : password
       };
 
@@ -57,9 +57,9 @@ class AuthProviders extends ChangeNotifier {
       };
 
       final response = await http.get(_api, headers: headers);
-      print(response.body);
 
       if(response.statusCode == 200){
+        print(response.body);
         _user = userDetailFromJson(response.body);
         notifyListeners();
         return true;

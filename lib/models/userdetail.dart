@@ -2,7 +2,6 @@
 //
 //     final userDetail = userDetailFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 UserDetail userDetailFromJson(String str) => UserDetail.fromJson(json.decode(str));
@@ -15,8 +14,8 @@ class UserDetail {
     required this.data,
   });
 
-  final int statusCode;
-  final DUser data;
+  int statusCode;
+  DUser data;
 
   factory UserDetail.fromJson(Map<String, dynamic> json) => UserDetail(
     statusCode: json["status_code"],
@@ -33,62 +32,50 @@ class DUser {
   DUser({
     required this.idUser,
     required this.nama,
-    required this.tglLahir,
     required this.email,
-    required this.alamat,
-    required this.telepon,
-    required this.foto,
-    required this.username,
-    required this.password,
-    required this.ktp,
+    this.tglLahir,
+    this.alamat,
+    this.telepon,
+    this.foto,
+    this.ktp,
     required this.status,
     required this.mRolesId,
-    required this.isDeleted,
   });
 
-  final int idUser;
-  final String nama;
-  final dynamic tglLahir;
-  final String email;
-  final String alamat;
-  final String telepon;
-  final dynamic foto;
-  final String username;
-  final String password;
-  final dynamic ktp;
-  final int status;
-  final int mRolesId;
-  final int isDeleted;
+  int idUser;
+  String nama;
+  String email;
+  String? alamat;
+  String? tglLahir;
+  String? telepon;
+  String? foto;
+  String? ktp;
+  int status;
+  int mRolesId;
 
   factory DUser.fromJson(Map<String, dynamic> json) => DUser(
     idUser: json["id_user"],
     nama: json["nama"],
-    tglLahir: json["tgl_lahir"],
     email: json["email"],
+    tglLahir: json["tgl_lahir"],
     alamat: json["alamat"],
     telepon: json["telepon"],
     foto: json["foto"],
-    username: json["username"],
-    password: json["password"],
     ktp: json["ktp"],
     status: json["status"],
     mRolesId: json["m_roles_id"],
-    isDeleted: json["is_deleted"],
   );
 
   Map<String, dynamic> toJson() => {
     "id_user": idUser,
     "nama": nama,
-    "tgl_lahir": tglLahir,
     "email": email,
+    "tgl_lahir": tglLahir,
     "alamat": alamat,
     "telepon": telepon,
     "foto": foto,
-    "username": username,
-    "password": password,
     "ktp": ktp,
     "status": status,
     "m_roles_id": mRolesId,
-    "is_deleted": isDeleted,
   };
 }
