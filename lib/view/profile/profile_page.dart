@@ -12,6 +12,7 @@ import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
+import 'package:java_code_app/tools/google_tools.dart';
 import 'package:java_code_app/tools/shared_preferences.dart';
 import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/detailmenu_sheet.dart';
@@ -377,6 +378,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               onPressed: () {
                                 Navigator.pushReplacementNamed(context, "/");
                                 Preferences.getInstance().clear();
+                                GoogleLogin.getInstance().logout();
                               },
                               child: SizedBox(
                                 width: 204,
