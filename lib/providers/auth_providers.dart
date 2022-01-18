@@ -15,14 +15,18 @@ class AuthProviders extends ChangeNotifier {
     return null;
   }
 
-  Future<bool> login(String email, String? password,
-      {bool? isGoogle = false, String? nama = ""}) async {
+  Future<bool> login(
+    String email,
+    String? password, {
+    bool? isGoogle = false,
+    String? nama = "",
+  }) async {
     final Uri _api = Uri.https(_domain, "/api/auth/login");
     try {
       final body = <String, dynamic>{
         "email": email,
         "password": password,
-        "nama" : nama,
+        "nama": nama,
         "is_google": isGoogle! ? "is_google" : "",
       };
 
@@ -32,7 +36,8 @@ class AuthProviders extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         _loginUser = loginUserFromJson(response.body);
-        Preferences.getInstance().setIntValue(KeyPrefens.loginID, _loginUser!.data.user.idUser);
+        Preferences.getInstance()
+            .setIntValue(KeyPrefens.loginID, _loginUser!.data.user.idUser);
         getUser();
         notifyListeners();
         return true;
@@ -67,6 +72,29 @@ class AuthProviders extends ChangeNotifier {
       // return false;
     }
 
+    return false;
+  }
+
+
+  Future<bool> update({id, key, value}) async {
+    if (_loginUser == null && id == null) return false;
+    final _id = id ?? _loginUser!.data.user.idUser;
+    final Uri _api = Uri.https(_domain, "/api/user/update/$_id");
+
+    try {
+      final headers = {"token": "m_app"};
+      final body = {"$key" : "$value"};
+      final response = await http.post(_api, headers: headers, body: body);
+
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        getUser();
+        return true;
+      }
+    } catch (e) {
+      // return false;
+    }
     return false;
   }
 }

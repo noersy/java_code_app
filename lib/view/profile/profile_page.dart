@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,6 +20,8 @@ import 'package:java_code_app/widget/detailmenu_sheet.dart';
 import 'package:java_code_app/widget/vp_pin_dialog.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:intl/intl.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -33,13 +36,14 @@ class _ProfilePageState extends State<ProfilePage> {
   static PackageInfo? _packageInfo;
   static final ImagePicker _picker = ImagePicker();
   static File? _fileImage;
+  static final DateFormat _dateFormat = DateFormat('dd/MM/yy');
+  get provider => Provider.of<AuthProviders>(context, listen: false);
 
   getInfoDevice() async {
     _androidInfo = await deviceInfo.androidInfo;
     _packageInfo = await PackageInfo.fromPlatform();
     setState(() {});
   }
-
   _camera() async {
     final _image = await _picker.pickImage(
       source: ImageSource.camera,
@@ -49,7 +53,6 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.pop(context);
     _saveImage(_image);
   }
-
   _galley() async {
     final _image = await _picker.pickImage(
       source: ImageSource.gallery,
@@ -59,7 +62,6 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.pop(context);
     _saveImage(_image);
   }
-
   _changeImageProfile() {
     showModalBottomSheet(
       barrierColor: Colors.grey.withOpacity(0.2),
@@ -113,7 +115,6 @@ class _ProfilePageState extends State<ProfilePage> {
       },
     );
   }
-
   _saveImage(_image) async {
     if (_image != null) {
       _fileImage = await ImageCropper.cropImage(
@@ -144,7 +145,28 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {});
     }
   }
+  _updateTgl() async {
+    final value = await showDialog(
+      barrierColor: ColorSty.grey.withOpacity(0.2),
+      context: context, builder: (_)=>const DatePickerDialog(),
+    );
 
+    if(value != null) {
+      final _dateR = _dateFormat.format(value);
+      provider.update(key: "tgl_lahir", value: _dateR);
+      if(mounted) setState(() {});
+    }
+  }
+  _updateTelepon(String value){
+    provider.update(key: "telepon", value: value);
+    if(mounted) setState(() {});
+  }
+  _updateNama(String value){
+    provider.update(key: "nama", value: value);
+    if(mounted) setState(() {});
+  }
+  
+  
   @override
   void initState() {
     getInfoDevice();
@@ -263,14 +285,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                     top: false,
                                     title: lang.profile.nam,
                                     suffix: _user?.nama ?? " ",
+                                    onSubmit: _updateNama,
                                   ),
                                   TileListProfile(
                                     title: lang.profile.tgl,
                                     suffix: _user?.tglLahir ?? ' ',
+                                    onPressed: _updateTgl,
                                   ),
                                   TileListProfile(
                                     title: lang.profile.tlp,
                                     suffix: _user?.telepon ?? ' ',
+                                    onSubmit: _updateTelepon,
                                   ),
                                   TileListProfile(
                                     title: 'Email',
@@ -413,6 +438,7 @@ class TileListProfile extends StatefulWidget {
   final bool? top, bottom, enable;
   final String title, suffix;
   final Function()? onPressed;
+  final Function(String value)? onSubmit;
 
   const TileListProfile({
     Key? key,
@@ -421,7 +447,7 @@ class TileListProfile extends StatefulWidget {
     required this.title,
     required this.suffix,
     this.onPressed,
-    this.enable = true,
+    this.enable = true, this.onSubmit,
   }) : super(key: key);
 
   @override
@@ -477,7 +503,12 @@ class _TileListProfileState extends State<TileListProfile> {
                             ),
                             if (widget.enable!)
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  if(widget.onSubmit != null){
+                                    Navigator.pop(context);
+                                    widget.onSubmit!(_editingController.text);
+                                  }
+                                },
                                 style: ElevatedButton.styleFrom(
                                   padding: const EdgeInsets.all(0),
                                   minimumSize: const Size(25.0, 25.0),
@@ -610,6 +641,42 @@ class _ChangeLagSheetState extends State<ChangeLagSheet> {
               ],
             );
           }),
+    );
+  }
+}
+
+class DatePickerDialog extends StatelessWidget {
+  const DatePickerDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ScreenUtilInit(
+        builder: () {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(SpaceDims.sp12),
+              child: SizedBox(
+                height: 0.5.sh,
+                width: double.infinity,
+                child: SfDateRangePicker(
+                  onSubmit: (value) {
+                    if(value != null) {
+                      Navigator.pop(context, value);
+                    }
+                  },
+                  onCancel: () => Navigator.pop(context),
+                  showActionButtons: true,
+                  selectionMode: DateRangePickerSelectionMode.single,
+                  extendableRangeSelectionDirection: ExtendableRangeSelectionDirection.both,
+                  view: DateRangePickerView.month,
+                ),
+              ),
+            ),
+          );
+        }
     );
   }
 }
