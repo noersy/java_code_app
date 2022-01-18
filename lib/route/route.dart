@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:java_code_app/models/list_voucher.dart';
+import 'package:java_code_app/models/listvoucher.dart';
 import 'package:java_code_app/transision/route_transisition.dart';
 import 'package:java_code_app/view/orders/checkout_page.dart';
 import 'package:java_code_app/view/dashboard_page.dart';

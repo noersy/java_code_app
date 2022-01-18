@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/models/menudetail.dart';
+import 'package:java_code_app/models/menulist.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -124,8 +125,8 @@ class _DetailMenuState extends State<DetailMenu> {
   void _tambahkanPesanan() {
     if (_data == null) return;
 
-    final orders =
-        Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+
     final data = {
       "id": "${widget.id}",
       "jenis": _data!.kategori,
@@ -142,7 +143,7 @@ class _DetailMenuState extends State<DetailMenu> {
     if (_jumlahOrder > 0) {
       if (orders.keys.contains("${widget.id}")) {
         Provider.of<OrderProviders>(context, listen: false).editOrder(
-          data: data,
+          id: "${widget.id}",
           jumlahOrder: _jumlahOrder,
           topping: _selectedTopping,
           level: _selectedLevel,

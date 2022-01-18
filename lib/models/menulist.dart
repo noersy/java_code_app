@@ -2,7 +2,6 @@
 //
 //     final menuList = menuListFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 MenuList menuListFromJson(String str) => MenuList.fromJson(json.decode(str));
@@ -16,11 +15,11 @@ class MenuList {
   });
 
   final int statusCode;
-  final List<MenuCard> data;
+  final List<DMenu> data;
 
   factory MenuList.fromJson(Map<String, dynamic> json) => MenuList(
     statusCode: json["status_code"],
-    data: List<MenuCard>.from(json["data"].map((x) => MenuCard.fromJson(x))),
+    data: List<DMenu>.from(json["data"].map((x) => DMenu.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -29,8 +28,8 @@ class MenuList {
   };
 }
 
-class MenuCard {
-  MenuCard({
+class DMenu {
+  DMenu({
     required this.idMenu,
     required this.nama,
     required this.kategori,
@@ -54,7 +53,7 @@ class MenuCard {
   final DateTime createdAt;
   final int createdBy;
 
-  factory MenuCard.fromJson(Map<String, dynamic> json) => MenuCard(
+  factory DMenu.fromJson(Map<String, dynamic> json) => DMenu(
     idMenu: json["id_menu"],
     nama: json["nama"],
     kategori: json["kategori"],

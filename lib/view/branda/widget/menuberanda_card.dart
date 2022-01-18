@@ -9,7 +9,7 @@ import 'package:java_code_app/view/orders/checkout_page.dart';
 import 'package:provider/provider.dart';
 
 class CardMenu extends StatefulWidget {
-  final MenuCard data;
+  final DMenu data;
 
   const CardMenu({
     Key? key,
@@ -24,52 +24,53 @@ class _CardMenuState extends State<CardMenu> {
   int _jumlahOrder = 0;
   late final String nama, url;
   late final int status, id, harga;
+  late final Map<String, dynamic> _data;
 
   void  _add(){
-    // setState(() => _jumlahOrder++);
-    // if(_jumlahOrder == 1){
-    //   Provider.of<OrderProviders>(context, listen: false).addOrder(
-    //     jumlahOrder: _jumlahOrder,
-    //     data: widget.data,
-    //     catatan: '',
-    //     topping: [],
-    //     level: '',
-    //   );
-    // }else{
-    //   Provider.of<OrderProviders>(context, listen: false).editOrder(
-    //     jumlahOrder: _jumlahOrder,
-    //     data: widget.data,
-    //     catatan: '',
-    //     topping: [],
-    //     level: '',
-    //   );
-    // }
+    setState(() => _jumlahOrder++);
+    if(_jumlahOrder == 1){
+      Provider.of<OrderProviders>(context, listen: false).addOrder(
+        jumlahOrder: _jumlahOrder,
+        data: _data,
+        catatan: '',
+        topping: [],
+        level: '',
+      );
+    }else{
+      Provider.of<OrderProviders>(context, listen: false).editOrder(
+        jumlahOrder: _jumlahOrder,
+        id: "${widget.data.idMenu}",
+        catatan: '',
+        topping: [],
+        level: '',
+      );
+    }
   }
 
   void _min() async {
     setState(() => _jumlahOrder--);
-    // final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
-    // if(_jumlahOrder >= 1){
-    //   Provider.of<OrderProviders>(context, listen: false).editOrder(
-    //     jumlahOrder: _jumlahOrder,
-    //     data: widget.data,
-    //     catatan: '',
-    //     topping: [],
-    //     level: '',
-    //   );
-    // } else if (_jumlahOrder != 0) {
-    //   Provider.of<OrderProviders>(context, listen: false).addOrder(
-    //     jumlahOrder: _jumlahOrder,
-    //     data: widget.data,
-    //     catatan: '',
-    //     topping: [],
-    //     level: '',
-    //   );
-    // }else{
-    //   await showDialog(context: context,
-    //     builder: (_) => DeleteMenuInCheckoutDialog(id: widget.data["id"]),
-    //   );
-    // }
+    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    if(_jumlahOrder >= 1){
+      Provider.of<OrderProviders>(context, listen: false).editOrder(
+        jumlahOrder: _jumlahOrder,
+        id: "${widget.data.idMenu}",
+        catatan: '',
+        topping: [],
+        level: '',
+      );
+    } else if (_jumlahOrder != 0) {
+      Provider.of<OrderProviders>(context, listen: false).addOrder(
+        jumlahOrder: _jumlahOrder,
+        data: _data,
+        catatan: '',
+        topping: [],
+        level: '',
+      );
+    }else{
+      await showDialog(context: context,
+        builder: (_) => DeleteMenuInCheckoutDialog(id: "${widget.data.idMenu}"),
+      );
+    }
   }
 
   @override
@@ -79,8 +80,22 @@ class _CardMenuState extends State<CardMenu> {
 
     _jumlahOrder =  0;
     nama = widget.data.nama;
-    url = "";
     harga = widget.data.harga;
+    url = "";
+
+
+    _data = {
+    "id": "${widget.data.idMenu}",
+    "jenis": widget.data.kategori,
+    "image": widget.data.foto,
+    "harga": widget.data.harga,
+    "amount": widget.data.status,
+    "name": widget.data.nama,
+    "level": "",
+    "topping": [],
+    "catatan": "",
+    "countOrder": _jumlahOrder,
+    };
 
     super.initState();
   }

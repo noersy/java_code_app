@@ -78,7 +78,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
       Provider.of<OrderProviders>(context, listen: false).deleteOrder(id: id);
     } else {
       Provider.of<OrderProviders>(context, listen: false).editOrder(
-        data: data,
+        id: data["id"],
         jumlahOrder: _jumlahOrder,
         level: _selectedLevel,
         catatan: _catatan,

@@ -59,7 +59,7 @@ class AuthProviders extends ChangeNotifier {
       final response = await http.get(_api, headers: headers);
 
       if(response.statusCode == 200){
-        print(response.body);
+        // print(response.body);
         _user = userDetailFromJson(response.body);
         notifyListeners();
         return true;

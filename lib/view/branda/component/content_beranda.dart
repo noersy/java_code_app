@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:java_code_app/models/ListPromo.dart';
+import 'package:java_code_app/models/listpromo.dart';
 import 'package:java_code_app/models/listdiscount.dart';
 import 'package:java_code_app/models/menulist.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -32,6 +32,7 @@ class _ContentBerandaState extends State<ContentBeranda>
     with AutomaticKeepAliveClientMixin<ContentBeranda> {
   final PageController _pageController = PageController();
   final ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollPromo = ScrollController();
   final Duration _duration = const Duration(milliseconds: 500);
   int _sIndex = 0;
 

@@ -26,7 +26,7 @@ class GeolocationStatus {
 
   //The test to actually see if there is a connection
   Future<bool> checkConnection() async {
-    bool previousLocation = inLocation;
+    // bool previousLocation = inLocation;
 
     if (hasPermission) {
       try {
@@ -38,7 +38,6 @@ class GeolocationStatus {
           inLocation = false;
         }
 
-        print(result);
       } on TimeoutException catch (_) {
         inLocation = false;
       }

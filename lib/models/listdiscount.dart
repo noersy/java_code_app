@@ -2,7 +2,6 @@
 //
 //     final listDiscount = listDiscountFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 ListDiscount listDiscountFromJson(String str) => ListDiscount.fromJson(json.decode(str));

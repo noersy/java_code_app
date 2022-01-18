@@ -1,14 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:java_code_app/models/ListPromo.dart';
-import 'package:java_code_app/models/list_voucher.dart';
+import 'package:java_code_app/models/listpromo.dart';
+import 'package:java_code_app/models/listvoucher.dart';
 import 'package:java_code_app/models/listdiscount.dart';
 import 'package:java_code_app/models/menudetail.dart';
 import 'package:java_code_app/models/menulist.dart';
 import 'package:java_code_app/tools/check_connectivity.dart';
 import 'package:java_code_app/tools/random_string.dart';
-import 'package:java_code_app/transision/route_transisition.dart';
-import 'package:java_code_app/view/offline/offline_page.dart';
 
 class OrderProviders extends ChangeNotifier {
   // static int _orderInProgress = 0;
@@ -34,17 +32,17 @@ class OrderProviders extends ChangeNotifier {
 
   List<Promo> get listPromo => _listPromo;
 
-  static final _connectionStatus = ConnectionStatus.getInstance();
+  // static final _connectionStatus = ConnectionStatus.getInstance();
 
   addOrder({
-    required Map<String, dynamic> data,
+    required Map<String , dynamic> data,
     required int jumlahOrder,
     required String catatan,
     required String level,
     required List<String> topping,
   }) async {
     _checkOrder.addAll({
-      data["id"]: {
+      "${data["id"]}": {
         "id": data["id"],
         "jenis": data["jenis"],
         "image": data["image"],
@@ -66,21 +64,21 @@ class OrderProviders extends ChangeNotifier {
   }
 
   editOrder({
-    required Map<String, dynamic> data,
+    required String id,
     required int jumlahOrder,
     required String catatan,
     required String level,
     required List<String> topping,
   }) async {
     _checkOrder.update(
-      data["id"],
+      id,
       (value) => {
-        "id": value["id"],
-        "jenis": value["jenis"],
-        "image": value["image"],
-        "harga": value["harga"],
-        "amount": value["amount"],
-        "name": value["name"],
+        // "id": value["id"],
+        // "jenis": value["jenis"],
+        // "image": value["image"],
+        // "harga": value["harga"],
+        // "amount": value["amount"],
+        // "name": value["name"],
         "level": level.isEmpty ? value["level"] : level,
         "topping": topping.isEmpty ? value["topping"] : topping,
         "catatan": catatan.isEmpty ? value["catatan"] : catatan,

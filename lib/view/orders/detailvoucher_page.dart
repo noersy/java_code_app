@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:java_code_app/models/list_voucher.dart';
+import 'package:java_code_app/models/listvoucher.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';

@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _checkInternet() async {
-    final _isConnected = await _connectionStatus.checkConnection();
+    // final _isConnected = await _connectionStatus.checkConnection();
   }
 
   _checkPrefens() async{
