@@ -60,13 +60,16 @@ class _CheckOutPageState extends State<CheckOutPage> {
                 builder: (context, snapshot) {
                   final _orders = Provider.of<OrderProviders>(context).checkOrder;
                   final _discount = Provider.of<OrderProviders>(context).listDiscount;
-                  totalDiscout = _discount.isNotEmpty
-                      ? _discount.map((e) => e.diskon).reduce((a, b) => a+b)
-                      : totalDiscout;
-                  totalOrders = _orders.values.map((e) => e["harga"]).reduce((a, b) => a+b);
-                  totalDisP = (totalOrders*(totalDiscout/100)).toInt();
-                  totalPay = totalOrders - totalDisP;
-                  numOrders = _orders.length;
+
+                  if(_discount.isNotEmpty) {
+                    totalDiscout = _discount.map((e) => e.diskon).reduce((a, b) => a+b);
+                  }
+                  if(_orders.isNotEmpty){
+                    totalOrders = _orders.values.map((e) => e["harga"]).reduce((a, b) => a+b);
+                    totalDisP = (totalOrders*(totalDiscout/100)).toInt();
+                    totalPay = totalOrders - totalDisP;
+                    numOrders = _orders.length;
+                  }
 
                   return Column(
                     children: [
