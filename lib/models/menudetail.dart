@@ -31,25 +31,29 @@ class MenuDetail {
 class Data {
   Data({
     required this.menu,
-    required this.detail,
+    this.topping,
+    this.level,
   });
 
   final Menu menu;
-  final List<Detail> detail;
+  final List<Level>? topping;
+  final List<Level>? level;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     menu: Menu.fromJson(json["menu"]),
-    detail: List<Detail>.from(json["detail"].map((x) => Detail.fromJson(x))),
+    topping: List<Level>.from(json["topping"].map((x) => Level.fromJson(x))),
+    level: List<Level>.from(json["level"].map((x) => Level.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "menu": menu.toJson(),
-    "detail": List<dynamic>.from(detail.map((x) => x.toJson())),
+    "topping": topping != null ? List<Level>.from(topping!.map((x) => x.toJson())) : null,
+    "level": level != null ? List<Level>.from(level!.map((x) => x.toJson())) : null,
   };
 }
 
-class Detail {
-  Detail({
+class Level {
+  Level({
     required this.idDetail,
     required this.idMenu,
     required this.keterangan,
@@ -65,7 +69,7 @@ class Detail {
   final int harga;
   final int isDeleted;
 
-  factory Detail.fromJson(Map<String, dynamic> json) => Detail(
+  factory Level.fromJson(Map<String, dynamic> json) => Level(
     idDetail: json["id_detail"],
     idMenu: json["id_menu"],
     keterangan: json["keterangan"],

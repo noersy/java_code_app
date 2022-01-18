@@ -44,12 +44,15 @@ class _DetailMenuState extends State<DetailMenu> {
   Menu? _data;
 
   getMenu() async {
-    final data = await Provider.of<OrderProviders>(context, listen: false)
+    final data = await Provider
+        .of<OrderProviders>(context, listen: false)
         .getDetailMenu(id: widget.id);
+
     if (data != null) {
       _data = data.data.menu;
       _isLoading = false;
     }
+
     if (mounted) setState(() {});
   }
 
@@ -58,12 +61,8 @@ class _DetailMenuState extends State<DetailMenu> {
     _isLoading = true;
     _jumlahOrder = widget.countOrder;
     getMenu();
-    // _catatan = widget.data["catatan"] ?? "";
-    // _selectedTopping = widget.data["topping"] ?? _selectedTopping;
-    // _selectedLevel = widget.data["level"] ?? "1";
 
-    final orders =
-        Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
     if (orders.keys.contains("${widget.id}")) {
       _jumlahOrder = orders["${widget.id}"]["countOrder"];
       _catatan = orders["${widget.id}"]["catatan"] ?? "";
