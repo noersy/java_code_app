@@ -73,12 +73,12 @@ class OrderProviders extends ChangeNotifier {
     _checkOrder.update(
       id,
       (value) => {
-        // "id": value["id"],
-        // "jenis": value["jenis"],
-        // "image": value["image"],
-        // "harga": value["harga"],
-        // "amount": value["amount"],
-        // "name": value["name"],
+        "id": value["id"],
+        "jenis": value["jenis"],
+        "image": value["image"],
+        "harga": value["harga"],
+        "amount": value["amount"],
+        "name": value["name"],
         "level": level.isEmpty ? value["level"] : level,
         "topping": topping.isEmpty ? value["topping"] : topping,
         "catatan": catatan.isEmpty ? value["catatan"] : catatan,

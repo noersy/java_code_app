@@ -6,7 +6,6 @@ import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/shadows.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:java_code_app/view/branda/detailmenu_page.dart';
 import 'package:java_code_app/widget/addorder_button.dart';
 import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/detailmenu_sheet.dart';
@@ -20,7 +19,9 @@ class EditOrderPage extends StatefulWidget {
   final int countOrder;
 
   const EditOrderPage({
-    Key? key, required this.data, required this.countOrder,
+    Key? key,
+    required this.data,
+    required this.countOrder,
   }) : super(key: key);
 
   @override
@@ -46,7 +47,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
     _jumlahOrder = widget.countOrder;
     name = widget.data["name"] ?? "";
     urlImage = widget.data["image"] ?? "";
-    harga = widget.data["harga"] ?? "";
+    harga = "Rp ${widget.data["harga"]}";
     amount = widget.data["amount"] ?? 0;
     id = widget.data["id"] ?? '-';
 
@@ -54,19 +55,19 @@ class _EditOrderPageState extends State<EditOrderPage> {
     _selectedTopping = widget.data["topping"] ?? _selectedTopping;
     _selectedLevel = widget.data["level"] ?? "1";
 
-    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
-    if(orders.keys.contains(id)) {
+    final orders =
+        Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    if (orders.keys.contains(id)) {
       _jumlahOrder = orders[id]["countOrder"];
       _catatan = orders[id]["catatan"] ?? "";
       _selectedTopping = orders[id]["topping"] ?? _selectedTopping;
       _selectedLevel = orders[id]["level"] ?? "1";
     }
 
-
     super.initState();
   }
 
-  void _editPesanan(){
+  void _editPesanan() {
     // final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
     final data = widget.data;
 
@@ -89,8 +90,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
     Navigator.of(context).pop();
   }
 
-
-  void _addCatatan(){
+  void _addCatatan() {
     setState(() => _catatan = _editingController.text);
     Navigator.pop(context);
   }
@@ -107,13 +107,18 @@ class _EditOrderPageState extends State<EditOrderPage> {
         children: [
           const SizedBox(height: SpaceDims.sp24),
           GestureDetector(
-            onTap: ()=> Navigate.toViewImage(context, urlImage: urlImage),
+            onTap: () => Navigate.toViewImage(context, urlImage: urlImage),
             child: SizedBox(
               width: 234.0,
               height: 182.4,
               child: Hero(
-                  tag: 'image',
-                  child: Image.asset(urlImage),
+                tag: 'image',
+                child: urlImage.isNotEmpty
+                    ? Image.network(urlImage)
+                    : const Icon(
+                        Icons.image_not_supported,
+                        color: ColorSty.grey,
+                      ),
               ),
             ),
           ),
@@ -198,17 +203,23 @@ class _EditOrderPageState extends State<EditOrderPage> {
                               textAlign: TextAlign.end,
                               overflow: TextOverflow.ellipsis,
                               text: TextSpan(
-                                  style: TypoSty.captionSemiBold.copyWith(color: ColorSty.black),
-                                  text: _selectedTopping.isEmpty ? "" : _selectedTopping[0],
+                                  style: TypoSty.captionSemiBold
+                                      .copyWith(color: ColorSty.black),
+                                  text: _selectedTopping.isEmpty
+                                      ? ""
+                                      : _selectedTopping[0],
                                   children: [
-                                    for (var i = 0; i < _selectedTopping.length; i++)
-                                      if(i > 0)
-                                      TextSpan(
-                                        text: ", " +_selectedTopping[i],
-                                        style: TypoSty.captionSemiBold.copyWith(
-                                          color: ColorSty.black,
-                                        ),
-                                      )
+                                    for (var i = 0;
+                                        i < _selectedTopping.length;
+                                        i++)
+                                      if (i > 0)
+                                        TextSpan(
+                                          text: ", " + _selectedTopping[i],
+                                          style:
+                                              TypoSty.captionSemiBold.copyWith(
+                                            color: ColorSty.black,
+                                          ),
+                                        )
                                   ]),
                             ),
                             onPressed: () {
@@ -218,9 +229,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
                                 shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(30.0),
-                                        topRight: Radius.circular(30.0)
-                                    )
-                                ),
+                                        topRight: Radius.circular(30.0))),
                                 context: context,
                                 builder: (_) => BottomSheetDetailMenu(
                                   title: "Pilih Toping",
@@ -231,12 +240,18 @@ class _EditOrderPageState extends State<EditOrderPage> {
                                         for (String item in _listTopping)
                                           LabelToppingSelection(
                                             title: item,
-                                            initial: _selectedTopping.where((e) => e == item).isNotEmpty,
+                                            initial: _selectedTopping
+                                                .where((e) => e == item)
+                                                .isNotEmpty,
                                             onSelection: (value) {
-                                              if (_selectedTopping.where((e) => e == value).isNotEmpty) {
-                                                setState(() => _selectedTopping.remove(value));
+                                              if (_selectedTopping
+                                                  .where((e) => e == value)
+                                                  .isNotEmpty) {
+                                                setState(() => _selectedTopping
+                                                    .remove(value));
                                               } else {
-                                                setState(() => _selectedTopping.add(value));
+                                                setState(() => _selectedTopping
+                                                    .add(value));
                                               }
                                             },
                                           )
@@ -251,43 +266,44 @@ class _EditOrderPageState extends State<EditOrderPage> {
                             prefixIcon: true,
                             icon: IconsCs.note,
                             title: "Catatan",
-                            prefix: _catatan.isEmpty ? "Lorem Ipsum sit aaasss" : _catatan,
+                            prefix: _catatan.isEmpty
+                                ? "Lorem Ipsum sit aaasss"
+                                : _catatan,
                             onPressed: () => showModalBottomSheet(
                               isScrollControlled: true,
                               barrierColor: ColorSty.grey.withOpacity(0.2),
                               context: context,
                               builder: (BuildContext context) =>
                                   BottomSheetDetailMenu(
-                                    title: "Buat Catatan",
-                                    content: Row(
-                                      children: [
-                                        Expanded(
-                                          child: TextFormField(
-                                            controller: _editingController,
-                                            maxLength: 100,
-                                            decoration: const InputDecoration(
-                                              contentPadding:
-                                              EdgeInsets.symmetric(
-                                                  horizontal: 0, vertical: 0),
-                                            ),
-                                          ),
+                                title: "Buat Catatan",
+                                content: Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextFormField(
+                                        controller: _editingController,
+                                        maxLength: 100,
+                                        decoration: const InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(
+                                              horizontal: 0, vertical: 0),
                                         ),
-                                        ElevatedButton(
-                                          onPressed: _addCatatan,
-                                          style: ElevatedButton.styleFrom(
-                                            padding: const EdgeInsets.all(0),
-                                            minimumSize: const Size(25.0, 25.0),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(100.0),
-                                            ),
-                                          ),
-                                          child:
-                                          const Icon(Icons.check, size: 26.0),
-                                        ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
+                                    ElevatedButton(
+                                      onPressed: _addCatatan,
+                                      style: ElevatedButton.styleFrom(
+                                        padding: const EdgeInsets.all(0),
+                                        minimumSize: const Size(25.0, 25.0),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(100.0),
+                                        ),
+                                      ),
+                                      child:
+                                          const Icon(Icons.check, size: 26.0),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                           const Divider(thickness: 1.5),
