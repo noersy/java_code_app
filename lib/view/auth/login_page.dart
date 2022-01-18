@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:java_code_app/constans/key_prefens.dart';
 import 'package:java_code_app/providers/auth_providers.dart';
 import 'package:java_code_app/route/route.dart';
@@ -9,6 +10,7 @@ import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/tools/check_connectivity.dart';
+import 'package:java_code_app/tools/google_tools.dart';
 import 'package:java_code_app/tools/shared_preferences.dart';
 import 'package:java_code_app/widget/button_login.dart';
 import 'package:java_code_app/widget/form_login.dart';
@@ -30,23 +32,50 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _loading = false;
 
-  void _login() async {
+  _login() async {
     setState(() => _loading = true);
 
-    final isLogin = await Provider.of<AuthProviders>(context, listen: false).login(
-      _controllerEmail.text,
-      _controllerPassword.text
-    );
+    bool isLogin = await Provider.of<AuthProviders>(context, listen: false).login(_controllerEmail.text, _controllerPassword.text, isGoogle: false);
 
-    if(isLogin) {
+    if (isLogin) {
       await _preferences.setBoolValue(KeyPrefens.login, true);
 
-      Timer(_duration,(){
-      Navigate.toFindLocation(context);
-      setState(() => _loading = false);});
+      Timer(_duration, () {
+        Navigate.toFindLocation(context);
+        setState(() => _loading = false);
+      });
       return;
     }
 
+    setState(() => _loading = false);
+  }
+
+  _loginWithGoogle() async {
+    setState(() => _loading = true);
+    try {
+
+      final user = await GoogleLogin.getInstance().login();
+
+
+      if (user != null) {
+        bool isLogin = await Provider.of<AuthProviders>(context, listen: false).login(
+          user.email,
+          _controllerPassword.text,
+          isGoogle: true,
+          nama: user.displayName,
+        );
+
+        if (!isLogin) throw Exception("Error : ");
+
+        await _preferences.setBoolValue(KeyPrefens.login, true);
+
+        Timer(_duration, () {
+          Navigate.toFindLocation(context);
+          setState(() => _loading = false);
+        });
+        return;
+      }
+    } catch (e) {}
     setState(() => _loading = false);
   }
 
@@ -54,17 +83,17 @@ class _LoginPageState extends State<LoginPage> {
     // final _isConnected = await _connectionStatus.checkConnection();
   }
 
-  _checkPrefens() async{
+  _checkPrefens() async {
     bool _isAlreadyLogin = await _preferences.getBoolValue(KeyPrefens.login);
-    if(_isAlreadyLogin) {
+    if (_isAlreadyLogin) {
       setState(() => _loading = true);
       final id = await _preferences.getIntValue(KeyPrefens.loginID);
       await Provider.of<AuthProviders>(context, listen: false).getUser(id: id);
 
-      Timer(_duration,(){
-      Navigate.toFindLocation(context);
-      setState(() => _loading = false);}
-      );
+      Timer(_duration, () {
+        Navigate.toFindLocation(context);
+        setState(() => _loading = false);
+      });
     }
   }
 
@@ -143,7 +172,8 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: SpaceDims.sp8),
+                                horizontal: SpaceDims.sp8,
+                              ),
                               child: Text("atau", style: TypoSty.caption2),
                             ),
                             const Expanded(
@@ -160,8 +190,7 @@ class _LoginPageState extends State<LoginPage> {
                           boldTitle: "Google",
                           bgColors: ColorSty.white,
                           icon: "assert/image/icon_google.png",
-                          onPressed: () {
-                          },
+                          onPressed: _loginWithGoogle,
                         ),
                         SizedBox(height: SpaceDims.sp8.h),
                         ButtonLogin(
@@ -175,13 +204,14 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   ),
-                  if(_loading) Positioned.fill(
-                    child: Container(
-                      alignment: Alignment.center,
-                      color: ColorSty.white.withOpacity(0.3),
-                      child: const RefreshProgressIndicator(),
-                    ),
-                  )
+                  if (_loading)
+                    Positioned.fill(
+                      child: Container(
+                        alignment: Alignment.center,
+                        color: ColorSty.white.withOpacity(0.3),
+                        child: const RefreshProgressIndicator(),
+                      ),
+                    )
                 ],
               ),
             ),

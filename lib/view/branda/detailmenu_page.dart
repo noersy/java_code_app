@@ -32,13 +32,12 @@ class DetailMenu extends StatefulWidget {
 
 class _DetailMenuState extends State<DetailMenu> {
   int _jumlahOrder = 0;
-  String _selectedLevel = "1";
-  List<String> _selectedTopping = ["Mozarella"];
-  final List<String> _listLevel = ["1", "2", "3"];
-  final List<String> _listTopping = ["Mozarella", "Sausagge", "Dimsum"];
+  String _selectedLevel = "";
+  List<String> _selectedTopping = [];
+  List<String> _listLevel = [];
+  List<String> _listTopping = [""];
   String _catatan = "";
-  static final TextEditingController _editingController =
-      TextEditingController();
+  final TextEditingController _editingController = TextEditingController();
   static bool _isLoading = true;
 
   Menu? _data;
@@ -50,6 +49,16 @@ class _DetailMenuState extends State<DetailMenu> {
 
     if (data != null) {
       _data = data.data.menu;
+
+      if(data.data.topping.isNotEmpty){
+        _selectedTopping = [data.data.topping.first.keterangan] ;
+      }
+      if(data.data.level.isNotEmpty){
+        _selectedLevel = data.data.level.first.keterangan;
+      }
+
+      _listLevel = data.data.level.map((e) => e.keterangan).toList();
+      _listTopping = data.data.topping.map((e) => e.keterangan).toList();
       _isLoading = false;
     }
 
@@ -299,7 +308,7 @@ class _DetailMenuState extends State<DetailMenu> {
                                 style: TypoSty.captionSemiBold
                                     .copyWith(color: ColorSty.black),
                                 text: _selectedTopping.isEmpty
-                                    ? _listTopping[0]
+                                    ? ""
                                     : "",
                                 children: [
                                   for (final item in _selectedTopping)

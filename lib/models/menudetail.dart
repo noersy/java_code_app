@@ -31,13 +31,13 @@ class MenuDetail {
 class Data {
   Data({
     required this.menu,
-    this.topping,
-    this.level,
+    required this.topping,
+    required this.level,
   });
 
   final Menu menu;
-  final List<Level>? topping;
-  final List<Level>? level;
+  final List<Level> topping;
+  final List<Level> level;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     menu: Menu.fromJson(json["menu"]),
@@ -47,8 +47,8 @@ class Data {
 
   Map<String, dynamic> toJson() => {
     "menu": menu.toJson(),
-    "topping": topping != null ? List<Level>.from(topping!.map((x) => x.toJson())) : null,
-    "level": level != null ? List<Level>.from(level!.map((x) => x.toJson())) : null,
+    "topping": topping.isNotEmpty ? List<Level>.from(topping.map((x) => x.toJson())) : [],
+    "level": level.isNotEmpty ? List<Level>.from(level.map((x) => x.toJson())) : [],
   };
 }
 
