@@ -15,6 +15,7 @@ class CardCoupon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 158.0,
+      width: 290.0,
       padding : const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
       margin: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
       child: TextButton(
@@ -46,6 +47,7 @@ class CardCoupon extends StatelessWidget {
             ),
             Text(
               title,
+              overflow: TextOverflow.ellipsis,
               style: TypoSty.caption.copyWith(color: ColorSty.white),
             )
           ],

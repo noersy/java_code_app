@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/models/listdiscount.dart';
 import 'package:java_code_app/models/menulist.dart';
-import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
@@ -11,7 +10,6 @@ import 'package:java_code_app/view/branda/component/search_screen.dart';
 import 'package:java_code_app/widget/card_coupun.dart';
 import 'package:java_code_app/widget/label_button.dart';
 import 'package:java_code_app/widget/listmenu.dart';
-import 'package:provider/provider.dart';
 
 class ContentBeranda extends StatefulWidget {
   final List result;
@@ -21,7 +19,8 @@ class ContentBeranda extends StatefulWidget {
   const ContentBeranda({
     Key? key,
     required this.result,
-    required this.data, required this.listDiscount,
+    required this.data,
+    required this.listDiscount,
   }) : super(key: key);
 
   @override
@@ -88,19 +87,16 @@ class _ContentBerandaState extends State<ContentBeranda>
             child: Row(
               children: [
                 const SizedBox(width: 10),
-                for(final item in widget.listDiscount)
+                for (final item in widget.listDiscount)
                   CardCoupon(
                     title: item.nama,
                     discount: item.diskon,
                   ),
-                const CardCoupon(
-                  title: "Lorem ipsum dolor sit amet",
-                  discount: 10,
-                ),
-                const CardCoupon(
-                  title: "Lorem ipsum dolor sit amet",
-                  discount: 10,
-                ),
+                if (widget.listDiscount.isEmpty)
+                  const CardCoupon(
+                    title: "Lorem ipsum dolor sit amet",
+                    discount: 10,
+                  ),
               ],
             ),
           ),

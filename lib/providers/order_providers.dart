@@ -22,7 +22,7 @@ class OrderProviders extends ChangeNotifier {
   Map<String, dynamic> get checkOrder => _checkOrder;
   List<Map<String, dynamic>> get orderProgress => _orderInProgress;
   List<LVoucher> get listVoucher => _listVoucher;
-  List<Discount> listDiscount = _listDiscount;
+  List<Discount> get listDiscount => _listDiscount;
 
   addOrder({
     required Map<String, dynamic> data,
