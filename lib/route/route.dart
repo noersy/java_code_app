@@ -19,7 +19,7 @@ import 'package:java_code_app/widget/view_image.dart';
 class Navigate {
   static void toFindLocation(context) => Navigator.of(context).pushReplacement(routeTransition(const FindLocationPage()));
   static void toDashboard(context) => Navigator.of(context).pushReplacement(routeTransition(const DashboardPage()));
-  static void toPromoPage(context) => Navigator.of(context).push(routeTransition(const PromoPage()));
+  static void toPromoPage(context, {required String title, required String  police, int? discount, int? nominal}) => Navigator.of(context).push(routeTransition(PromoPage(title: title, police: police, discount: discount, nominal: nominal,)));
   static void toChekOut(context) => Navigator.of(context).push(routeTransition(const CheckOutPage()));
   static Future toSelectionVoucherPage(context, {LVoucher? initialData}) async => await Navigator.of(context).push(routeTransition(SelectionVoucherPage(initialData: initialData)));
   static Future<bool>? toDetailVoucherPage(context, {required LVoucher voucher}) async => await Navigator.of(context).push(routeTransition(DetailVoucherPage(voucher: voucher))) ?? false;

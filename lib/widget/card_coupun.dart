@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -7,19 +6,32 @@ import 'package:java_code_app/theme/text_style.dart';
 
 class CardCoupon extends StatelessWidget {
   final int? discount, nominal;
-  final String title;
+  final String title, police;
+  final bool disable;
 
-  const CardCoupon({Key? key, this.discount, required this.title, this.nominal}) : super(key: key);
+  const CardCoupon({
+    Key? key,
+    this.discount,
+    required this.title,
+    this.nominal,
+    required this.police, this.disable = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 158.0,
       width: 290.0,
-      padding : const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
+      padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
       margin: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
       child: TextButton(
-        onPressed: () => Navigate.toPromoPage(context),
+        onPressed: disable ? null : () => Navigate.toPromoPage(
+          context,
+          title: title,
+          police: police,
+          discount: discount,
+          nominal: nominal,
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -34,9 +46,7 @@ class CardCoupon extends StatelessWidget {
                 ),
                 const SizedBox(width: SpaceDims.sp12),
                 Text(
-                  discount != null
-                      ? "$discount %"
-                      : "Rp $nominal",
+                  discount != null ? "$discount %" : "Rp $nominal",
                   style: TypoSty.heading.copyWith(
                     fontSize: discount != null ? 36.0 : 22.0,
                     foreground: Paint()

@@ -93,11 +93,13 @@ class _ContentBerandaState extends State<ContentBeranda>
                     title: item.nama,
                     discount: item.diskon,
                     nominal: item.nominal,
+                    police: item.syaratKetentuan,
                   ),
-                if (widget.listPromo.isEmpty)
+                if (widget.listPromo.isNotEmpty)
                   const CardCoupon(
-                    title: "Lorem ipsum dolor sit amet",
-                    discount: 10,
+                    title: "Empty",
+                    police: "",
+                    discount: 0,
                   ),
               ],
             ),

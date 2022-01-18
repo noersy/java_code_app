@@ -12,11 +12,12 @@ import 'package:java_code_app/view/auth/login_page.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
           title: 'Java Code App',
           debugShowCheckedModeBanner: false,
           initialRoute: "/",
+          navigatorKey: navigatorKey,
           routes: {"dashboard": (_) => const DashboardPage()},
           theme: ThemeData.light().copyWith(
             colorScheme: ThemeData().colorScheme.copyWith(

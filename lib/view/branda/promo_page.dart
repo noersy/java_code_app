@@ -4,11 +4,15 @@ import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
+import 'package:java_code_app/view/orders/selection_vocher_page.dart';
 import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/card_coupun.dart';
 
 class PromoPage extends StatelessWidget {
-  const PromoPage({Key? key}) : super(key: key);
+  final int? discount, nominal;
+  final String title, police;
+
+  const PromoPage({Key? key, this.discount, this.nominal, required this.title, required this.police}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +28,7 @@ class PromoPage extends StatelessWidget {
         return Column(
           children: [
             SizedBox(height: SpaceDims.sp24.h),
-            // const CardCoupon(), @todo
+            CardCoupon(police: police, title: title, discount: discount, nominal: nominal),
             SizedBox(height: SpaceDims.sp24.h),
             Expanded(
               child: Container(
@@ -56,7 +60,7 @@ class PromoPage extends StatelessWidget {
                           children: [
                             Text("Nama Promo", style: TypoSty.title),
                             Text(
-                              "Diskon 10%",
+                              nominal == null ? "Diskon $discount%" : "Rp $nominal Voucher ",
                               style: TypoSty.title.copyWith(
                                 color: ColorSty.primary,
                               ),

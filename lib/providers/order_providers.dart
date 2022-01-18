@@ -5,8 +5,10 @@ import 'package:java_code_app/models/list_voucher.dart';
 import 'package:java_code_app/models/listdiscount.dart';
 import 'package:java_code_app/models/menudetail.dart';
 import 'package:java_code_app/models/menulist.dart';
+import 'package:java_code_app/tools/check_connectivity.dart';
 import 'package:java_code_app/tools/random_string.dart';
-import 'package:java_code_app/widget/listmenu.dart';
+import 'package:java_code_app/transision/route_transisition.dart';
+import 'package:java_code_app/view/offline/offline_page.dart';
 
 class OrderProviders extends ChangeNotifier {
   // static int _orderInProgress = 0;
@@ -21,11 +23,18 @@ class OrderProviders extends ChangeNotifier {
   static List<Promo> _listPromo = [];
 
   MenuList? get listMenu => _menuList;
+
   Map<String, dynamic> get checkOrder => _checkOrder;
+
   List<Map<String, dynamic>> get orderProgress => _orderInProgress;
+
   List<LVoucher> get listVoucher => _listVoucher;
+
   List<Discount> get listDiscount => _listDiscount;
+
   List<Promo> get listPromo => _listPromo;
+
+  static final _connectionStatus = ConnectionStatus.getInstance();
 
   addOrder({
     required Map<String, dynamic> data,
@@ -151,7 +160,6 @@ class OrderProviders extends ChangeNotifier {
     }
   }
 
-
   Future<bool> getListDisCount() async {
     try {
       final _api = Uri.https(_domain, "/api/diskon/user/1");
@@ -172,7 +180,6 @@ class OrderProviders extends ChangeNotifier {
       return false;
     }
   }
-
 
   Future<bool> getListPromo() async {
     try {
