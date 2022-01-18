@@ -6,10 +6,10 @@ import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 
 class CardCoupon extends StatelessWidget {
-  final int discount;
+  final int? discount, nominal;
   final String title;
 
-  const CardCoupon({Key? key, required this.discount, required this.title}) : super(key: key);
+  const CardCoupon({Key? key, this.discount, required this.title, this.nominal}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +27,18 @@ class CardCoupon extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Diskon",
+                  discount != null ? "Diskon" : "Voucher",
                   style: TypoSty.heading.copyWith(
                     color: ColorSty.white,
                   ),
                 ),
                 const SizedBox(width: SpaceDims.sp12),
                 Text(
-                  "$discount %",
+                  discount != null
+                      ? "$discount %"
+                      : "Rp $nominal",
                   style: TypoSty.heading.copyWith(
-                    fontSize: 36.0,
+                    fontSize: discount != null ? 36.0 : 22.0,
                     foreground: Paint()
                       ..style = PaintingStyle.stroke
                       ..strokeWidth = 1
@@ -47,7 +49,7 @@ class CardCoupon extends StatelessWidget {
             ),
             Text(
               title,
-              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
               style: TypoSty.caption.copyWith(color: ColorSty.white),
             )
           ],

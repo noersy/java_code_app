@@ -41,6 +41,7 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     Provider.of<OrderProviders>(context, listen: false).getMenuList();
+    Provider.of<OrderProviders>(context, listen: false).getListPromo();
     Provider.of<OrderProviders>(context, listen: false).getListDisCount();
     super.initState();
   }

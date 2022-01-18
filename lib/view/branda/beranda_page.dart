@@ -32,6 +32,8 @@ class _BerandaPageState extends State<BerandaPage> {
     var _duration = const Duration(seconds: 0);
 
     await Provider.of<OrderProviders>(context, listen: false).getMenuList();
+    await Provider.of<OrderProviders>(context, listen: false).getListPromo();
+
     Provider.of<OrderProviders>(context, listen: false).getListDisCount();
 
     if (mounted) {
@@ -102,14 +104,14 @@ class _BerandaPageState extends State<BerandaPage> {
               builder: (_, snapshot) {
                 final provider = Provider.of<OrderProviders>(context);
                 final menuList = provider.listMenu;
-                final discountList = provider.listDiscount;
+                final listPromo = provider.listPromo;
 
                 if (menuList != null && !_loading) {
                   return SingleChildScrollView(
                     child: ContentBeranda(
                       result: result,
                       data: menuList,
-                      listDiscount: discountList,
+                      listPromo: listPromo,
                     ),
                   );
                 }
