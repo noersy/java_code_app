@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/models/menudetail.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -32,36 +33,53 @@ class _EditOrderPageState extends State<EditOrderPage> {
   String _selectedLevel = "1";
   List<String> _selectedTopping = ["Mozarella"];
 
-  late final String urlImage, name, harga, id;
-  late final int amount;
+  int status = 0;
   int _jumlahOrder = 0;
-  final List<String> _listLevel = ["1", "2", "3"];
-  final List<String> _listTopping = ["Mozarella", "Sausagge", "Dimsum"];
+  List<String> _listLevel = [];
+  List<String> _listTopping = [];
   final TextEditingController _editingController = TextEditingController();
   String _catatan = "";
+
+  Menu? _data;
+
+  bool _isLoading = false;
+
+  getMenu() async {
+    final data = await Provider
+        .of<OrderProviders>(context, listen: false)
+        .getDetailMenu(id: int.parse(widget.data["id"]));
+
+    if (data != null) {
+      _data = data.data.menu;
+
+      if(data.data.topping.isNotEmpty){
+        _selectedTopping = [data.data.topping.first.keterangan] ;
+      }
+      if(data.data.level.isNotEmpty){
+        _selectedLevel = data.data.level.first.keterangan;
+      }
+
+      _listLevel = data.data.level.map((e) => e.keterangan).toList();
+      _listTopping = data.data.topping.map((e) => e.keterangan).toList();
+      _isLoading = false;
+    }
+
+    if (mounted) setState(() {});
+  }
 
   @override
   void initState() {
     // print(widget.data);
-
+    _isLoading = true;
     _jumlahOrder = widget.countOrder;
-    name = widget.data["name"] ?? "";
-    urlImage = widget.data["image"] ?? "";
-    harga = "Rp ${widget.data["harga"]}";
-    amount = widget.data["amount"] ?? 0;
-    id = widget.data["id"] ?? '-';
+    getMenu();
 
-    _catatan = widget.data["catatan"] ?? "";
-    _selectedTopping = widget.data["topping"] ?? _selectedTopping;
-    _selectedLevel = widget.data["level"] ?? "1";
-
-    final orders =
-        Provider.of<OrderProviders>(context, listen: false).checkOrder;
-    if (orders.keys.contains(id)) {
-      _jumlahOrder = orders[id]["countOrder"];
-      _catatan = orders[id]["catatan"] ?? "";
-      _selectedTopping = orders[id]["topping"] ?? _selectedTopping;
-      _selectedLevel = orders[id]["level"] ?? "1";
+    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    if (orders.keys.contains("${widget.data["id"]}")) {
+      _jumlahOrder = orders["${widget.data["id"]}"]["countOrder"];
+      _catatan = orders["${widget.data["id"]}"]["catatan"] ?? "";
+      _selectedTopping = orders["${widget.data["id"]}"]["topping"] ?? _selectedTopping;
+      _selectedLevel = orders["${widget.data["id"]}"]["level"] ?? "1";
     }
 
     super.initState();
@@ -76,7 +94,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
     data["catatan"] = _catatan;
 
     if (_jumlahOrder <= 0) {
-      Provider.of<OrderProviders>(context, listen: false).deleteOrder(id: id);
+      Provider.of<OrderProviders>(context, listen: false).deleteOrder(id: "${_data?.idMenu}");
     } else {
       Provider.of<OrderProviders>(context, listen: false).editOrder(
         id: data["id"],
@@ -107,14 +125,14 @@ class _EditOrderPageState extends State<EditOrderPage> {
         children: [
           const SizedBox(height: SpaceDims.sp24),
           GestureDetector(
-            onTap: () => Navigate.toViewImage(context, urlImage: urlImage),
+            onTap: () => Navigate.toViewImage(context, urlImage: "${_data?.foto}"),
             child: SizedBox(
               width: 234.0,
               height: 182.4,
               child: Hero(
                 tag: 'image',
-                child: urlImage.isNotEmpty
-                    ? Image.network(urlImage)
+                child: _data?.foto != null
+                    ? Image.network(_data!.foto!)
                     : const Icon(
                         Icons.image_not_supported,
                         color: ColorSty.grey,
@@ -152,7 +170,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            name,
+                            "${_data?.nama}",
                             style: TypoSty.title.copyWith(
                               color: ColorSty.primary,
                             ),
@@ -185,7 +203,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
                           TileListDMenu(
                             icon: IconsCs.cash,
                             title: "Harga",
-                            prefix: harga,
+                            prefix: "${_data?.harga}",
                             onPressed: () {},
                           ),
                           TileListDMenu(

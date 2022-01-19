@@ -95,7 +95,7 @@ class Menu {
     required this.kategori,
     required this.harga,
     required this.deskripsi,
-    required this.foto,
+    this.foto,
     required this.status,
     required this.isDeleted,
     required this.createdAt,
@@ -107,7 +107,7 @@ class Menu {
   final String kategori;
   final int harga;
   final String deskripsi;
-  final dynamic foto;
+  final String? foto;
   final int status;
   final int isDeleted;
   final DateTime createdAt;

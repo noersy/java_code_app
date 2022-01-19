@@ -191,7 +191,7 @@ class _DetailMenuState extends State<DetailMenu> {
                 child: Hero(
                   tag: "image",
                   child: _data?.foto != null
-                      ? Image.network(_data!.foto)
+                      ? Image.network(_data!.foto!)
                       : const Icon(
                           Icons.image_not_supported,
                           size: 32.0,
