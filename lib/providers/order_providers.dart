@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:java_code_app/constans/hosts.dart';
 import 'package:java_code_app/models/listdiscount.dart';
+import 'package:java_code_app/models/listorder.dart';
 import 'package:java_code_app/models/listpromo.dart';
 import 'package:java_code_app/models/listvoucher.dart';
 import 'package:java_code_app/models/menudetail.dart';
@@ -21,6 +22,7 @@ class OrderProviders extends ChangeNotifier {
   static List<LVoucher> _listVoucher = [];
   static List<Discount> _listDiscount = [];
   static List<Promo> _listPromo = [];
+  static List<Order> _listOrders = [];
 
   MenuList? get listMenu => _menuList;
   Map<String, dynamic> get checkOrder => _checkOrder;
@@ -28,6 +30,7 @@ class OrderProviders extends ChangeNotifier {
   List<LVoucher> get listVoucher => _listVoucher;
   List<Discount> get listDiscount => _listDiscount;
   List<Promo> get listPromo => _listPromo;
+  List<Order> get listOrders => _listOrders;
 
   // static final _connectionStatus = ConnectionStatus.getInstance();
 
@@ -127,11 +130,14 @@ class OrderProviders extends ChangeNotifier {
 
       final response = await http.get(_api, headers: headers);
 
+      print(response.body);
+
       if (response.statusCode == 200) {
         return menuDetailFromJson(response.body);
       }
       return null;
     } catch (e) {
+      print(e);
       return null;
     }
   }
@@ -188,6 +194,27 @@ class OrderProviders extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         _listPromo = listPromoFromJson(response.body).data;
+        notifyListeners();
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> getListOrder() async {
+    try {
+      final _api = Uri.http(host, "$sub/api/promo/all");
+
+      final headers = {"token": "m_app"};
+
+      final response = await http.get(_api, headers: headers);
+
+      // print(response.body);
+
+      if (response.statusCode == 200) {
+        _listOrders = listOrderFromJson(response.body).data;
         notifyListeners();
         return true;
       }

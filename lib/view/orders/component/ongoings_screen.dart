@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:java_code_app/models/listorder.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -81,7 +83,9 @@ class _OngoingScreenState extends State<OngoingScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const Icon(IconsCs.order,
-                                size: 120, color: ColorSty.primary),
+                              size: 120,
+                              color: ColorSty.primary,
+                            ),
                             const SizedBox(height: SpaceDims.sp22),
                             Text("Sudah Pesan?\nLacak pesananmu\ndi sini.",
                                 textAlign: TextAlign.center,
@@ -101,8 +105,8 @@ class _OngoingScreenState extends State<OngoingScreen> {
 
 class OrderMenuCard extends StatelessWidget {
   final String urlImage, title, date, harga, jumlah;
+  final Order? order;
   final VoidCallback onPressed;
-
   const OrderMenuCard({
     Key? key,
     required this.urlImage,
@@ -110,12 +114,13 @@ class OrderMenuCard extends StatelessWidget {
     required this.date,
     required this.harga,
     required this.onPressed, required this.jumlah,
+    this.order,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 138,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp4),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
@@ -139,7 +144,7 @@ class OrderMenuCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: urlImage.isNotEmpty
-                  ? Image.asset(urlImage)
+                  ? Image.network(urlImage)
                   : const Icon(Icons.image_not_supported, color: ColorSty.grey),
             ),
             Expanded(
@@ -213,18 +218,17 @@ class SkeletonOrderMenuCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Card(
-          elevation: 4,
-          color: ColorSty.white80,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Container(
-            height: 138,
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp4),
+          child: ElevatedButton(
+           onPressed: (){},
+            style: ElevatedButton.styleFrom(
+              elevation: 3,
+              primary: ColorSty.white80,
+              onPrimary: ColorSty.primary,
+              padding: const EdgeInsets.all(0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
               ),
             ),
             child: Row(
@@ -297,18 +301,17 @@ class SkeletonOrderMenuCard extends StatelessWidget {
             ),
           ),
         ),
-        Card(
-          elevation: 4,
-          color: ColorSty.white80,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Container(
-            height: 138,
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp4),
+          child: ElevatedButton(
+           onPressed: (){},
+            style: ElevatedButton.styleFrom(
+              elevation: 3,
+              primary: ColorSty.white80,
+              onPrimary: ColorSty.primary,
+              padding: const EdgeInsets.all(0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
               ),
             ),
             child: Row(

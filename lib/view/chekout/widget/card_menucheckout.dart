@@ -118,7 +118,7 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
                   child: Padding(
                     padding: const EdgeInsets.all(SpaceDims.sp4),
                     child: url.isNotEmpty
-                        ? Image.asset(url)
+                        ? Image.network(url)
                         : const Icon(Icons.image_not_supported, color: ColorSty.grey),
                   ),
                   decoration: BoxDecoration(

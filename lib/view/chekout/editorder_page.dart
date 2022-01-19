@@ -47,9 +47,9 @@ class _EditOrderPageState extends State<EditOrderPage> {
   bool _isLoading = false;
 
   getMenu() async {
-    final data = await Provider
-        .of<OrderProviders>(context, listen: false)
+    final data = await Provider.of<OrderProviders>(context, listen: false)
         .getDetailMenu(id: int.parse(widget.data["id"]));
+    print(data);
 
     if (data != null) {
       _data = data.data.menu;

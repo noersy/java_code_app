@@ -131,14 +131,11 @@ class _DetailMenuState extends State<DetailMenu> {
     );
     setState(() => _selectedLevel = _value);
   }
-
   void _viewImage() => Navigate.toViewImage(context, urlImage: "urlImage");
-
   void _addCatatan() {
     setState(() => _catatan = _editingController.text);
     Navigator.pop(context);
   }
-
   void _tambahkanPesanan() {
     if (_data == null) return;
 

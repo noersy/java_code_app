@@ -74,7 +74,7 @@ class _CardMenuState extends State<CardMenu> {
     _jumlahOrder =  0;
     nama = widget.data.nama;
     harga = widget.data.harga;
-    url = "";
+    url = widget.data.foto ?? "";
 
 
     _data = {

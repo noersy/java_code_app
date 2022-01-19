@@ -24,6 +24,7 @@ class _PesananPageState extends State<PesananPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorSty.white,
       appBar: AppBar(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
