@@ -32,18 +32,14 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
     setState(() => _jumlahOrder++);
     if(_jumlahOrder == 1){
       Provider.of<OrderProviders>(context, listen: false).addOrder(
-        level: '',
         catatan: '',
-        topping: [],
         data: widget.data,
         jumlahOrder: _jumlahOrder,
       );
     }else{
       Provider.of<OrderProviders>(context, listen: false).editOrder(
         id: widget.data["id"],
-        level: '',
         catatan: '',
-        topping: [],
         jumlahOrder: _jumlahOrder,
       );
     }
@@ -57,16 +53,12 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
         jumlahOrder: _jumlahOrder,
         id: widget.data["id"],
         catatan: '',
-        topping: [],
-        level: '',
       );
     } else if (_jumlahOrder != 0) {
       Provider.of<OrderProviders>(context, listen: false).addOrder(
         jumlahOrder: _jumlahOrder,
         data: widget.data,
         catatan: '',
-        topping: [],
-        level: '',
       );
     }else{
       await showDialog(context: context,

@@ -32,10 +32,10 @@ class DetailMenu extends StatefulWidget {
 
 class _DetailMenuState extends State<DetailMenu> {
   int _jumlahOrder = 0;
-  String _selectedLevel = "";
-  List<String> _selectedTopping = [];
-  List<String> _listLevel = [];
-  List<String> _listTopping = [""];
+  Level? _selectedLevel;
+  List<Level> _selectedTopping = [];
+  List<Level> _listLevel = [];
+  List<Level> _listTopping = [];
   String _catatan = "";
   final TextEditingController _editingController = TextEditingController();
   static bool _isLoading = true;
@@ -51,14 +51,14 @@ class _DetailMenuState extends State<DetailMenu> {
       _data = data.data.menu;
 
       if(data.data.topping.isNotEmpty){
-        _selectedTopping = [data.data.topping.first.keterangan] ;
+        _selectedTopping = [data.data.topping.first] ;
       }
       if(data.data.level.isNotEmpty){
-        _selectedLevel = data.data.level.first.keterangan;
+        _selectedLevel = data.data.level.first;
       }
 
-      _listLevel = data.data.level.map((e) => e.keterangan).toList();
-      _listTopping = data.data.topping.map((e) => e.keterangan).toList();
+      _listLevel = data.data.level;
+      _listTopping = data.data.topping;
       _isLoading = false;
     }
 
@@ -75,15 +75,24 @@ class _DetailMenuState extends State<DetailMenu> {
     if (orders.keys.contains("${widget.id}")) {
       _jumlahOrder = orders["${widget.id}"]["countOrder"];
       _catatan = orders["${widget.id}"]["catatan"] ?? "";
-      _selectedTopping = orders["${widget.id}"]["topping"] ?? _selectedTopping;
-      _selectedLevel = orders["${widget.id}"]["level"] ?? "1";
+
+      final topping = orders["${widget.id}"]["topping"];
+      final level = orders["${widget.id}"]["level"];
+
+      _selectedTopping = topping != null
+          ?  List<Level>.from(topping.map((x) => Level.fromJson(x)))
+          : _selectedTopping;
+      _selectedLevel =  level != null
+          ?  Level.fromJson(level)
+          : _selectedLevel;
+
     }
 
     super.initState();
   }
 
-  _showDialogLevel(List<String> _listLevel) async {
-    String _value = "1";
+  _showDialogLevel(List<Level> _listLevel) async {
+    Level _value = _listLevel.first;
     _value = await showModalBottomSheet(
       barrierColor: ColorSty.grey.withOpacity(0.2),
       elevation: 5,
@@ -103,11 +112,11 @@ class _DetailMenuState extends State<DetailMenu> {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    for (String item in _listLevel)
+                    for (Level item in _listLevel)
                       LabelLevelSelection(
-                        title: item,
+                        data: item,
                         isSelected: item == _selectedLevel,
-                        onSelection: (String value) {
+                        onSelection: (Level value) {
                           setState(() => _selectedLevel = value);
                           Navigator.of(context).pop(value);
                         },
@@ -291,7 +300,7 @@ class _DetailMenuState extends State<DetailMenu> {
                           isLoading: _isLoading,
                           icon: IconsCs.fire,
                           title: "Level",
-                          prefix: _selectedLevel,
+                          prefix: _selectedLevel?.keterangan,
                           onPressed: () => _showDialogLevel(_listLevel),
                         ),
                         TileListDMenu(
@@ -313,7 +322,7 @@ class _DetailMenuState extends State<DetailMenu> {
                                 children: [
                                   for (final item in _selectedTopping)
                                     TextSpan(
-                                      text: item + " ",
+                                      text: item.keterangan + " ",
                                       style: TypoSty.captionSemiBold
                                           .copyWith(color: ColorSty.black),
                                     )
@@ -337,18 +346,14 @@ class _DetailMenuState extends State<DetailMenu> {
                                   child: ListView(
                                     scrollDirection: Axis.horizontal,
                                     children: [
-                                      for (String item in _listTopping)
+                                      for (final item in _listTopping)
                                         LabelToppingSelection(
-                                          title: item,
-                                          initial: _selectedTopping
-                                              .where((e) => e == item)
-                                              .isNotEmpty,
+                                          data: item,
+                                          initial: _selectedTopping.where((e) => e == item).isNotEmpty,
                                           onSelection: (value) {
                                             if (_selectedTopping
-                                                .where((e) => e == value)
-                                                .isNotEmpty) {
-                                              setState(() => _selectedTopping
-                                                  .remove(value));
+                                                .where((e) => e == value).isNotEmpty) {
+                                              setState(() => _selectedTopping.remove(value));
                                             } else {
                                               setState(() =>
                                                   _selectedTopping.add(value));

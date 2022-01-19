@@ -34,16 +34,12 @@ class _CardMenuState extends State<CardMenu> {
         jumlahOrder: _jumlahOrder,
         data: _data,
         catatan: '',
-        topping: [],
-        level: '',
       );
     }else{
       Provider.of<OrderProviders>(context, listen: false).editOrder(
         jumlahOrder: _jumlahOrder,
         id: "${widget.data.idMenu}",
         catatan: '',
-        topping: [],
-        level: '',
       );
     }
   }
@@ -56,16 +52,12 @@ class _CardMenuState extends State<CardMenu> {
         jumlahOrder: _jumlahOrder,
         id: "${widget.data.idMenu}",
         catatan: '',
-        topping: [],
-        level: '',
       );
     } else if (_jumlahOrder != 0) {
       Provider.of<OrderProviders>(context, listen: false).addOrder(
         jumlahOrder: _jumlahOrder,
         data: _data,
         catatan: '',
-        topping: [],
-        level: '',
       );
     }else{
       await showDialog(context: context,

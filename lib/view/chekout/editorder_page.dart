@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:java_code_app/models/menudetail.dart';
 import 'package:java_code_app/providers/order_providers.dart';
@@ -30,13 +32,13 @@ class EditOrderPage extends StatefulWidget {
 }
 
 class _EditOrderPageState extends State<EditOrderPage> {
-  String _selectedLevel = "1";
-  List<String> _selectedTopping = ["Mozarella"];
+  Level? _selectedLevel;
+  List<Level> _selectedTopping = [];
 
   int status = 0;
   int _jumlahOrder = 0;
-  List<String> _listLevel = [];
-  List<String> _listTopping = [];
+  List<Level> _listLevel = [];
+  List<Level> _listTopping = [];
   final TextEditingController _editingController = TextEditingController();
   String _catatan = "";
 
@@ -53,14 +55,14 @@ class _EditOrderPageState extends State<EditOrderPage> {
       _data = data.data.menu;
 
       if(data.data.topping.isNotEmpty){
-        _selectedTopping = [data.data.topping.first.keterangan] ;
+        _selectedTopping = [data.data.topping.first] ;
       }
       if(data.data.level.isNotEmpty){
-        _selectedLevel = data.data.level.first.keterangan;
+        _selectedLevel = data.data.level.first;
       }
 
-      _listLevel = data.data.level.map((e) => e.keterangan).toList();
-      _listTopping = data.data.topping.map((e) => e.keterangan).toList();
+      _listLevel = data.data.level;
+      _listTopping = data.data.topping;
       _isLoading = false;
     }
 
@@ -78,8 +80,16 @@ class _EditOrderPageState extends State<EditOrderPage> {
     if (orders.keys.contains("${widget.data["id"]}")) {
       _jumlahOrder = orders["${widget.data["id"]}"]["countOrder"];
       _catatan = orders["${widget.data["id"]}"]["catatan"] ?? "";
-      _selectedTopping = orders["${widget.data["id"]}"]["topping"] ?? _selectedTopping;
-      _selectedLevel = orders["${widget.data["id"]}"]["level"] ?? "1";
+
+      final tooping = orders["${widget.data["id"]}"]["topping"];
+      final level = orders["${widget.data["id"]}"]["level"];
+
+      _selectedTopping = tooping != null
+          ? List<Level>.from(tooping.map((x) => Level.fromJson(x)))
+          : _selectedTopping;
+      _selectedLevel = level != null
+          ? Level.fromJson(level)
+          : null;
     }
 
     super.initState();
@@ -210,7 +220,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
                             prefixIcon: true,
                             icon: IconsCs.fire,
                             title: "Level",
-                            prefix: _selectedLevel,
+                            prefix: _selectedLevel?.keterangan,
                             onPressed: () => _showDialogLevel(_listLevel),
                           ),
                           TileListDMenu(
@@ -225,14 +235,14 @@ class _EditOrderPageState extends State<EditOrderPage> {
                                       .copyWith(color: ColorSty.black),
                                   text: _selectedTopping.isEmpty
                                       ? ""
-                                      : _selectedTopping[0],
+                                      : _selectedTopping.first.keterangan,
                                   children: [
                                     for (var i = 0;
                                         i < _selectedTopping.length;
                                         i++)
                                       if (i > 0)
                                         TextSpan(
-                                          text: ", " + _selectedTopping[i],
+                                          text: ", " + _selectedTopping[i].keterangan,
                                           style:
                                               TypoSty.captionSemiBold.copyWith(
                                             color: ColorSty.black,
@@ -255,9 +265,9 @@ class _EditOrderPageState extends State<EditOrderPage> {
                                     child: ListView(
                                       scrollDirection: Axis.horizontal,
                                       children: [
-                                        for (String item in _listTopping)
+                                        for (final item in _listTopping)
                                           LabelToppingSelection(
-                                            title: item,
+                                            data: item,
                                             initial: _selectedTopping
                                                 .where((e) => e == item)
                                                 .isNotEmpty,
@@ -377,8 +387,8 @@ class _EditOrderPageState extends State<EditOrderPage> {
     );
   }
 
-  _showDialogLevel(List<String> _listLevel) async {
-    String _value = "1";
+  _showDialogLevel(List<Level> _listLevel) async {
+    Level _value = _listLevel.first;
     _value = await showModalBottomSheet(
       isScrollControlled: true,
       barrierColor: ColorSty.grey.withOpacity(0.2),
@@ -392,11 +402,11 @@ class _EditOrderPageState extends State<EditOrderPage> {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    for (String item in _listLevel)
+                    for (final item in _listLevel)
                       LabelLevelSelection(
-                        title: item,
+                        data: item,
                         isSelected: item == _selectedLevel,
-                        onSelection: (String value) {
+                        onSelection: (Level value) {
                           setState(() => _selectedLevel = value);
                           Navigator.of(context).pop(value);
                         },

@@ -1,16 +1,17 @@
 
 import 'package:flutter/material.dart';
+import 'package:java_code_app/models/menudetail.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 
 class LabelToppingSelection extends StatefulWidget {
-  final String title;
+  final Level data;
   final bool? initial;
-  final ValueChanged<String> onSelection;
+  final ValueChanged<Level> onSelection;
 
   const LabelToppingSelection({
     Key? key,
-    required this.title,
+    required this.data,
     required this.onSelection,
     this.initial,
   }) : super(key: key);
@@ -48,12 +49,12 @@ class _LabelToppingSelectionState extends State<LabelToppingSelection> {
         ),
         onPressed: () {
           setState(() => _isSelected = !_isSelected);
-          widget.onSelection(widget.title);
+          widget.onSelection(widget.data);
         },
         child: Row(
           children: [
             const SizedBox(width: SpaceDims.sp4),
-            Text(widget.title),
+            Text(widget.data.keterangan),
             const SizedBox(width: SpaceDims.sp4),
             if (_isSelected) const Icon(Icons.check, size: 18.0),
           ],

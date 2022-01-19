@@ -11,10 +11,10 @@ class UserInstance {
   
   static UserDetail? _userDetail;
 
-
   //And check the connection status out of the gate
   void initialize(UserDetail user) {
     _userDetail = user;
+    print("User has initialize");
   }
 
   UserDetail? get user => _userDetail;

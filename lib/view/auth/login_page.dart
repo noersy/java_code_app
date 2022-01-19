@@ -26,7 +26,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
-  final ConnectionStatus _connectionStatus = ConnectionStatus.getInstance();
+  // final ConnectionStatus _connectionStatus = ConnectionStatus.getInstance();
   final Preferences _preferences = Preferences.getInstance();
   final _duration = const Duration(seconds: 1);
 
@@ -49,13 +49,11 @@ class _LoginPageState extends State<LoginPage> {
 
     setState(() => _loading = false);
   }
-
   _loginWithGoogle() async {
     setState(() => _loading = true);
     try {
 
       final user = await GoogleLogin.getInstance().login();
-
 
       if (user != null) {
         bool isLogin = await Provider.of<AuthProviders>(context, listen: false).login(
@@ -75,14 +73,14 @@ class _LoginPageState extends State<LoginPage> {
         });
         return;
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
     setState(() => _loading = false);
   }
-
   _checkInternet() async {
     // final _isConnected = await _connectionStatus.checkConnection();
   }
-
   _checkPrefens() async {
     bool _isAlreadyLogin = await _preferences.getBoolValue(KeyPrefens.login);
     if (_isAlreadyLogin) {

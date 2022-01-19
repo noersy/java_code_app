@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/models/menudetail.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 
 class LabelLevelSelection extends StatefulWidget {
-  final String title;
+  final Level data;
   final bool isSelected;
-  final ValueChanged<String> onSelection;
+  final ValueChanged<Level> onSelection;
 
   const LabelLevelSelection({
     Key? key,
-    required this.title,
+    required this.data,
     required this.onSelection,
     required this.isSelected,
   }) : super(key: key);
@@ -38,12 +39,12 @@ class _LabelLevelSelectionState extends State<LabelLevelSelection> {
           ),
         ),
         onPressed: () {
-          widget.onSelection(widget.title);
+          widget.onSelection(widget.data);
         },
         child: Row(
           children: [
             const SizedBox(width: SpaceDims.sp4),
-            Text(widget.title),
+            Text(widget.data.keterangan),
             const SizedBox(width: SpaceDims.sp4),
             if (widget.isSelected) const Icon(Icons.check, size: 18.0),
           ],

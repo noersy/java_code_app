@@ -22,7 +22,7 @@ class AuthProviders extends ChangeNotifier {
     bool? isGoogle = false,
     String? nama = "",
   }) async {
-    final Uri _api = Uri.https(host, "$sub/api/auth/login");
+    final Uri _api = Uri.http(host, "$sub/api/auth/login");
     try {
       final body = <String, dynamic>{
         "email": email,
@@ -33,19 +33,18 @@ class AuthProviders extends ChangeNotifier {
 
       final response = await http.post(_api, body: body);
 
-      print(response.body);
+      // print(response.body);
 
       if (response.statusCode == 200) {
         _loginUser = loginUserFromJson(response.body);
-        Preferences.getInstance()
-            .setIntValue(KeyPrefens.loginID, _loginUser!.data.user.idUser);
+        Preferences.getInstance().setIntValue(KeyPrefens.loginID, _loginUser!.data.user.idUser);
         getUser();
         notifyListeners();
         return true;
       }
     } catch (e, r) {
       print(e);
-      print(r);
+      // print(r);
       // return false;
     }
 
@@ -55,15 +54,16 @@ class AuthProviders extends ChangeNotifier {
   Future<bool> getUser({id}) async {
     if (_loginUser == null && id == null) return false;
     final _id = id ?? _loginUser!.data.user.idUser;
-    final Uri _api = Uri.https(host, "$sub/api/user/detail/$_id");
+    final Uri _api = Uri.http(host, "$sub/api/user/detail/$_id");
 
     try {
       final headers = {"token": "m_app"};
 
       final response = await http.get(_api, headers: headers);
 
+      // print(response.body);
+
       if (response.statusCode == 200) {
-        // print(response.body);
         _user = userDetailFromJson(response.body);
         UserInstance.getInstance().initialize(_user!);
         notifyListeners();
@@ -81,14 +81,14 @@ class AuthProviders extends ChangeNotifier {
   Future<bool> update({id, key, value}) async {
     if (_loginUser == null && id == null) return false;
     final _id = id ?? _loginUser!.data.user.idUser;
-    final Uri _api = Uri.https(host, "$sub/api/user/update/$_id");
+    final Uri _api = Uri.http(host, "$sub/api/user/update/$_id");
 
     try {
       final headers = {"token": "m_app"};
       final body = {"$key" : "$value"};
       final response = await http.post(_api, headers: headers, body: body);
 
-      print(response.body);
+      // print(response.body);
 
       if (response.statusCode == 200) {
         getUser();

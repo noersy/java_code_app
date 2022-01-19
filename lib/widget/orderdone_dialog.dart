@@ -9,21 +9,9 @@ import 'package:java_code_app/theme/text_style.dart';
 import 'package:provider/provider.dart';
 
 class OrderDoneDialog extends StatelessWidget {
-  final int? idVoucher;
-  final int? discount;
-  final int? totalPotong;
-  final int totalPay;
-  final List<int>? listDiscount;
-  final List<Map<String, dynamic>> menu;
 
   const OrderDoneDialog({
     Key? key,
-    this.idVoucher,
-    this.discount,
-    this.totalPotong,
-    this.listDiscount,
-    required this.menu,
-    required this.totalPay,
   }) : super(key: key);
 
   @override
@@ -85,7 +73,7 @@ class OrderDoneDialog extends StatelessWidget {
                               ),
                             ),
                           ),
-                          onPressed: null,//() => _submit(context, voucher: voucher),
+                          onPressed: () => _submit(context),
                           child: const SizedBox(
                             width: double.infinity,
                             child: Align(
@@ -106,7 +94,7 @@ class OrderDoneDialog extends StatelessWidget {
     );
   }
 
-  _submit(context, {LVoucher? voucher}) async{
+  _submit(context) async{
     // await Provider.of<OrderProviders>(context, listen: false).submitOrder(voucher);
     Navigator.pop(context);
     Navigator.pop(context);
