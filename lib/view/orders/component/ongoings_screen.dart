@@ -114,96 +114,92 @@ class OrderMenuCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      color: ColorSty.white80,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: Container(
-        height: 138,
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10.0),
+    return SizedBox(
+      height: 138,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          elevation: 3,
+          primary: ColorSty.white80,
+          onPrimary: ColorSty.primary,
+          padding: const EdgeInsets.all(0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
           ),
         ),
-        child: InkWell(
-          onTap: onPressed,
-          child: Row(
-            children: [
-              Container(
-                width: 120,
-                height: 120,
-                padding: const EdgeInsets.all(SpaceDims.sp14),
-                margin: const EdgeInsets.all(SpaceDims.sp8),
-                decoration: BoxDecoration(
-                  color: ColorSty.grey60,
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: urlImage.isNotEmpty
-                    ? Image.asset(urlImage)
-                    : const Icon(Icons.image_not_supported, color: ColorSty.grey),
+        child: Row(
+          children: [
+            Container(
+              width: 120,
+              height: 120,
+              padding: const EdgeInsets.all(SpaceDims.sp14),
+              margin: const EdgeInsets.all(SpaceDims.sp8),
+              decoration: BoxDecoration(
+                color: ColorSty.grey60,
+                borderRadius: BorderRadius.circular(10.0),
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: SpaceDims.sp18),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.access_time,
-                                  size: 18.0,
-                                  color: Colors.orange,
-                                ),
-                                const SizedBox(width: SpaceDims.sp4),
-                                Text(
-                                  "Sedang disiapkan",
-                                  style: TypoSty.mini
-                                      .copyWith(color: Colors.orange),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              "20 Des 2021",
-                              style: TypoSty.mini.copyWith(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: SpaceDims.sp12),
-                      Text(title, style: TypoSty.title),
-                      const SizedBox(height: SpaceDims.sp12),
-                      Row(
+              child: urlImage.isNotEmpty
+                  ? Image.asset(urlImage)
+                  : const Icon(Icons.image_not_supported, color: ColorSty.grey),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: SpaceDims.sp18),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "Rp 20.000",
-                            style: TypoSty.mini.copyWith(
-                                fontSize: 14.0, color: ColorSty.primary),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.access_time,
+                                size: 18.0,
+                                color: Colors.orange,
+                              ),
+                              const SizedBox(width: SpaceDims.sp4),
+                              Text(
+                                "Sedang disiapkan",
+                                style: TypoSty.mini
+                                    .copyWith(color: Colors.orange),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: SpaceDims.sp8),
                           Text(
-                            "($jumlah Menu)",
-                            style: TypoSty.mini.copyWith(
-                              fontSize: 12.0,
-                              color: ColorSty.grey,
-                            ),
+                            "20 Des 2021",
+                            style: TypoSty.mini.copyWith(color: Colors.grey),
                           ),
                         ],
-                      )
-                    ],
-                  ),
+                      ),
+                    ),
+                    const SizedBox(height: SpaceDims.sp12),
+                    Text(title, style: TypoSty.title),
+                    const SizedBox(height: SpaceDims.sp12),
+                    Row(
+                      children: [
+                        Text(
+                          "Rp 20.000",
+                          style: TypoSty.mini.copyWith(
+                              fontSize: 14.0, color: ColorSty.primary),
+                        ),
+                        const SizedBox(width: SpaceDims.sp8),
+                        Text(
+                          "($jumlah Menu)",
+                          style: TypoSty.mini.copyWith(
+                            fontSize: 12.0,
+                            color: ColorSty.grey,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );

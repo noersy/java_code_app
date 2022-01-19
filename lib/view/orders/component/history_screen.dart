@@ -263,145 +263,141 @@ class OrderHistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      color: ColorSty.white80,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: Container(
-        height: 138,
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10.0),
+    return SizedBox(
+      height: 138,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          elevation: 3,
+          primary: ColorSty.white80,
+          onPrimary: ColorSty.primary,
+          padding: const EdgeInsets.all(0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
           ),
         ),
-        child: InkWell(
-          onTap: onPressed,
-          child: Row(
-            children: [
-              Container(
-                width: 120,
-                height: 120,
-                padding: const EdgeInsets.all(SpaceDims.sp14),
-                margin: const EdgeInsets.all(SpaceDims.sp8),
-                decoration: BoxDecoration(
-                  color: ColorSty.grey60,
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: Image.asset("assert/image/menu/1637916792.png"),
+        child: Row(
+          children: [
+            Container(
+              width: 120,
+              height: 120,
+              padding: const EdgeInsets.all(SpaceDims.sp14),
+              margin: const EdgeInsets.all(SpaceDims.sp8),
+              decoration: BoxDecoration(
+                color: ColorSty.grey60,
+                borderRadius: BorderRadius.circular(10.0),
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: SpaceDims.sp8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: SpaceDims.sp18),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.check,
-                                  size: 18.0,
-                                  color: Colors.green,
-                                ),
-                                const SizedBox(width: SpaceDims.sp4),
-                                Text(
-                                  "Selesai",
-                                  style: TypoSty.mini
-                                      .copyWith(color: Colors.green),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              "20 Des 2021",
-                              style: TypoSty.mini
-                                  .copyWith(color: Colors.grey, fontSize: 14.0),
-                            ),
-                          ],
+              child: Image.asset("assert/image/menu/1637916792.png"),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: SpaceDims.sp8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: SpaceDims.sp18),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.check,
+                                size: 18.0,
+                                color: Colors.green,
+                              ),
+                              const SizedBox(width: SpaceDims.sp4),
+                              Text(
+                                "Selesai",
+                                style: TypoSty.mini
+                                    .copyWith(color: Colors.green),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            "20 Des 2021",
+                            style: TypoSty.mini
+                                .copyWith(color: Colors.grey, fontSize: 14.0),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: SpaceDims.sp2),
+                    Text("Fried Rice, Chicken Katsu", style: TypoSty.title),
+                    const SizedBox(height: SpaceDims.sp4),
+                    Row(
+                      children: [
+                        Text(
+                          "Rp 20.000",
+                          style: TypoSty.mini.copyWith(
+                              fontSize: 14.0, color: ColorSty.primary),
                         ),
-                      ),
-                      const SizedBox(height: SpaceDims.sp2),
-                      Text("Fried Rice, Chicken Katsu", style: TypoSty.title),
-                      const SizedBox(height: SpaceDims.sp4),
-                      Row(
-                        children: [
-                          Text(
-                            "Rp 20.000",
-                            style: TypoSty.mini.copyWith(
-                                fontSize: 14.0, color: ColorSty.primary),
+                        const SizedBox(width: SpaceDims.sp8),
+                        Text(
+                          "(3 Menu)",
+                          style: TypoSty.mini.copyWith(
+                            fontSize: 12.0,
+                            color: ColorSty.grey,
                           ),
-                          const SizedBox(width: SpaceDims.sp8),
-                          Text(
-                            "(3 Menu)",
-                            style: TypoSty.mini.copyWith(
-                              fontSize: 12.0,
-                              color: ColorSty.grey,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: Size.zero,
+                            primary: ColorSty.white,
+                            onPrimary: ColorSty.primary,
+                            padding: const EdgeInsets.symmetric(
+                              vertical: SpaceDims.sp8,
+                              horizontal: SpaceDims.sp12,
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size.zero,
-                              primary: ColorSty.white,
-                              onPrimary: ColorSty.primary,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: SpaceDims.sp8,
-                                horizontal: SpaceDims.sp12,
+                            shape: RoundedRectangleBorder(
+                              side: const BorderSide(
+                                color: ColorSty.primaryDark,
+                                width: 2,
                               ),
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                  color: ColorSty.primaryDark,
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                            ),
-                            onPressed: () {},
-                            child: Text(
-                              "Beri Penilaian",
-                              style: TypoSty.button.copyWith(fontSize: 11.0),
+                              borderRadius: BorderRadius.circular(30.0),
                             ),
                           ),
-                          const SizedBox(width: SpaceDims.sp8),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size.zero,
-                              primary: ColorSty.primary,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: SpaceDims.sp8,
-                                horizontal: SpaceDims.sp12,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                  color: ColorSty.primaryDark,
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
+                          onPressed: () {},
+                          child: Text(
+                            "Beri Penilaian",
+                            style: TypoSty.button.copyWith(fontSize: 11.0),
+                          ),
+                        ),
+                        const SizedBox(width: SpaceDims.sp8),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: Size.zero,
+                            primary: ColorSty.primary,
+                            padding: const EdgeInsets.symmetric(
+                              vertical: SpaceDims.sp8,
+                              horizontal: SpaceDims.sp12,
                             ),
-                            onPressed: () {},
-                            child: Text(
-                              "Pesan Lagi",
-                              style: TypoSty.button.copyWith(fontSize: 11.0),
+                            shape: RoundedRectangleBorder(
+                              side: const BorderSide(
+                                color: ColorSty.primaryDark,
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.circular(30.0),
                             ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
+                          ),
+                          onPressed: () {},
+                          child: Text(
+                            "Pesan Lagi",
+                            style: TypoSty.button.copyWith(fontSize: 11.0),
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );

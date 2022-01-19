@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/view/orders/component/history_screen.dart';
-import 'package:java_code_app/view/orders/component/ongoing_screen.dart';
+import 'package:java_code_app/view/orders/component/ongoings_screen.dart';
 
 class PesananPage extends StatefulWidget {
   const PesananPage({Key? key}) : super(key: key);

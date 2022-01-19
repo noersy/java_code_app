@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:java_code_app/constans/hosts.dart';
 import 'package:java_code_app/models/listpromo.dart';
 import 'package:java_code_app/models/listvoucher.dart';
 import 'package:java_code_app/models/listdiscount.dart';
@@ -11,7 +12,6 @@ import 'package:java_code_app/tools/random_string.dart';
 class OrderProviders extends ChangeNotifier {
   // static int _orderInProgress = 0;
   // static int _checkOrder = 0;
-  static const String _domain = "javacode.ngodingin.com";
 
   static Map<String, dynamic> _checkOrder = {};
   static List<Map<String, dynamic>> _orderInProgress = [];
@@ -104,7 +104,7 @@ class OrderProviders extends ChangeNotifier {
 
   Future<MenuList?> getMenuList() async {
     try {
-      final _api = Uri.https(_domain, "/api/menu/all");
+      final _api = Uri.http(host, "$sub/api/menu/all");
       final headers = {"token": "m_app"};
 
       final response = await http.get(_api, headers: headers);
@@ -124,7 +124,7 @@ class OrderProviders extends ChangeNotifier {
 
   Future<MenuDetail?> getDetailMenu({required int id}) async {
     try {
-      final _api = Uri.https(_domain, "/api/menu/detail/$id");
+      final _api = Uri.http(host, "$sub/api/menu/detail/$id");
 
       final headers = {"token": "m_app"};
 
@@ -141,7 +141,7 @@ class OrderProviders extends ChangeNotifier {
 
   Future<bool> getListVoucher() async {
     try {
-      final _api = Uri.https(_domain, "/api/voucher/all");
+      final _api = Uri.http(host, "$sub/api/voucher/all");
 
       final headers = {"token": "m_app"};
 
@@ -160,7 +160,7 @@ class OrderProviders extends ChangeNotifier {
 
   Future<bool> getListDisCount() async {
     try {
-      final _api = Uri.https(_domain, "/api/diskon/user/1");
+      final _api = Uri.http(host, "$sub/api/diskon/user/1");
 
       final headers = {"token": "m_app"};
 
@@ -181,7 +181,7 @@ class OrderProviders extends ChangeNotifier {
 
   Future<bool> getListPromo() async {
     try {
-      final _api = Uri.https(_domain, "/api/promo/all");
+      final _api = Uri.http(host, "$sub/api/promo/all");
 
       final headers = {"token": "m_app"};
 

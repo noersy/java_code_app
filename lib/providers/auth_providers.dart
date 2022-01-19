@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:java_code_app/constans/hosts.dart';
 import 'package:java_code_app/constans/key_prefens.dart';
 import 'package:java_code_app/models/loginuser.dart';
 import 'package:java_code_app/models/userdetail.dart';
 import 'package:java_code_app/tools/shared_preferences.dart';
 
 class AuthProviders extends ChangeNotifier {
-  static const String _domain = "javacode.ngodingin.com";
   static LoginUser? _loginUser;
   static UserDetail? _user;
 
@@ -21,7 +21,7 @@ class AuthProviders extends ChangeNotifier {
     bool? isGoogle = false,
     String? nama = "",
   }) async {
-    final Uri _api = Uri.https(_domain, "/api/auth/login");
+    final Uri _api = Uri.https(host, "$sub/api/auth/login");
     try {
       final body = <String, dynamic>{
         "email": email,
@@ -54,7 +54,7 @@ class AuthProviders extends ChangeNotifier {
   Future<bool> getUser({id}) async {
     if (_loginUser == null && id == null) return false;
     final _id = id ?? _loginUser!.data.user.idUser;
-    final Uri _api = Uri.https(_domain, "/api/user/detail/$_id");
+    final Uri _api = Uri.https(host, "$sub/api/user/detail/$_id");
 
     try {
       final headers = {"token": "m_app"};
@@ -79,7 +79,7 @@ class AuthProviders extends ChangeNotifier {
   Future<bool> update({id, key, value}) async {
     if (_loginUser == null && id == null) return false;
     final _id = id ?? _loginUser!.data.user.idUser;
-    final Uri _api = Uri.https(_domain, "/api/user/update/$_id");
+    final Uri _api = Uri.https(host, "$sub/api/user/update/$_id");
 
     try {
       final headers = {"token": "m_app"};

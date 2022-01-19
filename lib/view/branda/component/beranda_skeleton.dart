@@ -166,106 +166,106 @@ class BerandaSkeleton extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: SpaceDims.sp12,
-                            vertical: SpaceDims.sp2),
-                        child: Card(
-                          elevation: 4,
-                          color: ColorSty.white80,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                            horizontal: SpaceDims.sp22,
+                            vertical: SpaceDims.sp8,
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            elevation: 3,
+                            primary: ColorSty.white80,
+                            onPrimary: ColorSty.primary,
+                            padding: const EdgeInsets.all(
+                              SpaceDims.sp8,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
                           ),
-                          child: TextButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
+                          child: Row(
+                            children: [
+                              Container(
+                                height: 74,
+                                width: 74,
+                                child: Padding(
+                                  padding:
+                                  const EdgeInsets.all(SpaceDims.sp4),
+                                  child: Skeleton(
+                                      height: 100,
+                                      borderRadius:
+                                      BorderRadius.circular(7.0)),
+                                ),
+                                decoration: BoxDecoration(
+                                  color: ColorSty.grey60,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
                               ),
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  height: 74,
-                                  width: 74,
-                                  child: Padding(
-                                    padding:
-                                    const EdgeInsets.all(SpaceDims.sp4),
-                                    child: Skeleton(
-                                        height: 100,
-                                        borderRadius:
-                                        BorderRadius.circular(7.0)),
+                              const SizedBox(width: SpaceDims.sp8),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SkeletonText(height: 12.0),
+                                  const SkeletonText(height: 12.0),
+                                  Row(
+                                    children: const [
+                                      Icon(
+                                        Icons.playlist_add_check,
+                                        color: ColorSty.primary,
+                                      ),
+                                      SizedBox(width: SpaceDims.sp4),
+                                      SkeletonText(height: 12.0),
+                                    ],
                                   ),
-                                  decoration: BoxDecoration(
-                                    color: ColorSty.grey60,
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                ),
-                                const SizedBox(width: SpaceDims.sp8),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SkeletonText(height: 12.0),
-                                    const SkeletonText(height: 12.0),
-                                    Row(
-                                      children: const [
-                                        Icon(
-                                          Icons.playlist_add_check,
-                                          color: ColorSty.primary,
-                                        ),
-                                        SizedBox(width: SpaceDims.sp4),
-                                        SkeletonText(height: 12.0),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: SpaceDims.sp12,
-                            vertical: SpaceDims.sp2),
-                        child: Card(
-                          elevation: 4,
-                          color: ColorSty.white80,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                            horizontal: SpaceDims.sp22,
+                            vertical: SpaceDims.sp8,
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            elevation: 3,
+                            primary: ColorSty.white80,
+                            onPrimary: ColorSty.primary,
+                            padding: const EdgeInsets.all(
+                              SpaceDims.sp8,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
                           ),
-                          child: TextButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  height: 74,
-                                  width: 74,
-                                  child: Padding(
-                                    padding:
-                                    const EdgeInsets.all(SpaceDims.sp4),
-                                    child: Skeleton(
-                                        height: 100,
-                                        borderRadius:
-                                        BorderRadius.circular(7.0)),
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: ColorSty.grey60,
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
+                          child: Row(
+                            children: [
+                              Container(
+                                height: 74,
+                                width: 74,
+                                child: Padding(
+                                  padding:
+                                  const EdgeInsets.all(SpaceDims.sp4),
+                                  child: Skeleton(
+                                      height: 100,
+                                      borderRadius:
+                                      BorderRadius.circular(7.0)),
                                 ),
-                                const SizedBox(width: SpaceDims.sp8),
-                                Expanded(
-                                    child: Skeleton(
-                                        height: 60.0,
-                                        borderRadius:
-                                        BorderRadius.circular(7.0))),
-                                const SizedBox(width: SpaceDims.sp8),
-                              ],
-                            ),
+                                decoration: BoxDecoration(
+                                  color: ColorSty.grey60,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              const SizedBox(width: SpaceDims.sp8),
+                              Expanded(
+                                  child: Skeleton(
+                                      height: 60.0,
+                                      borderRadius:
+                                      BorderRadius.circular(7.0))),
+                              const SizedBox(width: SpaceDims.sp8),
+                            ],
                           ),
                         ),
                       ),

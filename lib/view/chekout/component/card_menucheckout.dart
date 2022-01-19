@@ -104,7 +104,8 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
           if(_isEmpty ?? false) Navigator.pop(context);
         },
         style: ElevatedButton.styleFrom(
-          primary: ColorSty.white,
+          primary: ColorSty.white80,
+          elevation: 3,
           onPrimary: ColorSty.primary,
           padding: const EdgeInsets.all(
             SpaceDims.sp8,

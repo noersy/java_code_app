@@ -104,8 +104,8 @@ class _CardMenuState extends State<CardMenu> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: SpaceDims.sp18,
-        vertical: SpaceDims.sp2,
+        horizontal: SpaceDims.sp22,
+        vertical: SpaceDims.sp8,
       ),
       child: ElevatedButton(
         onPressed: status == 0 ? null: () {
@@ -116,7 +116,8 @@ class _CardMenuState extends State<CardMenu> {
           );
         },
         style: ElevatedButton.styleFrom(
-          primary: ColorSty.white,
+          elevation: 3,
+          primary: ColorSty.white80,
           onPrimary: ColorSty.primary,
           padding: const EdgeInsets.all(
             SpaceDims.sp8,

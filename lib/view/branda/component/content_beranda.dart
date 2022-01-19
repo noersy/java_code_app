@@ -62,7 +62,6 @@ class _ContentBerandaState extends State<ContentBeranda>
   Widget build(BuildContext context) {
     if (widget.result.isEmpty) {
       return Column(
-        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: SpaceDims.sp22),
@@ -96,11 +95,14 @@ class _ContentBerandaState extends State<ContentBeranda>
                     nominal: item.nominal,
                     police: item.syaratKetentuan,
                   ),
-                if (widget.listPromo.isNotEmpty)
-                  const CardCoupon(
-                    title: "Empty",
-                    police: "",
-                    discount: 0,
+                if (widget.listPromo.isEmpty)
+                  const Opacity(
+                    opacity: 0,
+                    child: CardCoupon(
+                      title: "Empty",
+                      police: "",
+                      discount: 0,
+                    ),
                   ),
               ],
             ),
