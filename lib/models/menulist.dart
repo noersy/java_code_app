@@ -34,24 +34,18 @@ class DMenu {
     required this.nama,
     required this.kategori,
     required this.harga,
-    required this.deskripsi,
-    required this.foto,
+    this.deskripsi,
+    this.foto,
     required this.status,
-    required this.isDeleted,
-    required this.createdAt,
-    required this.createdBy,
   });
 
   final int idMenu;
+  final int status;
   final String nama;
   final String kategori;
   final int harga;
-  final String deskripsi;
-  final dynamic foto;
-  final int status;
-  final int isDeleted;
-  final DateTime createdAt;
-  final int createdBy;
+  final String? deskripsi;
+  final String? foto;
 
   factory DMenu.fromJson(Map<String, dynamic> json) => DMenu(
     idMenu: json["id_menu"],
@@ -61,9 +55,6 @@ class DMenu {
     deskripsi: json["deskripsi"],
     foto: json["foto"],
     status: json["status"],
-    isDeleted: json["is_deleted"],
-    createdAt: DateTime.parse(json["created_at"]),
-    createdBy: json["created_by"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -74,8 +65,5 @@ class DMenu {
     "deskripsi": deskripsi,
     "foto": foto,
     "status": status,
-    "is_deleted": isDeleted,
-    "created_at": createdAt.toIso8601String(),
-    "created_by": createdBy,
   };
 }

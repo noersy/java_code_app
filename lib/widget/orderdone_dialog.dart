@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/models/listdiscount.dart';
 import 'package:java_code_app/models/listvoucher.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/theme/spacing.dart';
@@ -8,8 +9,22 @@ import 'package:java_code_app/theme/text_style.dart';
 import 'package:provider/provider.dart';
 
 class OrderDoneDialog extends StatelessWidget {
-  final LVoucher? voucher;
-  const OrderDoneDialog({Key? key, required this.voucher}) : super(key: key);
+  final int? idVoucher;
+  final int? discount;
+  final int? totalPotong;
+  final int totalPay;
+  final List<int>? listDiscount;
+  final List<Map<String, dynamic>> menu;
+
+  const OrderDoneDialog({
+    Key? key,
+    this.idVoucher,
+    this.discount,
+    this.totalPotong,
+    this.listDiscount,
+    required this.menu,
+    required this.totalPay,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +85,7 @@ class OrderDoneDialog extends StatelessWidget {
                               ),
                             ),
                           ),
-                          onPressed: () => _submit(context, voucher: voucher),
+                          onPressed: null,//() => _submit(context, voucher: voucher),
                           child: const SizedBox(
                             width: double.infinity,
                             child: Align(
@@ -92,7 +107,7 @@ class OrderDoneDialog extends StatelessWidget {
   }
 
   _submit(context, {LVoucher? voucher}) async{
-    await Provider.of<OrderProviders>(context, listen: false).submitOrder(voucher);
+    // await Provider.of<OrderProviders>(context, listen: false).submitOrder(voucher);
     Navigator.pop(context);
     Navigator.pop(context);
   }
