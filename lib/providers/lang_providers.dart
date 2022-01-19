@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:java_code_app/constans/key_prefens.dart';
 import 'package:java_code_app/constans/languages.dart';
 import 'package:java_code_app/models/lang.dart';
-import 'package:java_code_app/tools/shared_preferences.dart';
+import 'package:java_code_app/singletons/shared_preferences.dart';
 
 class LangProviders extends ChangeNotifier {
   static final Preferences _preferences = Preferences.getInstance();

@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -151,10 +152,7 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
                     ),
                     Row(
                       children: [
-                        const Icon(
-                          Icons.playlist_add_check,
-                          color: ColorSty.primary,
-                        ),
+                        SvgPicture.asset("assert/image/icons/note-icon.svg"),
                         const SizedBox(width: SpaceDims.sp4),
                         SizedBox(
                           width: 120.0,

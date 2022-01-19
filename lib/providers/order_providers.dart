@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:java_code_app/constans/hosts.dart';
+import 'package:java_code_app/models/listdiscount.dart';
 import 'package:java_code_app/models/listpromo.dart';
 import 'package:java_code_app/models/listvoucher.dart';
-import 'package:java_code_app/models/listdiscount.dart';
 import 'package:java_code_app/models/menudetail.dart';
 import 'package:java_code_app/models/menulist.dart';
-import 'package:java_code_app/tools/check_connectivity.dart';
-import 'package:java_code_app/tools/random_string.dart';
+import 'package:java_code_app/singletons/random_string.dart';
 
 class OrderProviders extends ChangeNotifier {
   // static int _orderInProgress = 0;
@@ -35,7 +34,7 @@ class OrderProviders extends ChangeNotifier {
   // static final _connectionStatus = ConnectionStatus.getInstance();
 
   addOrder({
-    required Map<String , dynamic> data,
+    required Map<String, dynamic> data,
     required int jumlahOrder,
     required String catatan,
     required String level,
@@ -184,6 +183,38 @@ class OrderProviders extends ChangeNotifier {
       final _api = Uri.http(host, "$sub/api/promo/all");
 
       final headers = {"token": "m_app"};
+
+      final response = await http.get(_api, headers: headers);
+
+      if (response.statusCode == 200) {
+        _listPromo = listPromoFromJson(response.body).data;
+        notifyListeners();
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> sendCheckOut() async {
+    try {
+      final _api = Uri.http(host, "$sub/api/order/add");
+
+      final headers = {"token": "m_app"};
+      final body = {
+        "order": {
+          "id_user": 1,
+          "id_voucher": 1,
+          "id_diskon": [1, 2],
+          "diskon": 20,
+          "total_bayar": 100000
+        },
+        "menu": [
+          {"id_menu": 2, "harga": 18000, "jumlah": 2},
+          {"id_menu": 3, "harga": 10000, "jumlah": 1}
+        ]
+      };
 
       final response = await http.get(_api, headers: headers);
 

@@ -4,7 +4,7 @@ import 'package:java_code_app/constans/hosts.dart';
 import 'package:java_code_app/constans/key_prefens.dart';
 import 'package:java_code_app/models/loginuser.dart';
 import 'package:java_code_app/models/userdetail.dart';
-import 'package:java_code_app/tools/shared_preferences.dart';
+import 'package:java_code_app/singletons/shared_preferences.dart';
 
 class AuthProviders extends ChangeNotifier {
   static LoginUser? _loginUser;
