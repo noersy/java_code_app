@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/models/listdiscount.dart';
 import 'package:java_code_app/models/listvoucher.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/text_style.dart';
@@ -9,10 +10,13 @@ import 'package:java_code_app/widget/vp_pin_dialog.dart';
 import 'package:local_auth/local_auth.dart';
 
 class VFingerPrintDialog extends StatelessWidget {
-  final BuildContext ctx;
-  final LVoucher? voucher;
 
-  const VFingerPrintDialog({Key? key, required this.ctx, this.voucher}) : super(key: key);
+  final ValueChanged<bool> onSumint;
+
+  const VFingerPrintDialog({
+    Key? key,
+    required this.onSumint,
+  }) : super(key: key);
 
   static final localAuth = LocalAuthentication();
 
@@ -27,13 +31,9 @@ class VFingerPrintDialog extends StatelessWidget {
         localizedReason: 'Please authenticate to continue',
       );
 
-      if(didAuthenticate) {
-        await showDialog(
-          context: context,
-          builder: (_) => OrderDoneDialog(voucher: voucher),
-        );
-        Navigator.pop(context);
-      }
+      // if(didAuthenticate) {
+        onSumint(didAuthenticate);
+      // }
     }
   }
 
@@ -89,7 +89,7 @@ class VFingerPrintDialog extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       Navigator.pop(context);
-                      showDialog(context: context, builder: (_)=> VPinDialog(voucher: voucher));
+                      showDialog(context: context, builder: (_)=> const VPinDialog());
                     },
                     child: Text(
                       "Verifikasi Menggunakan PIN",

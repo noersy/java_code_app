@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/models/listvoucher.dart';
+import 'package:java_code_app/models/menudetail.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -13,6 +14,7 @@ import 'package:java_code_app/view/chekout/widget/card_menucheckout.dart';
 import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/infodiscount_dialog.dart';
 import 'package:java_code_app/widget/listmenu_tile.dart';
+import 'package:java_code_app/widget/orderdone_dialog.dart';
 import 'package:java_code_app/widget/vp_fingerprint_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -48,6 +50,43 @@ class _CheckOutPageState extends State<CheckOutPage> {
     super.initState();
   }
 
+
+
+  void _checkOut() {
+    final _orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    final _discount = Provider.of<OrderProviders>(context, listen: false).listDiscount;
+    showDialog(
+      context: context,
+      builder: (_) => VFingerPrintDialog(
+        onSumint: (bool value) async {
+          if (value) {
+            Provider.of<OrderProviders>(context, listen: false).sendCheckOut(
+              idVoucher: _selectedVoucher?.idVoucher,
+              idDiscount : _discount.map((e) => e.idDiskon).toList(),
+              discount: totalDiscout,
+              totalPotong: totalDisP,
+              totalPay: totalPay,
+              menu: _orders.values.map((e) => {
+                "id_menu": e["id"],
+                "harga": e["harga"],
+                "level": e["level"],
+                "topping": e["topping"],
+                "jumlah": e["countOrder"],
+                "catatan": e["catatan"]
+              }).toList(),
+            );
+
+            Navigator.pop(context);
+            await showDialog(
+              context: context,
+              builder: (_) => const OrderDoneDialog(),
+            );
+          }
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_selectedVoucher != null) {
@@ -69,8 +108,6 @@ class _CheckOutPageState extends State<CheckOutPage> {
             totalOrders = _orders.values
                 .map((e) => e["harga"] * e["countOrder"])
                 .reduce((a, b) => a + b);
-
-            print(totalOrders);
 
             totalDisP = (totalOrders * (totalDiscout / 100)).toInt();
             totalPay = totalOrders - totalDisP;
@@ -209,9 +246,10 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                   "assert/image/icons/voucher-icon-line.svg",
                                 ),
                                 onPressed: () {
-                                  Navigate.toSelectionVoucherPage(context,
-                                          initialData: _selectedVoucher)
-                                      .then((val) {
+                                  Navigate.toSelectionVoucherPage(
+                                    context,
+                                    initialData: _selectedVoucher,
+                                  ).then((val) {
                                     setState(() {
                                       _selectedVoucher = val;
                                     });
@@ -277,13 +315,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             ],
                           ),
                           ElevatedButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (_) => VFingerPrintDialog(
-                                    ctx: context, voucher: _selectedVoucher),
-                              );
-                            },
+                            onPressed: _checkOut,
                             style: ElevatedButton.styleFrom(
                               shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(
@@ -329,10 +361,14 @@ class ListOrder extends StatelessWidget {
           child: Row(
             children: [
               type.compareTo("makanan") == 0
-                  ? SvgPicture.asset("assert/image/icons/ep_food.svg",
-                      height: 22)
-                  : SvgPicture.asset("assert/image/icons/ep_coffee.svg",
-                      height: 26),
+                  ? SvgPicture.asset(
+                      "assert/image/icons/ep_food.svg",
+                      height: 22,
+                    )
+                  : SvgPicture.asset(
+                      "assert/image/icons/ep_coffee.svg",
+                      height: 26,
+                    ),
               const SizedBox(width: SpaceDims.sp4),
               Text(
                 title,

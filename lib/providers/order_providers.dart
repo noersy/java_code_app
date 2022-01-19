@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:java_code_app/constans/hosts.dart';
@@ -21,15 +23,10 @@ class OrderProviders extends ChangeNotifier {
   static List<Promo> _listPromo = [];
 
   MenuList? get listMenu => _menuList;
-
   Map<String, dynamic> get checkOrder => _checkOrder;
-
   List<Map<String, dynamic>> get orderProgress => _orderInProgress;
-
   List<LVoucher> get listVoucher => _listVoucher;
-
   List<Discount> get listDiscount => _listDiscount;
-
   List<Promo> get listPromo => _listPromo;
 
   // static final _connectionStatus = ConnectionStatus.getInstance();
@@ -38,8 +35,8 @@ class OrderProviders extends ChangeNotifier {
     required Map<String, dynamic> data,
     required int jumlahOrder,
     required String catatan,
-    required String level,
-    required List<String> topping,
+    Level? level,
+    List<Level>? topping,
   }) async {
     _checkOrder.addAll({
       "${data["id"]}": {
@@ -49,8 +46,8 @@ class OrderProviders extends ChangeNotifier {
         "harga": data["harga"],
         "amount": data["amount"],
         "name": data["name"],
-        "level": level,
-        "topping": topping,
+        "level": level?.idDetail,
+        "topping": topping?.map((e) => e.idDetail).toList(),
         "catatan": catatan,
         "countOrder": jumlahOrder,
       }
@@ -67,8 +64,8 @@ class OrderProviders extends ChangeNotifier {
     required String id,
     required int jumlahOrder,
     required String catatan,
-    required String level,
-    required List<String> topping,
+    Level? level,
+    List<Level>? topping,
   }) async {
     _checkOrder.update(
       id,
@@ -79,8 +76,8 @@ class OrderProviders extends ChangeNotifier {
         "harga": value["harga"],
         "amount": value["amount"],
         "name": value["name"],
-        "level": level.isEmpty ? value["level"] : level,
-        "topping": topping.isEmpty ? value["topping"] : topping,
+        "level": level == null ? value["topping"] : level.idDetail,
+        "topping": topping == null ? value["topping"] : topping.map((e) => e.idDetail).toList(),
         "catatan": catatan.isEmpty ? value["catatan"] : catatan,
         "countOrder": jumlahOrder,
       },
@@ -88,7 +85,7 @@ class OrderProviders extends ChangeNotifier {
     notifyListeners();
   }
 
-  submitOrder(LVoucher? voucher) async {
+  submitOrder({LVoucher? voucher}) async {
     final _id = RanString.getInstance().getRandomString(5);
 
     _orderInProgress.add({
@@ -187,6 +184,8 @@ class OrderProviders extends ChangeNotifier {
 
       final response = await http.get(_api, headers: headers);
 
+      // print(response.body);
+
       if (response.statusCode == 200) {
         _listPromo = listPromoFromJson(response.body).data;
         notifyListeners();
@@ -205,7 +204,6 @@ class OrderProviders extends ChangeNotifier {
     int? totalPotong,
     required int totalPay,
     required List<Map<String, dynamic>> menu,
-
   }) async {
     try {
       final user = UserInstance.getInstance().user;
@@ -213,11 +211,16 @@ class OrderProviders extends ChangeNotifier {
 
       final _api = Uri.http(host, "$sub/api/order/add");
 
-      final headers = {"token": "m_app"};
+      final headers = {
+        "Content-Type" : "application/json",
+        "token": "m_app"
+      };
+
       final body = {
         "order": {
           "id_user": user.data.idUser,
           "id_voucher": idVoucher,
+          "potongan": totalPotong,
           "id_diskon": idDiscount,
           "diskon": discount,
           "total_bayar": totalPay
@@ -225,16 +228,24 @@ class OrderProviders extends ChangeNotifier {
         "menu": menu
       };
 
-      final response = await http.post(_api, headers: headers, body: body);
 
+
+      final response = await http.post(
+          _api,
+          headers: headers,
+          body: jsonEncode(body),
+          encoding: Encoding.getByName("utf-8")
+      );
       if (response.statusCode == 200) {
-        // _listPromo = listPromoFromJson(response.body).data;
+        submitOrder();
         print(response.body);
         notifyListeners();
         return true;
       }
       return false;
-    } catch (e) {
+    } catch (e, r) {
+      print(e);
+      print(r);
       return false;
     }
   }

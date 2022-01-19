@@ -80,13 +80,8 @@ class _VPinDialogState extends State<VPinDialog> {
                         eachFieldConstraints: const BoxConstraints(
                             minHeight: 30.0, minWidth: 30.0),
                         onSubmit: (_) {
-                          Navigator.pop(context);
+                          Navigator.pop(context, true);
                           if (widget.onComplete != null) widget.onComplete!(null);
-                          showDialog(
-                            context: context,
-                            builder: (_) =>
-                                OrderDoneDialog(voucher: widget.voucher),
-                          );
                         },
                         separator: Padding(
                           padding: const EdgeInsets.all(SpaceDims.sp4),
