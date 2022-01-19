@@ -9,7 +9,7 @@ import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/shadows.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:java_code_app/view/chekout/component/card_menucheckout.dart';
+import 'package:java_code_app/view/chekout/widget/card_menucheckout.dart';
 import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/infodiscount_dialog.dart';
 import 'package:java_code_app/widget/listmenu_tile.dart';

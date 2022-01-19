@@ -7,6 +7,7 @@ import 'package:java_code_app/models/listvoucher.dart';
 import 'package:java_code_app/models/menudetail.dart';
 import 'package:java_code_app/models/menulist.dart';
 import 'package:java_code_app/singletons/random_string.dart';
+import 'package:java_code_app/singletons/user_instance.dart';
 
 class OrderProviders extends ChangeNotifier {
   // static int _orderInProgress = 0;
@@ -197,29 +198,38 @@ class OrderProviders extends ChangeNotifier {
     }
   }
 
-  Future<bool> sendCheckOut() async {
+  Future<bool> sendCheckOut({
+    int? idVoucher,
+    List<int>? idDiscount,
+    int? discount,
+    int? totalPotong,
+    required int totalPay,
+    required List<Map<String, dynamic>> menu,
+
+  }) async {
     try {
+      final user = UserInstance.getInstance().user;
+      if(user == null) return false;
+
       final _api = Uri.http(host, "$sub/api/order/add");
 
       final headers = {"token": "m_app"};
       final body = {
         "order": {
-          "id_user": 1,
-          "id_voucher": 1,
-          "id_diskon": [1, 2],
-          "diskon": 20,
-          "total_bayar": 100000
+          "id_user": user.data.idUser,
+          "id_voucher": idVoucher,
+          "id_diskon": idDiscount,
+          "diskon": discount,
+          "total_bayar": totalPay
         },
-        "menu": [
-          {"id_menu": 2, "harga": 18000, "jumlah": 2},
-          {"id_menu": 3, "harga": 10000, "jumlah": 1}
-        ]
+        "menu": menu
       };
 
-      final response = await http.get(_api, headers: headers);
+      final response = await http.post(_api, headers: headers, body: body);
 
       if (response.statusCode == 200) {
-        _listPromo = listPromoFromJson(response.body).data;
+        // _listPromo = listPromoFromJson(response.body).data;
+        print(response.body);
         notifyListeners();
         return true;
       }

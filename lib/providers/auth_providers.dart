@@ -5,6 +5,7 @@ import 'package:java_code_app/constans/key_prefens.dart';
 import 'package:java_code_app/models/loginuser.dart';
 import 'package:java_code_app/models/userdetail.dart';
 import 'package:java_code_app/singletons/shared_preferences.dart';
+import 'package:java_code_app/singletons/user_instance.dart';
 
 class AuthProviders extends ChangeNotifier {
   static LoginUser? _loginUser;
@@ -64,6 +65,7 @@ class AuthProviders extends ChangeNotifier {
       if (response.statusCode == 200) {
         // print(response.body);
         _user = userDetailFromJson(response.body);
+        UserInstance.getInstance().initialize(_user!);
         notifyListeners();
         return true;
       }
