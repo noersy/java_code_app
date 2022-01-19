@@ -10,9 +10,9 @@ import 'package:local_auth/local_auth.dart';
 
 class VFingerPrintDialog extends StatelessWidget {
   final BuildContext ctx;
-  final LVoucher voucher;
+  final LVoucher? voucher;
 
-  const VFingerPrintDialog({Key? key, required this.ctx, required this.voucher}) : super(key: key);
+  const VFingerPrintDialog({Key? key, required this.ctx, this.voucher}) : super(key: key);
 
   static final localAuth = LocalAuthentication();
 

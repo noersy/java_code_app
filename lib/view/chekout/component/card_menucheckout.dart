@@ -27,6 +27,7 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
 
 
   void  _add(){
+    if(_jumlahOrder >= 99) return;
     setState(() => _jumlahOrder++);
     if(_jumlahOrder == 1){
       Provider.of<OrderProviders>(context, listen: false).addOrder(
@@ -93,140 +94,131 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
         horizontal: SpaceDims.sp12,
         vertical: SpaceDims.sp2,
       ),
-      child: Card(
-        elevation: 4,
-        color: ColorSty.white80,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: TextButton(
-          onPressed: () async {
-            var _isEmpty = await Navigate.toEditOrderMenu(
-              context,
-              data: widget.data,
-              countOrder: _jumlahOrder,
-            );
-            if(_isEmpty ?? false) Navigator.pop(context);
-          },
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
+      child: ElevatedButton(
+        onPressed: () async {
+          var _isEmpty = await Navigate.toEditOrderMenu(
+            context,
+            data: widget.data,
+            countOrder: _jumlahOrder,
+          );
+          if(_isEmpty ?? false) Navigator.pop(context);
+        },
+        style: ElevatedButton.styleFrom(
+          primary: ColorSty.white,
+          onPrimary: ColorSty.primary,
+          padding: const EdgeInsets.all(
+            SpaceDims.sp8,
           ),
-          child: Row(
-            children: [
-              Container(
-                height: 74,
-                width: 74,
-                child: Padding(
-                  padding: const EdgeInsets.all(SpaceDims.sp4),
-                  child: url.isNotEmpty
-                      ? Image.asset(url)
-                      : const Icon(Icons.image_not_supported, color: ColorSty.grey),
-                ),
-                decoration: BoxDecoration(
-                  color: ColorSty.grey60,
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              const SizedBox(width: SpaceDims.sp8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 12,
+              child: Row(
                 children: [
-                  Text(
-                    nama,
-                    style: TypoSty.title.copyWith(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.w600,
+                  Container(
+                    height: 74,
+                    width: 74,
+                    child: Padding(
+                      padding: const EdgeInsets.all(SpaceDims.sp4),
+                      child: url.isNotEmpty
+                          ? Image.asset(url)
+                          : const Icon(Icons.image_not_supported, color: ColorSty.grey),
+                    ),
+                    decoration: BoxDecoration(
+                      color: ColorSty.grey60,
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
-                  Text(
-                    harga,
-                    style: TypoSty.title.copyWith(color: ColorSty.primary),
-                  ),
-                  Row(
+                  const SizedBox(width: SpaceDims.sp8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(
-                        Icons.playlist_add_check,
-                        color: ColorSty.primary,
-                      ),
-                      const SizedBox(width: SpaceDims.sp4),
-                      SizedBox(
-                        width: 120.0,
-                        child: Text(
-                          widget.data["catatan"] ?? "Tambahkan Catatan",
-                          overflow: TextOverflow.ellipsis,
-                          style: TypoSty.caption2.copyWith(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 12.0,
-                            color: ColorSty.grey,
-                          ),
+                      Text(
+                        nama,
+                        overflow: TextOverflow.ellipsis,
+                        style: TypoSty.title.copyWith(
+                          fontSize: 19.0,
+                          fontWeight: FontWeight.w600,
                         ),
+                      ),
+                      Text(
+                        harga,
+                        style: TypoSty.title.copyWith(color: ColorSty.primary),
+                      ),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.playlist_add_check,
+                            color: ColorSty.primary,
+                          ),
+                          const SizedBox(width: SpaceDims.sp4),
+                          SizedBox(
+                            width: 120.0,
+                            child: Text(
+                              widget.data["catatan"] ?? "Tambahkan Catatan",
+                              overflow: TextOverflow.ellipsis,
+                              style: TypoSty.caption2.copyWith(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12.0,
+                                color: ColorSty.grey,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ],
               ),
-              if (amount != 0)
-                Expanded(
-                  child: AnimatedBuilder(
-                      animation: OrderProviders(),
-                      builder: (context, snapshot) {
+            ),
+            if (amount != 0)
+              Expanded(
+                flex: 6,
+                child: AnimatedBuilder(
+                    animation: OrderProviders(),
+                    builder: (context, snapshot) {
 
-                        final orders = Provider.of<OrderProviders>(context).checkOrder;
-                        if(orders.keys.contains(widget.data["id"])) _jumlahOrder = orders[widget.data["id"]]["countOrder"];
-                        if(!orders.keys.contains(widget.data["id"]))  _jumlahOrder = 0;
+                      final orders = Provider.of<OrderProviders>(context).checkOrder;
+                      if(orders.keys.contains(widget.data["id"])) _jumlahOrder = orders[widget.data["id"]]["countOrder"];
+                      if(!orders.keys.contains(widget.data["id"]))  _jumlahOrder = 0;
 
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            if (_jumlahOrder != 0)
-                              TextButton(
-                                onPressed: _min,
-                                style: TextButton.styleFrom(
-                                  padding: EdgeInsets.zero,
-                                  minimumSize: const Size(25, 25),
-                                  side: const BorderSide(
-                                    color: ColorSty.primary,
-                                    width: 2,
-                                  ),
-                                ),
-                                child: const Icon(Icons.remove),
-                              ),
-                            if (_jumlahOrder != 0)
-                              Text("$_jumlahOrder", style: TypoSty.subtitle),
+                      return Row(
+                        children: [
+                          if (_jumlahOrder != 0)
                             TextButton(
-                              onPressed: _add,
+                              onPressed: _min,
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,
-                                minimumSize: const Size(25, 25),
-                                primary: ColorSty.white,
-                                backgroundColor: ColorSty.primary,
+                                minimumSize: const Size(24, 24),
+                                side: const BorderSide(
+                                  color: ColorSty.primary,
+                                  width: 2,
+                                ),
                               ),
-                              child: const Icon(Icons.add, color: ColorSty.white),
-                            )
-                          ],
-                        );
-                      }
-                  ),
-                )
-              else
-                Expanded(
-                  child: Container(
-                    alignment: Alignment.bottomRight,
-                    height: 70,
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
-                    child: Text(
-                      "Stok Habis",
-                      style: TypoSty.caption.copyWith(
-                        color: ColorSty.grey,
-                      ),
-                    ),
-                  ),
-                )
-            ],
-          ),
+                              child: const Icon(Icons.remove),
+                            ),
+                          if (_jumlahOrder != 0)
+                            Text("$_jumlahOrder", style: TypoSty.subtitle),
+                          TextButton(
+                            onPressed: _add,
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              minimumSize: const Size(24, 24),
+                              primary: ColorSty.white,
+                              backgroundColor: ColorSty.primary,
+                            ),
+                            child: const Icon(Icons.add, color: ColorSty.white),
+                          )
+                        ],
+                      );
+                    }
+                ),
+              )
+          ],
         ),
       ),
     );
