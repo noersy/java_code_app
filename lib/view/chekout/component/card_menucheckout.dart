@@ -91,7 +91,7 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: SpaceDims.sp12,
+        horizontal: SpaceDims.sp18,
         vertical: SpaceDims.sp2,
       ),
       child: ElevatedButton(
@@ -113,71 +113,69 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
             borderRadius: BorderRadius.circular(10.0),
           ),
         ),
-        child: Row(
+        child: Stack(
+          alignment: Alignment.center,
           children: [
-            Expanded(
-              flex: 12,
-              child: Row(
-                children: [
-                  Container(
-                    height: 74,
-                    width: 74,
-                    child: Padding(
-                      padding: const EdgeInsets.all(SpaceDims.sp4),
-                      child: url.isNotEmpty
-                          ? Image.asset(url)
-                          : const Icon(Icons.image_not_supported, color: ColorSty.grey),
-                    ),
-                    decoration: BoxDecoration(
-                      color: ColorSty.grey60,
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
+            Row(
+              children: [
+                Container(
+                  height: 74,
+                  width: 74,
+                  child: Padding(
+                    padding: const EdgeInsets.all(SpaceDims.sp4),
+                    child: url.isNotEmpty
+                        ? Image.asset(url)
+                        : const Icon(Icons.image_not_supported, color: ColorSty.grey),
                   ),
-                  const SizedBox(width: SpaceDims.sp8),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        nama,
-                        overflow: TextOverflow.ellipsis,
-                        style: TypoSty.title.copyWith(
-                          fontSize: 19.0,
-                          fontWeight: FontWeight.w600,
+                  decoration: BoxDecoration(
+                    color: ColorSty.grey60,
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                const SizedBox(width: SpaceDims.sp8),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      nama,
+                      overflow: TextOverflow.ellipsis,
+                      style: TypoSty.title.copyWith(
+                        fontSize: 19.0,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      harga,
+                      style: TypoSty.title.copyWith(color: ColorSty.primary),
+                    ),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.playlist_add_check,
+                          color: ColorSty.primary,
                         ),
-                      ),
-                      Text(
-                        harga,
-                        style: TypoSty.title.copyWith(color: ColorSty.primary),
-                      ),
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.playlist_add_check,
-                            color: ColorSty.primary,
-                          ),
-                          const SizedBox(width: SpaceDims.sp4),
-                          SizedBox(
-                            width: 120.0,
-                            child: Text(
-                              widget.data["catatan"] ?? "Tambahkan Catatan",
-                              overflow: TextOverflow.ellipsis,
-                              style: TypoSty.caption2.copyWith(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 12.0,
-                                color: ColorSty.grey,
-                              ),
+                        const SizedBox(width: SpaceDims.sp4),
+                        SizedBox(
+                          width: 120.0,
+                          child: Text(
+                            widget.data["catatan"] ?? "Tambahkan Catatan",
+                            overflow: TextOverflow.ellipsis,
+                            style: TypoSty.caption2.copyWith(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12.0,
+                              color: ColorSty.grey,
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
             ),
             if (amount != 0)
-              Expanded(
-                flex: 6,
+              Positioned(
+                right: 0,
                 child: AnimatedBuilder(
                     animation: OrderProviders(),
                     builder: (context, snapshot) {
