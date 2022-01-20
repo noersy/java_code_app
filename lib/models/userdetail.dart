@@ -14,8 +14,8 @@ class UserDetail {
     required this.data,
   });
 
-  int statusCode;
-  DUser data;
+  final int statusCode;
+  final DUser data;
 
   factory UserDetail.fromJson(Map<String, dynamic> json) => UserDetail(
     statusCode: json["status_code"],
@@ -39,19 +39,21 @@ class DUser {
     this.foto,
     this.ktp,
     required this.status,
-    required this.mRolesId,
+    required this.rolesId,
+    required this.roles,
   });
 
-  int idUser;
-  String nama;
-  String email;
-  String? alamat;
-  String? tglLahir;
-  String? telepon;
-  String? foto;
-  String? ktp;
-  int status;
-  int mRolesId;
+  final int idUser;
+  final String nama;
+  final String email;
+  final String? tglLahir;
+  final String? alamat;
+  final String? telepon;
+  final String? foto;
+  final String? ktp;
+  final int status;
+  final int rolesId;
+  final String roles;
 
   factory DUser.fromJson(Map<String, dynamic> json) => DUser(
     idUser: json["id_user"],
@@ -63,7 +65,8 @@ class DUser {
     foto: json["foto"],
     ktp: json["ktp"],
     status: json["status"],
-    mRolesId: json["m_roles_id"],
+    rolesId: json["roles_id"],
+    roles: json["roles"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -76,6 +79,7 @@ class DUser {
     "foto": foto,
     "ktp": ktp,
     "status": status,
-    "m_roles_id": mRolesId,
+    "roles_id": rolesId,
+    "roles": roles,
   };
 }

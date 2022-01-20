@@ -214,6 +214,7 @@ class OrderProviders extends ChangeNotifier {
 
       final response = await http.get(_api, headers: headers);
 
+      print(response.body);
 
       if (response.statusCode == 200) {
         _orders = listOrderFromJson(response.body).data;

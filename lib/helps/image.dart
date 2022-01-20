@@ -5,7 +5,10 @@ Widget imageError(BuildContext context, Object error, StackTrace? stackTrace) {
   return const Icon(Icons.image_not_supported, color: Colors.grey);
 }
 
-Widget imageOnLoad(BuildContext context, Object error, ImageChunkEvent? stackTrace) {
+Widget imageOnLoad(BuildContext context, Widget child, ImageChunkEvent? stackTrace) {
+  if(stackTrace == null){
+    return child;
+  }
   return Skeleton();
 }
 
