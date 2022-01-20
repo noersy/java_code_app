@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:java_code_app/constans/hosts.dart';
 import 'package:java_code_app/models/listdiscount.dart';
+import 'package:java_code_app/models/listhistory.dart';
 import 'package:java_code_app/models/listorder.dart';
 import 'package:java_code_app/models/listpromo.dart';
 import 'package:java_code_app/models/listvoucher.dart';
@@ -237,6 +238,28 @@ class OrderProviders extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         return detail.orderDetailFromJson(response.body);
+      }
+    } catch (e) {
+      // return null;
+    }
+    return null;
+  }
+
+  Future<List<History>?> getHistoryList() async {
+
+    final user = UserInstance.getInstance().user;
+
+    if(user == null) return null;
+
+    try {
+      final _api = Uri.http(host, "$sub/api/order/history/${user.data.idUser}");
+
+      final headers = {"token": "m_app"};
+
+      final response = await http.get(_api, headers: headers);
+
+      if (response.statusCode == 200) {
+        return listHistoryFromJson(response.body).data;
       }
     } catch (e) {
       // return null;

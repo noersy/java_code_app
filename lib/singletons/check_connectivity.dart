@@ -3,6 +3,7 @@ import 'dart:async'; //For StreamController/Stream
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:java_code_app/constans/hosts.dart';
 import 'package:java_code_app/transision/route_transisition.dart';
 import 'package:java_code_app/view/dashboard_page.dart';
 import 'package:java_code_app/view/offline/offline_page.dart';
@@ -29,7 +30,6 @@ class ConnectionStatus {
   void initialize(GlobalKey<NavigatorState> navigatorKey) {
     _connectivity.onConnectivityChanged.listen(_connectionChange);
     _navigatorKey = navigatorKey;
-    print(_navigatorKey);
     checkConnection();
   }
 
@@ -52,8 +52,9 @@ class ConnectionStatus {
     bool previousConnection = hasConnection;
 
     try {
-      final result = await InternetAddress.lookup('google.com');
-      final connection = await _connectivity.checkConnectivity();
+      final result = await InternetAddress.lookup(
+        "google.com",
+      );
 
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         hasConnection = true;

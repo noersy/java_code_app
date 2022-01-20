@@ -33,8 +33,6 @@ class AuthProviders extends ChangeNotifier {
 
       final response = await http.post(_api, body: body);
 
-      // print(response.body);
-
       if (response.statusCode == 200) {
         _loginUser = loginUserFromJson(response.body);
         Preferences.getInstance().setIntValue(KeyPrefens.loginID, _loginUser!.data.user.idUser);
@@ -42,9 +40,8 @@ class AuthProviders extends ChangeNotifier {
         notifyListeners();
         return true;
       }
-    } catch (e, r) {
-      print(e);
-      // print(r);
+    } catch (e) {
+      // print(e);
       // return false;
     }
 

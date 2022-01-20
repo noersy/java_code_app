@@ -22,10 +22,13 @@ class OngoingScreen extends StatefulWidget {
   State<OngoingScreen> createState() => _OngoingScreenState();
 }
 
-class _OngoingScreenState extends State<OngoingScreen> {
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+class _OngoingScreenState extends State<OngoingScreen> with AutomaticKeepAliveClientMixin<OngoingScreen> {
+
+  @override
+  bool get wantKeepAlive => true;
+
   bool _loading = false;
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   Future<void> _onRefresh() async {
     var _duration = const Duration(seconds: 1);
@@ -39,9 +42,15 @@ class _OngoingScreenState extends State<OngoingScreen> {
     });
   }
 
+  getListOrder() async {
+    if (mounted) setState(() => _loading = true);
+    await Provider.of<OrderProviders>(context, listen: false).getListOrder();
+    if (mounted) setState(() => _loading = false);
+  }
+
   @override
   void initState() {
-    Provider.of<OrderProviders>(context, listen: false).getListOrder();
+    getListOrder();
     super.initState();
   }
 
@@ -52,9 +61,9 @@ class _OngoingScreenState extends State<OngoingScreen> {
     return SmartRefresher(
       onRefresh: _onRefresh,
       controller: _refreshController,
-      child: SingleChildScrollView(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height - 200,
+        child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.only(
               right: SpaceDims.sp18,
