@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ConnectionStatus.getInstance().initialize();
+    ConnectionStatus.getInstance().initialize(navigatorKey);
     GeolocationStatus.getInstance().initialize();
     Preferences.getInstance().initialize();
     Firebase.initializeApp();
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           initialRoute: "/",
           navigatorKey: navigatorKey,
-          routes: {"dashboard": (_) => const DashboardPage()},
+          routes: {"/dashboard": (_) => const DashboardPage()},
           theme: ThemeData.light().copyWith(
             colorScheme: ThemeData().colorScheme.copyWith(
                   primary: ColorSty.primary,
