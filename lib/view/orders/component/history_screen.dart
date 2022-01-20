@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
@@ -287,7 +288,11 @@ class OrderHistoryCard extends StatelessWidget {
                 color: ColorSty.grey60,
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Image.asset("assert/image/menu/1637916792.png"),
+              child: Image.network(
+                "assert/image/menu/1637916792.png",
+                loadingBuilder: imageOnLoad,
+                errorBuilder: imageError,
+              ),
             ),
             Expanded(
               child: Padding(

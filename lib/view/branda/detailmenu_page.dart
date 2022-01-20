@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/models/menudetail.dart';
 import 'package:java_code_app/models/menulist.dart';
 import 'package:java_code_app/providers/order_providers.dart';
@@ -196,13 +197,11 @@ class _DetailMenuState extends State<DetailMenu> {
                 height: 182.4,
                 child: Hero(
                   tag: "image",
-                  child: _data?.foto != null
-                      ? Image.network(_data!.foto!)
-                      : const Icon(
-                          Icons.image_not_supported,
-                          size: 32.0,
-                          color: ColorSty.grey,
-                        ),
+                  child:Image.network(
+                      _data!.foto!,
+                    loadingBuilder: imageOnLoad,
+                    errorBuilder: imageError,
+                  ),
                 ),
               ),
             ),

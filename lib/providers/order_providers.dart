@@ -9,6 +9,7 @@ import 'package:java_code_app/models/listpromo.dart';
 import 'package:java_code_app/models/listvoucher.dart';
 import 'package:java_code_app/models/menudetail.dart';
 import 'package:java_code_app/models/menulist.dart';
+import 'package:java_code_app/models/orderdetail.dart' as detail;
 import 'package:java_code_app/singletons/random_string.dart';
 import 'package:java_code_app/singletons/user_instance.dart';
 
@@ -22,7 +23,7 @@ class OrderProviders extends ChangeNotifier {
   static List<LVoucher> _listVoucher = [];
   static List<Discount> _listDiscount = [];
   static List<Promo> _listPromo = [];
-  static List<Order> _listOrders = [];
+  static List<Order> _orders = [];
 
   MenuList? get listMenu => _menuList;
   Map<String, dynamic> get checkOrder => _checkOrder;
@@ -30,7 +31,7 @@ class OrderProviders extends ChangeNotifier {
   List<LVoucher> get listVoucher => _listVoucher;
   List<Discount> get listDiscount => _listDiscount;
   List<Promo> get listPromo => _listPromo;
-  List<Order> get listOrders => _listOrders;
+  List<Order> get listOrders => _orders;
 
   // static final _connectionStatus = ConnectionStatus.getInstance();
 
@@ -204,17 +205,18 @@ class OrderProviders extends ChangeNotifier {
   }
 
   Future<bool> getListOrder() async {
+    final user = UserInstance.getInstance().user;
+    if(user == null) return false;
     try {
-      final _api = Uri.http(host, "$sub/api/promo/all");
+      final _api = Uri.http(host, "$sub/api/order/proses/${user.data.idUser}");
 
       final headers = {"token": "m_app"};
 
       final response = await http.get(_api, headers: headers);
 
-      // print(response.body);
 
       if (response.statusCode == 200) {
-        _listOrders = listOrderFromJson(response.body).data;
+        _orders = listOrderFromJson(response.body).data;
         notifyListeners();
         return true;
       }
@@ -222,6 +224,23 @@ class OrderProviders extends ChangeNotifier {
     } catch (e) {
       return false;
     }
+  }
+
+  Future<detail.OrderDetail?> getDetailOrder({required int id}) async {
+    try {
+      final _api = Uri.http(host, "$sub/api/order/detail/$id");
+
+      final headers = {"token": "m_app"};
+
+      final response = await http.get(_api, headers: headers);
+
+      if (response.statusCode == 200) {
+        return detail.orderDetailFromJson(response.body);
+      }
+    } catch (e) {
+      // return null;
+    }
+    return null;
   }
 
   Future<bool> sendCheckOut({
@@ -263,16 +282,18 @@ class OrderProviders extends ChangeNotifier {
           body: jsonEncode(body),
           encoding: Encoding.getByName("utf-8")
       );
+
       if (response.statusCode == 200) {
         submitOrder();
+        getListOrder();
+
         print(response.body);
         notifyListeners();
         return true;
       }
       return false;
-    } catch (e, r) {
+    } catch (e) {
       print(e);
-      print(r);
       return false;
     }
   }

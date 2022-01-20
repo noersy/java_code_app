@@ -93,7 +93,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         child: AnimatedBuilder(
                           animation: OrderProviders(),
                           builder: (BuildContext context, Widget? child) {
-                            int _orderOngoing = Provider.of<OrderProviders>(context).orderProgress.length;
+                            int _orderOngoing = Provider.of<OrderProviders>(context).listOrders.length;
                             // print(Provider.of<OrderProvider>(context).orderProgress.first);
                             if (_orderOngoing > 0) {
                               return Container(

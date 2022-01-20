@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -26,17 +26,16 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
   late final String nama, harga, url;
   late final int amount;
 
-
-  void  _add(){
-    if(_jumlahOrder >= 99) return;
+  void _add() {
+    if (_jumlahOrder >= 99) return;
     setState(() => _jumlahOrder++);
-    if(_jumlahOrder == 1){
+    if (_jumlahOrder == 1) {
       Provider.of<OrderProviders>(context, listen: false).addOrder(
         catatan: '',
         data: widget.data,
         jumlahOrder: _jumlahOrder,
       );
-    }else{
+    } else {
       Provider.of<OrderProviders>(context, listen: false).editOrder(
         id: widget.data["id"],
         catatan: '',
@@ -47,8 +46,9 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
 
   void _min() async {
     setState(() => _jumlahOrder--);
-    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
-    if(_jumlahOrder >= 1){
+    final orders =
+        Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    if (_jumlahOrder >= 1) {
       Provider.of<OrderProviders>(context, listen: false).editOrder(
         jumlahOrder: _jumlahOrder,
         id: widget.data["id"],
@@ -60,12 +60,13 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
         data: widget.data,
         catatan: '',
       );
-    }else{
-      await showDialog(context: context,
+    } else {
+      await showDialog(
+        context: context,
         builder: (_) => DeleteMenuInCheckoutDialog(id: widget.data["id"]),
       );
 
-      if(orders.isEmpty) Navigator.pop(context);
+      if (orders.isEmpty) Navigator.pop(context);
     }
   }
 
@@ -94,7 +95,7 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
             data: widget.data,
             countOrder: _jumlahOrder,
           );
-          if(_isEmpty ?? false) Navigator.pop(context);
+          if (_isEmpty ?? false) Navigator.pop(context);
         },
         style: ElevatedButton.styleFrom(
           primary: ColorSty.white80,
@@ -117,9 +118,11 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
                   width: 74,
                   child: Padding(
                     padding: const EdgeInsets.all(SpaceDims.sp4),
-                    child: url.isNotEmpty
-                        ? Image.network(url)
-                        : const Icon(Icons.image_not_supported, color: ColorSty.grey),
+                    child: Image.network(
+                      url,
+                      errorBuilder: imageError,
+                      loadingBuilder: imageOnLoad,
+                    ),
                   ),
                   decoration: BoxDecoration(
                     color: ColorSty.grey60,
@@ -170,10 +173,12 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
                 child: AnimatedBuilder(
                     animation: OrderProviders(),
                     builder: (context, snapshot) {
-
-                      final orders = Provider.of<OrderProviders>(context).checkOrder;
-                      if(orders.keys.contains(widget.data["id"])) _jumlahOrder = orders[widget.data["id"]]["countOrder"];
-                      if(!orders.keys.contains(widget.data["id"]))  _jumlahOrder = 0;
+                      final orders =
+                          Provider.of<OrderProviders>(context).checkOrder;
+                      if (orders.keys.contains(widget.data["id"]))
+                        _jumlahOrder = orders[widget.data["id"]]["countOrder"];
+                      if (!orders.keys.contains(widget.data["id"]))
+                        _jumlahOrder = 0;
 
                       return Row(
                         children: [
@@ -204,8 +209,7 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
                           )
                         ],
                       );
-                    }
-                ),
+                    }),
               )
           ],
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/models/menulist.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
@@ -128,9 +129,11 @@ class _CardMenuState extends State<CardMenu> {
                   width: 74,
                   child: Padding(
                     padding: const EdgeInsets.all(SpaceDims.sp4),
-                    child: url.isNotEmpty
-                        ? Image.network(url)
-                        : const Icon(Icons.image_not_supported_outlined, color: Colors.grey),
+                    child: Image.network(
+                      url,
+                      loadingBuilder: imageOnLoad,
+                      errorBuilder: imageError,
+                    )
                   ),
                   decoration: BoxDecoration(
                     color: ColorSty.grey60,

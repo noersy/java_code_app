@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/helps/image.dart';
+import 'package:java_code_app/models/orderdetail.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
@@ -8,20 +10,20 @@ import 'package:java_code_app/theme/text_style.dart';
 class ListOrderOngoing extends StatelessWidget {
 
   final String type, title;
-  final List<dynamic> orders;
+  final List<Detail> detail;
   const ListOrderOngoing({
     Key? key,
     required this.type,
-    required this.title, required this.orders,
+    required this.title,
+    required this.detail,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print(orders);
     return Column(
       children: [
         const SizedBox(height: SpaceDims.sp22),
-        if(orders.where((element) => element["type"] == type).isEmpty)
+        if(detail.where((element) => element.kategori == type).isEmpty)
           Padding(
             padding: const EdgeInsets.only(left: SpaceDims.sp24),
             child: Row(
@@ -43,8 +45,8 @@ class ListOrderOngoing extends StatelessWidget {
           width: double.infinity,
           child: Column(
             children: [
-              for (Map<String, dynamic> item in orders)
-                if (item["jenis"]?.compareTo(type) == 0)
+              for (Detail item in detail)
+                if (item.kategori.compareTo(type) == 0)
                   CardMenuOngoing(data: item),
             ],
           ),
@@ -56,7 +58,7 @@ class ListOrderOngoing extends StatelessWidget {
 
 
 class CardMenuOngoing extends StatefulWidget {
-  final Map<String, dynamic> data;
+  final Detail data;
 
   const CardMenuOngoing({
     Key? key,
@@ -69,16 +71,15 @@ class CardMenuOngoing extends StatefulWidget {
 
 class _CardMenuOngoingState extends State<CardMenuOngoing> {
   int _jumlahOrder = 0;
-  late final String nama, harga, url;
-  late final int amount;
+  late final String nama, harga, url, catatan;
 
   @override
   void initState() {
-    _jumlahOrder = widget.data["countOrder"] ?? 0;
-    nama = widget.data["name"] ?? "";
-    url = widget.data["image"] ?? "";
-    harga = "${widget.data["harga"]}";
-    amount = widget.data["amount"] ?? 0;
+    _jumlahOrder = widget.data.jumlah;
+    nama = widget.data.nama;
+    url = widget.data.foto ?? "";
+    harga = widget.data.harga;
+    catatan = widget.data.catatan ?? "";
 
     super.initState();
   }
@@ -88,15 +89,7 @@ class _CardMenuOngoingState extends State<CardMenuOngoing> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp18, vertical: SpaceDims.sp2),
       child: ElevatedButton(
-        onPressed: (){
-          //
-          // Navigate.toEditOrderMenu(
-          //     context,
-          //     data: widget.data,
-          //     countOrder: _jumlahOrder
-          // );
-
-        },
+        onPressed: (){},
         style: ElevatedButton.styleFrom(
           primary: ColorSty.white,
           onPrimary: ColorSty.primary,
@@ -116,9 +109,11 @@ class _CardMenuOngoingState extends State<CardMenuOngoing> {
                   width: 74,
                   child: Padding(
                     padding: const EdgeInsets.all(SpaceDims.sp4),
-                    child: url.isNotEmpty
-                        ? Image.network(url)
-                        : const Icon(Icons.image_not_supported, color: ColorSty.grey),
+                    child: Image.network(
+                        url,
+                      errorBuilder: imageError,
+                      loadingBuilder: imageOnLoad,
+                    )
                   ),
                   decoration: BoxDecoration(
                     color: ColorSty.grey60,
@@ -142,13 +137,10 @@ class _CardMenuOngoingState extends State<CardMenuOngoing> {
                     ),
                     Row(
                       children: [
-                        const Icon(
-                          Icons.playlist_add_check,
-                          color: ColorSty.primary,
-                        ),
+                        SvgPicture.asset("assert/image/icons/note-icon.svg"),
                         const SizedBox(width: SpaceDims.sp4),
                         Text(
-                          "Tambahkan Catatan",
+                          catatan,
                           style: TypoSty.caption2.copyWith(
                             fontWeight: FontWeight.w500,
                             fontSize: 12.0,
@@ -161,43 +153,6 @@ class _CardMenuOngoingState extends State<CardMenuOngoing> {
                 ),
               ],
             ),
-            if (amount != 0)
-              Positioned.fill(
-                right: 0,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    if (_jumlahOrder != 0)
-                      TextButton(
-                        onPressed: () {
-                          // setState(() => _jumlahOrder--)
-                        },
-                        style: TextButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          minimumSize: const Size(25, 25),
-                          side: const BorderSide(
-                            color: ColorSty.primary, width: 2,
-                          ),
-                        ),
-                        child: const Icon(Icons.remove),
-                      ),
-                    if (_jumlahOrder != 0)
-                      Text("$_jumlahOrder", style: TypoSty.subtitle),
-                    TextButton(
-                      onPressed: (){
-                         // setState(() => _jumlahOrder++);
-                      },
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: const Size(25, 25),
-                        primary: ColorSty.white,
-                        backgroundColor: ColorSty.primary,
-                      ),
-                      child: const Icon(Icons.add, color: ColorSty.white),
-                    )
-                  ],
-                ),
-              )
           ],
         ),
       ),
