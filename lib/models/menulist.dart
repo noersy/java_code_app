@@ -40,12 +40,12 @@ class DMenu {
   });
 
   final int idMenu;
-  final int status;
   final String nama;
   final String kategori;
   final int harga;
   final String? deskripsi;
   final String? foto;
+  final int status;
 
   factory DMenu.fromJson(Map<String, dynamic> json) => DMenu(
     idMenu: json["id_menu"],

@@ -54,7 +54,7 @@ class _LabelToppingSelectionState extends State<LabelToppingSelection> {
         child: Row(
           children: [
             const SizedBox(width: SpaceDims.sp4),
-            Text(widget.data.keterangan),
+            Text("${widget.data.keterangan}"),
             const SizedBox(width: SpaceDims.sp4),
             if (_isSelected) const Icon(Icons.check, size: 18.0),
           ],

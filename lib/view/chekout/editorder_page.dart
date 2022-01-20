@@ -242,7 +242,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
                                         i++)
                                       if (i > 0)
                                         TextSpan(
-                                          text: ", " + _selectedTopping[i].keterangan,
+                                          text: ", ${_selectedTopping[i].keterangan}",
                                           style:
                                               TypoSty.captionSemiBold.copyWith(
                                             color: ColorSty.black,

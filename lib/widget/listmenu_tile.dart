@@ -56,7 +56,7 @@ class TileListDMenu extends StatelessWidget {
               Row(
                 children: [
                   SizedBox(
-                    width: (prefixCostume != null || isLoading!) ? 165 : 118,
+                    width: isLoading! ? 90 : (prefixCostume != null) ? 165 : 118,
                     child: isLoading!
                         ? const SkeletonText(height: 20.0)
                         : prefixCostume ??

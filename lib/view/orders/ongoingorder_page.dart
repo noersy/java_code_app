@@ -6,10 +6,12 @@ import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
+import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/listmenu_tile.dart';
 import 'package:java_code_app/widget/listongoing_card.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
 import 'package:provider/provider.dart';
+import 'package:skeleton_animation/skeleton_animation.dart';
 
 class OngoingOrderPage extends StatefulWidget {
   final int id;
@@ -22,10 +24,13 @@ class OngoingOrderPage extends StatefulWidget {
 class _OngoingOrderPageState extends State<OngoingOrderPage> {
   OrderDetail? data;
   int status = 0;
+  bool _isLoading = false;
+
   getOrder() async {
+    setState(() => _isLoading = true);
     data = await Provider.of<OrderProviders>(context, listen: false).getDetailOrder(id: widget.id);
     if(data != null) status = data!.data.order.status;
-    setState(() {});
+    setState(() => _isLoading = false);
   }
 
   @override
@@ -38,24 +43,17 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorSty.white,
-      body: SilverAppBar(
+      appBar: const CostumeAppBar(
         back: true,
-        pinned: true,
-        floating: true,
-        title: Row(
+        title: 'Pesanan',
+        icon: Icon(IconsCs.pesanan, size: 28.0, color: ColorSty.primary),
+      ),
+      body: SingleChildScrollView(
+        primary: true,
+        child: Column(
           children: [
-            const Icon(IconsCs.pesanan, size: 28.0),
-            const SizedBox(width: SpaceDims.sp8),
-            Text("Pesanan", style: TypoSty.title),
-            const SizedBox(width: SpaceDims.sp8),
-          ],
-        ),
-        body: SingleChildScrollView(
-          primary: true,
-          child: Column(
-            children: [
-              if(data != null)
-                Column(
+            if(data != null)
+              Column(
                 children: [
                   if (data!.data.detail.where((e) => e.kategori == "makanan").isNotEmpty)
                     ListOrderOngoing(
@@ -71,9 +69,8 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                     ),
                 ],
               ),
-              const SizedBox(height: SpaceDims.sp24),
-            ],
-          ),
+            const SizedBox(height: SpaceDims.sp24),
+          ],
         ),
       ),
       bottomNavigationBar: Container(
@@ -114,15 +111,17 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                               "Total Pesanan ",
                               style: TypoSty.captionSemiBold,
                             ),
-                            Text("(${data?.data.detail.length} Menu) :", style: TypoSty.caption),
+                            if (data != null) Text("(${data?.data.detail.length} Menu) :", style: TypoSty.caption)
+                            else Skeleton(height: 16.0, width: 20),
                           ],
                         ),
-                        Text(
+                        if (data != null) Text(
                           "Rp ${data?.data.order.totalBayar}",
                           style: TypoSty.subtitle.copyWith(
                             color: ColorSty.primary,
                           ),
-                        ),
+                        )
+                        else Skeleton(height: 16.0, width: 50),
                       ],
                     ),
                   ),
@@ -151,6 +150,7 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                                 textAlign: TextAlign.right,)
                             ],
                           ),
+                          isLoading: _isLoading,
                           iconSvg: data?.data.order.namaVoucher != null
                               ? SvgPicture.asset("assert/image/icons/voucher-icon.svg")
                               : SvgPicture.asset("assert/image/icons/la_coins.svg"),
@@ -162,6 +162,7 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                             title: "Pembayaran",
                             prefix: "Pay Leter",
                             icon: IconsCs.coins,
+                            isLoading: _isLoading,
                             onPressed: () {},
                           ),
                         ]),
@@ -171,6 +172,7 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                           prefix: "Rp 4.000",
                           textStylePrefix: TypoSty.titlePrimary,
                           icon: Icons.wine_bar,
+                          isLoading: _isLoading,
                           onPressed: (){},
                         ),
                         const SizedBox(height: SpaceDims.sp18),

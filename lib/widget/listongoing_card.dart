@@ -137,7 +137,6 @@ class _CardMenuOngoingState extends State<CardMenuOngoing> {
                     ),
                     Row(
                       children: [
-                        SvgPicture.asset("assert/image/icons/note-icon.svg"),
                         const SizedBox(width: SpaceDims.sp4),
                         Text(
                           catatan,
@@ -153,6 +152,42 @@ class _CardMenuOngoingState extends State<CardMenuOngoing> {
                 ),
               ],
             ),
+            Positioned.fill(
+              right: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  if (_jumlahOrder != 0)
+                    TextButton(
+                      onPressed: () {
+                        // setState(() => _jumlahOrder--)
+                      },
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: const Size(25, 25),
+                        side: const BorderSide(
+                          color: ColorSty.primary, width: 2,
+                        ),
+                      ),
+                      child: const Icon(Icons.remove),
+                    ),
+                  if (_jumlahOrder != 0)
+                    Text("$_jumlahOrder", style: TypoSty.subtitle),
+                  TextButton(
+                    onPressed: (){
+                      // setState(() => _jumlahOrder++);
+                    },
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(25, 25),
+                      primary: ColorSty.white,
+                      backgroundColor: ColorSty.primary,
+                    ),
+                    child: const Icon(Icons.add, color: ColorSty.white),
+                  )
+                ],
+              ),
+            )
           ],
         ),
       ),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/models/menudetail.dart';
-import 'package:java_code_app/models/menulist.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -44,17 +43,16 @@ class _DetailMenuState extends State<DetailMenu> {
   Menu? _data;
 
   getMenu() async {
-    final data = await Provider
-        .of<OrderProviders>(context, listen: false)
+    final data = await Provider.of<OrderProviders>(context, listen: false)
         .getDetailMenu(id: widget.id);
 
     if (data != null) {
       _data = data.data.menu;
 
-      if(data.data.topping.isNotEmpty){
-        _selectedTopping = [data.data.topping.first] ;
+      if (data.data.topping.isNotEmpty) {
+        _selectedTopping = [data.data.topping.first];
       }
-      if(data.data.level.isNotEmpty){
+      if (data.data.level.isNotEmpty) {
         _selectedLevel = data.data.level.first;
       }
 
@@ -72,7 +70,8 @@ class _DetailMenuState extends State<DetailMenu> {
     _jumlahOrder = widget.countOrder;
     getMenu();
 
-    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    final orders =
+        Provider.of<OrderProviders>(context, listen: false).checkOrder;
     if (orders.keys.contains("${widget.id}")) {
       _jumlahOrder = orders["${widget.id}"]["countOrder"];
       _catatan = orders["${widget.id}"]["catatan"] ?? "";
@@ -81,12 +80,9 @@ class _DetailMenuState extends State<DetailMenu> {
       final level = orders["${widget.id}"]["level"];
 
       _selectedTopping = topping != null
-          ?  List<Level>.from(topping.map((x) => Level.fromJson(x)))
+          ? List<Level>.from(topping.map((x) => Level.fromJson(x)))
           : _selectedTopping;
-      _selectedLevel =  level != null
-          ?  Level.fromJson(level)
-          : _selectedLevel;
-
+      _selectedLevel = level != null ? Level.fromJson(level) : _selectedLevel;
     }
 
     super.initState();
@@ -132,15 +128,19 @@ class _DetailMenuState extends State<DetailMenu> {
     );
     setState(() => _selectedLevel = _value);
   }
+
   void _viewImage() => Navigate.toViewImage(context, urlImage: "urlImage");
+
   void _addCatatan() {
     setState(() => _catatan = _editingController.text);
     Navigator.pop(context);
   }
+
   void _tambahkanPesanan() {
     if (_data == null) return;
 
-    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    final orders =
+        Provider.of<OrderProviders>(context, listen: false).checkOrder;
 
     final data = {
       "id": "${widget.id}",
@@ -197,8 +197,8 @@ class _DetailMenuState extends State<DetailMenu> {
                 height: 182.4,
                 child: Hero(
                   tag: "image",
-                  child:Image.network(
-                      _data!.foto!,
+                  child: Image.network(
+                    _data != null ? _data!.foto ?? "" : "",
                     loadingBuilder: imageOnLoad,
                     errorBuilder: imageError,
                   ),
@@ -274,7 +274,10 @@ class _DetailMenuState extends State<DetailMenu> {
                           )
                         : SizedBox(
                             height: 100.0,
-                            child: Text(_data?.deskripsi ?? "", overflow: TextOverflow.fade,),
+                            child: Text(
+                              _data?.deskripsi ?? "",
+                              overflow: TextOverflow.fade,
+                            ),
                           ),
                   ),
                   Padding(
@@ -312,13 +315,11 @@ class _DetailMenuState extends State<DetailMenu> {
                             text: TextSpan(
                                 style: TypoSty.captionSemiBold
                                     .copyWith(color: ColorSty.black),
-                                text: _selectedTopping.isEmpty
-                                    ? ""
-                                    : "",
+                                text: _selectedTopping.isEmpty ? "" : "",
                                 children: [
                                   for (final item in _selectedTopping)
                                     TextSpan(
-                                      text: item.keterangan + " ",
+                                      text:  "${item.keterangan}",
                                       style: TypoSty.captionSemiBold
                                           .copyWith(color: ColorSty.black),
                                     )
@@ -345,11 +346,15 @@ class _DetailMenuState extends State<DetailMenu> {
                                       for (final item in _listTopping)
                                         LabelToppingSelection(
                                           data: item,
-                                          initial: _selectedTopping.where((e) => e == item).isNotEmpty,
+                                          initial: _selectedTopping
+                                              .where((e) => e == item)
+                                              .isNotEmpty,
                                           onSelection: (value) {
                                             if (_selectedTopping
-                                                .where((e) => e == value).isNotEmpty) {
-                                              setState(() => _selectedTopping.remove(value));
+                                                .where((e) => e == value)
+                                                .isNotEmpty) {
+                                              setState(() => _selectedTopping
+                                                  .remove(value));
                                             } else {
                                               setState(() =>
                                                   _selectedTopping.add(value));
