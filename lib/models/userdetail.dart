@@ -2,6 +2,7 @@
 //
 //     final userDetail = userDetailFromJson(jsonString);
 
+import 'package:meta/meta.dart';
 import 'dart:convert';
 
 UserDetail userDetailFromJson(String str) => UserDetail.fromJson(json.decode(str));
@@ -38,6 +39,7 @@ class DUser {
     this.telepon,
     this.foto,
     this.ktp,
+    required this.pin,
     required this.status,
     required this.rolesId,
     required this.roles,
@@ -51,6 +53,7 @@ class DUser {
   final String? telepon;
   final String? foto;
   final String? ktp;
+  final String pin;
   final int status;
   final int rolesId;
   final String roles;
@@ -64,6 +67,7 @@ class DUser {
     telepon: json["telepon"],
     foto: json["foto"],
     ktp: json["ktp"],
+    pin: json["pin"],
     status: json["status"],
     rolesId: json["roles_id"],
     roles: json["roles"],
@@ -78,6 +82,7 @@ class DUser {
     "telepon": telepon,
     "foto": foto,
     "ktp": ktp,
+    "pin": pin,
     "status": status,
     "roles_id": rolesId,
     "roles": roles,

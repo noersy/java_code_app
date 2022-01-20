@@ -51,8 +51,9 @@ class AuthProviders extends ChangeNotifier {
   }
 
   Future<bool> getUser({id}) async {
-    if (_loginUser == null && id == null) return false;
-    final _id = id ?? _loginUser!.data.user.idUser;
+    final user = UserInstance.getInstance().user;
+    if (user == null) return false;
+    final _id = user.data.idUser;
     final Uri _api = Uri.http(host, "$sub/api/user/detail/$_id");
 
     try {
@@ -78,16 +79,15 @@ class AuthProviders extends ChangeNotifier {
 
 
   Future<bool> update({id, key, value}) async {
-    if (_loginUser == null && id == null) return false;
-    final _id = id ?? _loginUser!.data.user.idUser;
+    final user = UserInstance.getInstance().user;
+    if (user == null) return false;
+    final _id = user.data.idUser;
     final Uri _api = Uri.http(host, "$sub/api/user/update/$_id");
 
     try {
       final headers = {"token": "m_app"};
       final body = {"$key" : "$value"};
       final response = await http.post(_api, headers: headers, body: body);
-
-      // print(response.body);
 
       if (response.statusCode == 200) {
         getUser();

@@ -65,8 +65,6 @@ class ConnectionStatus {
       hasConnection = false;
     }
 
-    print(hasLock);
-
 
     if(!hasConnection && _navigatorKey?.currentState != null && hasLock <= 0){
       hasLock++;

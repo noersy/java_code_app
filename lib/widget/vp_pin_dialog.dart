@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/models/listvoucher.dart';
+import 'package:java_code_app/singletons/user_instance.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:java_code_app/widget/orderdone_dialog.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 
 class VPinDialog extends StatefulWidget {
   final LVoucher? voucher;
   final String? title;
-  final ValueChanged<void>? onComplete;
+  final bool? giveString;
+  final ValueChanged<Object>? onComplete;
 
-  const VPinDialog(
-      {Key? key,
-      this.voucher,
-      this.title = "Verifikasi Pesanan",
-      this.onComplete})
-      : super(key: key);
+  const VPinDialog({
+    Key? key,
+    this.voucher,
+    this.title = "Verifikasi Pesanan",
+    this.onComplete, this.giveString = false,
+  }) : super(key: key);
 
   @override
   State<VPinDialog> createState() => _VPinDialogState();
@@ -78,10 +79,20 @@ class _VPinDialogState extends State<VPinDialog> {
                         obscureText: _isHide ? "*" : null,
                         textStyle: TypoSty.button,
                         eachFieldConstraints: const BoxConstraints(
-                            minHeight: 30.0, minWidth: 30.0),
+                          minHeight: 30.0,
+                          minWidth: 30.0,
+                        ),
                         onSubmit: (_) {
-                          Navigator.pop(context, true);
-                          if (widget.onComplete != null) widget.onComplete!(null);
+                          final user = UserInstance.getInstance().user;
+                          if (user == null) return;
+                          final correct = user.data.pin == _pinPutController.text;
+                          Navigator.pop(context, correct);
+
+                          if (widget.onComplete != null && !widget.giveString!) {
+                            widget.onComplete!(correct);
+                          }else if(widget.giveString!){
+                            widget.onComplete!(_pinPutController.text);
+                          }
                         },
                         separator: Padding(
                           padding: const EdgeInsets.all(SpaceDims.sp4),
