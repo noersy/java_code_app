@@ -82,13 +82,11 @@ class _OngoingScreenState extends State<OngoingScreen> with AutomaticKeepAliveCl
                       children: [
                         for (final item in orders)
                           OrderMenuCard(
-                            // onPressed: () {},
                             onPressed: () => Navigate.toViewOrder(
                               context,
                               id: item.idOrder,
                             ),
-                            order: item.menu,
-                            status: item.status,
+                            data: item,
                           ),
                       ],
                     );

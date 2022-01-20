@@ -2,15 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/models/listhistory.dart';
+import 'package:java_code_app/providers/order_providers.dart';
+import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
+import 'package:provider/provider.dart';
 
 class OrderHistoryCard extends StatelessWidget {
   final History data;
   final VoidCallback onPressed;
 
   const OrderHistoryCard({Key? key, required this.onPressed, required this.data}) : super(key: key);
+
+
+  void _pesanLagi(BuildContext context) async{
+    final provider = Provider.of<OrderProviders>(context, listen: false);
+
+    for(final item in data.menu){
+      provider.addOrder(
+          data: {
+            "id": "${item.idMenu}",
+            "jenis": item.kategori,
+            "image": item.foto,
+            "harga": int.parse(item.harga),
+            "amount": 1,
+            "name": item.nama,
+          },
+          jumlahOrder: item.jumlah,
+          catatan: "none",
+      );
+    }
+
+    Navigate.toChekOut(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +172,7 @@ class OrderHistoryCard extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(30.0),
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: ()=> _pesanLagi(context),
                             child: Text(
                               "Pesan Lagi",
                               style: TypoSty.button.copyWith(fontSize: 11.0),

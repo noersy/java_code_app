@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/models/listorder.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -6,14 +7,13 @@ import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 
 class OrderMenuCard extends StatelessWidget {
-  final List<Menu> order;
-  final int status;
+  final Order data;
   final VoidCallback onPressed;
 
   OrderMenuCard({
     Key? key,
     required this.onPressed,
-    required this.order, required this.status,
+    required this.data,
   }) : super(key: key);
 
   final  List<String> _status = [
@@ -61,7 +61,7 @@ class OrderMenuCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: Image.network(
-                  order.first.foto!,
+                  data.menu.first.foto!,
                   loadingBuilder: imageOnLoad,
                   errorBuilder: imageError,
                 )),
@@ -81,18 +81,18 @@ class OrderMenuCard extends StatelessWidget {
                               Icon(
                                 Icons.access_time,
                                 size: 18.0,
-                                color: _colors[status],
+                                color: _colors[data.status],
                               ),
                               const SizedBox(width: SpaceDims.sp4),
                               Text(
-                                _status[status],
+                                _status[data.status],
                                 style:
-                                TypoSty.mini.copyWith(color: _colors[status]),
+                                TypoSty.mini.copyWith(color: _colors[data.status]),
                               ),
                             ],
                           ),
                           Text(
-                            "20 Des 2021",
+                            dateFormat.format(data.tanggal),
                             style: TypoSty.mini.copyWith(color: Colors.grey),
                           ),
                         ],
@@ -102,25 +102,25 @@ class OrderMenuCard extends StatelessWidget {
                     RichText(
                       overflow: TextOverflow.ellipsis,
                       text: TextSpan(
-                          text: order.first.nama,
+                          text: data.menu.first.nama,
                           style: TypoSty.title,
                           children: [
                             for (final i
-                            in List.generate(order.length, (i) => i))
-                              if (i != 0) TextSpan(text: ", ${order[i].nama}")
+                            in List.generate(data.menu.length, (i) => i))
+                              if (i != 0) TextSpan(text: ", ${data.menu[i].nama}")
                           ]),
                     ),
                     const SizedBox(height: SpaceDims.sp12),
                     Row(
                       children: [
                         Text(
-                          "Rp 20.000",
+                          "Rp ${oCcy.format(data.totalBayar)}",
                           style: TypoSty.mini.copyWith(
                               fontSize: 14.0, color: ColorSty.primary),
                         ),
                         const SizedBox(width: SpaceDims.sp8),
                         Text(
-                          "(${order.length} Menu)",
+                          "(${data.menu.length} Menu)",
                           style: TypoSty.mini.copyWith(
                             fontSize: 12.0,
                             color: ColorSty.grey,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/models/menulist.dart';
 import 'package:java_code_app/providers/order_providers.dart';
@@ -153,7 +154,7 @@ class _CardMenuState extends State<CardMenu> {
                       ),
                     ),
                     Text(
-                      "Rp $harga",
+                      "Rp ${oCcy.format(harga)}",
                       overflow: TextOverflow.ellipsis,
                       style: TypoSty.title.copyWith(color: ColorSty.primary),
                     ),

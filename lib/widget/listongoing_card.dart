@@ -91,8 +91,8 @@ class _CardMenuOngoingState extends State<CardMenuOngoing> {
       child: ElevatedButton(
         onPressed: (){},
         style: ElevatedButton.styleFrom(
-          primary: ColorSty.white,
-          onPrimary: ColorSty.primary,
+          primary: ColorSty.grey90,
+          onPrimary: ColorSty.grey90,
           padding: const EdgeInsets.all(
             SpaceDims.sp8,
           ),
@@ -137,6 +137,7 @@ class _CardMenuOngoingState extends State<CardMenuOngoing> {
                     ),
                     Row(
                       children: [
+                        SvgPicture.asset("assert/image/icons/note-icon.svg"),
                         const SizedBox(width: SpaceDims.sp4),
                         Text(
                           catatan,
@@ -172,7 +173,7 @@ class _CardMenuOngoingState extends State<CardMenuOngoing> {
                       child: const Icon(Icons.remove),
                     ),
                   if (_jumlahOrder != 0)
-                    Text("$_jumlahOrder", style: TypoSty.subtitle),
+                    Text("$_jumlahOrder", style: TypoSty.subtitle.copyWith(color: ColorSty.primary)),
                   TextButton(
                     onPressed: (){
                       // setState(() => _jumlahOrder++);

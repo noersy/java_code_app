@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:device_info/device_info.dart';
@@ -138,9 +139,13 @@ class _ProfilePageState extends State<ProfilePage> {
           _fileImage!.path,
           quality: 5,
         );
-        print(_fileImage!.lengthSync());
-        print(compressedFile.lengthSync());
         _fileImage = compressedFile;
+
+        String base64Image = base64Encode(compressedFile.readAsBytesSync());
+
+        Provider.of<AuthProviders>(context, listen: false).uploadProfileImage(base64Image);
+        print("image terkirim");
+
       }
       setState(() {});
     }

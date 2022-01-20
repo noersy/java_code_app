@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:java_code_app/constans/hosts.dart';
@@ -89,6 +91,35 @@ class AuthProviders extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         getUser();
+        return true;
+      }
+    } catch (e) {
+      // return false;
+    }
+    return false;
+  }
+
+  Future<bool> uploadProfileImage(String base64) async {
+    final user = UserInstance.getInstance().user;
+
+    if(user == null) return false;
+    final Uri _api = Uri.http(host, "$sub/api/user/profil/${user.data.idUser}");
+
+    try {
+      final headers = {
+        "Content-Type" : "application/json",
+        "token": "m_app",
+      };
+      final body = {"image" : base64};
+      final response = await http.post(
+          _api,
+          headers: headers,
+          body: jsonEncode(body),
+      );
+
+      print(response.body);
+
+      if (response.statusCode == 200) {
         return true;
       }
     } catch (e) {

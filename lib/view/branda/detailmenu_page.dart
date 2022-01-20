@@ -149,10 +149,6 @@ class _DetailMenuState extends State<DetailMenu> {
       "harga": _data!.harga,
       "amount": _data!.status,
       "name": _data!.nama,
-      "level": _selectedLevel,
-      "topping": _selectedTopping,
-      "catatan": _catatan,
-      "countOrder": _jumlahOrder,
     };
 
     if (_jumlahOrder > 0) {

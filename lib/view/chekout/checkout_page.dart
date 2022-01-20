@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/models/listvoucher.dart';
-import 'package:java_code_app/models/menudetail.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -35,14 +35,15 @@ class _CheckOutPageState extends State<CheckOutPage> {
 
   @override
   void initState() {
-    final _orders =
-        Provider.of<OrderProviders>(context, listen: false).checkOrder;
-    final _discount =
-        Provider.of<OrderProviders>(context, listen: false).listDiscount;
+    final _orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    final _discount = Provider.of<OrderProviders>(context, listen: false).listDiscount;
     totalDiscout = _discount.isNotEmpty
         ? _discount.map((e) => e.diskon).reduce((a, b) => a + b)
         : totalDiscout;
+
     totalOrders = _orders.values.map((e) => e["harga"]).reduce((a, b) => a + b);
+
+
     totalDisP = (totalOrders * (totalDiscout / 100)).toInt();
     totalPay = totalOrders - totalDisP;
     numOrders = _orders.length;
@@ -308,7 +309,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                     "Total Pembayaran",
                                     style: TextStyle(color: ColorSty.black60),
                                   ),
-                                  Text("Rp $totalPay",
+                                  Text("Rp ${oCcy.format(totalPay)}",
                                       style: TypoSty.titlePrimary),
                                 ],
                               ),
