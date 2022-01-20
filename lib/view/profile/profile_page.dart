@@ -9,6 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/models/lang.dart';
 import 'package:java_code_app/providers/auth_providers.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
@@ -149,9 +150,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
         String base64Image = base64Encode(compressedFile.readAsBytesSync());
 
-        Provider.of<AuthProviders>(context, listen: false)
-            .uploadProfileImage(base64Image);
-        print("image terkirim");
+        Provider.of<AuthProviders>(context, listen: false).uploadProfileImage(base64Image);
       }
       setState(() {});
     }
@@ -165,7 +164,8 @@ class _ProfilePageState extends State<ProfilePage> {
     );
 
     if (value != null) {
-      provider.update(key: "tgl_lahir", value: _dateFormat.format((value as DateTime)));
+      provider.update(
+          key: "tgl_lahir", value: _dateFormat.format((value as DateTime)));
       if (mounted) setState(() {});
     }
   }
@@ -186,7 +186,7 @@ class _ProfilePageState extends State<ProfilePage> {
       builder: (_) => VPinDialog(
         title: lang.profile.lm,
         onComplete: (value) {
-          if(value.runtimeType != bool) return;
+          if (value.runtimeType != bool) return;
           if ((value as bool)) {
             showDialog(
               context: context,
@@ -195,7 +195,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 giveString: true,
                 onComplete: (value) {
                   print(value);
-                  if(value.runtimeType != String) return;
+                  if (value.runtimeType != String) return;
 
                   provider.update(key: "pin", value: "$value");
                 },
@@ -206,7 +206,7 @@ class _ProfilePageState extends State<ProfilePage> {
               context: context,
               builder: (_) => Dialog(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
+                  borderRadius: BorderRadius.circular(30.0),
                 ),
                 child: const SizedBox(
                   height: 90.0,
@@ -266,11 +266,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                   child: Stack(
                                     alignment: Alignment.bottomCenter,
                                     children: [
-                                      if (_fileImage != null)
-                                        Image.file(_fileImage!)
+                                      if (_user?.foto == null)
+                                        if (_fileImage != null)
+                                          Image.file(_fileImage!)
+                                        else
+                                          SvgPicture.asset(
+                                            "assert/image/icons/user-icon.svg",
+                                          )
                                       else
-                                        SvgPicture.asset(
-                                          "assert/image/icons/user-icon.svg",
+                                        Image.network(
+                                          "${_user?.foto}",
+                                          errorBuilder: imageError,
+                                          loadingBuilder: imageOnLoad,
                                         ),
                                       Positioned(
                                         bottom: -10,

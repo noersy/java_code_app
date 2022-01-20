@@ -120,6 +120,7 @@ class AuthProviders extends ChangeNotifier {
       print(response.body);
 
       if (response.statusCode == 200) {
+        getUser();
         return true;
       }
     } catch (e) {
