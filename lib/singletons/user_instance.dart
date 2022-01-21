@@ -31,7 +31,6 @@ class UserInstance {
       print("User has initialize");
     }
   }
-
   void _getFromPref()async{
     if(_userDetail == null){
       final id = await _preferences.getIntValue(KeyPrefens.loginID);
@@ -65,4 +64,7 @@ class UserInstance {
   }
 
   UserDetail? get user => _userDetail;
+  void clear(){
+    _userDetail = null;
+  }
 }

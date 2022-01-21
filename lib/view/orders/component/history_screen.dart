@@ -122,135 +122,133 @@ class _HistoryScreenState extends State<HistoryScreen> {
         onRefresh: _onRefresh,
         controller: _refreshController,
         child: SingleChildScrollView(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height - 140,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: SpaceDims.sp18,
-                vertical: SpaceDims.sp14,
-              ),
-              child: _orders.isNotEmpty
-                  ? Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.only(
-                                right: SpaceDims.sp8,
-                                left: SpaceDims.sp12,
-                                bottom: SpaceDims.sp4,
-                                top: SpaceDims.sp4,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: SpaceDims.sp18,
+              vertical: SpaceDims.sp14,
+            ),
+            child: _orders.isNotEmpty
+                ? Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.only(
+                              right: SpaceDims.sp8,
+                              left: SpaceDims.sp12,
+                              bottom: SpaceDims.sp4,
+                              top: SpaceDims.sp4,
+                            ),
+                            width: 170.0,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: ColorSty.grey60,
+                              border: Border.all(color: ColorSty.primary),
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            child: DropdownButton<String>(
+                              isDense: true,
+                              value: _dropdownValue,
+                              alignment: Alignment.topCenter,
+                              underline: const SizedBox.shrink(),
+                              borderRadius: BorderRadius.circular(30.0),
+                              icon: const Icon(Icons.arrow_drop_down),
+                              style: TypoSty.caption2.copyWith(
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w600,
+                                  color: ColorSty.black),
+                              onChanged: _changeSatuts,
+                              items: [
+                                for (String item in _item)
+                                  DropdownMenuItem<String>(
+                                    value: item,
+                                    child: Text(item),
+                                  ),
+                              ],
+                            ),
+                          ),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: ColorSty.grey60,
+                              minimumSize: const Size(0, 0),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: SpaceDims.sp8 + 0.5),
+                              shape: RoundedRectangleBorder(
+                                side:
+                                    const BorderSide(color: ColorSty.primary),
+                                borderRadius: BorderRadius.circular(30.0),
                               ),
+                            ),
+                            onPressed: _pickDateRange,
+                            child: SizedBox(
                               width: 170.0,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: ColorSty.grey60,
-                                border: Border.all(color: ColorSty.primary),
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              child: DropdownButton<String>(
-                                isDense: true,
-                                value: _dropdownValue,
-                                alignment: Alignment.topCenter,
-                                underline: const SizedBox.shrink(),
-                                borderRadius: BorderRadius.circular(30.0),
-                                icon: const Icon(Icons.arrow_drop_down),
-                                style: TypoSty.caption2.copyWith(
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w600,
-                                    color: ColorSty.black),
-                                onChanged: _changeSatuts,
-                                items: [
-                                  for (String item in _item)
-                                    DropdownMenuItem<String>(
-                                      value: item,
-                                      child: Text(item),
+                              child: Row(
+                                children: [
+                                  const SizedBox(width: SpaceDims.sp12),
+                                  Text(
+                                    _dateRange,
+                                    style: TypoSty.caption2.copyWith(
+                                      fontSize: 13.0,
+                                      fontWeight: FontWeight.w600,
                                     ),
+                                  ),
+                                  const SizedBox(width: SpaceDims.sp8),
+                                  const Icon(IconsCs.date,
+                                      size: 18.0, color: ColorSty.primary),
+                                  const SizedBox(width: SpaceDims.sp8),
                                 ],
                               ),
                             ),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor: ColorSty.grey60,
-                                minimumSize: const Size(0, 0),
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: SpaceDims.sp8 + 0.5),
-                                shape: RoundedRectangleBorder(
-                                  side:
-                                      const BorderSide(color: ColorSty.primary),
-                                  borderRadius: BorderRadius.circular(30.0),
-                                ),
-                              ),
-                              onPressed: _pickDateRange,
-                              child: SizedBox(
-                                width: 170.0,
-                                child: Row(
-                                  children: [
-                                    const SizedBox(width: SpaceDims.sp12),
-                                    Text(
-                                      _dateRange,
-                                      style: TypoSty.caption2.copyWith(
-                                        fontSize: 13.0,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    const SizedBox(width: SpaceDims.sp8),
-                                    const Icon(IconsCs.date,
-                                        size: 18.0, color: ColorSty.primary),
-                                    const SizedBox(width: SpaceDims.sp8),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        if (_loading)
-                          const SkeletonOrderCard()
-                        else
-                          Column(
-                            children: [
-                              for (final item in _data)
-                                OrderHistoryCard(
-                                  onPressed: () {},
-                                  data: item,
-                                ),
-                            ],
                           ),
-                        const SizedBox(height: SpaceDims.sp8),
-                      ],
-                    )
-                  : SizedBox(
-                      height: MediaQuery.of(context).size.height - 80,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Image.asset("assert/image/bg_findlocation.png"),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                IconsCs.order,
-                                size: 120,
-                                color: ColorSty.primary,
-                              ),
-                              const SizedBox(height: SpaceDims.sp22),
-                              Text("Mulai buat pesanan.",
-                                  textAlign: TextAlign.center,
-                                  style: TypoSty.title2,
-                              ),
-                              const SizedBox(height: SpaceDims.sp12),
-                              Text(
-                                  "Makanan yang kamu pesan\nakan muncul di sini agar\nkamu bisa menemukan\nmenu favoritmu lagi!.",
-                                  textAlign: TextAlign.center,
-                                  style: TypoSty.title2,
-                              ),
-                            ],
-                          )
                         ],
                       ),
+                      if (_loading)
+                        const SkeletonOrderCard()
+                      else
+                        Column(
+                          children: [
+                            for (final item in _data)
+                              OrderHistoryCard(
+                                onPressed: () {},
+                                data: item,
+                              ),
+                            const SizedBox(height: 120.0)
+                          ],
+                        ),
+                      const SizedBox(height: SpaceDims.sp8),
+                    ],
+                  )
+                : SizedBox(
+                    height: MediaQuery.of(context).size.height - 80,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Image.asset("assert/image/bg_findlocation.png"),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              IconsCs.order,
+                              size: 120,
+                              color: ColorSty.primary,
+                            ),
+                            const SizedBox(height: SpaceDims.sp22),
+                            Text("Mulai buat pesanan.",
+                                textAlign: TextAlign.center,
+                                style: TypoSty.title2,
+                            ),
+                            const SizedBox(height: SpaceDims.sp12),
+                            Text(
+                                "Makanan yang kamu pesan\nakan muncul di sini agar\nkamu bisa menemukan\nmenu favoritmu lagi!.",
+                                textAlign: TextAlign.center,
+                                style: TypoSty.title2,
+                            ),
+                          ],
+                        )
+                      ],
                     ),
-            ),
+                  ),
           ),
         ),
       ),

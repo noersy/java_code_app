@@ -16,6 +16,7 @@ import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/singletons/google_tools.dart';
 import 'package:java_code_app/singletons/shared_preferences.dart';
+import 'package:java_code_app/singletons/user_instance.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
@@ -205,6 +206,7 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.pushReplacementNamed(context, "/");
     Preferences.getInstance().clear();
     GoogleLogin.getInstance().logout();
+    UserInstance.getInstance().clear();
     Provider.of<OrderProviders>(context, listen: false).clear();
   }
 

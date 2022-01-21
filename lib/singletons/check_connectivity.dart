@@ -4,7 +4,9 @@ import 'dart:async'; //For StreamController/Stream
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:java_code_app/constans/hosts.dart';
+import 'package:java_code_app/singletons/user_instance.dart';
 import 'package:java_code_app/transision/route_transisition.dart';
+import 'package:java_code_app/view/auth/login_page.dart';
 import 'package:java_code_app/view/dashboard_page.dart';
 import 'package:java_code_app/view/offline/offline_page.dart';
 
@@ -32,6 +34,7 @@ class ConnectionStatus {
     _navigatorKey = navigatorKey;
     checkConnection();
   }
+
 
   Stream get connectionChange => connectionChangeController.stream;
 
@@ -65,15 +68,26 @@ class ConnectionStatus {
       hasConnection = false;
     }
 
-
-    if(!hasConnection && _navigatorKey?.currentState != null && hasLock <= 0){
-      hasLock++;
-      _navigatorKey!.currentState!.pushNamedAndRemoveUntil( '/dashboard', (_) => false);
-      _navigatorKey!.currentState!.pushReplacement(routeTransition(const OfflinePage()));
-    } else if(hasConnection && _navigatorKey?.currentState != null && hasLock >= 1){
-      hasLock--;
-      _navigatorKey!.currentState!.pushNamedAndRemoveUntil( '/dashboard', (_) => false);
-      _navigatorKey!.currentState!.pushReplacement(routeTransition(const DashboardPage()));
+    if(UserInstance.getInstance().user != null){
+      if(!hasConnection && _navigatorKey?.currentState != null && hasLock <= 0){
+        hasLock++;
+        _navigatorKey!.currentState!.pushNamedAndRemoveUntil( '/dashboard', (_) => false);
+        _navigatorKey!.currentState!.pushReplacement(routeTransition(const OfflinePage()));
+      } else if(hasConnection && _navigatorKey?.currentState != null && hasLock >= 1){
+        hasLock--;
+        _navigatorKey!.currentState!.pushNamedAndRemoveUntil( '/dashboard', (_) => false);
+        _navigatorKey!.currentState!.pushReplacement(routeTransition(const DashboardPage()));
+      }
+    }else{
+      if(!hasConnection && _navigatorKey?.currentState != null && hasLock <= 0){
+        hasLock++;
+        _navigatorKey!.currentState!.pushNamedAndRemoveUntil( '/', (_) => false);
+        _navigatorKey!.currentState!.pushReplacement(routeTransition(const OfflinePage()));
+      } else if(hasConnection && _navigatorKey?.currentState != null && hasLock >= 1){
+        hasLock--;
+        _navigatorKey!.currentState!.pushNamedAndRemoveUntil( '/', (_) => false);
+        _navigatorKey!.currentState!.pushReplacement(routeTransition(const LoginPage()));
+      }
     }
 
     //The connection status changed send out an update to all listeners
