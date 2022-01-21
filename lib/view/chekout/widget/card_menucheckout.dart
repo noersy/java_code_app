@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
@@ -24,7 +25,7 @@ class CardMenuCheckout extends StatefulWidget {
 class _CardMenuCheckoutState extends State<CardMenuCheckout> {
   int _jumlahOrder = 0;
   late final String nama, harga, url;
-  late final int amount;
+  late final int status;
 
   void _add() {
     if (_jumlahOrder >= 99) return;
@@ -43,7 +44,6 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
       );
     }
   }
-
   void _min() async {
     setState(() => _jumlahOrder--);
     final orders =
@@ -75,8 +75,8 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
     _jumlahOrder = widget.data["countOrder"] ?? 0;
     nama = widget.data["name"] ?? "";
     url = widget.data["image"] ?? "";
-    harga = "${widget.data["harga"]}";
-    amount = widget.data["amount"] ?? 0;
+    harga = "Rp ${oCcy.format(widget.data["harga"])}";
+    status = widget.data["amount"] ?? 0;
 
     super.initState();
   }
@@ -167,7 +167,7 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
                 ),
               ],
             ),
-            if (amount != 0)
+            if (status != 0)
               Positioned(
                 right: 0,
                 child: AnimatedBuilder(
@@ -175,10 +175,12 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
                     builder: (context, snapshot) {
                       final orders =
                           Provider.of<OrderProviders>(context).checkOrder;
-                      if (orders.keys.contains(widget.data["id"]))
+                      if (orders.keys.contains(widget.data["id"])) {
                         _jumlahOrder = orders[widget.data["id"]]["countOrder"];
-                      if (!orders.keys.contains(widget.data["id"]))
+                      }
+                      if (!orders.keys.contains(widget.data["id"])) {
                         _jumlahOrder = 0;
+                      }
 
                       return Row(
                         children: [

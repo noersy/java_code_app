@@ -35,6 +35,13 @@ class _CheckOutPageState extends State<CheckOutPage> {
 
   @override
   void initState() {
+    _getData();
+    super.initState();
+  }
+
+  void _getData()async{
+    await Provider.of<OrderProviders>(context, listen: false).getListDisCount();
+
     final _orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
     final _discount = Provider.of<OrderProviders>(context, listen: false).listDiscount;
     totalDiscout = _discount.isNotEmpty
@@ -47,12 +54,8 @@ class _CheckOutPageState extends State<CheckOutPage> {
     totalDisP = (totalOrders * (totalDiscout / 100)).toInt();
     totalPay = totalOrders - totalDisP;
     numOrders = _orders.length;
-
-    super.initState();
+    if(mounted) setState(() {});
   }
-
-
-
   void _checkOut() {
     final _orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
     final _discount = Provider.of<OrderProviders>(context, listen: false).listDiscount;
@@ -87,14 +90,29 @@ class _CheckOutPageState extends State<CheckOutPage> {
       ),
     );
   }
+  void _setVoucher() async {
+    try{
+      final data = await Navigate.toSelectionVoucherPage(
+        context,
+        initialData: _selectedVoucher,
+      );
 
+      if(mounted) {
+        setState(() {
+        _selectedVoucher = data;
+        if (data != null) {
+          totalPay = totalOrders - (data as LVoucher).nominal;
+          print(data.nominal);
+          if (totalPay < 0) totalPay = 0;
+        }
+      });
+      }
+    }catch(e){
+      return;
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    if (_selectedVoucher != null) {
-      totalPay = totalOrders - _selectedVoucher!.nominal;
-      if (totalPay < 0) totalPay = 0;
-    }
-
     return AnimatedBuilder(
         animation: OrderProviders(),
         builder: (_, __) {
@@ -102,16 +120,15 @@ class _CheckOutPageState extends State<CheckOutPage> {
           final _discount = Provider.of<OrderProviders>(context).listDiscount;
 
           if (_discount.isNotEmpty) {
-            totalDiscout =
-                _discount.map((e) => e.diskon).reduce((a, b) => a + b);
+            totalDiscout = _discount.map((e) => e.diskon).reduce((a, b) => a + b);
           }
+
           if (_orders.isNotEmpty) {
-            totalOrders = _orders.values
-                .map((e) => e["harga"] * e["countOrder"])
+            totalOrders = _orders.values.map((e) => e["harga"] * e["countOrder"])
                 .reduce((a, b) => a + b);
 
             totalDisP = (totalOrders * (totalDiscout / 100)).toInt();
-            totalPay = totalOrders - totalDisP;
+            if(_selectedVoucher == null) totalPay = totalOrders - totalDisP;
             numOrders = _orders.length;
           }
 
@@ -185,7 +202,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                 ],
                               ),
                               Text(
-                                "Rp $totalOrders",
+                                "Rp ${oCcy.format(totalOrders)}",
                                 style: TypoSty.subtitle.copyWith(
                                   color: ColorSty.primary,
                                 ),
@@ -205,7 +222,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                   dense: true,
                                   prefixIcon: true,
                                   title: "Diskon $totalDiscout%",
-                                  prefix: "Rp $totalDisP",
+                                  prefix: "Rp ${oCcy.format(totalDisP)}",
                                   textStylePrefix:
                                       const TextStyle(color: Colors.red),
                                   iconSvg: SvgPicture.asset(
@@ -227,7 +244,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                             CrossAxisAlignment.end,
                                         children: [
                                           Text(
-                                            "Rp ${_selectedVoucher!.nominal}",
+                                            "Rp ${oCcy.format(_selectedVoucher!.nominal)}",
                                             style: TypoSty.captionSemiBold
                                                 .copyWith(color: Colors.red),
                                           ),
@@ -246,16 +263,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                 iconSvg: SvgPicture.asset(
                                   "assert/image/icons/voucher-icon-line.svg",
                                 ),
-                                onPressed: () {
-                                  Navigate.toSelectionVoucherPage(
-                                    context,
-                                    initialData: _selectedVoucher,
-                                  ).then((val) {
-                                    setState(() {
-                                      _selectedVoucher = val;
-                                    });
-                                  });
-                                },
+                                onPressed: _setVoucher,
                               ),
                               Stack(
                                 children: [
@@ -309,8 +317,10 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                     "Total Pembayaran",
                                     style: TextStyle(color: ColorSty.black60),
                                   ),
-                                  Text("Rp ${oCcy.format(totalPay)}",
-                                      style: TypoSty.titlePrimary),
+                                  Text(
+                                    "Rp ${oCcy.format(totalPay)}",
+                                    style: TypoSty.titlePrimary,
+                                  ),
                                 ],
                               ),
                             ],

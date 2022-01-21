@@ -154,7 +154,7 @@ class OrderProviders extends ChangeNotifier {
 
       final response = await http.get(_api, headers: headers);
 
-      print(response.body);
+      // print(response.body);
 
       if (response.statusCode == 200) {
         _listVoucher = listVoucherFromJson(response.body).data;
@@ -168,9 +168,11 @@ class OrderProviders extends ChangeNotifier {
   }
 
   Future<bool> getListDisCount() async {
-    try {
-      final _api = Uri.http(host, "$sub/api/diskon/user/1");
+    final user = UserInstance.getInstance().user;
+    if(user == null) return false;
 
+    try {
+      final _api = Uri.http(host, "$sub/api/diskon/user/${user.data.idUser}");
       final headers = {"token": "m_app"};
 
       final response = await http.get(_api, headers: headers);
@@ -189,8 +191,11 @@ class OrderProviders extends ChangeNotifier {
   }
 
   Future<bool> getListPromo() async {
+    final user = UserInstance.getInstance().user;
+    if(user == null) return false;
+
     try {
-      final _api = Uri.http(host, "$sub/api/promo/all");
+      final _api = Uri.http(host, "$sub/api/promo/${user.data.idUser}");
 
       final headers = {"token": "m_app"};
 
