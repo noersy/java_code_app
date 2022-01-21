@@ -75,6 +75,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
   _pickImage(bool isImageProfile) {
     setState(() => _imageProfile = isImageProfile);
+    final user = UserInstance.getInstance().user?.data;
+    if(!_imageProfile && user?.status != 0) return;
     showModalBottomSheet(
       barrierColor: Colors.grey.withOpacity(0.2),
       elevation: 4,
