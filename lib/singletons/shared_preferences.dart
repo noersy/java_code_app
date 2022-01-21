@@ -37,6 +37,16 @@ class Preferences {
     }
   }
 
+  Future<bool> setStringValue(String key, String value) async {
+    try {
+      if (_prefs == null) throw Exception("prefs not initialize yet.");
+
+      return await _prefs!.setString(key, value);
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<bool> getBoolValue(String key) async {
     try {
       if (_prefs == null) await initialize();
@@ -57,6 +67,17 @@ class Preferences {
       return _prefs!.getInt(key) ?? -1;
     } catch (e) {
       return -1;
+    }
+  }
+
+  Future<String?> getStringValue(String key) async {
+    try {
+      if (_prefs == null) await initialize();
+      if (_prefs == null) throw Exception("prefs not initialize yet.");
+
+      return _prefs!.getString(key);
+    } catch (e) {
+      return null;
     }
   }
 

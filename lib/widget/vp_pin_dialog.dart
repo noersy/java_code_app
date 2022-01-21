@@ -90,6 +90,26 @@ class _VPinDialogState extends State<VPinDialog> {
 
                           if (widget.onComplete != null && !widget.giveString!) {
                             widget.onComplete!(correct);
+
+                            if(!correct){
+                              showDialog(
+                                context: context,
+                                builder: (_) => Dialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                  ),
+                                  child: const SizedBox(
+                                    height: 90.0,
+                                    width: double.infinity,
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Text("Pin Salah"),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+
                           }else if(widget.giveString!){
                             widget.onComplete!(_pinPutController.text);
                           }

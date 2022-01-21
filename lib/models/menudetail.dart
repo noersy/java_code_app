@@ -2,6 +2,7 @@
 //
 //     final menuDetail = menuDetailFromJson(jsonString);
 
+import 'package:meta/meta.dart';
 import 'dart:convert';
 
 MenuDetail menuDetailFromJson(String str) => MenuDetail.fromJson(json.decode(str));
@@ -30,40 +31,40 @@ class MenuDetail {
 
 class Data {
   Data({
-    required this.topping,
     required this.menu,
-    required this.level,
+    this.topping,
+    this.level,
   });
 
   final Menu menu;
-  final List<Level> topping;
-  final List<Level> level;
+  final List<Level>? topping;
+  final List<Level>? level;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     menu: Menu.fromJson(json["menu"]),
-    topping: List<Level>.from(json["topping"].map((x) => x)),
+    topping: List<Level>.from(json["topping"].map((x) => Level.fromJson(x))),
     level: List<Level>.from(json["level"].map((x) => Level.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "menu": menu.toJson(),
-    "topping": List<dynamic>.from(topping.map((x) => x)),
-    "level": List<dynamic>.from(level.map((x) => x.toJson())),
+    "topping": topping != null ? List<Level>.from(topping!.map((x) => x.toJson())) : [],
+    "level": level != null ?List<Level>.from(level!.map((x) => x.toJson())) : [],
   };
 }
 
 class Level {
   Level({
-    required this.idMenu,
     required this.idDetail,
-    this.keterangan,
+    required this.idMenu,
+    required this.keterangan,
     required this.type,
     required this.harga,
   });
 
   final int idDetail;
   final int idMenu;
-  final String? keterangan;
+  final String keterangan;
   final String type;
   final int harga;
 
@@ -88,8 +89,8 @@ class Menu {
   Menu({
     required this.idMenu,
     required this.nama,
-    required this.harga,
     required this.kategori,
+    required this.harga,
     this.deskripsi,
     this.foto,
     required this.status,

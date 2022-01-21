@@ -77,7 +77,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
               }).toList(),
             );
 
-            Navigator.pop(context);
+            // Navigator.pop(context);
             await showDialog(
               context: context,
               builder: (_) => const OrderDoneDialog(),

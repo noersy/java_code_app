@@ -43,21 +43,20 @@ class _DetailMenuState extends State<DetailMenu> {
   Menu? _data;
 
   getMenu() async {
-    final data = await Provider.of<OrderProviders>(context, listen: false)
-        .getDetailMenu(id: widget.id);
+    final data = await Provider.of<OrderProviders>(context, listen: false).getDetailMenu(id: widget.id);
 
     if (data != null) {
       _data = data.data.menu;
 
-      if (data.data.topping.isNotEmpty) {
-        _selectedTopping = [data.data.topping.first];
+      if (data.data.topping?.isNotEmpty ?? false) {
+        _selectedTopping = [data.data.topping!.first];
       }
-      if (data.data.level.isNotEmpty) {
-        _selectedLevel = data.data.level.first;
+      if (data.data.level?.isNotEmpty ?? false) {
+        _selectedLevel = data.data.level!.first;
       }
 
-      _listLevel = data.data.level;
-      _listTopping = data.data.topping;
+      _listLevel = data.data.level ?? [];
+      _listTopping = data.data.topping ?? [];
       _isLoading = false;
     }
 
@@ -70,20 +69,19 @@ class _DetailMenuState extends State<DetailMenu> {
     _jumlahOrder = widget.countOrder;
     getMenu();
 
-    final orders =
-        Provider.of<OrderProviders>(context, listen: false).checkOrder;
-    if (orders.keys.contains("${widget.id}")) {
-      _jumlahOrder = orders["${widget.id}"]["countOrder"];
-      _catatan = orders["${widget.id}"]["catatan"] ?? "";
-
-      final topping = orders["${widget.id}"]["topping"];
-      final level = orders["${widget.id}"]["level"];
-
-      _selectedTopping = topping != null
-          ? List<Level>.from(topping.map((x) => Level.fromJson(x)))
-          : _selectedTopping;
-      _selectedLevel = level != null ? Level.fromJson(level) : _selectedLevel;
-    }
+    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    // if (orders.keys.contains("${widget.id}")) {
+    //   _jumlahOrder = orders["${widget.id}"]["countOrder"];
+    //   _catatan = orders["${widget.id}"]["catatan"] ?? "";
+    //
+    //   final topping = orders["${widget.id}"]["topping"];
+    //   final level = orders["${widget.id}"]["level"];
+    //
+    //   _selectedTopping = topping != null
+    //       ? List<Level>.from(topping.map((x) => Level.fromJson(x)))
+    //       : _selectedTopping;
+    //   _selectedLevel = level != null ? Level.fromJson(level) : _selectedLevel;
+    // }
 
     super.initState();
   }

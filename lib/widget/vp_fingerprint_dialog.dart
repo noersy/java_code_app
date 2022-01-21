@@ -89,7 +89,13 @@ class VFingerPrintDialog extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       Navigator.pop(context);
-                      showDialog(context: context, builder: (_)=> const VPinDialog());
+                      showDialog(context: context, builder: (_)=> VPinDialog(
+                        onComplete: (value){
+                          if(value.runtimeType == bool){
+                            onSumint(value as bool);
+                          }
+                        },
+                      ));
                     },
                     child: Text(
                       "Verifikasi Menggunakan PIN",

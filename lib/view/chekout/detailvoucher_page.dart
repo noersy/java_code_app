@@ -114,7 +114,7 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
                               Text("Valid Date", style: TypoSty.button),
                             ],
                           ),
-                          Text("${_format.format(widget.voucher.periodeMulai)} - ${_format.format(widget.voucher.periodeSelesai)}"),
+                          Text("${DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeMulai)} - ${DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeSelesai)}"),
                         ],
                       ),
                     ),

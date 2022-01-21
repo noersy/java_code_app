@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/providers/auth_providers.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/providers/order_providers.dart';
+import 'package:java_code_app/singletons/user_instance.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/singletons/check_connectivity.dart';
 import 'package:java_code_app/singletons/check_location.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
     ConnectionStatus.getInstance().initialize(navigatorKey);
     GeolocationStatus.getInstance().initialize();
     Preferences.getInstance().initialize();
+    UserInstance.getInstance().initialize();
     Firebase.initializeApp();
 
     return MultiProvider(

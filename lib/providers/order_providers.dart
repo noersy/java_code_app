@@ -51,7 +51,7 @@ class OrderProviders extends ChangeNotifier {
         "harga": data["harga"],
         "amount": data["amount"],
         "name": data["name"],
-        "level": level?.idDetail,
+        "level": "${level?.idDetail}",
         "topping": topping?.map((e) => e.idDetail).toList(),
         "catatan": catatan,
         "countOrder": jumlahOrder,
@@ -81,7 +81,7 @@ class OrderProviders extends ChangeNotifier {
         "harga": value["harga"],
         "amount": value["amount"],
         "name": value["name"],
-        "level": level == null ? value["topping"] : level.idDetail,
+        "level": level == null ? value["topping"] : "${level.idDetail}",
         "topping": topping == null ? value["topping"] : topping.map((e) => e.idDetail).toList(),
         "catatan": catatan.isEmpty ? value["catatan"] : catatan,
         "countOrder": jumlahOrder,
@@ -146,11 +146,15 @@ class OrderProviders extends ChangeNotifier {
 
   Future<bool> getListVoucher() async {
     try {
-      final _api = Uri.http(host, "$sub/api/voucher/all");
+      final user = UserInstance.getInstance().user;
+      if(user == null) return false;
+      final _api = Uri.http(host, "$sub/api/voucher/user/${user.data.idUser}");
 
       final headers = {"token": "m_app"};
 
       final response = await http.get(_api, headers: headers);
+
+      print(response.body);
 
       if (response.statusCode == 200) {
         _listVoucher = listVoucherFromJson(response.body).data;
@@ -296,7 +300,7 @@ class OrderProviders extends ChangeNotifier {
         "menu": menu
       };
 
-
+      print(body);
 
       final response = await http.post(
           _api,

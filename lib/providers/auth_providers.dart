@@ -38,7 +38,7 @@ class AuthProviders extends ChangeNotifier {
       if (response.statusCode == 200) {
         _loginUser = loginUserFromJson(response.body);
         Preferences.getInstance().setIntValue(KeyPrefens.loginID, _loginUser!.data.user.idUser);
-        getUser();
+        getUser(id: _loginUser!.data.user.idUser);
         notifyListeners();
         return true;
       }
@@ -52,8 +52,8 @@ class AuthProviders extends ChangeNotifier {
 
   Future<bool> getUser({id}) async {
     final user = UserInstance.getInstance().user;
-    if (user == null) return false;
-    final _id = user.data.idUser;
+    if (user == null && id == null) return false;
+    final _id = id ?? user!.data.idUser;
     final Uri _api = Uri.http(host, "$sub/api/user/detail/$_id");
 
     try {
@@ -65,7 +65,7 @@ class AuthProviders extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         _user = userDetailFromJson(response.body);
-        UserInstance.getInstance().initialize(_user!);
+        UserInstance.getInstance().initialize(user: _user!);
         notifyListeners();
         return true;
       }

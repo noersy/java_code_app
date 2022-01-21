@@ -168,10 +168,13 @@ class VoucherCard extends StatefulWidget {
 class _VoucherCardState extends State<VoucherCard> {
   bool _isSelected = false;
   final DateFormat _format = DateFormat('dd/MM/yy');
+  late final DateTime _start, _end;
 
   @override
   void initState() {
     _isSelected = widget.isChecked;
+    _start = DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeMulai);
+    _end = DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeSelesai);
     super.initState();
   }
 
@@ -268,7 +271,7 @@ class _VoucherCardState extends State<VoucherCard> {
                               TextStyle(color: ColorSty.black, fontSize: 12.0),
                         ),
                         Text(
-                          """(${widget.voucher.periodeSelesai.difference(widget.voucher.periodeMulai).inDays} Month) ${_format.format(widget.voucher.periodeMulai)} - ${_format.format(widget.voucher.periodeSelesai)} 
+                          """(${_end.difference(_end).inDays} Month) ${_format.format(_start)} - ${_format.format(_end)} 
                           """,
                           style: TypoSty.mini
                               .copyWith(color: ColorSty.black60, fontSize: 9.0),

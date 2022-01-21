@@ -144,7 +144,7 @@ class _ProfilePageState extends State<ProfilePage> {
       if (_fileImage != null) {
         File compressedFile = await FlutterNativeImage.compressImage(
           _fileImage!.path,
-          quality: 5,
+          quality: 50,
         );
         _fileImage = compressedFile;
 
@@ -201,23 +201,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 },
               ),
             );
-          } else {
-            showDialog(
-              context: context,
-              builder: (_) => Dialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                child: const SizedBox(
-                  height: 90.0,
-                  width: double.infinity,
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text("Pin Salah"),
-                  ),
-                ),
-              ),
-            );
           }
         },
       ),
@@ -266,7 +249,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   child: Stack(
                                     alignment: Alignment.bottomCenter,
                                     children: [
-                                      if (_user?.foto == null)
+                                      if (true)
                                         if (_fileImage != null)
                                           Image.file(_fileImage!)
                                         else

@@ -54,15 +54,15 @@ class _EditOrderPageState extends State<EditOrderPage> {
     if (data != null) {
       _data = data.data.menu;
 
-      if(data.data.topping.isNotEmpty){
-        _selectedTopping = [data.data.topping.first] ;
+      if(data.data.topping?.isNotEmpty ?? false){
+        _selectedTopping = [data.data.topping!.first] ;
       }
-      if(data.data.level.isNotEmpty){
-        _selectedLevel = data.data.level.first;
+      if(data.data.level?.isNotEmpty ?? false){
+        _selectedLevel = data.data.level!.first;
       }
 
-      _listLevel = data.data.level;
-      _listTopping = data.data.topping;
+      _listLevel = data.data.level ?? [];
+      _listTopping = data.data.topping ?? [];
       _isLoading = false;
     }
 
@@ -76,21 +76,21 @@ class _EditOrderPageState extends State<EditOrderPage> {
     _jumlahOrder = widget.countOrder;
     getMenu();
 
-    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
-    if (orders.keys.contains("${widget.data["id"]}")) {
-      _jumlahOrder = orders["${widget.data["id"]}"]["countOrder"];
-      _catatan = orders["${widget.data["id"]}"]["catatan"] ?? "";
-
-      final tooping = orders["${widget.data["id"]}"]["topping"];
-      final level = orders["${widget.data["id"]}"]["level"];
-
-      _selectedTopping = tooping != null
-          ? List<Level>.from(tooping.map((x) => Level.fromJson(x)))
-          : _selectedTopping;
-      _selectedLevel = level != null
-          ? Level.fromJson(level)
-          : null;
-    }
+    // final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    // if (orders.keys.contains("${widget.data["id"]}")) {
+    //   _jumlahOrder = orders["${widget.data["id"]}"]["countOrder"];
+    //   _catatan = orders["${widget.data["id"]}"]["catatan"] ?? "";
+    //
+    //   final tooping = orders["${widget.data["id"]}"]["topping"];
+    //   final level = orders["${widget.data["id"]}"]["level"];
+    //
+    //   _selectedTopping = tooping != null
+    //       ? List<Level>.from(tooping.map((x) => Level.fromJson(x)))
+    //       : _selectedTopping;
+    //   _selectedLevel = level != null
+    //       ? Level.fromJson(level)
+    //       : null;
+    // }
 
     super.initState();
   }

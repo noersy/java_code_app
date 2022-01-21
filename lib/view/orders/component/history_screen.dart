@@ -71,11 +71,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
       _dateStart = val.startDate;
       _dateEnd = val.endDate;
-
+      _status = 0;
+      _dropdownValue = "Semua Status";
       _data = _orders.where(
               (element) => (element.tanggal.compareTo(_dateStart!) >= 0
-                  && element.tanggal.compareTo(_dateEnd!) <= 0
-                  && _status == 0 ? true : element.status == _status)
+                  && element.tanggal.compareTo(_dateEnd!) <= 0)
       ).toList();
 
       _dateRange = dateFormat.format(val.startDate!) +
