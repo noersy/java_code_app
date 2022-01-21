@@ -8,13 +8,13 @@ class CardCoupon extends StatelessWidget {
   final int? discount, nominal;
   final String title, police;
   final bool disable;
-
+  final Color? color;
   const CardCoupon({
     Key? key,
     this.discount,
     required this.title,
     this.nominal,
-    required this.police, this.disable = false,
+    required this.police, this.disable = false, this.color,
   }) : super(key: key);
 
   @override
@@ -46,7 +46,7 @@ class CardCoupon extends StatelessWidget {
                 ),
                 const SizedBox(width: SpaceDims.sp12),
                 Text(
-                  discount != null ? "$discount %" : "Rp $nominal",
+                  discount != null ? discount != 0 ? "$discount %" : "-" : "Rp $nominal",
                   style: TypoSty.heading.copyWith(
                     fontSize: discount != null ? 36.0 : 22.0,
                     foreground: Paint()
@@ -66,7 +66,7 @@ class CardCoupon extends StatelessWidget {
         ),
       ),
       decoration: BoxDecoration(
-        color: ColorSty.primary,
+        color: color ?? ColorSty.primary,
         borderRadius: BorderRadius.circular(7.0),
         image: DecorationImage(
           colorFilter: ColorFilter.mode(

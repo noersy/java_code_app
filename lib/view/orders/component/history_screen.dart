@@ -123,7 +123,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         controller: _refreshController,
         child: SingleChildScrollView(
           child: SizedBox(
-            height: MediaQuery.of(context).size.height - 200,
+            height: MediaQuery.of(context).size.height - 140,
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: SpaceDims.sp18,

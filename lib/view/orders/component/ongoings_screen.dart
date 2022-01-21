@@ -62,7 +62,7 @@ class _OngoingScreenState extends State<OngoingScreen> with AutomaticKeepAliveCl
       onRefresh: _onRefresh,
       controller: _refreshController,
       child: SizedBox(
-        height: MediaQuery.of(context).size.height - 200,
+        height: MediaQuery.of(context).size.height - 140,
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.only(

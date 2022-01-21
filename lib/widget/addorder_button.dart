@@ -14,7 +14,7 @@ class AddOrderButton extends StatefulWidget {
 }
 
 class _AddOrderButtonState extends State<AddOrderButton> {
-  int jumlahOrder = 0;
+  static int jumlahOrder = 0;
 
   @override
   void initState() {
@@ -24,6 +24,7 @@ class _AddOrderButtonState extends State<AddOrderButton> {
 
   @override
   Widget build(BuildContext context) {
+    print("button $jumlahOrder");
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [

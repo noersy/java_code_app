@@ -24,7 +24,7 @@ class AuthProviders extends ChangeNotifier {
     bool? isGoogle = false,
     String? nama = "",
   }) async {
-    final Uri _api = Uri.http(host, "$sub/api/auth/login");
+    final Uri _api = Uri.https(host, "$sub/api/auth/login");
     try {
       final body = <String, dynamic>{
         "email": email,
@@ -54,7 +54,7 @@ class AuthProviders extends ChangeNotifier {
     final user = UserInstance.getInstance().user;
     if (user == null && id == null) return false;
     final _id = id ?? user!.data.idUser;
-    final Uri _api = Uri.http(host, "$sub/api/user/detail/$_id");
+    final Uri _api = Uri.https(host, "$sub/api/user/detail/$_id");
 
     try {
       final headers = {"token": "m_app"};
@@ -82,7 +82,7 @@ class AuthProviders extends ChangeNotifier {
     final user = UserInstance.getInstance().user;
     if (user == null) return false;
     final _id = user.data.idUser;
-    final Uri _api = Uri.http(host, "$sub/api/user/update/$_id");
+    final Uri _api = Uri.https(host, "$sub/api/user/update/$_id");
 
     try {
       final headers = {"token": "m_app"};
@@ -103,7 +103,7 @@ class AuthProviders extends ChangeNotifier {
     final user = UserInstance.getInstance().user;
 
     if(user == null) return false;
-    final Uri _api = Uri.http(host, "$sub/api/user/profil/${user.data.idUser}");
+    final Uri _api = Uri.https(host, "$sub/api/user/profil/${user.data.idUser}");
 
     try {
       final headers = {

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as https;
 import 'package:java_code_app/constans/hosts.dart';
 import 'package:java_code_app/models/listdiscount.dart';
 import 'package:java_code_app/models/listhistory.dart';
@@ -106,10 +106,10 @@ class OrderProviders extends ChangeNotifier {
 
   Future<MenuList?> getMenuList() async {
     try {
-      final _api = Uri.http(host, "$sub/api/menu/all");
+      final _api = Uri.https(host, "$sub/api/menu/all");
       final headers = {"token": "m_app"};
 
-      final response = await http.get(_api, headers: headers);
+      final response = await https.get(_api, headers: headers);
 
       // print(response.body);
 
@@ -126,13 +126,13 @@ class OrderProviders extends ChangeNotifier {
 
   Future<MenuDetail?> getDetailMenu({required int id}) async {
     try {
-      final _api = Uri.http(host, "$sub/api/menu/detail/$id");
+      final _api = Uri.https(host, "$sub/api/menu/detail/$id");
 
       final headers = {"token": "m_app"};
 
-      final response = await http.get(_api, headers: headers);
+      final response = await https.get(_api, headers: headers);
 
-      print(response.body);
+      // print(response.body);
 
       if (response.statusCode == 200) {
         return menuDetailFromJson(response.body);
@@ -148,11 +148,11 @@ class OrderProviders extends ChangeNotifier {
     try {
       final user = UserInstance.getInstance().user;
       if(user == null) return false;
-      final _api = Uri.http(host, "$sub/api/voucher/user/${user.data.idUser}");
+      final _api = Uri.https(host, "$sub/api/voucher/user/${user.data.idUser}");
 
       final headers = {"token": "m_app"};
 
-      final response = await http.get(_api, headers: headers);
+      final response = await https.get(_api, headers: headers);
 
       // print(response.body);
 
@@ -172,10 +172,10 @@ class OrderProviders extends ChangeNotifier {
     if(user == null) return false;
 
     try {
-      final _api = Uri.http(host, "$sub/api/diskon/user/${user.data.idUser}");
+      final _api = Uri.https(host, "$sub/api/diskon/user/${user.data.idUser}");
       final headers = {"token": "m_app"};
 
-      final response = await http.get(_api, headers: headers);
+      final response = await https.get(_api, headers: headers);
 
       // print(response.body);
 
@@ -195,11 +195,11 @@ class OrderProviders extends ChangeNotifier {
     if(user == null) return false;
 
     try {
-      final _api = Uri.http(host, "$sub/api/promo/${user.data.idUser}");
+      final _api = Uri.https(host, "$sub/api/promo/user/${user.data.idUser}");
 
       final headers = {"token": "m_app"};
 
-      final response = await http.get(_api, headers: headers);
+      final response = await https.get(_api, headers: headers);
 
       // print(response.body);
 
@@ -218,11 +218,11 @@ class OrderProviders extends ChangeNotifier {
     final user = UserInstance.getInstance().user;
     if(user == null) return false;
     try {
-      final _api = Uri.http(host, "$sub/api/order/proses/${user.data.idUser}");
+      final _api = Uri.https(host, "$sub/api/order/proses/${user.data.idUser}");
 
       final headers = {"token": "m_app"};
 
-      final response = await http.get(_api, headers: headers);
+      final response = await https.get(_api, headers: headers);
 
       if (response.statusCode == 200) {
         _orders = listOrderFromJson(response.body).data;
@@ -237,11 +237,11 @@ class OrderProviders extends ChangeNotifier {
 
   Future<detail.OrderDetail?> getDetailOrder({required int id}) async {
     try {
-      final _api = Uri.http(host, "$sub/api/order/detail/$id");
+      final _api = Uri.https(host, "$sub/api/order/detail/$id");
 
       final headers = {"token": "m_app"};
 
-      final response = await http.get(_api, headers: headers);
+      final response = await https.get(_api, headers: headers);
 
       if (response.statusCode == 200) {
         return detail.orderDetailFromJson(response.body);
@@ -259,11 +259,11 @@ class OrderProviders extends ChangeNotifier {
     if(user == null) return null;
 
     try {
-      final _api = Uri.http(host, "$sub/api/order/history/${user.data.idUser}");
+      final _api = Uri.https(host, "$sub/api/order/history/${user.data.idUser}");
 
       final headers = {"token": "m_app"};
 
-      final response = await http.get(_api, headers: headers);
+      final response = await https.get(_api, headers: headers);
 
       if (response.statusCode == 200) {
         return listHistoryFromJson(response.body).data;
@@ -286,7 +286,7 @@ class OrderProviders extends ChangeNotifier {
       final user = UserInstance.getInstance().user;
       if(user == null) return false;
 
-      final _api = Uri.http(host, "$sub/api/order/add");
+      final _api = Uri.https(host, "$sub/api/order/add");
 
       final headers = {
         "Content-Type" : "application/json",
@@ -307,7 +307,7 @@ class OrderProviders extends ChangeNotifier {
 
       print(body);
 
-      final response = await http.post(
+      final response = await https.post(
           _api,
           headers: headers,
           body: jsonEncode(body),

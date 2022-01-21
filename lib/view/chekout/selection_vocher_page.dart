@@ -173,8 +173,8 @@ class _VoucherCardState extends State<VoucherCard> {
   @override
   void initState() {
     _isSelected = widget.isChecked;
-    _start = DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeMulai);
-    _end = DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeSelesai);
+    _start = DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeMulai * 1000);
+    _end = DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeSelesai * 1000);
     super.initState();
   }
 

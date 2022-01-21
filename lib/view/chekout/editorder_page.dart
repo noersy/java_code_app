@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/models/menudetail.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
@@ -16,6 +15,7 @@ import 'package:java_code_app/widget/label_toppingselection.dart';
 import 'package:java_code_app/widget/labellevel_selection.dart';
 import 'package:java_code_app/widget/listmenu_tile.dart';
 import 'package:provider/provider.dart';
+import 'package:skeleton_animation/skeleton_animation.dart';
 
 class EditOrderPage extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -44,25 +44,43 @@ class _EditOrderPageState extends State<EditOrderPage> {
 
   Menu? _data;
 
-  bool _isLoading = false;
+  bool _isLoading = true;
 
   getMenu() async {
-    final data = await Provider.of<OrderProviders>(context, listen: false)
-        .getDetailMenu(id: int.parse(widget.data["id"]));
-    print(data);
+    final data = await Provider.of<OrderProviders>(context, listen: false).getDetailMenu(id: int.parse(widget.data["id"]));
+    if (mounted) setState(() => _isLoading = true);
+    _jumlahOrder = widget.countOrder;
 
     if (data != null) {
       _data = data.data.menu;
 
-      if(data.data.topping?.isNotEmpty ?? false){
-        _selectedTopping = [data.data.topping!.first] ;
+      if (data.data.topping?.isNotEmpty ?? false) {
+        _selectedTopping = [data.data.topping!.first];
       }
-      if(data.data.level?.isNotEmpty ?? false){
+      if (data.data.level?.isNotEmpty ?? false) {
         _selectedLevel = data.data.level!.first;
       }
 
       _listLevel = data.data.level ?? [];
       _listTopping = data.data.topping ?? [];
+
+
+      final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+
+      if(orders.containsKey("${_data?.idMenu}")){
+        final dat = orders["${_data?.idMenu}"];
+        _jumlahOrder = dat["countOrder"];
+
+        final _level = data.data.level?.where((element) => "${element.idDetail}" == dat["level"]);
+        _selectedTopping = data.data.topping?.where((element){
+          return dat["topping"].where((e) => e == "${element.idDetail}") != null;
+        }).toList() ?? _selectedTopping;
+
+        if(_level?.isNotEmpty ?? false) _selectedLevel = _level!.first;
+
+        if(dat["catatan"] != null) _catatan = dat["catatan"];
+      }
+
       _isLoading = false;
     }
 
@@ -71,32 +89,88 @@ class _EditOrderPageState extends State<EditOrderPage> {
 
   @override
   void initState() {
-    // print(widget.data);
-    _isLoading = true;
-    _jumlahOrder = widget.countOrder;
     getMenu();
-
-    // final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
-    // if (orders.keys.contains("${widget.data["id"]}")) {
-    //   _jumlahOrder = orders["${widget.data["id"]}"]["countOrder"];
-    //   _catatan = orders["${widget.data["id"]}"]["catatan"] ?? "";
-    //
-    //   final tooping = orders["${widget.data["id"]}"]["topping"];
-    //   final level = orders["${widget.data["id"]}"]["level"];
-    //
-    //   _selectedTopping = tooping != null
-    //       ? List<Level>.from(tooping.map((x) => Level.fromJson(x)))
-    //       : _selectedTopping;
-    //   _selectedLevel = level != null
-    //       ? Level.fromJson(level)
-    //       : null;
-    // }
-
     super.initState();
   }
 
+  void _showTopping(List<Level>? _listTopping){
+    if(_listTopping?.isEmpty ?? false) return;
+    showModalBottomSheet(
+      barrierColor: ColorSty.grey.withOpacity(0.2),
+      elevation: 5,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0),
+        ),
+      ),
+      context: context,
+      builder: (_) => BottomSheetDetailMenu(
+        title: "Pilih Toping",
+        content: Expanded(
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: [
+              for (final item in _listTopping!)
+                LabelToppingSelection(
+                  data: item,
+                  initial: _selectedTopping
+                      .where((e) => e == item)
+                      .isNotEmpty,
+                  onSelection: (value) {
+                    if (_selectedTopping
+                        .where((e) => e == value)
+                        .isNotEmpty) {
+                      setState(() => _selectedTopping
+                          .remove(value));
+                    } else {
+                      setState(() => _selectedTopping
+                          .add(value));
+                    }
+                  },
+                )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+  void _showLevel(List<Level> _listLevel) async {
+    Level _value = _listLevel.first;
+    _value = await showModalBottomSheet(
+      isScrollControlled: true,
+      barrierColor: ColorSty.grey.withOpacity(0.2),
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (_, setState) {
+            return BottomSheetDetailMenu(
+              title: "Pilih Level",
+              content: Expanded(
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    for (final item in _listLevel)
+                      LabelLevelSelection(
+                        data: item,
+                        isSelected: item == _selectedLevel,
+                        onSelection: (Level value) {
+                          setState(() => _selectedLevel = value);
+                          Navigator.of(context).pop(value);
+                        },
+                      ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+    setState(() => _selectedLevel = _value);
+  }
+
   void _editPesanan() {
-    // final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
     final data = widget.data;
 
     data["level"] = _selectedLevel;
@@ -104,7 +178,8 @@ class _EditOrderPageState extends State<EditOrderPage> {
     data["catatan"] = _catatan;
 
     if (_jumlahOrder <= 0) {
-      Provider.of<OrderProviders>(context, listen: false).deleteOrder(id: "${_data?.idMenu}");
+      Provider.of<OrderProviders>(context, listen: false)
+          .deleteOrder(id: "${_data?.idMenu}");
     } else {
       Provider.of<OrderProviders>(context, listen: false).editOrder(
         id: data["id"],
@@ -117,7 +192,6 @@ class _EditOrderPageState extends State<EditOrderPage> {
 
     Navigator.of(context).pop();
   }
-
   void _addCatatan() {
     setState(() => _catatan = _editingController.text);
     Navigator.pop(context);
@@ -135,19 +209,18 @@ class _EditOrderPageState extends State<EditOrderPage> {
         children: [
           const SizedBox(height: SpaceDims.sp24),
           GestureDetector(
-            onTap: () => Navigate.toViewImage(context, urlImage: "${_data?.foto}"),
+            onTap: () =>
+                Navigate.toViewImage(context, urlImage: "${_data?.foto}"),
             child: SizedBox(
               width: 234.0,
               height: 182.4,
               child: Hero(
-                tag: 'image',
-                child: _data?.foto != null
-                    ? Image.network(_data!.foto!)
-                    : const Icon(
-                        Icons.image_not_supported,
-                        color: ColorSty.grey,
-                      ),
-              ),
+                  tag: 'image',
+                  child: Image.network(
+                    _data?.foto ?? "",
+                    loadingBuilder: imageOnLoad,
+                    errorBuilder: imageError,
+                  )),
             ),
           ),
           const SizedBox(height: SpaceDims.sp24),
@@ -179,12 +252,18 @@ class _EditOrderPageState extends State<EditOrderPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "${_data?.nama}",
-                            style: TypoSty.title.copyWith(
-                              color: ColorSty.primary,
+                          if (_data != null)
+                            Text(
+                              "${_data?.nama}",
+                              style: TypoSty.title.copyWith(
+                                color: ColorSty.primary,
+                              ),
+                            )
+                          else
+                            const SizedBox(
+                              width: 90,
+                              child: SkeletonText(height: 16.0),
                             ),
-                          ),
                           AddOrderButton(
                             initCount: _jumlahOrder,
                             onChange: (int value) {
@@ -194,14 +273,19 @@ class _EditOrderPageState extends State<EditOrderPage> {
                         ],
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(
+                    Padding(
+                      padding: const EdgeInsets.only(
                         bottom: SpaceDims.sp12,
                         left: SpaceDims.sp24,
                         right: 108.0,
                       ),
-                      child: Text(
-                          "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
+                      child: SizedBox(
+                        height: 120,
+                        child: _isLoading
+                            ? const SkeletonText(height: 12.0)
+                            : Text(_data?.deskripsi ??
+                                "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
@@ -212,21 +296,24 @@ class _EditOrderPageState extends State<EditOrderPage> {
                         children: [
                           TileListDMenu(
                             icon: IconsCs.cash,
+                            isLoading: _isLoading,
                             title: "Harga",
                             prefix: "${_data?.harga}",
                             onPressed: () {},
                           ),
                           TileListDMenu(
                             prefixIcon: true,
+                            isLoading: _isLoading,
                             icon: IconsCs.fire,
                             title: "Level",
                             prefix: _selectedLevel?.keterangan,
-                            onPressed: () => _showDialogLevel(_listLevel),
+                            onPressed: () => _showLevel(_listLevel),
                           ),
                           TileListDMenu(
                             prefixIcon: true,
                             icon: IconsCs.topping,
                             title: "Topping",
+                            isLoading: _isLoading,
                             prefixCostume: RichText(
                               textAlign: TextAlign.end,
                               overflow: TextOverflow.ellipsis,
@@ -237,12 +324,11 @@ class _EditOrderPageState extends State<EditOrderPage> {
                                       ? ""
                                       : _selectedTopping.first.keterangan,
                                   children: [
-                                    for (var i = 0;
-                                        i < _selectedTopping.length;
-                                        i++)
+                                    for (var i = 0; i < _selectedTopping.length; i++)
                                       if (i > 0)
                                         TextSpan(
-                                          text: ", ${_selectedTopping[i].keterangan}",
+                                          text:
+                                              ", ${_selectedTopping[i].keterangan}",
                                           style:
                                               TypoSty.captionSemiBold.copyWith(
                                             color: ColorSty.black,
@@ -250,50 +336,13 @@ class _EditOrderPageState extends State<EditOrderPage> {
                                         )
                                   ]),
                             ),
-                            onPressed: () {
-                              showModalBottomSheet(
-                                barrierColor: ColorSty.grey.withOpacity(0.2),
-                                elevation: 5,
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(30.0),
-                                        topRight: Radius.circular(30.0))),
-                                context: context,
-                                builder: (_) => BottomSheetDetailMenu(
-                                  title: "Pilih Toping",
-                                  content: Expanded(
-                                    child: ListView(
-                                      scrollDirection: Axis.horizontal,
-                                      children: [
-                                        for (final item in _listTopping)
-                                          LabelToppingSelection(
-                                            data: item,
-                                            initial: _selectedTopping
-                                                .where((e) => e == item)
-                                                .isNotEmpty,
-                                            onSelection: (value) {
-                                              if (_selectedTopping
-                                                  .where((e) => e == value)
-                                                  .isNotEmpty) {
-                                                setState(() => _selectedTopping
-                                                    .remove(value));
-                                              } else {
-                                                setState(() => _selectedTopping
-                                                    .add(value));
-                                              }
-                                            },
-                                          )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
+                            onPressed: () => _showTopping(_listTopping),
                           ),
                           TileListDMenu(
                             prefixIcon: true,
                             icon: IconsCs.note,
                             title: "Catatan",
+                            isLoading: _isLoading,
                             prefix: _catatan.isEmpty
                                 ? "Lorem Ipsum sit aaasss"
                                 : _catatan,
@@ -387,38 +436,4 @@ class _EditOrderPageState extends State<EditOrderPage> {
     );
   }
 
-  _showDialogLevel(List<Level> _listLevel) async {
-    Level _value = _listLevel.first;
-    _value = await showModalBottomSheet(
-      isScrollControlled: true,
-      barrierColor: ColorSty.grey.withOpacity(0.2),
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (_, setState) {
-            return BottomSheetDetailMenu(
-              title: "Pilih Level",
-              content: Expanded(
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    for (final item in _listLevel)
-                      LabelLevelSelection(
-                        data: item,
-                        isSelected: item == _selectedLevel,
-                        onSelection: (Level value) {
-                          setState(() => _selectedLevel = value);
-                          Navigator.of(context).pop(value);
-                        },
-                      ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-    setState(() => _selectedLevel = _value);
-  }
 }

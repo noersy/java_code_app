@@ -43,7 +43,10 @@ class _DetailMenuState extends State<DetailMenu> {
   Menu? _data;
 
   getMenu() async {
-    final data = await Provider.of<OrderProviders>(context, listen: false).getDetailMenu(id: widget.id);
+    if (mounted) setState(() => _isLoading = true);
+    final data = await Provider.of<OrderProviders>(context, listen: false)
+        .getDetailMenu(id: widget.id);
+    _jumlahOrder = widget.countOrder;
 
     if (data != null) {
       _data = data.data.menu;
@@ -57,6 +60,28 @@ class _DetailMenuState extends State<DetailMenu> {
 
       _listLevel = data.data.level ?? [];
       _listTopping = data.data.topping ?? [];
+
+      final orders =
+          Provider.of<OrderProviders>(context, listen: false).checkOrder;
+
+      if (orders.containsKey("${_data?.idMenu}")) {
+        final dat = orders["${_data?.idMenu}"];
+
+        _jumlahOrder = dat["countOrder"];
+
+        final _level = data.data.level
+            ?.where((element) => "${element.idDetail}" == dat["level"]);
+        _selectedTopping = data.data.topping?.where((element) {
+              return dat["topping"].where((e) => e == "${element.idDetail}") !=
+                  null;
+            }).toList() ??
+            _selectedTopping;
+
+        if (_level?.isNotEmpty ?? false) _selectedLevel = _level!.first;
+
+        if (dat["catatan"] != null) _catatan = dat["catatan"];
+      }
+
       _isLoading = false;
     }
 
@@ -65,29 +90,13 @@ class _DetailMenuState extends State<DetailMenu> {
 
   @override
   void initState() {
-    _isLoading = true;
-    _jumlahOrder = widget.countOrder;
     getMenu();
-
-    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
-    // if (orders.keys.contains("${widget.id}")) {
-    //   _jumlahOrder = orders["${widget.id}"]["countOrder"];
-    //   _catatan = orders["${widget.id}"]["catatan"] ?? "";
-    //
-    //   final topping = orders["${widget.id}"]["topping"];
-    //   final level = orders["${widget.id}"]["level"];
-    //
-    //   _selectedTopping = topping != null
-    //       ? List<Level>.from(topping.map((x) => Level.fromJson(x)))
-    //       : _selectedTopping;
-    //   _selectedLevel = level != null ? Level.fromJson(level) : _selectedLevel;
-    // }
-
     super.initState();
   }
 
-  _showDialogLevel(List<Level> _listLevel) async {
-    Level _value = _listLevel.first;
+  _showDialogLevel(List<Level>? _listLevel) async {
+    if (_listLevel?.isEmpty ?? false) return;
+    Level _value = _listLevel!.first;
     _value = await showModalBottomSheet(
       barrierColor: ColorSty.grey.withOpacity(0.2),
       elevation: 5,
@@ -125,6 +134,43 @@ class _DetailMenuState extends State<DetailMenu> {
       },
     );
     setState(() => _selectedLevel = _value);
+  }
+
+  _showDialogTopping(List<Level>? _listTopping) async {
+    if (_listTopping?.isEmpty ?? false) return;
+    showModalBottomSheet(
+      barrierColor: ColorSty.grey.withOpacity(0.2),
+      elevation: 5,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0),
+        ),
+      ),
+      context: context,
+      builder: (_) => BottomSheetDetailMenu(
+        title: "Pilih Toping",
+        content: Expanded(
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: [
+              for (final item in _listTopping!)
+                LabelToppingSelection(
+                  data: item,
+                  initial: _selectedTopping.where((e) => e == item).isNotEmpty,
+                  onSelection: (value) {
+                    if (_selectedTopping.where((e) => e == value).isNotEmpty) {
+                      setState(() => _selectedTopping.remove(value));
+                    } else {
+                      setState(() => _selectedTopping.add(value));
+                    }
+                  },
+                )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   void _viewImage() => Navigate.toViewImage(context, urlImage: "urlImage");
@@ -173,6 +219,7 @@ class _DetailMenuState extends State<DetailMenu> {
 
   @override
   Widget build(BuildContext context) {
+    print(_jumlahOrder);
     return Scaffold(
       backgroundColor: ColorSty.bg2,
       appBar: const CostumeAppBar(
@@ -228,14 +275,15 @@ class _DetailMenuState extends State<DetailMenu> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        _isLoading
-                            ? const SkeletonText(height: 16.0)
-                            : Text(
-                                _data!.nama,
-                                style: TypoSty.title.copyWith(
-                                  color: ColorSty.primary,
-                                ),
-                              ),
+                        if (_isLoading)
+                          const SkeletonText(height: 16.0)
+                        else
+                          Text(
+                            "${_data?.nama}",
+                            style: TypoSty.title.copyWith(
+                              color: ColorSty.primary,
+                            ),
+                          ),
                         AddOrderButton(
                           initCount: _jumlahOrder,
                           onChange: (int value) {
@@ -285,7 +333,7 @@ class _DetailMenuState extends State<DetailMenu> {
                           icon: IconsCs.cash,
                           isLoading: _isLoading,
                           title: "Harga",
-                          prefix: !_isLoading ? "Rp ${_data!.harga}" : "Rp 0",
+                          prefix: !_isLoading ? "Rp ${_data?.harga}" : "Rp 0",
                           onPressed: () {},
                         ),
                         TileListDMenu(
@@ -309,58 +357,25 @@ class _DetailMenuState extends State<DetailMenu> {
                             text: TextSpan(
                                 style: TypoSty.captionSemiBold
                                     .copyWith(color: ColorSty.black),
-                                text: _selectedTopping.isEmpty ? "" : "",
+                                text: _selectedTopping.isEmpty
+                                    ? ""
+                                    : _selectedTopping.first.keterangan,
                                 children: [
-                                  for (final item in _selectedTopping)
-                                    TextSpan(
-                                      text:  "${item.keterangan}",
-                                      style: TypoSty.captionSemiBold
-                                          .copyWith(color: ColorSty.black),
-                                    )
+                                  for (var i = 0;
+                                      i < _selectedTopping.length;
+                                      i++)
+                                    if (i > 0)
+                                      TextSpan(
+                                        text:
+                                            ", ${_selectedTopping[i].keterangan}",
+                                        style: TypoSty.captionSemiBold.copyWith(
+                                          color: ColorSty.black,
+                                        ),
+                                      )
                                 ]),
                           ),
                           title: "Topping",
-                          onPressed: () {
-                            showModalBottomSheet(
-                              barrierColor: ColorSty.grey.withOpacity(0.2),
-                              elevation: 5,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(30.0),
-                                  topRight: Radius.circular(30.0),
-                                ),
-                              ),
-                              context: context,
-                              builder: (_) => BottomSheetDetailMenu(
-                                title: "Pilih Toping",
-                                content: Expanded(
-                                  child: ListView(
-                                    scrollDirection: Axis.horizontal,
-                                    children: [
-                                      for (final item in _listTopping)
-                                        LabelToppingSelection(
-                                          data: item,
-                                          initial: _selectedTopping
-                                              .where((e) => e == item)
-                                              .isNotEmpty,
-                                          onSelection: (value) {
-                                            if (_selectedTopping
-                                                .where((e) => e == value)
-                                                .isNotEmpty) {
-                                              setState(() => _selectedTopping
-                                                  .remove(value));
-                                            } else {
-                                              setState(() =>
-                                                  _selectedTopping.add(value));
-                                            }
-                                          },
-                                        )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
+                          onPressed: () => _showDialogTopping(_listTopping),
                         ),
                         TileListDMenu(
                           prefixIcon: true,

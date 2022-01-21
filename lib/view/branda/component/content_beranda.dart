@@ -97,9 +97,11 @@ class _ContentBerandaState extends State<ContentBeranda>
                   ),
                 if (widget.listPromo.isEmpty)
                   const Opacity(
-                    opacity: 0,
+                    opacity: 1,
                     child: CardCoupon(
-                      title: "Empty",
+                      disable: true,
+                      color: ColorSty.grey,
+                      title: "Belum ada",
                       police: "",
                       discount: 0,
                     ),
