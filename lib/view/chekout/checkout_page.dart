@@ -69,6 +69,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
               discount: totalDiscout,
               totalPotong: totalDisP,
               totalPay: totalPay,
+              totalOrder: totalOrders,
               menu: _orders.values.map((e) => {
                 "id_menu": e["id"],
                 "harga": e["harga"],
@@ -180,7 +181,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: SpaceDims.sp24.h),
+                  const SizedBox(height: SpaceDims.sp24),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,7 +212,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             ],
                           ),
                         ),
-                        SizedBox(height: SpaceDims.sp14.h),
+                        const SizedBox(height: SpaceDims.sp14),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: SpaceDims.sp24,
@@ -423,10 +424,10 @@ class DeleteMenuInCheckoutDialog extends StatelessWidget {
           ),
         ),
         child: SizedBox(
-          height: 0.5.sh,
+          height: 390,
           width: double.infinity,
           child: Padding(
-            padding: EdgeInsets.only(top: 42.h),
+            padding: const EdgeInsets.only(top: 42),
             child: Column(
               children: [
                 Stack(

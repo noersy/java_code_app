@@ -1,13 +1,16 @@
 
 import 'package:flutter/material.dart';
+import 'package:java_code_app/models/menulist.dart';
 import 'package:java_code_app/theme/spacing.dart';
+import 'package:java_code_app/view/branda/widget/menuberanda_card.dart';
 
 class SearchScreen extends StatefulWidget {
-  final List result;
+  final String result;
+  final MenuList data;
 
   const SearchScreen({
     Key? key,
-    required this.result,
+    required this.result, required this.data,
   }) : super(key: key);
 
   @override
@@ -15,6 +18,15 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  List<DMenu> data = [];
+
+  @override
+  void initState() {
+    data = widget.data.data.where((element) => element.nama.toLowerCase()
+        .contains(widget.result.toLowerCase())).toList();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -25,9 +37,9 @@ class _SearchScreenState extends State<SearchScreen> {
           child: SingleChildScrollView(
             physics: const NeverScrollableScrollPhysics(),
             child: Column(
-              children: const [
-                // for (Map<String, dynamic> item in widget.result)
-                // CardMenu(data: item),
+              children: [
+                for (DMenu item in data)
+                  CardMenu(data: item),
               ],
             ),
           ),

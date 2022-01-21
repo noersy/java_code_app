@@ -128,4 +128,34 @@ class AuthProviders extends ChangeNotifier {
     }
     return false;
   }
+
+  Future<bool> uploadKtp(String base64) async {
+    final user = UserInstance.getInstance().user;
+
+    if(user == null) return false;
+    final Uri _api = Uri.https(host, "$sub/api/user/ktp/${user.data.idUser}");
+
+    try {
+      final headers = {
+        "Content-Type" : "application/json",
+        "token": "m_app",
+      };
+      final body = {"image" : base64};
+      final response = await http.post(
+          _api,
+          headers: headers,
+          body: jsonEncode(body),
+      );
+
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        getUser();
+        return true;
+      }
+    } catch (e) {
+      // return false;
+    }
+    return false;
+  }
 }

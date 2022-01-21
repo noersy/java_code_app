@@ -289,11 +289,31 @@ class OrderProviders extends ChangeNotifier {
     return null;
   }
 
+  Future<bool> cancelOrder({required int idOrder}) async {
+    try {
+      final _api = Uri.https(host, "$sub/api/order/batal/$idOrder");
+
+      final headers = {"token": "m_app"};
+
+      final response = await https.post(_api, headers: headers);
+
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        return true;
+      }
+    } catch (e) {
+      // return null;
+    }
+    return false;
+  }
+
   Future<bool> sendCheckOut({
     int? idVoucher,
     List<int>? idDiscount,
     int? discount,
     int? totalPotong,
+    required int totalOrder,
     required int totalPay,
     required List<Map<String, dynamic>> menu,
   }) async {
@@ -315,7 +335,8 @@ class OrderProviders extends ChangeNotifier {
           "potongan": totalPotong,
           "id_diskon": idDiscount,
           "diskon": discount,
-          "total_bayar": totalPay
+          "total_bayar": totalPay,
+          "total_order" : totalOrder
         },
         "menu": menu
       };

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:java_code_app/helps/image.dart';
@@ -10,6 +12,7 @@ import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/widget/appbar.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
 class SelectionVoucherPage extends StatefulWidget {
@@ -24,6 +27,26 @@ class SelectionVoucherPage extends StatefulWidget {
 class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
   LVoucher? _selectedVoucher;
   static List<LVoucher> _listVoucher = [];
+  static final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  bool _loading = false;
+  Future<void> _onRefresh() async {
+    var _duration = const Duration(seconds:1);
+    if (mounted) {
+      setState(() => _loading = true);
+
+      Timer(_duration, () {
+        setState(() => _loading = false);
+        _refreshController.refreshCompleted();
+      });
+    }
+  }
+
+
+  @override
+  void dispose() {
+    _refreshController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -41,41 +64,45 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
         title: "Pilih Voucher",
         icon: Icon(IconsCs.voucher, color: ColorSty.primary),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: SpaceDims.sp24,
-            horizontal: SpaceDims.sp24,
-          ),
-          child: AnimatedBuilder(
-              animation: OrderProviders(),
-              builder: (context, snapshot) {
-                _listVoucher = Provider.of<OrderProviders>(context).listVoucher;
-                return Column(
-                  children: [
-                    if (_selectedVoucher == null)
-                      for (LVoucher item in _listVoucher)
+      body: SmartRefresher(
+        controller: _refreshController,
+        onRefresh: _onRefresh,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: SpaceDims.sp24,
+              horizontal: SpaceDims.sp24,
+            ),
+            child: AnimatedBuilder(
+                animation: OrderProviders(),
+                builder: (context, snapshot) {
+                  _listVoucher = Provider.of<OrderProviders>(context).listVoucher;
+                  return Column(
+                    children: [
+                      if (_selectedVoucher == null)
+                        for (LVoucher item in _listVoucher)
+                          VoucherCard(
+                            isChecked: false,
+                            voucher: item,
+                            onChanged: (String value) {
+                              setState(() => _selectedVoucher = item);
+                            },
+                            onPressed: (String value) {
+                              setState(() => _selectedVoucher = item);
+                            },
+                          ),
+                      if (_selectedVoucher != null)
                         VoucherCard(
-                          isChecked: false,
-                          voucher: item,
-                          onChanged: (String value) {
-                            setState(() => _selectedVoucher = item);
-                          },
+                          voucher: _selectedVoucher!,
+                          isChecked: true,
                           onPressed: (String value) {
-                            setState(() => _selectedVoucher = item);
+                            setState(() => _selectedVoucher = null);
                           },
-                        ),
-                    if (_selectedVoucher != null)
-                      VoucherCard(
-                        voucher: _selectedVoucher!,
-                        isChecked: true,
-                        onPressed: (String value) {
-                          setState(() => _selectedVoucher = null);
-                        },
-                      )
-                  ],
-                );
-              }),
+                        )
+                    ],
+                  );
+                }),
+          ),
         ),
       ),
       bottomNavigationBar: Container(

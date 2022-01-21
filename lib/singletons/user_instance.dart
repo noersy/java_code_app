@@ -41,7 +41,8 @@ class UserInstance {
       final email = await _preferences.getStringValue(KeyPrefens.email);
       final pin = await _preferences.getStringValue(KeyPrefens.pin);
 
-      final data = UserDetail.fromJson({
+      if(id != -1) {
+        final data = UserDetail.fromJson({
         "status_code": 200,
         "data" : {
           "id_user": id,
@@ -56,10 +57,10 @@ class UserInstance {
           "status": 0,
           "roles_id": 0,
           "roles": "",
-        }
-      });
+        }});
 
-      _userDetail = data;
+        _userDetail = data;
+      }
     }
   }
 

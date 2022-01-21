@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -25,6 +26,7 @@ import 'package:java_code_app/widget/detailmenu_sheet.dart';
 import 'package:java_code_app/widget/vp_pin_dialog.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -41,8 +43,10 @@ class _ProfilePageState extends State<ProfilePage> {
   static final ImagePicker _picker = ImagePicker();
   static File? _fileImage;
   static final DateFormat _dateFormat = DateFormat('dd/MM/yy');
-
+  static bool _imageProfile = true;
   get provider => Provider.of<AuthProviders>(context, listen: false);
+  static final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  bool _loading = false;
 
   getInfoDevice() async {
     _androidInfo = await deviceInfo.androidInfo;
@@ -56,7 +60,8 @@ class _ProfilePageState extends State<ProfilePage> {
     );
 
     Navigator.pop(context);
-    _saveImage(_image);
+    if(_imageProfile) _saveImageProfile(_image);
+    if(!_imageProfile) _sendKTP(_image);
   }
   _galley() async {
     final _image = await _picker.pickImage(
@@ -65,9 +70,11 @@ class _ProfilePageState extends State<ProfilePage> {
     );
 
     Navigator.pop(context);
-    _saveImage(_image);
+    if(_imageProfile) _saveImageProfile(_image);
+    if(!_imageProfile) _sendKTP(_image);
   }
-  _changeImageProfile() {
+  _pickImage(bool isImageProfile) {
+    setState(() => _imageProfile = isImageProfile);
     showModalBottomSheet(
       barrierColor: Colors.grey.withOpacity(0.2),
       elevation: 4,
@@ -121,7 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
       },
     );
   }
-  _saveImage(_image) async {
+  _saveImageProfile(_image) async {
     if (_image != null) {
       _fileImage = await ImageCropper.cropImage(
           sourcePath: _image.path,
@@ -167,10 +174,12 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
   _updateTelepon(String value) {
+    if(value.isEmpty) return;
     provider.update(key: "telepon", value: value);
     if (mounted) setState(() {});
   }
   _updateNama(String value) {
+    if(value.isEmpty) return;
     provider.update(key: "nama", value: value);
     if (mounted) setState(() {});
   }
@@ -200,7 +209,42 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+  _sendKTP(_image) async{
+    if (_image != null) {
+      _fileImage = await ImageCropper.cropImage(
+          sourcePath: _image.path,
+          cropStyle: CropStyle.rectangle,
+          aspectRatioPresets: [
+            CropAspectRatioPreset.original,
+            CropAspectRatioPreset.square,
+            CropAspectRatioPreset.ratio3x2,
+            CropAspectRatioPreset.ratio4x3,
+            CropAspectRatioPreset.ratio16x9
+          ],
+          androidUiSettings: const AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            toolbarColor: ColorSty.white,
+            toolbarWidgetColor: ColorSty.primary,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false,
+          ),
+          iosUiSettings: const IOSUiSettings(
+            minimumAspectRatio: 1.0,
+          ));
+      if (_fileImage != null) {
+        File compressedFile = await FlutterNativeImage.compressImage(
+          _fileImage!.path,
+          quality: 50,
+        );
+        _fileImage = compressedFile;
 
+        String base64Image = base64Encode(compressedFile.readAsBytesSync());
+
+        Provider.of<AuthProviders>(context, listen: false).uploadKtp(base64Image);
+      }
+      setState(() {});
+    }
+  }
 
   _logout(){
     Navigator.pushReplacementNamed(context, "/");
@@ -214,6 +258,26 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     getInfoDevice();
     super.initState();
+  }
+
+
+  @override
+  void dispose() {
+    _refreshController.dispose();
+    super.dispose();
+  }
+
+  void _onRefresh() async {
+    var _duration = const Duration(seconds:1);
+    if (mounted) {
+      setState(() => _loading = true);
+      await Provider.of<AuthProviders>(context, listen: false).getUser();
+
+      Timer(_duration, () {
+        setState(() => _loading = false);
+      });
+    }
+    _refreshController.refreshCompleted();
   }
 
   @override
@@ -232,234 +296,264 @@ class _ProfilePageState extends State<ProfilePage> {
               animation: AuthProviders(),
               builder: (_, __) {
                 final _user = Provider.of<AuthProviders>(context).user();
-
-                return Stack(
-                  children: [
-                    Image.asset("assert/image/bg_findlocation.png"),
-                    SingleChildScrollView(
-                      primary: true,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            children: [
-                              const SizedBox(height: SpaceDims.sp22),
-                              SizedBox(
-                                height: 171,
-                                width: 171,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(300.0),
-                                  child: Stack(
-                                    alignment: Alignment.bottomCenter,
-                                    children: [
-                                      if (_user?.foto == null)
-                                        if (_fileImage != null)
-                                          Image.file(_fileImage!)
+                return SmartRefresher(
+                  controller: _refreshController,
+                  onRefresh: _onRefresh,
+                  child: Stack(
+                    children: [
+                      Image.asset("assert/image/bg_findlocation.png"),
+                      SingleChildScrollView(
+                        primary: true,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Column(
+                              children: [
+                                const SizedBox(height: SpaceDims.sp22),
+                                SizedBox(
+                                  height: 171,
+                                  width: 171,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(300.0),
+                                    child: Stack(
+                                      alignment: Alignment.bottomCenter,
+                                      children: [
+                                        if (_user?.foto == null)
+                                          if (_fileImage != null)
+                                            Image.file(_fileImage!)
+                                          else
+                                            SvgPicture.asset(
+                                              "assert/image/icons/user-icon.svg",
+                                            )
                                         else
-                                          SvgPicture.asset(
-                                            "assert/image/icons/user-icon.svg",
-                                          )
-                                      else
-                                        Image.network(
-                                          "${_user?.foto}",
-                                          errorBuilder: imageError,
-                                          loadingBuilder: imageOnLoad,
-                                        ),
-                                      Positioned(
-                                        bottom: -10,
-                                        child: TextButton(
-                                          onPressed: _changeImageProfile,
-                                          style: TextButton.styleFrom(
-                                            backgroundColor: ColorSty.primary,
-                                            primary: ColorSty.white,
+                                          Image.network(
+                                            "${_user?.foto}",
+                                            errorBuilder: imageError,
+                                            loadingBuilder: imageOnLoad,
                                           ),
-                                          child: SizedBox(
-                                            width: 160,
-                                            height: 25,
-                                            child: Align(
-                                              alignment: Alignment.topCenter,
-                                              child: Text(lang.profile.ub),
+                                        Positioned(
+                                          bottom: -10,
+                                          child: TextButton(
+                                            onPressed: () => _pickImage(true),
+                                            style: TextButton.styleFrom(
+                                              backgroundColor: ColorSty.primary,
+                                              primary: ColorSty.white,
+                                            ),
+                                            child: SizedBox(
+                                              width: 160,
+                                              height: 25,
+                                              child: Align(
+                                                alignment: Alignment.topCenter,
+                                                child: Text(lang.profile.ub),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      )
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: SpaceDims.sp8, width: double.infinity),
+                                SizedBox(
+                                  width: 280,
+                                  child: TextButton(
+                                    onPressed: ()=> _pickImage(false),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        if(_user?.status == 2)...[
+                                          const Icon(
+                                            Icons.check,
+                                            color: ColorSty.primary,
+                                            size: 18.0,
+                                          ),
+                                          const SizedBox(width: SpaceDims.sp4),
+                                          const Text(
+                                            "Sudah verifikasi KTP",
+                                            style: TextStyle(color: ColorSty.primary),
+                                          ),
+                                        ],
+                                        if(_user?.status == 1) ...[
+                                          const Icon(
+                                            Icons.schedule_send,
+                                            color: ColorSty.primary,
+                                            size: 18.0,
+                                          ),
+                                          const SizedBox(width: SpaceDims.sp4),
+                                          const Text(
+                                            "Dalam proses verifikasi KTP",
+                                            style: TextStyle(color: ColorSty.primary),
+                                          ),
+                                        ],
+                                        if(_user?.status == 0) ...[
+                                          SvgPicture.asset("assert/image/icons/id-icon.svg"),
+                                          const SizedBox(width: SpaceDims.sp4),
+                                          const Text(
+                                            "Kamu belum verifikasi KTP",
+                                            style: TextStyle(color: ColorSty.primary),
+                                          ),
+                                        ],
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: SpaceDims.sp16),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: SpaceDims.sp32),
+                                  child: Text(
+                                    lang.profile.subtitle,
+                                    style: TypoSty.titlePrimary,
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: SpaceDims.sp24,
+                                    vertical: SpaceDims.sp12,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: SpaceDims.sp22,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: ColorSty.grey60,
+                                    borderRadius: BorderRadius.circular(30.0),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      TileListProfile(
+                                        top: false,
+                                        title: lang.profile.nam,
+                                        suffix: _user?.nama ?? " ",
+                                        onSubmit: _updateNama,
+                                      ),
+                                      TileListProfile(
+                                        title: lang.profile.tgl,
+                                        suffix: _user?.tglLahir ?? ' ',
+                                        onPressed: _updateTgl,
+                                      ),
+                                      TileListProfile(
+                                        title: lang.profile.tlp,
+                                        suffix: _user?.telepon ?? ' ',
+                                        onSubmit: _updateTelepon,
+                                      ),
+                                      TileListProfile(
+                                        title: 'Email',
+                                        suffix: _user?.email ?? ' ',
+                                      ),
+                                      TileListProfile(
+                                        title: '${lang.profile.ub} PIN',
+                                        suffix: '*********',
+                                        onPressed: () => _changePin(lang),
+                                      ),
+                                      AnimatedBuilder(
+                                        animation: LangProviders(),
+                                        builder: (context, snapshot) {
+                                          bool _isIndo =
+                                              Provider.of<LangProviders>(context)
+                                                  .isIndo;
+                                          return TileListProfile(
+                                            title: lang.profile.bhs,
+                                            suffix:
+                                                _isIndo ? 'Indonesia' : 'English',
+                                            onPressed: () => showModalBottomSheet(
+                                              barrierColor:
+                                                  ColorSty.grey.withOpacity(0.2),
+                                              elevation: 5,
+                                              shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(30.0),
+                                                  topRight: Radius.circular(30.0),
+                                                ),
+                                              ),
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  const ChangeLagSheet(),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ],
                                   ),
                                 ),
-                              ),
-                              const SizedBox(height: SpaceDims.sp22),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(
-                                    Icons.check,
-                                    color: ColorSty.primary,
-                                    size: 18.0,
-                                  ),
-                                  const SizedBox(width: SpaceDims.sp2),
-                                  Text(
-                                    lang.profile.caption,
-                                    style: const TextStyle(
-                                        color: ColorSty.primary),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: SpaceDims.sp22),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: SpaceDims.sp32),
-                                child: Text(
-                                  lang.profile.subtitle,
-                                  style: TypoSty.titlePrimary,
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.center,
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: SpaceDims.sp24,
-                                  vertical: SpaceDims.sp12,
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: SpaceDims.sp22,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: ColorSty.grey60,
-                                  borderRadius: BorderRadius.circular(30.0),
-                                ),
-                                child: Column(
-                                  children: [
-                                    TileListProfile(
-                                      top: false,
-                                      title: lang.profile.nam,
-                                      suffix: _user?.nama ?? " ",
-                                      onSubmit: _updateNama,
-                                    ),
-                                    TileListProfile(
-                                      title: lang.profile.tgl,
-                                      suffix: _user?.tglLahir ?? ' ',
-                                      onPressed: _updateTgl,
-                                    ),
-                                    TileListProfile(
-                                      title: lang.profile.tlp,
-                                      suffix: _user?.telepon ?? ' ',
-                                      onSubmit: _updateTelepon,
-                                    ),
-                                    TileListProfile(
-                                      title: 'Email',
-                                      suffix: _user?.email ?? ' ',
-                                    ),
-                                    TileListProfile(
-                                      title: '${lang.profile.ub} PIN',
-                                      suffix: '*********',
-                                      onPressed: () => _changePin(lang),
-                                    ),
-                                    AnimatedBuilder(
-                                      animation: LangProviders(),
-                                      builder: (context, snapshot) {
-                                        bool _isIndo =
-                                            Provider.of<LangProviders>(context)
-                                                .isIndo;
-                                        return TileListProfile(
-                                          title: lang.profile.bhs,
-                                          suffix:
-                                              _isIndo ? 'Indonesia' : 'English',
-                                          onPressed: () => showModalBottomSheet(
-                                            barrierColor:
-                                                ColorSty.grey.withOpacity(0.2),
-                                            elevation: 5,
-                                            shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(30.0),
-                                                topRight: Radius.circular(30.0),
-                                              ),
-                                            ),
-                                            context: context,
-                                            builder: (BuildContext context) =>
-                                                const ChangeLagSheet(),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: SpaceDims.sp22),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: SpaceDims.sp32),
-                                child: Text(
-                                  lang.profile.subtitle2,
-                                  style: TypoSty.titlePrimary,
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.center,
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: SpaceDims.sp24,
-                                  vertical: SpaceDims.sp12,
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: SpaceDims.sp22,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: ColorSty.grey60,
-                                  borderRadius: BorderRadius.circular(30.0),
-                                ),
-                                child: Column(
-                                  children: [
-                                    TileListProfile(
-                                      top: false,
-                                      enable: false,
-                                      title: 'Device Info',
-                                      suffix: _androidInfo?.device ?? "",
-                                    ),
-                                    TileListProfile(
-                                      enable: false,
-                                      title: 'Version',
-                                      suffix: _packageInfo?.version ?? '',
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: SpaceDims.sp22),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ElevatedButton(
-                                onPressed: _logout,
-                                child: SizedBox(
-                                  width: 204,
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child:
-                                        Text("Log Out", style: TypoSty.button),
+                                const SizedBox(height: SpaceDims.sp22),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: SpaceDims.sp32),
+                                  child: Text(
+                                    lang.profile.subtitle2,
+                                    style: TypoSty.titlePrimary,
                                   ),
                                 ),
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
+                                Container(
+                                  alignment: Alignment.center,
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: SpaceDims.sp24,
+                                    vertical: SpaceDims.sp12,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: SpaceDims.sp22,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: ColorSty.grey60,
                                     borderRadius: BorderRadius.circular(30.0),
                                   ),
+                                  child: Column(
+                                    children: [
+                                      TileListProfile(
+                                        top: false,
+                                        enable: false,
+                                        title: 'Device Info',
+                                        suffix: _androidInfo?.device ?? "",
+                                      ),
+                                      TileListProfile(
+                                        enable: false,
+                                        title: 'Version',
+                                        suffix: _packageInfo?.version ?? '',
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              )
-                            ],
-                          ),
-                          const SizedBox(height: 65),
-                        ],
+                                const SizedBox(height: SpaceDims.sp22),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: _logout,
+                                  child: SizedBox(
+                                    width: 204,
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child:
+                                          Text("Log Out", style: TypoSty.button),
+                                    ),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30.0),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 65),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 );
               }),
         );

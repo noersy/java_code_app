@@ -13,13 +13,11 @@ import 'package:java_code_app/widget/label_button.dart';
 import 'package:java_code_app/widget/listmenu.dart';
 
 class ContentBeranda extends StatefulWidget {
-  final List result;
   final MenuList data;
   final List<Promo> listPromo;
 
   const ContentBeranda({
     Key? key,
-    required this.result,
     required this.data,
     required this.listPromo,
   }) : super(key: key);
@@ -60,7 +58,6 @@ class _ContentBerandaState extends State<ContentBeranda>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.result.isEmpty) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -145,6 +142,9 @@ class _ContentBerandaState extends State<ContentBeranda>
             height: MediaQuery.of(context).size.height - 130,
             child: PageView(
               controller: _pageController,
+              onPageChanged: (value){
+                if(mounted) setState(() => _sIndex = value);
+              },
               children: [
                 SingleChildScrollView(
                   physics: const NeverScrollableScrollPhysics(),
@@ -178,8 +178,5 @@ class _ContentBerandaState extends State<ContentBeranda>
           ),
         ],
       );
-    } else {
-      return SearchScreen(result: widget.result);
-    }
   }
 }

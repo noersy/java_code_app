@@ -8,6 +8,7 @@ import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/view/branda/component/beranda_skeleton.dart';
 import 'package:java_code_app/view/branda/component/content_beranda.dart';
+import 'package:java_code_app/view/branda/component/search_screen.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -20,14 +21,15 @@ class BerandaPage extends StatefulWidget {
 }
 
 class _BerandaPageState extends State<BerandaPage> {
-  static List result = [];
+  static String result = "";
 
   final TextEditingController _editingController = TextEditingController();
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   bool _loading = false;
 
   Future<void> _onRefresh() async {
-    if(mounted) setState(() => _loading = true);
+    if (mounted) setState(() => _loading = true);
     var _duration = const Duration(seconds: 0);
 
     await Provider.of<OrderProviders>(context, listen: false).getMenuList();
@@ -43,6 +45,13 @@ class _BerandaPageState extends State<BerandaPage> {
     }
   }
 
+
+  @override
+  void dispose() {
+    _refreshController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +62,7 @@ class _BerandaPageState extends State<BerandaPage> {
           child: TextFormField(
             controller: _editingController,
             onChanged: (value) {
+              result = value;
               setState(() {});
             },
             decoration: InputDecoration(
@@ -99,29 +109,32 @@ class _BerandaPageState extends State<BerandaPage> {
           controller: _refreshController,
           onRefresh: _onRefresh,
           child: AnimatedBuilder(
-              animation: OrderProviders(),
-              builder: (_, snapshot) {
-                final provider = Provider.of<OrderProviders>(context);
-                final menuList = provider.listMenu;
-                final listPromo = provider.listPromo;
+            animation: OrderProviders(),
+            builder: (_, snapshot) {
+              final provider = Provider.of<OrderProviders>(context);
+              final menuList = provider.listMenu;
+              final listPromo = provider.listPromo;
 
-                if (menuList != null && !_loading) {
+              if (menuList != null && !_loading) {
+                if (result.isEmpty) {
                   return SingleChildScrollView(
                     child: ContentBeranda(
-                      result: result,
                       data: menuList,
                       listPromo: listPromo,
                     ),
                   );
+                } else {
+                  return SearchScreen(
+                    result: result,
+                    data: menuList,
+                  );
                 }
-
-                return const SingleChildScrollView(child: BerandaSkeleton());
-              }),
+              }
+              return const SingleChildScrollView(child: BerandaSkeleton());
+            },
+          ),
         ),
       ),
     );
   }
 }
-
-
-

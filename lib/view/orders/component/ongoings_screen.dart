@@ -55,6 +55,13 @@ class _OngoingScreenState extends State<OngoingScreen> with AutomaticKeepAliveCl
   }
 
   @override
+  void dispose() {
+    _refreshController.dispose();
+    super.dispose();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     // final _orderOngoing = Provider.of<OrderProviders>(context, listen: false).orderProgress;
     // print(_orderOngoing[0]);
