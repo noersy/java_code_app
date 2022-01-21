@@ -41,7 +41,6 @@ class _CheckOutPageState extends State<CheckOutPage> {
 
   void _getData()async{
     await Provider.of<OrderProviders>(context, listen: false).getListDisCount();
-
     final _orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
     final _discount = Provider.of<OrderProviders>(context, listen: false).listDiscount;
     totalDiscout = _discount.isNotEmpty
@@ -80,7 +79,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
               }).toList(),
             );
 
-            // Navigator.pop(context);
+            // if(value) Navigator.pop(context);
             await showDialog(
               context: context,
               builder: (_) => const OrderDoneDialog(),
@@ -111,6 +110,8 @@ class _CheckOutPageState extends State<CheckOutPage> {
       return;
     }
   }
+
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(

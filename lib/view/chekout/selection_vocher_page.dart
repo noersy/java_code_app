@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/models/listvoucher.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
@@ -240,23 +241,8 @@ class _VoucherCardState extends State<VoucherCard> {
                     borderRadius: BorderRadius.circular(20.0),
                     child: Image.network(
                       widget.voucher.infoVoucher,
-                      loadingBuilder:
-                          (_, child, ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress != null) {
-                          return Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Skeleton(height: 160, width: double.infinity),
-                              // Text(
-                              //   loadingProgress.toStringShort(),
-                              //   style: const TextStyle(color: Colors.grey),
-                              // )
-                            ],
-                          );
-                        } else {
-                          return child;
-                        }
-                      },
+                      errorBuilder: imageError,
+                      loadingBuilder: imageOnLoad,
                     ),
                   ),
                   Positioned(

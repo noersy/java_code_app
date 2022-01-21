@@ -44,9 +44,7 @@ class _DetailMenuState extends State<DetailMenu> {
 
   getMenu() async {
     if (mounted) setState(() => _isLoading = true);
-    final data = await Provider.of<OrderProviders>(context, listen: false)
-        .getDetailMenu(id: widget.id);
-    _jumlahOrder = widget.countOrder;
+    final data = await Provider.of<OrderProviders>(context, listen: false).getDetailMenu(id: widget.id);
 
     if (data != null) {
       _data = data.data.menu;
@@ -67,17 +65,20 @@ class _DetailMenuState extends State<DetailMenu> {
       if (orders.containsKey("${_data?.idMenu}")) {
         final dat = orders["${_data?.idMenu}"];
 
-        _jumlahOrder = dat["countOrder"];
+        // _jumlahOrder = dat["countOrder"];
 
-        final _level = data.data.level
-            ?.where((element) => "${element.idDetail}" == dat["level"]);
-        _selectedTopping = data.data.topping?.where((element) {
-              return dat["topping"].where((e) => e == "${element.idDetail}") !=
-                  null;
-            }).toList() ??
-            _selectedTopping;
+        if(dat["level"] != null) {
+          final _level = data.data.level
+              ?.where((element) => "${element.idDetail}" == dat["level"]);
+          if (_level?.isNotEmpty ?? false) _selectedLevel = _level!.first;
+        }
 
-        if (_level?.isNotEmpty ?? false) _selectedLevel = _level!.first;
+        if(dat["topping"] != null) {
+          _selectedTopping = data.data.topping?.where((element) {
+            return dat["topping"].where((e) => e == "${element.idDetail}") !=
+                null;
+          }).toList() ?? _selectedTopping;
+        }
 
         if (dat["catatan"] != null) _catatan = dat["catatan"];
       }
@@ -90,6 +91,8 @@ class _DetailMenuState extends State<DetailMenu> {
 
   @override
   void initState() {
+    _jumlahOrder = widget.countOrder;
+
     getMenu();
     super.initState();
   }

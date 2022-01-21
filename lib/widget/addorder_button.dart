@@ -24,7 +24,6 @@ class _AddOrderButtonState extends State<AddOrderButton> {
 
   @override
   Widget build(BuildContext context) {
-    print("button $jumlahOrder");
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [

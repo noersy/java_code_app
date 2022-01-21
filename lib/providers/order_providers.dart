@@ -36,6 +36,17 @@ class OrderProviders extends ChangeNotifier {
 
   // static final _connectionStatus = ConnectionStatus.getInstance();
 
+  clear(){
+    _checkOrder = {};
+    _orderInProgress = [];
+    _menuList = null;
+    _listVoucher = [];
+    _listDiscount = [];
+    _listPromo = [];
+    _orders = [];
+    notifyListeners();
+  }
+
   addOrder({
     required Map<String, dynamic> data,
     required int jumlahOrder,
@@ -202,6 +213,10 @@ class OrderProviders extends ChangeNotifier {
       final response = await https.get(_api, headers: headers);
 
       // print(response.body);
+
+      if(response.statusCode == 204){
+        _listPromo = [];
+      }
 
       if (response.statusCode == 200) {
         _listPromo = listPromoFromJson(response.body).data;

@@ -13,6 +13,7 @@ import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/models/lang.dart';
 import 'package:java_code_app/providers/auth_providers.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/singletons/google_tools.dart';
 import 'package:java_code_app/singletons/shared_preferences.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -47,7 +48,6 @@ class _ProfilePageState extends State<ProfilePage> {
     _packageInfo = await PackageInfo.fromPlatform();
     setState(() {});
   }
-
   _camera() async {
     final _image = await _picker.pickImage(
       source: ImageSource.camera,
@@ -57,7 +57,6 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.pop(context);
     _saveImage(_image);
   }
-
   _galley() async {
     final _image = await _picker.pickImage(
       source: ImageSource.gallery,
@@ -67,7 +66,6 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.pop(context);
     _saveImage(_image);
   }
-
   _changeImageProfile() {
     showModalBottomSheet(
       barrierColor: Colors.grey.withOpacity(0.2),
@@ -122,7 +120,6 @@ class _ProfilePageState extends State<ProfilePage> {
       },
     );
   }
-
   _saveImage(_image) async {
     if (_image != null) {
       _fileImage = await ImageCropper.cropImage(
@@ -155,7 +152,6 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {});
     }
   }
-
   _updateTgl() async {
     final value = await showDialog(
       barrierColor: ColorSty.grey.withOpacity(0.2),
@@ -169,17 +165,14 @@ class _ProfilePageState extends State<ProfilePage> {
       if (mounted) setState(() {});
     }
   }
-
   _updateTelepon(String value) {
     provider.update(key: "telepon", value: value);
     if (mounted) setState(() {});
   }
-
   _updateNama(String value) {
     provider.update(key: "nama", value: value);
     if (mounted) setState(() {});
   }
-
   _changePin(Lang lang) {
     showDialog(
       context: context,
@@ -205,6 +198,14 @@ class _ProfilePageState extends State<ProfilePage> {
         },
       ),
     );
+  }
+
+
+  _logout(){
+    Navigator.pushReplacementNamed(context, "/");
+    Preferences.getInstance().clear();
+    GoogleLogin.getInstance().logout();
+    Provider.of<OrderProviders>(context, listen: false).clear();
   }
 
   @override
@@ -249,7 +250,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   child: Stack(
                                     alignment: Alignment.bottomCenter,
                                     children: [
-                                      if (true)
+                                      if (_user?.foto == null)
                                         if (_fileImage != null)
                                           Image.file(_fileImage!)
                                         else
@@ -435,11 +436,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pushReplacementNamed(context, "/");
-                                  Preferences.getInstance().clear();
-                                  GoogleLogin.getInstance().logout();
-                                },
+                                onPressed: _logout,
                                 child: SizedBox(
                                   width: 204,
                                   child: Align(
