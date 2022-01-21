@@ -42,9 +42,9 @@ class _VPinDialogState extends State<VPinDialog> {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28.h)),
       child: SizedBox(
-        height: 0.19.sh,
+        height: 160,
         child: Padding(
-          padding: EdgeInsets.only(top: 24.w),
+          padding: const EdgeInsets.only(top: 24),
           child: Column(
             children: [
               Text(
@@ -64,10 +64,10 @@ class _VPinDialogState extends State<VPinDialog> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(
-                  top: 10.w,
-                  left: 18.w,
-                  right: 18.w,
+                padding: const EdgeInsets.only(
+                  top: 10,
+                  left: 18,
+                  right: 18,
                 ),
                 child: Row(
                   children: [
@@ -113,6 +113,7 @@ class _VPinDialogState extends State<VPinDialog> {
                           }else if(widget.giveString!){
                             widget.onComplete!(_pinPutController.text);
                           }
+                          Navigator.pop(context);
                         },
                         separator: Padding(
                           padding: const EdgeInsets.all(SpaceDims.sp4),

@@ -160,18 +160,29 @@ class _ContentBerandaState extends State<ContentBeranda>
                         title: "Minuman",
                         data: widget.data,
                       ),
+                      const SizedBox(height: 30)
                     ],
                   ),
                 ),
-                ListMenu(
-                  type: "makanan",
-                  title: "Makanan",
-                  data: widget.data,
+                Column(
+                  children: [
+                    ListMenu(
+                      type: "makanan",
+                      title: "Makanan",
+                      data: widget.data,
+                    ),
+                    const SizedBox(height: 30)
+                  ],
                 ),
-                ListMenu(
-                  type: "minuman",
-                  title: "Minuman",
-                  data: widget.data,
+                Column(
+                  children: [
+                    ListMenu(
+                      type: "minuman",
+                      title: "Minuman",
+                      data: widget.data,
+                    ),
+                    const SizedBox(height: 30)
+                  ],
                 ),
               ],
             ),

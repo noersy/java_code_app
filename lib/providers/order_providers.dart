@@ -350,8 +350,6 @@ class OrderProviders extends ChangeNotifier {
         "menu": menu
       };
 
-      print(body);
-
       final response = await https.post(
           _api,
           headers: headers,

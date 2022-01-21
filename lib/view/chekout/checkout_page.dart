@@ -100,7 +100,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
               }).toList(),
             );
 
-            // if(value) Navigator.pop(context);
+            if(value) Navigator.pop(context);
             await showDialog(
               context: context,
               builder: (_) => const OrderDoneDialog(),

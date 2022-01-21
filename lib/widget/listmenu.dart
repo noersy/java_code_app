@@ -62,8 +62,6 @@ class _ListMenuState extends State<ListMenu> {
                 for (final item in widget.data.data)
                   if (widget.type == item.kategori)
                       CardMenu(data: item),
-                if (widget.type != "makanan")
-                const SizedBox(height: 120)
               ],
             ),
           ),
