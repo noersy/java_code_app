@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,6 +19,8 @@ import 'package:java_code_app/widget/listmenu_tile.dart';
 import 'package:java_code_app/widget/orderdone_dialog.dart';
 import 'package:java_code_app/widget/vp_fingerprint_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:skeleton_animation/skeleton_animation.dart';
 
 class CheckOutPage extends StatefulWidget {
   const CheckOutPage({Key? key}) : super(key: key);
@@ -33,13 +37,29 @@ class _CheckOutPageState extends State<CheckOutPage> {
       totalDisP = 0,
       numOrders = 0;
 
+  static final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  bool _loading = false;
+  Future<void> _onRefresh() async {
+    var _duration = const Duration(seconds:1);
+    if (mounted) {
+      setState(() => _loading = true);
+
+      await _getData();
+
+      Timer(_duration, () {
+        setState(() => _loading = false);
+        _refreshController.refreshCompleted();
+      });
+    }
+  }
+
   @override
   void initState() {
     _getData();
     super.initState();
   }
 
-  void _getData()async{
+  _getData() async{
     await Provider.of<OrderProviders>(context, listen: false).getListDisCount();
     final _orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
     final _discount = Provider.of<OrderProviders>(context, listen: false).listDiscount;
@@ -140,32 +160,36 @@ class _CheckOutPageState extends State<CheckOutPage> {
               icon: Icon(IconsCs.pesanan, size: 28.0, color: ColorSty.primary),
               title: 'Pesanan',
             ),
-            body: SingleChildScrollView(
-              primary: true,
-              child: Column(
-                children: [
-                  Column(
-                    children: [
-                      if (_orders.values
-                          .where((element) => element["jenis"] == "makanan")
-                          .isNotEmpty)
-                        ListOrder(
-                          orders: _orders,
-                          title: 'Makanan',
-                          type: 'makanan',
-                        ),
-                      if (_orders.values
-                          .where((element) => element["jenis"] == "minuman")
-                          .isNotEmpty)
-                        ListOrder(
-                          orders: _orders,
-                          title: 'Minuman',
-                          type: 'minuman',
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: SpaceDims.sp24),
-                ],
+            body: SmartRefresher(
+              controller: _refreshController,
+              onRefresh: _onRefresh,
+              child: SingleChildScrollView(
+                primary: true,
+                child: Column(
+                  children: [
+                    Column(
+                      children: [
+                        if (_orders.values
+                            .where((element) => element["jenis"] == "makanan")
+                            .isNotEmpty)
+                          ListOrder(
+                            orders: _orders,
+                            title: 'Makanan',
+                            type: 'makanan',
+                          ),
+                        if (_orders.values
+                            .where((element) => element["jenis"] == "minuman")
+                            .isNotEmpty)
+                          ListOrder(
+                            orders: _orders,
+                            title: 'Minuman',
+                            type: 'minuman',
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: SpaceDims.sp24),
+                  ],
+                ),
               ),
             ),
             bottomNavigationBar: Container(
@@ -199,11 +223,15 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                     "Total Pesanan ",
                                     style: TypoSty.captionSemiBold,
                                   ),
-                                  Text("($numOrders Menu) :",
+                                  _loading
+                                      ? const SizedBox(width: 30,child: SkeletonText(height: 18.0))
+                                      : Text("($numOrders Menu) :",
                                       style: TypoSty.caption),
                                 ],
                               ),
-                              Text(
+                              _loading
+                                  ? const SizedBox(width: 100,child: SkeletonText(height: 18.0))
+                                  : Text(
                                 "Rp ${oCcy.format(totalOrders)}",
                                 style: TypoSty.subtitle.copyWith(
                                   color: ColorSty.primary,
@@ -234,6 +262,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                     context: context,
                                     builder: (_) => const InfoDiscountDialog(),
                                   ),
+                                  isLoading: _loading,
                                 ),
                               TileListDMenu(
                                 dense: true,
@@ -266,20 +295,18 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                   "assert/image/icons/voucher-icon-line.svg",
                                 ),
                                 onPressed: _setVoucher,
+                                isLoading: _loading,
                               ),
-                              Stack(
-                                children: [
-                                  TileListDMenu(
-                                    dense: true,
-                                    title: "Pembayaran",
-                                    prefix: "Pay Later",
-                                    // icon: IconsCs.coins,
-                                    iconSvg: SvgPicture.asset(
-                                      "assert/image/icons/la_coins.svg",
-                                    ),
-                                    onPressed: () {},
-                                  ),
-                                ],
+                              TileListDMenu(
+                                dense: true,
+                                isLoading: _loading,
+                                title: "Pembayaran",
+                                prefix: "Pay Later",
+                                // icon: IconsCs.coins,
+                                iconSvg: SvgPicture.asset(
+                                  "assert/image/icons/la_coins.svg",
+                                ),
+                                onPressed: () {},
                               ),
                             ],
                           ),
@@ -424,7 +451,7 @@ class DeleteMenuInCheckoutDialog extends StatelessWidget {
           ),
         ),
         child: SizedBox(
-          height: 390,
+          height: 400,
           width: double.infinity,
           child: Padding(
             padding: const EdgeInsets.only(top: 42),
@@ -455,9 +482,9 @@ class DeleteMenuInCheckoutDialog extends StatelessWidget {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 24.h),
+                  padding: const EdgeInsets.symmetric(vertical: 24),
                   child: SizedBox(
-                    width: 200.w,
+                    width: 200,
                     child: Column(
                       children: [
                         Text(
@@ -468,7 +495,7 @@ class DeleteMenuInCheckoutDialog extends StatelessWidget {
                             fontSize: 20.sp,
                           ),
                         ),
-                        SizedBox(height: 8.h),
+                        const SizedBox(height: SpaceDims.sp8),
                         RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(
@@ -485,7 +512,7 @@ class DeleteMenuInCheckoutDialog extends StatelessWidget {
                             ],
                           ),
                         ),
-                        SizedBox(height: 16.h),
+                        const SizedBox(height: SpaceDims.sp12),
                         Row(
                           children: [
                             Expanded(
@@ -516,7 +543,8 @@ class DeleteMenuInCheckoutDialog extends StatelessWidget {
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   padding: const EdgeInsets.symmetric(
-                                      vertical: SpaceDims.sp8),
+                                      vertical: SpaceDims.sp8,
+                                  ),
                                   shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.all(
                                       Radius.circular(30.0),

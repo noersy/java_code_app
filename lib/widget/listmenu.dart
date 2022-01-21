@@ -62,6 +62,8 @@ class _ListMenuState extends State<ListMenu> {
                 for (final item in widget.data.data)
                   if (widget.type == item.kategori)
                       CardMenu(data: item),
+                if (widget.type != "makanan")
+                const SizedBox(height: 120)
               ],
             ),
           ),
@@ -70,41 +72,3 @@ class _ListMenuState extends State<ListMenu> {
     );
   }
 }
-
-List<Map<String, dynamic>> datafakeMakanan = [
-  {
-    "id": "1",
-    "jenis": "makanan",
-    "image": "assert/image/menu/1637916792.png",
-    "harga": "Rp 10.000",
-    "name": "Chicken Katsu",
-    "amount": 99,
-  },
-  {
-    "id": "2",
-    "jenis": "makanan",
-    "image": "assert/image/menu/1637916829.png",
-    "harga": "Rp 10.000",
-    "name": "Chicken Slam",
-    "amount": 99,
-  },
-  {
-    "id": "3",
-    "jenis": "makanan",
-    "image": "assert/image/menu/167916789.png",
-    "harga": "Rp 10.000",
-    "name": "Fried Rice",
-    "amount": 0,
-  },
-];
-
-List<Map<String, dynamic>> datafakeMinuman = [
-  {
-    "id": "4",
-    "jenis": "minuman",
-    "image": "assert/image/menu/1637916759.png",
-    "harga": "Rp 10.000",
-    "name": "Es Jeruk",
-    "amount": 99,
-  },
-];

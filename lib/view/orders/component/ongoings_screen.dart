@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:java_code_app/helps/image.dart';
-import 'package:java_code_app/models/listorder.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -13,7 +11,6 @@ import 'package:java_code_app/view/orders/widget/ordemenu_card.dart';
 import 'package:java_code_app/view/orders/widget/skeletonorder_menu.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:skeleton_animation/skeleton_animation.dart';
 
 class OngoingScreen extends StatefulWidget {
   const OngoingScreen({Key? key}) : super(key: key);
@@ -55,16 +52,7 @@ class _OngoingScreenState extends State<OngoingScreen> with AutomaticKeepAliveCl
   }
 
   @override
-  void dispose() {
-    _refreshController.dispose();
-    super.dispose();
-  }
-
-
-  @override
   Widget build(BuildContext context) {
-    // final _orderOngoing = Provider.of<OrderProviders>(context, listen: false).orderProgress;
-    // print(_orderOngoing[0]);
     return SmartRefresher(
       onRefresh: _onRefresh,
       controller: _refreshController,

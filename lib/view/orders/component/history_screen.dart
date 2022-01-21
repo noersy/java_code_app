@@ -116,12 +116,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   @override
-  void dispose() {
-    _refreshController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SmartRefresher(

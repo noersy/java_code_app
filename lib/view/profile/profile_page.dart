@@ -260,13 +260,6 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
   }
 
-
-  @override
-  void dispose() {
-    _refreshController.dispose();
-    super.dispose();
-  }
-
   void _onRefresh() async {
     var _duration = const Duration(seconds:1);
     if (mounted) {

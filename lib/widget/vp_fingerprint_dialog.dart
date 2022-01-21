@@ -39,75 +39,71 @@ class VFingerPrintDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      builder: () {
-        return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28.h)),
-          child: SizedBox(
-            height: 0.45.sh,
-            child: Padding(
-              padding: EdgeInsets.only(top: 24.w),
-              child: Column(
-                children: [
-                  Text(
-                    "Verifikasi Pesanan",
-                    style: TypoSty.title.copyWith(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    "Finger Print",
-                    style: TypoSty.caption2.copyWith(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: ()=> _chekFingerPrint(context),
-                    child: Column(
-                      children: [
-                        SizedBox(height: 28.h),
-                        SvgPicture.asset("assert/image/icons/Finger-print.svg"),
-                        SizedBox(height: 20.w),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 42.w),
-                    child: Row(
-                      children: [
-                        const Expanded(child: Divider(thickness: 3)),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 14.w),
-                          child:  Text("Atau", style: TypoSty.caption2),
-                        ),
-                        const Expanded(child: Divider(thickness: 3)),
-                      ],
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      showDialog(context: context, builder: (_)=> VPinDialog(
-                        onComplete: (value){
-                          if(value.runtimeType == bool){
-                            onSumint(value as bool);
-                          }
-                        },
-                      ));
-                    },
-                    child: Text(
-                      "Verifikasi Menggunakan PIN",
-                      style: TypoSty.subtitle.copyWith(color: ColorSty.primary),
-                    ),
-                  )
-                ],
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28.h)),
+      child: SizedBox(
+        height: 350,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 24),
+          child: Column(
+            children: [
+              Text(
+                "Verifikasi Pesanan",
+                style: TypoSty.title.copyWith(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
+              Text(
+                "Finger Print",
+                style: TypoSty.caption2.copyWith(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+              GestureDetector(
+                onTap: ()=> _chekFingerPrint(context),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 28),
+                    SvgPicture.asset("assert/image/icons/Finger-print.svg"),
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 42),
+                child: Row(
+                  children: [
+                    const Expanded(child: Divider(thickness: 3)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 14),
+                      child:  Text("Atau", style: TypoSty.caption2),
+                    ),
+                    const Expanded(child: Divider(thickness: 3)),
+                  ],
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  showDialog(context: context, builder: (_)=> VPinDialog(
+                    onComplete: (value){
+                      if(value.runtimeType == bool){
+                        onSumint(value as bool);
+                      }
+                    },
+                  ));
+                },
+                child: Text(
+                  "Verifikasi Menggunakan PIN",
+                  style: TypoSty.subtitle.copyWith(color: ColorSty.primary),
+                ),
+              )
+            ],
           ),
-        );
-      }
+        ),
+      ),
     );
   }
 }

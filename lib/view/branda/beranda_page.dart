@@ -45,13 +45,6 @@ class _BerandaPageState extends State<BerandaPage> {
     }
   }
 
-
-  @override
-  void dispose() {
-    _refreshController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

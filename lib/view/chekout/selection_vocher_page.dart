@@ -27,25 +27,23 @@ class SelectionVoucherPage extends StatefulWidget {
 class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
   LVoucher? _selectedVoucher;
   static List<LVoucher> _listVoucher = [];
-  static final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  static final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   bool _loading = false;
+
   Future<void> _onRefresh() async {
-    var _duration = const Duration(seconds:1);
+    var _duration = const Duration(seconds: 1);
     if (mounted) {
       setState(() => _loading = true);
+
+      await Provider.of<OrderProviders>(context, listen: false)
+          .getListVoucher();
 
       Timer(_duration, () {
         setState(() => _loading = false);
         _refreshController.refreshCompleted();
       });
     }
-  }
-
-
-  @override
-  void dispose() {
-    _refreshController.dispose();
-    super.dispose();
   }
 
   @override
@@ -79,7 +77,16 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
                   _listVoucher = Provider.of<OrderProviders>(context).listVoucher;
                   return Column(
                     children: [
-                      if (_selectedVoucher == null)
+                      if(_loading)
+                        VoucherCard(
+                          voucher: _selectedVoucher,
+                          isChecked: false,
+                          isLoading: true,
+                          onPressed: (String value) {
+                            setState(() => _selectedVoucher = null);
+                          },
+                        ),
+                      if (_selectedVoucher == null && !_loading)
                         for (LVoucher item in _listVoucher)
                           VoucherCard(
                             isChecked: false,
@@ -91,7 +98,7 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
                               setState(() => _selectedVoucher = item);
                             },
                           ),
-                      if (_selectedVoucher != null)
+                      if (_selectedVoucher != null && !_loading)
                         VoucherCard(
                           voucher: _selectedVoucher!,
                           isChecked: true,
@@ -177,7 +184,8 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
 
 class VoucherCard extends StatefulWidget {
   final bool isChecked;
-  final LVoucher voucher;
+  final LVoucher? voucher;
+  final bool? isLoading;
   final Function(String string) onPressed;
   final ValueChanged<String>? onChanged;
 
@@ -187,6 +195,7 @@ class VoucherCard extends StatefulWidget {
     required this.isChecked,
     this.onChanged,
     required this.voucher,
+    this.isLoading = false,
   }) : super(key: key);
 
   @override
@@ -201,8 +210,10 @@ class _VoucherCardState extends State<VoucherCard> {
   @override
   void initState() {
     _isSelected = widget.isChecked;
-    _start = DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeMulai * 1000);
-    _end = DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeSelesai * 1000);
+    _start =
+        DateTime.fromMicrosecondsSinceEpoch(widget.voucher?.periodeMulai ?? 0 * 1000);
+    _end = DateTime.fromMicrosecondsSinceEpoch(
+        widget.voucher?.periodeSelesai ??0 * 1000);
     super.initState();
   }
 
@@ -212,15 +223,13 @@ class _VoucherCardState extends State<VoucherCard> {
       padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp8),
       child: ElevatedButton(
         clipBehavior: Clip.antiAlias,
-        onPressed: () async {
-          _isSelected = (await Navigate.toDetailVoucherPage(context,
-                  voucher: widget.voucher)) ??
-              false;
+        onPressed: widget.voucher != null ? () async {
+          _isSelected = (await Navigate.toDetailVoucherPage(context, voucher: widget.voucher!)) ?? false;
 
           if (_isSelected && widget.onChanged != null) {
-            widget.onChanged!(widget.voucher.nama);
+            widget.onChanged!(widget.voucher!.nama);
           }
-        },
+        } : (){},
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.all(0),
           primary: ColorSty.bg2,
@@ -238,14 +247,17 @@ class _VoucherCardState extends State<VoucherCard> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    widget.voucher.nama,
-                    style: TypoSty.button.copyWith(color: ColorSty.black60),
-                  ),
+                  if (widget.isLoading!)
+                    const SkeletonText(height: 12.0)
+                  else
+                    Text(
+                      "${widget.voucher?.nama}",
+                      style: TypoSty.button.copyWith(color: ColorSty.black60),
+                    ),
                   IconButton(
                     onPressed: () {
                       setState(() => _isSelected = !_isSelected);
-                      widget.onPressed(widget.voucher.nama);
+                      widget.onPressed("${widget.voucher?.nama}");
                     },
                     icon: widget.isChecked
                         ? const Icon(
@@ -260,77 +272,55 @@ class _VoucherCardState extends State<VoucherCard> {
                 ],
               ),
             ),
-            SizedBox(
-              height: 160,
-              child: Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20.0),
-                    child: Image.network(
-                      widget.voucher.infoVoucher,
-                      errorBuilder: imageError,
-                      loadingBuilder: imageOnLoad,
+            if (widget.isLoading!)
+              Skeleton(
+                height: 160,
+                width: double.infinity,
+              )
+            else
+              SizedBox(
+                height: 160,
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: Image.network(
+                        "${widget.voucher?.infoVoucher}",
+                        errorBuilder: imageError,
+                        loadingBuilder: imageOnLoad,
+                      ),
                     ),
-                  ),
-                  Positioned(
-                    right: 12.0,
-                    bottom: 0.0,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        const Text(
-                          "Valid Date:",
-                          style:
-                              TextStyle(color: ColorSty.black, fontSize: 12.0),
-                        ),
-                        Text(
-                          """(${_end.difference(_end).inDays} Month) ${_format.format(_start)} - ${_format.format(_end)} 
+                    Positioned(
+                      right: 12.0,
+                      bottom: 0.0,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          const Text(
+                            "Valid Date:",
+                            style: TextStyle(
+                                color: ColorSty.black, fontSize: 12.0),
+                          ),
+                          Text(
+                            """(${_end.difference(_end).inDays} Month) ${_format.format(_start)} - ${_format.format(_end)} 
                           """,
-                          style: TypoSty.mini
-                              .copyWith(color: ColorSty.black60, fontSize: 9.0),
-                        ),
-                      ],
+                            style: TypoSty.mini.copyWith(
+                                color: ColorSty.black60, fontSize: 9.0),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Positioned(
-                    bottom: 10.0,
-                    left: 8.0,
-                    child: Text("Catatan...", style: TypoSty.mini),
-                  )
-                ],
+                    Positioned(
+                      bottom: 10.0,
+                      left: 8.0,
+                      child: Text("Catatan...", style: TypoSty.mini),
+                    )
+                  ],
+                ),
               ),
-            ),
           ],
         ),
       ),
     );
   }
 }
-
-List<Map<String, dynamic>> _dataVoucher = [
-  {
-    "title": "Friend Referral Retention",
-    "urlImage": "assert/image/voucher/Voucher Java Code app-01.jpg",
-    "harga": "Rp 100.000"
-  },
-  {
-    "title": "Koordinator Program Kekompakan",
-    "urlImage": "assert/image/voucher/Voucher Java Code app-02.jpg",
-    "harga": "Rp 100.000"
-  },
-  {
-    "title": "Birthday",
-    "urlImage": "assert/image/voucher/Voucher Java Code app-03.jpg",
-    "harga": "Rp 100.000"
-  },
-  {
-    "title": "Friend Referral Retention",
-    "urlImage": "assert/image/voucher/Voucher Java Code app-04.jpg",
-    "harga": "Rp 100.000"
-  },
-  {
-    "title": "Friend Referral Retention",
-    "urlImage": "assert/image/voucher/Voucher Java Code app-05.jpg",
-    "harga": "Rp 100.000"
-  },
-];
