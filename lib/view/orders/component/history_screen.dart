@@ -220,7 +220,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     ],
                   )
                 : SizedBox(
-                    height: MediaQuery.of(context).size.height - 80,
+                    height: MediaQuery.of(context).size.height - 120,
                     child: Stack(
                       alignment: Alignment.center,
                       children: [

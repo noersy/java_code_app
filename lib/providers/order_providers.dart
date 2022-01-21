@@ -239,6 +239,10 @@ class OrderProviders extends ChangeNotifier {
 
       final response = await https.get(_api, headers: headers);
 
+      if(response.statusCode  == 204){
+        _orders = [];
+      }
+
       if (response.statusCode == 200) {
         _orders = listOrderFromJson(response.body).data;
         notifyListeners();
@@ -280,6 +284,11 @@ class OrderProviders extends ChangeNotifier {
 
       final response = await https.get(_api, headers: headers);
 
+
+      if(response.statusCode  == 204){
+        return [];
+      }
+
       if (response.statusCode == 200) {
         return listHistoryFromJson(response.body).data;
       }
@@ -297,7 +306,7 @@ class OrderProviders extends ChangeNotifier {
 
       final response = await https.post(_api, headers: headers);
 
-      print(response.body);
+      // print(response.body);
 
       if (response.statusCode == 200) {
         return true;
