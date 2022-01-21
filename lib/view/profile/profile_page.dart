@@ -151,13 +151,14 @@ class _ProfilePageState extends State<ProfilePage> {
       if (_fileImage != null) {
         File compressedFile = await FlutterNativeImage.compressImage(
           _fileImage!.path,
-          quality: 50,
+          quality: 25,
         );
         _fileImage = compressedFile;
 
         String base64Image = base64Encode(compressedFile.readAsBytesSync());
 
         Provider.of<AuthProviders>(context, listen: false).uploadProfileImage(base64Image);
+        Provider.of<AuthProviders>(context, listen: false).getUser();
       }
       setState(() {});
     }

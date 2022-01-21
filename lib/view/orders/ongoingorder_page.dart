@@ -350,7 +350,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
         borderRadius: BorderRadius.circular(30.0)
       ),
       child: SizedBox(
-        height: 400,
+        height: 340,
         width: double.infinity,
         child: Stack(
           children: [
@@ -408,7 +408,10 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
             if(_isLoading)
             Container(
               alignment: Alignment.center,
-              color: ColorSty.grey.withOpacity(0.3),
+              decoration: BoxDecoration(
+                  color: ColorSty.grey.withOpacity(0.3),
+                borderRadius: BorderRadius.circular(30.0)
+              ),
               child: const RefreshProgressIndicator(),
             )
           ],

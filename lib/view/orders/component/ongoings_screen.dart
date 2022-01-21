@@ -29,10 +29,11 @@ class _OngoingScreenState extends State<OngoingScreen> with AutomaticKeepAliveCl
 
   Future<void> _onRefresh() async {
     var _duration = const Duration(seconds: 1);
+    if (mounted) setState(() => _loading = true);
 
     await Provider.of<OrderProviders>(context, listen: false).getListOrder();
 
-    if (mounted) setState(() => _loading = true);
+
     Timer(_duration, () {
       if (mounted) setState(() => _loading = false);
       _refreshController.refreshCompleted();
@@ -57,56 +58,60 @@ class _OngoingScreenState extends State<OngoingScreen> with AutomaticKeepAliveCl
       onRefresh: _onRefresh,
       controller: _refreshController,
       child: SingleChildScrollView(
-        child: AnimatedBuilder(
-          animation: OrderProviders(),
-          builder: (BuildContext context, Widget? child) {
-            final orders = Provider.of<OrderProviders>(context).listOrders;
-            if (orders.isNotEmpty) {
-              if (_loading) {
-                return const SkeletonOrderMenuCard();
-              } else {
-                return Column(
-                  children: [
-                    for (final item in orders)
-                      OrderMenuCard(
-                        onPressed: () => Navigate.toViewOrder(
-                          context,
-                          id: item.idOrder,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp22),
+          child: AnimatedBuilder(
+            animation: OrderProviders(),
+            builder: (BuildContext context, Widget? child) {
+              final orders = Provider.of<OrderProviders>(context).listOrders;
+              if (orders.isNotEmpty) {
+                if (_loading) {
+                  return const SkeletonOrderMenuCard();
+                } else {
+                  return Column(
+                    children: [
+                      const SizedBox(height: SpaceDims.sp8),
+                      for (final item in orders)
+                        OrderMenuCard(
+                          onPressed: () => Navigate.toViewOrder(
+                            context,
+                            id: item.idOrder,
+                          ),
+                          data: item,
                         ),
-                        data: item,
-                      ),
-                    const SizedBox(height: 80.0)
-                  ],
+                      const SizedBox(height: 80.0)
+                    ],
+                  );
+                }
+              } else {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height - 120,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Image.asset("assert/image/bg_findlocation.png"),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            IconsCs.order,
+                            size: 120,
+                            color: ColorSty.primary,
+                          ),
+                          const SizedBox(height: SpaceDims.sp22),
+                          Text(
+                            "Sudah Pesan?\nLacak pesananmu\ndi sini.",
+                            textAlign: TextAlign.center,
+                            style: TypoSty.title2,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 );
               }
-            } else {
-              return SizedBox(
-                height: MediaQuery.of(context).size.height - 120,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Image.asset("assert/image/bg_findlocation.png"),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          IconsCs.order,
-                          size: 120,
-                          color: ColorSty.primary,
-                        ),
-                        const SizedBox(height: SpaceDims.sp22),
-                        Text(
-                          "Sudah Pesan?\nLacak pesananmu\ndi sini.",
-                          textAlign: TextAlign.center,
-                          style: TypoSty.title2,
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              );
-            }
-          },
+            },
+          ),
         ),
       ),
     );
