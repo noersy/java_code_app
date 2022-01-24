@@ -46,7 +46,7 @@ class _ContentBerandaState extends State<ContentBeranda>
 
   _setMakanan() {
     setState(() => _sIndex = 1);
-    final possition = _scrollManu.position.maxScrollExtent/2;
+    final possition = _scrollManu.position.maxScrollExtent / 2;
     _scrollManu.animateTo(possition, duration: _duration, curve: Curves.ease);
     // _pageController.animateToPage(1, duration: _duration, curve: Curves.ease);
   }
@@ -180,13 +180,13 @@ class _ContentBerandaState extends State<ContentBeranda>
             ),
           ),
           GestureDetector(
-            onHorizontalDragEnd: (DragEndDetails detail){
-              if(detail.velocity.pixelsPerSecond.dx < 0){
-                if(_sIndex == 1) _setMenuman();
-                if(_sIndex == 0) _setMakanan();
-              }else{
-                if(_sIndex == 1) _setAll();
-                if(_sIndex == 2) _setMakanan();
+            onHorizontalDragEnd: (DragEndDetails detail) {
+              if (detail.velocity.pixelsPerSecond.dx < 0) {
+                if (_sIndex == 1) _setMenuman();
+                if (_sIndex == 0) _setMakanan();
+              } else {
+                if (_sIndex == 1) _setAll();
+                if (_sIndex == 2) _setMakanan();
               }
             },
             child: SingleChildScrollView(
@@ -197,34 +197,44 @@ class _ContentBerandaState extends State<ContentBeranda>
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      children: [
-                        ListMenu(
-                          type: "makanan",
-                          title: "Makanan",
-                          data: widget.data,
-                        ),
-                        ListMenu(
-                          type: "minuman",
-                          title: "Minuman",
-                          data: widget.data,
-                        ),
-                      ],
-                    ),
+                  Column(
+                    children: [
+                      ListMenu(
+                        type: "makanan",
+                        title: "Makanan",
+                        data: widget.data,
+                      ),
+                      ListMenu(
+                        type: "minuman",
+                        title: "Minuman",
+                        data: widget.data,
+                      ),
+                      const SizedBox(
+                        height: 74,
+                      )
+                    ],
                   ),
-                  ListMenu(
-                    key: const Key("menu-2"),
-                    type: "makanan",
-                    title: "Makanan",
-                    data: widget.data,
+                  Column(
+                    children: [
+                      ListMenu(
+                        key: const Key("menu-2"),
+                        type: "makanan",
+                        title: "Makanan",
+                        data: widget.data,
+                      ),
+                      const SizedBox(height: 74)
+                    ],
                   ),
-                  ListMenu(
-                    key: const Key("menu-3"),
-                    type: "minuman",
-                    title: "Minuman",
-                    data: widget.data,
+                  Column(
+                    children: [
+                      ListMenu(
+                        key: const Key("menu-3"),
+                        type: "minuman",
+                        title: "Minuman",
+                        data: widget.data,
+                      ),
+                      const SizedBox(height: 74)
+                    ],
                   ),
                 ],
               ),

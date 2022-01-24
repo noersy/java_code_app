@@ -48,7 +48,6 @@ class _CardMenuState extends State<CardMenu> {
 
   void _min() async {
     setState(() => _jumlahOrder--);
-    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
     if(_jumlahOrder >= 1){
       Provider.of<OrderProviders>(context, listen: false).editOrder(
         jumlahOrder: _jumlahOrder,
