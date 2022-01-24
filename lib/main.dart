@@ -1,16 +1,16 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/providers/auth_providers.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/providers/order_providers.dart';
-import 'package:java_code_app/singletons/user_instance.dart';
-import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/singletons/check_connectivity.dart';
 import 'package:java_code_app/singletons/check_location.dart';
+import 'package:java_code_app/singletons/fcm.dart';
 import 'package:java_code_app/singletons/shared_preferences.dart';
-import 'package:java_code_app/view/dashboard_page.dart';
+import 'package:java_code_app/singletons/user_instance.dart';
+import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/view/auth/login_page.dart';
+import 'package:java_code_app/view/dashboard_page.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
     GeolocationStatus.getInstance().initialize();
     Preferences.getInstance().initialize();
     UserInstance.getInstance().initialize();
-    Firebase.initializeApp();
+    PushNotification.getInstance().initialize();
 
     return MultiProvider(
       providers: [

@@ -88,10 +88,12 @@ class _LoginPageState extends State<LoginPage> {
       final id = await _preferences.getIntValue(KeyPrefens.loginID);
       await Provider.of<AuthProviders>(context, listen: false).getUser(id: id);
 
-      Timer(_duration, () {
+      if(mounted) {
+        Timer(_duration, () {
         Navigate.toFindLocation(context);
         setState(() => _loading = false);
       });
+      }
     }
   }
 

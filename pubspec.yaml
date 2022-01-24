@@ -51,6 +51,7 @@ dependencies:
   flutter_native_image: any
   firebase_core: any
   firebase_messaging: any
+  flutter_local_notifications: any
   google_sign_in: any
 
 dev_dependencies:
