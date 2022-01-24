@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/models/listhistory.dart';
+import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
@@ -29,8 +30,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   static List<History> _data = [];
   static List<History> _orders = [];
   static int _status = 0;
-  static final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  static final RefreshController _refreshController = RefreshController(initialRefresh: false);
   static final DateTime _dateNow = DateTime.now();
   static DateTime? _dateStart;
   static DateTime? _dateEnd;
@@ -199,48 +199,54 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                           bottomRight: Radius.circular(20.0),
                                           bottomLeft: Radius.circular(20.0),
                                         )),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        const SizedBox(height: SpaceDims.sp16),
-                                        GestureDetector(
-                                          onTap: ()=> _changeStatus("Semua Status"),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
-                                            child: Text("Semua Status", style: TypoSty.caption.copyWith(
-                                              fontSize: 13.0,
-                                              color: _status == 0 ? ColorSty.primary : ColorSty.black,
-                                              fontWeight: _status == 0 ? FontWeight.bold : FontWeight.w600,
-                                            ),),
-                                          ),
-                                        ),
-                                        const Divider(thickness: 1.5),
-                                        GestureDetector(
-                                          onTap: ()=> _changeStatus("Selesai"),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
-                                            child: Text("Selesai", style: TypoSty.caption.copyWith(
-                                              fontSize: 13.0,
-                                              color: _status == 3 ? ColorSty.primary : ColorSty.black,
-                                              fontWeight: _status == 3 ? FontWeight.bold : FontWeight.w600,
-                                            ),),
-                                          ),
-                                        ),
-                                        const Divider(thickness: 1.5),
-                                        GestureDetector(
-                                          onTap: ()=> _changeStatus("Dibatalkan"),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
-                                            child: Text(
-                                              "Dibatalkan", style: TypoSty.caption.copyWith(
-                                              fontSize: 13.0,
-                                              color: _status == 4 ? ColorSty.primary : ColorSty.black,
-                                              fontWeight: _status == 4 ? FontWeight.bold : FontWeight.w600,
+                                    child: AnimatedBuilder(
+                                      animation: LangProviders(),
+                                      builder: (context, snapshot) {
+                                        final lang = context.watch<LangProviders>().lang;
+                                        return Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(height: SpaceDims.sp16),
+                                            GestureDetector(
+                                              onTap: ()=> _changeStatus("Semua Status"),
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
+                                                child: Text(lang.pesanan.allStatus, style: TypoSty.caption.copyWith(
+                                                  fontSize: 13.0,
+                                                  color: _status == 0 ? ColorSty.primary : ColorSty.black,
+                                                  fontWeight: _status == 0 ? FontWeight.bold : FontWeight.w600,
+                                                ),),
+                                              ),
                                             ),
+                                            const Divider(thickness: 1.5),
+                                            GestureDetector(
+                                              onTap: ()=> _changeStatus("Selesai"),
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
+                                                child: Text(lang.pesanan.status3, style: TypoSty.caption.copyWith(
+                                                  fontSize: 13.0,
+                                                  color: _status == 3 ? ColorSty.primary : ColorSty.black,
+                                                  fontWeight: _status == 3 ? FontWeight.bold : FontWeight.w600,
+                                                ),),
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                      ],
+                                            const Divider(thickness: 1.5),
+                                            GestureDetector(
+                                              onTap: ()=> _changeStatus("Dibatalkan"),
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
+                                                child: Text(
+                                                  lang.pesanan.status4, style: TypoSty.caption.copyWith(
+                                                  fontSize: 13.0,
+                                                  color: _status == 4 ? ColorSty.primary : ColorSty.black,
+                                                  fontWeight: _status == 4 ? FontWeight.bold : FontWeight.w600,
+                                                ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      }
                                     ),
                                   ),
                                 ),
@@ -266,14 +272,27 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                           MainAxisAlignment.center,
                                       children: [
                                         const SizedBox(width: SpaceDims.sp12),
-                                        Text(
-                                          _dropdownValue,
-                                          textAlign: TextAlign.center,
-                                          style: TypoSty.caption.copyWith(
-                                            fontSize: 13.0,
-                                            color: ColorSty.black60,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                        AnimatedBuilder(
+                                          animation: LangProviders(),
+                                          builder: (context, snapshot) {
+                                            final lang = context.watch<LangProviders>().lang;
+                                            String _ttile = lang.pesanan.allStatus;
+                                            if(_dropdownValue == "Selesai"){
+                                              _ttile = lang.pesanan.status3;
+                                            }
+                                            if(_dropdownValue == "Dibatalkan"){
+                                              _ttile = lang.pesanan.status4;
+                                            }
+                                            return Text(
+                                              _ttile,
+                                              textAlign: TextAlign.center,
+                                              style: TypoSty.caption.copyWith(
+                                                fontSize: 13.0,
+                                                color: ColorSty.black60,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            );
+                                          }
                                         ),
                                         const SizedBox(width: SpaceDims.sp8),
                                         const Icon(Icons.arrow_drop_down,
@@ -312,7 +331,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   ),
                                   const SizedBox(width: SpaceDims.sp8),
                                   const Icon(IconsCs.date,
-                                      size: 18.0, color: ColorSty.primary),
+                                    size: 18.0,
+                                    color: ColorSty.primary,
+                                  ),
                                   const SizedBox(width: SpaceDims.sp8),
                                 ],
                               ),
@@ -328,27 +349,33 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       alignment: Alignment.center,
                       children: [
                         Image.asset("assert/image/bg_findlocation.png"),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              IconsCs.order,
-                              size: 120,
-                              color: ColorSty.primary,
-                            ),
-                            const SizedBox(height: SpaceDims.sp22),
-                            Text(
-                              "Mulai buat pesanan.",
-                              textAlign: TextAlign.center,
-                              style: TypoSty.title2,
-                            ),
-                            const SizedBox(height: SpaceDims.sp12),
-                            Text(
-                              "Makanan yang kamu pesan\nakan muncul di sini agar\nkamu bisa menemukan\nmenu favoritmu lagi!.",
-                              textAlign: TextAlign.center,
-                              style: TypoSty.title2,
-                            ),
-                          ],
+                        AnimatedBuilder(
+                          animation: LangProviders(),
+                          builder: (context, snapshot) {
+                            final lang = context.watch<LangProviders>().lang;
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  IconsCs.order,
+                                  size: 120,
+                                  color: ColorSty.primary,
+                                ),
+                                const SizedBox(height: SpaceDims.sp22),
+                                Text(
+                                  lang.pesanan.riwayatCaption,
+                                  textAlign: TextAlign.center,
+                                  style: TypoSty.title2,
+                                ),
+                                const SizedBox(height: SpaceDims.sp12),
+                                Text(
+                                  lang.pesanan.riwayatCaption2,
+                                  textAlign: TextAlign.center,
+                                  style: TypoSty.title2,
+                                ),
+                              ],
+                            );
+                          }
                         )
                       ],
                     ),
@@ -371,9 +398,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "Total Pesanan",
-                    style: TypoSty.title,
+                  AnimatedBuilder(
+                    animation: LangProviders(),
+                    builder: (context, snapshot) {
+                      final lang = context.watch<LangProviders>().lang;
+                      return Text(
+                        lang.pesanan.totalOr,
+                        style: TypoSty.title,
+                      );
+                    }
                   ),
                   _loading
                       ? const SizedBox(

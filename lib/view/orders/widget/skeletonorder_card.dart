@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
+import 'package:provider/provider.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
 class SkeletonOrderCard extends StatelessWidget {
@@ -11,12 +13,12 @@ class SkeletonOrderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-          vertical: 8.0,
+        vertical: 8.0,
       ),
       child: SizedBox(
         height: 138,
         child: ElevatedButton(
-          onPressed: (){},
+          onPressed: () {},
           style: ElevatedButton.styleFrom(
             elevation: 3,
             primary: ColorSty.white80,
@@ -80,56 +82,61 @@ class SkeletonOrderCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Row(
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size.zero,
-                              primary: ColorSty.white,
-                              onPrimary: ColorSty.primary,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: SpaceDims.sp8,
-                                horizontal: SpaceDims.sp12,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                  color: ColorSty.primaryDark,
-                                  width: 2,
+                      AnimatedBuilder(
+                          animation: LangProviders(),
+                          builder: (context, snapshot) {
+                            final lang = context.watch<LangProviders>().lang;
+                            return Row(
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: Size.zero,
+                                    primary: ColorSty.white,
+                                    onPrimary: ColorSty.primary,
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: SpaceDims.sp8,
+                                      horizontal: SpaceDims.sp12,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      side: const BorderSide(
+                                        color: ColorSty.primaryDark,
+                                        width: 2,
+                                      ),
+                                      borderRadius: BorderRadius.circular(30.0),
+                                    ),
+                                  ),
+                                  onPressed: () {},
+                                  child: Text(
+                                    lang.pesanan.buttonPe,
+                                    style: TypoSty.button.copyWith(fontSize: 11.0),
+                                  ),
                                 ),
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                            ),
-                            onPressed: () {},
-                            child: Text(
-                              "Beri Penilaian",
-                              style: TypoSty.button.copyWith(fontSize: 11.0),
-                            ),
-                          ),
-                          const SizedBox(width: SpaceDims.sp8),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size.zero,
-                              primary: ColorSty.primary,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: SpaceDims.sp8,
-                                horizontal: SpaceDims.sp12,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                  color: ColorSty.primaryDark,
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                            ),
-                            onPressed: () {},
-                            child: Text(
-                              "Pesan Lagi",
-                              style: TypoSty.button.copyWith(fontSize: 11.0),
-                            ),
-                          )
-                        ],
-                      ),
+                                const SizedBox(width: SpaceDims.sp8),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: Size.zero,
+                                    primary: ColorSty.primary,
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: SpaceDims.sp8,
+                                      horizontal: SpaceDims.sp12,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      side: const BorderSide(
+                                        color: ColorSty.primaryDark,
+                                        width: 2,
+                                      ),
+                                      borderRadius: BorderRadius.circular(30.0),
+                                    ),
+                                  ),
+                                  onPressed: () {},
+                                  child: Text(
+                                    lang.pesanan.buttonLa,
+                                    style: TypoSty.button.copyWith(fontSize: 11.0),
+                                  ),
+                                )
+                              ],
+                            );
+                          }),
                     ],
                   ),
                 ),

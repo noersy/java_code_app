@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/models/listorder.dart';
+import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
+import 'package:provider/provider.dart';
 
 class OrderMenuCard extends StatelessWidget {
   final Order data;
@@ -16,14 +18,7 @@ class OrderMenuCard extends StatelessWidget {
     required this.data,
   }) : super(key: key);
 
-  final  List<String> _status = [
-    "Dalam antrian",
-    "Sedang disiapkan",
-    "Bisa diambil",
-    "",
-    "",
-    "",
-  ];
+
 
   final  List<Color> _colors = [
     Colors.blueAccent,
@@ -84,10 +79,24 @@ class OrderMenuCard extends StatelessWidget {
                                 color: _colors[data.status],
                               ),
                               const SizedBox(width: SpaceDims.sp4),
-                              Text(
-                                _status[data.status],
-                                style:
-                                TypoSty.mini.copyWith(color: _colors[data.status]),
+                              AnimatedBuilder(
+                                animation: LangProviders(),
+                                builder: (context, snapshot) {
+                                  final lang = context.watch<LangProviders>().lang;
+                                  final  List<String> _status = [
+                                    lang.pesanan.status,
+                                    lang.pesanan.status2,
+                                    lang.pesanan.statusB,
+                                    "",
+                                    "",
+                                    "",
+                                  ];
+                                  return Text(
+                                    _status[data.status],
+                                    style:
+                                    TypoSty.mini.copyWith(color: _colors[data.status]),
+                                  );
+                                }
                               ),
                             ],
                           ),

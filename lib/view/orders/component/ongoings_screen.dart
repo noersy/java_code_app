@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -99,10 +100,16 @@ class _OngoingScreenState extends State<OngoingScreen> with AutomaticKeepAliveCl
                             color: ColorSty.primary,
                           ),
                           const SizedBox(height: SpaceDims.sp22),
-                          Text(
-                            "Sudah Pesan?\nLacak pesananmu\ndi sini.",
-                            textAlign: TextAlign.center,
-                            style: TypoSty.title2,
+                          AnimatedBuilder(
+                            animation: LangProviders(),
+                            builder: (context, snapshot) {
+                              final lang = Provider.of<LangProviders>(context).lang;
+                              return Text(
+                                lang.pesanan.ongoingCaption,
+                                textAlign: TextAlign.center,
+                                style: TypoSty.title2,
+                              );
+                            }
                           ),
                         ],
                       )

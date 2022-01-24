@@ -366,9 +366,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                             size: 18.0,
                                           ),
                                           const SizedBox(width: SpaceDims.sp4),
-                                          const Text(
-                                            "Sudah verifikasi KTP",
-                                            style: TextStyle(color: ColorSty.primary),
+                                          Text(
+                                            lang.profile.caption.status3,
+                                            style: const TextStyle(color: ColorSty.primary),
                                           ),
                                         ],
                                         if(_user?.status == 1) ...[
@@ -378,17 +378,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                             size: 18.0,
                                           ),
                                           const SizedBox(width: SpaceDims.sp4),
-                                          const Text(
-                                            "Dalam proses verifikasi KTP",
-                                            style: TextStyle(color: ColorSty.primary),
+                                          Text(
+                                            lang.profile.caption.status2,
+                                            style: const TextStyle(color: ColorSty.primary),
                                           ),
                                         ],
                                         if(_user?.status == 0) ...[
                                           SvgPicture.asset("assert/image/icons/id-icon.svg"),
                                           const SizedBox(width: SpaceDims.sp4),
-                                          const Text(
-                                            "Kamu belum verifikasi KTP",
-                                            style: TextStyle(color: ColorSty.primary),
+                                          Text(
+                                            lang.profile.caption.status1,
+                                            style: const TextStyle(color: ColorSty.primary),
                                           ),
                                         ],
                                       ],

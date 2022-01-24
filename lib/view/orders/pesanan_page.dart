@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/view/orders/component/history_screen.dart';
 import 'package:java_code_app/view/orders/component/ongoings_screen.dart';
+import 'package:provider/provider.dart';
 
 class PesananPage extends StatefulWidget {
   const PesananPage({Key? key}) : super(key: key);
@@ -29,23 +31,31 @@ class _PesananPageState extends State<PesananPage>
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 bottomRight: Radius.circular(30.0),
-                bottomLeft: Radius.circular(30.0))),
+                bottomLeft: Radius.circular(30.0),
+            ),
+        ),
         backgroundColor: ColorSty.white,
-        title: TabBar(
-          controller: _tabController,
-          indicatorPadding: const EdgeInsets.symmetric(
-            horizontal: 50.0,
-            vertical: 8.0,
-          ),
-          labelPadding: const EdgeInsets.all(0),
-          labelStyle: TypoSty.title.copyWith(fontSize: 18),
-          indicatorColor: ColorSty.primary,
-          unselectedLabelColor: ColorSty.black,
-          labelColor: ColorSty.primary,
-          tabs: const [
-            Tab(child: Text("Sedang Berjalan")),
-            Tab(child: Text("Riwayat")),
-          ],
+        title: AnimatedBuilder(
+          animation: LangProviders(),
+          builder: (context, snapshot) {
+            final lang = context.watch<LangProviders>().lang;
+            return TabBar(
+              controller: _tabController,
+              indicatorPadding: const EdgeInsets.symmetric(
+                horizontal: 50.0,
+                vertical: 8.0,
+              ),
+              labelPadding: const EdgeInsets.all(0),
+              labelStyle: TypoSty.title.copyWith(fontSize: 18),
+              indicatorColor: ColorSty.primary,
+              unselectedLabelColor: ColorSty.black,
+              labelColor: ColorSty.primary,
+              tabs: [
+                Tab(child: Text(lang.pesanan.tap)),
+                Tab(child: Text(lang.pesanan.tap2)),
+              ],
+            );
+          }
         ),
       ),
       body: TabBarView(
