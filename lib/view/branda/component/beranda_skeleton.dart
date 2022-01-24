@@ -41,7 +41,7 @@ class BerandaSkeleton extends StatelessWidget {
               const SizedBox(width: 10),
               Container(
                 height: 158.0,
-                width: 282.0,
+                width: 290.0,
                 padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
                 margin: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
                 child: TextButton(

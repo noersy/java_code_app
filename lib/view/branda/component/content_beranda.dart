@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/models/listpromo.dart';
-import 'package:java_code_app/models/listdiscount.dart';
 import 'package:java_code_app/models/menulist.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:java_code_app/view/branda/component/search_screen.dart';
 import 'package:java_code_app/widget/card_coupun.dart';
 import 'package:java_code_app/widget/label_button.dart';
 import 'package:java_code_app/widget/listmenu.dart';
@@ -28,8 +26,8 @@ class ContentBeranda extends StatefulWidget {
 
 class _ContentBerandaState extends State<ContentBeranda>
     with AutomaticKeepAliveClientMixin<ContentBeranda> {
-  final PageController _pageController = PageController();
   final ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollManu = ScrollController();
   final ScrollController _scrollPromo = ScrollController();
   final Duration _duration = const Duration(milliseconds: 500);
   int _sIndex = 0;
@@ -39,26 +37,67 @@ class _ContentBerandaState extends State<ContentBeranda>
 
   _setAll() {
     setState(() => _sIndex = 0);
-    final max = _scrollController.position.minScrollExtent;
-    _scrollController.animateTo(max, duration: _duration, curve: Curves.ease);
-    _pageController.animateToPage(0, duration: _duration, curve: Curves.ease);
+    final min = _scrollController.position.minScrollExtent;
+    final minMenu = _scrollManu.position.minScrollExtent;
+    _scrollController.animateTo(min, duration: _duration, curve: Curves.ease);
+    _scrollManu.animateTo(minMenu, duration: _duration, curve: Curves.ease);
+    // _pageController.animateToPage(0, duration: _duration, curve: Curves.ease);
   }
 
   _setMakanan() {
     setState(() => _sIndex = 1);
-    _pageController.animateToPage(1, duration: _duration, curve: Curves.ease);
+    final possition = _scrollManu.position.maxScrollExtent/2;
+    _scrollManu.animateTo(possition, duration: _duration, curve: Curves.ease);
+    // _pageController.animateToPage(1, duration: _duration, curve: Curves.ease);
   }
 
   _setMenuman() {
     setState(() => _sIndex = 2);
     final max = _scrollController.position.maxScrollExtent;
+    final maxMenu = _scrollManu.position.maxScrollExtent;
     _scrollController.animateTo(max, duration: _duration, curve: Curves.ease);
-    _pageController.animateToPage(2, duration: _duration, curve: Curves.ease);
+    _scrollManu.animateTo(maxMenu, duration: _duration, curve: Curves.ease);
+    // _pageController.animateToPage(2, duration: _duration, curve: Curves.ease);
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-      return Column(
+    final _listMenu = <Widget>[
+      Column(
+        children: [
+          ListMenu(
+            type: "makanan",
+            title: "Makanan",
+            data: widget.data,
+          ),
+          ListMenu(
+            type: "minuman",
+            title: "Minuman",
+            data: widget.data,
+          ),
+        ],
+      ),
+      ListMenu(
+        key: const Key("menu-2"),
+        type: "makanan",
+        title: "Makanan",
+        data: widget.data,
+      ),
+      ListMenu(
+        key: const Key("menu-3"),
+        type: "minuman",
+        title: "Minuman",
+        data: widget.data,
+      ),
+    ];
+
+    return SingleChildScrollView(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: SpaceDims.sp22),
@@ -81,6 +120,7 @@ class _ContentBerandaState extends State<ContentBeranda>
           ),
           const SizedBox(height: SpaceDims.sp22),
           SingleChildScrollView(
+            controller: _scrollPromo,
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
@@ -110,6 +150,7 @@ class _ContentBerandaState extends State<ContentBeranda>
           SingleChildScrollView(
             controller: _scrollController,
             scrollDirection: Axis.horizontal,
+            primary: false,
             child: Row(
               children: [
                 const SizedBox(width: SpaceDims.sp12),
@@ -138,56 +179,60 @@ class _ContentBerandaState extends State<ContentBeranda>
               ],
             ),
           ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height - 130,
-            child: PageView(
-              controller: _pageController,
-              onPageChanged: (value){
-                if(mounted) setState(() => _sIndex = value);
-              },
-              children: [
-                SingleChildScrollView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  child: Column(
-                    children: [
-                      ListMenu(
-                        type: "makanan",
-                        title: "Makanan",
-                        data: widget.data,
-                      ),
-                      ListMenu(
-                        type: "minuman",
-                        title: "Minuman",
-                        data: widget.data,
-                      ),
-                      const SizedBox(height: 30)
-                    ],
+          GestureDetector(
+            onHorizontalDragEnd: (DragEndDetails detail){
+              if(detail.velocity.pixelsPerSecond.dx < 0){
+                if(_sIndex == 1) _setMenuman();
+                if(_sIndex == 0) _setMakanan();
+              }else{
+                if(_sIndex == 1) _setAll();
+                if(_sIndex == 2) _setMakanan();
+              }
+            },
+            child: SingleChildScrollView(
+              controller: _scrollManu,
+              scrollDirection: Axis.horizontal,
+              physics: const NeverScrollableScrollPhysics(),
+              primary: false,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      children: [
+                        ListMenu(
+                          type: "makanan",
+                          title: "Makanan",
+                          data: widget.data,
+                        ),
+                        ListMenu(
+                          type: "minuman",
+                          title: "Minuman",
+                          data: widget.data,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Column(
-                  children: [
-                    ListMenu(
-                      type: "makanan",
-                      title: "Makanan",
-                      data: widget.data,
-                    ),
-                    const SizedBox(height: 30)
-                  ],
-                ),
-                Column(
-                  children: [
-                    ListMenu(
-                      type: "minuman",
-                      title: "Minuman",
-                      data: widget.data,
-                    ),
-                    const SizedBox(height: 30)
-                  ],
-                ),
-              ],
+                  ListMenu(
+                    key: const Key("menu-2"),
+                    type: "makanan",
+                    title: "Makanan",
+                    data: widget.data,
+                  ),
+                  ListMenu(
+                    key: const Key("menu-3"),
+                    type: "minuman",
+                    title: "Minuman",
+                    data: widget.data,
+                  ),
+                ],
+              ),
             ),
           ),
+          const SizedBox(height: 70)
         ],
-      );
+      ),
+    );
   }
 }

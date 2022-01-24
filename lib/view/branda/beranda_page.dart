@@ -9,6 +9,7 @@ import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/view/branda/component/beranda_skeleton.dart';
 import 'package:java_code_app/view/branda/component/content_beranda.dart';
 import 'package:java_code_app/view/branda/component/search_screen.dart';
+import 'package:java_code_app/widget/appbar.dart';
 import 'package:java_code_app/widget/silver_appbar.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -49,8 +50,8 @@ class _BerandaPageState extends State<BerandaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: MainSilverAppBar(
-        title: SizedBox(
+      appBar: CostumeAppBar(
+        costumeTitle: SizedBox(
           height: 42.0,
           child: TextFormField(
             controller: _editingController,
@@ -95,37 +96,33 @@ class _BerandaPageState extends State<BerandaPage> {
               ),
             ),
           ),
-        ),
-        floating: true,
-        pinned: true,
-        body: SmartRefresher(
-          controller: _refreshController,
-          onRefresh: _onRefresh,
-          child: AnimatedBuilder(
-            animation: OrderProviders(),
-            builder: (_, snapshot) {
-              final provider = Provider.of<OrderProviders>(context);
-              final menuList = provider.listMenu;
-              final listPromo = provider.listPromo;
+        ), title: '',
+      ),
+      body: SmartRefresher(
+        controller: _refreshController,
+        onRefresh: _onRefresh,
+        child: AnimatedBuilder(
+          animation: OrderProviders(),
+          builder: (_, snapshot) {
+            final provider = Provider.of<OrderProviders>(context);
+            final menuList = provider.listMenu;
+            final listPromo = provider.listPromo;
 
-              if (menuList != null && !_loading) {
-                if (result.isEmpty) {
-                  return SingleChildScrollView(
-                    child: ContentBeranda(
-                      data: menuList,
-                      listPromo: listPromo,
-                    ),
-                  );
-                } else {
-                  return SearchScreen(
-                    result: result,
-                    data: menuList,
-                  );
-                }
+            if (menuList != null && !_loading) {
+              if (result.isEmpty) {
+                return ContentBeranda(
+                  data: menuList,
+                  listPromo: listPromo,
+                );
+              } else {
+                return SearchScreen(
+                  result: result,
+                  data: menuList,
+                );
               }
-              return const SingleChildScrollView(child: BerandaSkeleton());
-            },
-          ),
+            }
+            return const SingleChildScrollView(child: BerandaSkeleton());
+          },
         ),
       ),
     );
