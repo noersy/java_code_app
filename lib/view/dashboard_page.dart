@@ -20,7 +20,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  int _bottomNavBarSelectedIndex = 0;
+  int _bottomNavBarSelectedIndex = 0, _order = 0;
   final PageController _pageController = PageController();
 
   _onItemTapped(index) {
@@ -135,16 +135,21 @@ class _DashboardPageState extends State<DashboardPage> {
       floatingActionButton: AnimatedBuilder(
         animation: OrderProviders(),
         builder: (BuildContext context, Widget? child) {
-          final _order = Provider.of<OrderProviders>(context).checkOrder.length;
+          _order = Provider.of<OrderProviders>(context).checkOrder.length;
           if (_order > 0) {
-            return FloatingActionButton(
-              backgroundColor: ColorSty.primary,
-              onPressed: () {
-                Navigate.toChekOut(context);
-              },
-              child: const Padding(
-                padding: EdgeInsets.only(right: 3.0),
-                child: Icon(IconsCs.shopingbag),
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: _bottomNavBarSelectedIndex == 1 ? 40 : 0
+              ),
+              child: FloatingActionButton(
+                backgroundColor: ColorSty.primary,
+                onPressed: () {
+                  Navigate.toChekOut(context);
+                },
+                child: const Padding(
+                  padding: EdgeInsets.only(right: 3.0),
+                  child: Icon(IconsCs.shopingbag),
+                ),
               ),
             );
           } else {

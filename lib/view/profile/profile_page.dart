@@ -212,7 +212,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-  _sendKTP(_image) async{
+  _sendKTP(_image) async {
     if (_image != null) {
       _fileImage = await ImageCropper.cropImage(
           sourcePath: _image.path,
@@ -353,7 +353,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                 SizedBox(
                                   width: 280,
                                   child: TextButton(
-                                    onPressed: ()=> _pickImage(false),
+                                    onPressed: (){
+                                      if(_user?.status == 0) _pickImage(false);
+                                    },
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
@@ -510,7 +512,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         top: false,
                                         enable: false,
                                         title: 'Device Info',
-                                        suffix: _androidInfo?.device ?? "",
+                                        suffix: _androidInfo?.product ?? "",
                                       ),
                                       TileListProfile(
                                         enable: false,

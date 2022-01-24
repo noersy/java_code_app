@@ -1,5 +1,5 @@
-import 'dart:io'; //InternetAddress utility
 import 'dart:async'; //For StreamController/Stream
+import 'dart:io'; //InternetAddress utility
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +13,7 @@ import 'package:java_code_app/view/offline/offline_page.dart';
 class ConnectionStatus {
   //This creates the single instance by calling the `_internal` constructor specified below
   static final ConnectionStatus _singleton = ConnectionStatus._internal();
+
   ConnectionStatus._internal();
 
   //This is what's used to retrieve the instance through the app
@@ -21,12 +22,14 @@ class ConnectionStatus {
   //This tracks the current connection status
   static bool hasConnection = false;
   static int hasLock = 0;
+
   //This is how we'll allow subscribing to connection changes
   StreamController connectionChangeController = StreamController.broadcast();
 
   //flutter_connectivity
   static final Connectivity _connectivity = Connectivity();
   static GlobalKey<NavigatorState>? _navigatorKey;
+
   //Hook into flutter_connectivity's Stream to listen for changes
   //And check the connection status out of the gate
   void initialize(GlobalKey<NavigatorState> navigatorKey) {
@@ -34,7 +37,6 @@ class ConnectionStatus {
     _navigatorKey = navigatorKey;
     checkConnection();
   }
-
 
   Stream get connectionChange => connectionChangeController.stream;
 
@@ -50,42 +52,63 @@ class ConnectionStatus {
     checkConnection();
   }
 
+  static const _lost = "Koneksi anda terputus";
+  static const _cant = "Tidak bisa terhubung ke server";
+  static String title = 'Koneksi anda terputus';
+
   //The test to actually see if there is a connection
   Future<bool> checkConnection() async {
     bool previousConnection = hasConnection;
 
     try {
+      final resultHost = await InternetAddress.lookup(
+        host,
+      );
+
       final result = await InternetAddress.lookup(
         "google.com",
       );
 
+      if (resultHost.isEmpty && resultHost[0].rawAddress.isEmpty) {
+        title = _cant;
+      }
+
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         hasConnection = true;
-      }else {
+      } else {
         hasConnection = false;
+        title = _lost;
       }
-    } on SocketException catch(_) {
+    } on SocketException catch (_) {
       hasConnection = false;
     }
 
-    if(UserInstance.getInstance().user != null){
-      if(!hasConnection && _navigatorKey?.currentState != null && hasLock <= 0){
+    if (UserInstance.getInstance().user != null) {
+      if (!hasConnection &&
+          _navigatorKey?.currentState != null &&
+          hasLock <= 0) {
         hasLock++;
-        _navigatorKey!.currentState!.pushNamedAndRemoveUntil( '/dashboard', (_) => false);
-        _navigatorKey!.currentState!.pushReplacement(routeTransition(const OfflinePage()));
-      } else if(hasConnection && _navigatorKey?.currentState != null && hasLock >= 1){
+        _navigatorKey!.currentState!.pushNamedAndRemoveUntil('/dashboard', (_) => false);
+        _navigatorKey!.currentState!.pushReplacement(routeTransition(OfflinePage(title: title)));
+      } else if (hasConnection &&
+          _navigatorKey?.currentState != null &&
+          hasLock >= 1) {
         hasLock--;
-        _navigatorKey!.currentState!.pushNamedAndRemoveUntil( '/dashboard', (_) => false);
+        _navigatorKey!.currentState!.pushNamedAndRemoveUntil('/dashboard', (_) => false);
         _navigatorKey!.currentState!.pushReplacement(routeTransition(const DashboardPage()));
       }
-    }else{
-      if(!hasConnection && _navigatorKey?.currentState != null && hasLock <= 0){
+    } else {
+      if (!hasConnection &&
+          _navigatorKey?.currentState != null &&
+          hasLock <= 0) {
         hasLock++;
-        _navigatorKey!.currentState!.pushNamedAndRemoveUntil( '/', (_) => false);
-        _navigatorKey!.currentState!.pushReplacement(routeTransition(const OfflinePage()));
-      } else if(hasConnection && _navigatorKey?.currentState != null && hasLock >= 1){
+        _navigatorKey!.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
+        _navigatorKey!.currentState!.pushReplacement(routeTransition(OfflinePage(title: title)));
+      } else if (hasConnection &&
+          _navigatorKey?.currentState != null &&
+          hasLock >= 1) {
         hasLock--;
-        _navigatorKey!.currentState!.pushNamedAndRemoveUntil( '/', (_) => false);
+        _navigatorKey!.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
         _navigatorKey!.currentState!.pushReplacement(routeTransition(const LoginPage()));
       }
     }
