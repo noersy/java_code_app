@@ -29,7 +29,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
   static List<History> _data = [];
   static List<History> _orders = [];
   static int _status = 0;
-  static final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  static final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   static final DateTime _dateNow = DateTime.now();
   static DateTime? _dateStart;
   static DateTime? _dateEnd;
@@ -43,23 +44,25 @@ class _HistoryScreenState extends State<HistoryScreen> {
   bool _loading = false;
 
   Future<void> _onRefresh() async {
-    var _duration = const Duration(seconds:1);
+    var _duration = const Duration(seconds: 1);
     if (mounted) {
       setState(() => _loading = true);
 
       _orders = await Provider.of<OrderProviders>(context, listen: false)
-              .getHistoryList() ?? [];
+              .getHistoryList() ??
+          [];
 
       _data = _orders;
 
-      if(mounted) {
+      if (mounted) {
         Timer(_duration, () {
-        setState(() => _loading = false);
-        _refreshController.refreshCompleted();
-      });
+          setState(() => _loading = false);
+          _refreshController.refreshCompleted();
+        });
       }
     }
   }
+
   void _pickDateRange() async {
     final value = await showDialog(
       barrierColor: ColorSty.grey.withOpacity(0.2),
@@ -74,10 +77,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
       _dateEnd = val.endDate;
       _status = 0;
       _dropdownValue = "Semua Status";
-      _data = _orders.where(
-              (element) => (element.tanggal.compareTo(_dateStart!) >= 0
-                  && element.tanggal.compareTo(_dateEnd!) <= 0)
-      ).toList();
+      _data = _orders
+          .where((element) => (element.tanggal.compareTo(_dateStart!) >= 0 &&
+              element.tanggal.compareTo(_dateEnd!) <= 0))
+          .toList();
 
       _dateRange = dateFormat.format(val.startDate!) +
           " - " +
@@ -85,28 +88,30 @@ class _HistoryScreenState extends State<HistoryScreen> {
       setState(() {});
     }
   }
-  void _changeStatus(String? newValue) {
 
-    if(newValue == "Semua Status") {
+  void _changeStatus(String? newValue) {
+    if (newValue == "Semua Status") {
       _status = 0;
-    }else if(newValue == "Selesai"){
+    } else if (newValue == "Selesai") {
       _status = 3;
-    }else if(newValue == "Dibatalkan"){
+    } else if (newValue == "Dibatalkan") {
       _status = 4;
     }
 
-    if(_dateStart != null && _dateEnd !=null){
-      _data = _orders.where(
-              (element) => (element.tanggal.compareTo(_dateStart!) >= 0
-              && element.tanggal.compareTo(_dateEnd!) <= 0
-              && _status == 0 ? true : element.status == _status)
-      ).toList();
-    }else{
-      _data = _orders.where(
-              (element) => (_status == 0 ? true : element.status == _status)
-      ).toList();
+    if (_dateStart != null && _dateEnd != null) {
+      _data = _orders
+          .where((element) => (element.tanggal.compareTo(_dateStart!) >= 0 &&
+                  element.tanggal.compareTo(_dateEnd!) <= 0 &&
+                  _status == 0
+              ? true
+              : element.status == _status))
+          .toList();
+    } else {
+      _data = _orders
+          .where((element) => (_status == 0 ? true : element.status == _status))
+          .toList();
     }
-
+    _setStatus();
     setState(() => _dropdownValue = newValue!);
   }
 
@@ -114,6 +119,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
   void initState() {
     _onRefresh();
     super.initState();
+  }
+
+  bool _openStatus = false;
+
+  _setStatus() {
+    setState(() => _openStatus = !_openStatus);
   }
 
   @override
@@ -129,43 +140,149 @@ class _HistoryScreenState extends State<HistoryScreen> {
               vertical: SpaceDims.sp14,
             ),
             child: _orders.isNotEmpty
-                ? Column(
+                ? Stack(
+                    alignment: Alignment.topCenter,
                     children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 50),
+                        child: Column(
+                          children: [
+                            if (_loading)
+                              const SkeletonOrderCard()
+                            else
+                              Column(
+                                children: [
+                                  for (final item in _data)
+                                    OrderHistoryCard(
+                                      onPressed: () {},
+                                      data: item,
+                                    ),
+                                  const SizedBox(height: 10.0)
+                                ],
+                              ),
+                            const SizedBox(height: SpaceDims.sp8),
+                          ],
+                        ),
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.only(
-                              right: SpaceDims.sp8,
-                              left: SpaceDims.sp12,
-                              bottom: SpaceDims.sp4,
-                              top: SpaceDims.sp4,
-                            ),
-                            width: 170.0,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: ColorSty.grey60,
-                              border: Border.all(color: ColorSty.primary),
-                              borderRadius: BorderRadius.circular(30.0),
-                            ),
-                            child: DropdownButton<String>(
-                              isDense: true,
-                              value: _dropdownValue,
+                          SizedBox(
+                            height: 160,
+                            child: Stack(
                               alignment: Alignment.topCenter,
-                              underline: const SizedBox.shrink(),
-                              borderRadius: BorderRadius.circular(30.0),
-                              icon: const Icon(Icons.arrow_drop_down),
-                              style: TypoSty.caption2.copyWith(
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w600,
-                                  color: ColorSty.black),
-                              onChanged: _changeStatus,
-                              items: [
-                                for (String item in _item)
-                                  DropdownMenuItem<String>(
-                                    value: item,
-                                    child: Text(item),
+                              children: [
+                                if(_openStatus)
+                                Positioned(
+                                  top: 25,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: 123,
+                                    width: 170,
+                                    padding: const EdgeInsets.only(
+                                      top: SpaceDims.sp12,
+                                      left: SpaceDims.sp8,
+                                      right: SpaceDims.sp8,
+                                    ),
+                                    decoration: const BoxDecoration(
+                                        color: ColorSty.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            blurRadius: 1,
+                                            spreadRadius: 0.2,
+                                            offset: Offset(0, 0),
+                                            color: ColorSty.grey,
+                                          )
+                                        ],
+                                        borderRadius: BorderRadius.only(
+                                          bottomRight: Radius.circular(20.0),
+                                          bottomLeft: Radius.circular(20.0),
+                                        )),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(height: SpaceDims.sp16),
+                                        GestureDetector(
+                                          onTap: ()=> _changeStatus("Semua Status"),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
+                                            child: Text("Semua Status", style: TypoSty.caption.copyWith(
+                                              fontSize: 13.0,
+                                              color: _status == 0 ? ColorSty.primary : ColorSty.black,
+                                              fontWeight: _status == 0 ? FontWeight.bold : FontWeight.w600,
+                                            ),),
+                                          ),
+                                        ),
+                                        const Divider(thickness: 1.5),
+                                        GestureDetector(
+                                          onTap: ()=> _changeStatus("Selesai"),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
+                                            child: Text("Selesai", style: TypoSty.caption.copyWith(
+                                              fontSize: 13.0,
+                                              color: _status == 3 ? ColorSty.primary : ColorSty.black,
+                                              fontWeight: _status == 3 ? FontWeight.bold : FontWeight.w600,
+                                            ),),
+                                          ),
+                                        ),
+                                        const Divider(thickness: 1.5),
+                                        GestureDetector(
+                                          onTap: ()=> _changeStatus("Dibatalkan"),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
+                                            child: Text(
+                                              "Dibatalkan", style: TypoSty.caption.copyWith(
+                                              fontSize: 13.0,
+                                              color: _status == 4 ? ColorSty.primary : ColorSty.black,
+                                              fontWeight: _status == 4 ? FontWeight.bold : FontWeight.w600,
+                                            ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
+                                ),
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: ColorSty.grey60,
+                                    minimumSize: const Size(0, 0),
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: SpaceDims.sp8 + 0.5,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      side: const BorderSide(
+                                        color: ColorSty.primary,
+                                      ),
+                                      borderRadius: BorderRadius.circular(30.0),
+                                    ),
+                                  ),
+                                  onPressed: _setStatus,
+                                  child: SizedBox(
+                                    width: 170.0,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const SizedBox(width: SpaceDims.sp12),
+                                        Text(
+                                          _dropdownValue,
+                                          textAlign: TextAlign.center,
+                                          style: TypoSty.caption.copyWith(
+                                            fontSize: 13.0,
+                                            color: ColorSty.black60,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(width: SpaceDims.sp8),
+                                        const Icon(Icons.arrow_drop_down,
+                                            size: 18.0, color: ColorSty.black),
+                                        const SizedBox(width: SpaceDims.sp8),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -176,8 +293,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               padding: const EdgeInsets.symmetric(
                                   vertical: SpaceDims.sp8 + 0.5),
                               shape: RoundedRectangleBorder(
-                                side:
-                                    const BorderSide(color: ColorSty.primary),
+                                side: const BorderSide(color: ColorSty.primary),
                                 borderRadius: BorderRadius.circular(30.0),
                               ),
                             ),
@@ -204,20 +320,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           ),
                         ],
                       ),
-                      if (_loading)
-                        const SkeletonOrderCard()
-                      else
-                        Column(
-                          children: [
-                            for (final item in _data)
-                              OrderHistoryCard(
-                                onPressed: () {},
-                                data: item,
-                              ),
-                            const SizedBox(height: 10.0)
-                          ],
-                        ),
-                      const SizedBox(height: SpaceDims.sp8),
                     ],
                   )
                 : SizedBox(
@@ -235,15 +337,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               color: ColorSty.primary,
                             ),
                             const SizedBox(height: SpaceDims.sp22),
-                            Text("Mulai buat pesanan.",
-                                textAlign: TextAlign.center,
-                                style: TypoSty.title2,
+                            Text(
+                              "Mulai buat pesanan.",
+                              textAlign: TextAlign.center,
+                              style: TypoSty.title2,
                             ),
                             const SizedBox(height: SpaceDims.sp12),
                             Text(
-                                "Makanan yang kamu pesan\nakan muncul di sini agar\nkamu bisa menemukan\nmenu favoritmu lagi!.",
-                                textAlign: TextAlign.center,
-                                style: TypoSty.title2,
+                              "Makanan yang kamu pesan\nakan muncul di sini agar\nkamu bisa menemukan\nmenu favoritmu lagi!.",
+                              textAlign: TextAlign.center,
+                              style: TypoSty.title2,
                             ),
                           ],
                         )
@@ -277,7 +380,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           width: 120.0,
                           child: SkeletonText(height: 16.0),
                         )
-                      : Text("Rp ${oCcy.format(_data.map((e) => e.totalBayar).reduce((a, b) => a+b))}", style: TypoSty.titlePrimary),
+                      : Text(
+                          "Rp ${oCcy.format(_data.map((e) => e.totalBayar).reduce((a, b) => a + b))}",
+                          style: TypoSty.titlePrimary),
                 ],
               ),
             )
