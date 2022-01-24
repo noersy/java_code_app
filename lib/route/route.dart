@@ -17,12 +17,6 @@ import 'package:java_code_app/view/chekout/selection_vocher_page.dart';
 import 'package:java_code_app/widget/view_image.dart';
 
 class Navigate {
-
-  _checkInernet(context) async {
-    ConnectionStatus.getInstance().checkConnection();
-  }
-
-
   static void toFindLocation(context) => Navigator.of(context).pushReplacement(routeTransition(const FindLocationPage()));
   static void toDashboard(context) => Navigator.of(context).pushReplacement(routeTransition(const DashboardPage()));
   static void toPromoPage(context, {required String title, required String  police, int? discount, int? nominal}) => Navigator.of(context).push(routeTransition(PromoPage(title: title, police: police, discount: discount, nominal: nominal,)));
@@ -35,12 +29,12 @@ class Navigate {
   // static void toViewOrderKasir(context, {required Map<String, dynamic> dataOrders, bool? preparing}) => Navigator.of(context).push(routeTransition(OrderDetailPage(dataOrder: dataOrders, preparing: preparing)));
 
   //Costume route
-  static Future? toViewImage(context, {String? urlImage, File? file}) async => await Navigator.push(context, PageRouteBuilder(
+  static Future? toViewImage(context, {required String urlImage, File? file}) async => await Navigator.push(context, PageRouteBuilder(
       fullscreenDialog: true,
       opaque: false,
       barrierDismissible:true,
       pageBuilder: (BuildContext context, _, __) {
-        return ViewImage(urlImage: urlImage, file: file);
+        return ViewImage(urlImage: urlImage);
       }
   ));
 }

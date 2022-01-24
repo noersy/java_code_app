@@ -176,7 +176,7 @@ class _DetailMenuState extends State<DetailMenu> {
     );
   }
 
-  void _viewImage() => Navigate.toViewImage(context, urlImage: "urlImage");
+  void _viewImage() => Navigate.toViewImage(context, urlImage: _data?.foto ?? "");
 
   void _addCatatan() {
     setState(() => _catatan = _editingController.text);
