@@ -9,6 +9,10 @@ Widget imageOnLoad(BuildContext context, Widget child, ImageChunkEvent? stackTra
   if(stackTrace == null){
     return child;
   }
-  return Skeleton();
+  return Skeleton(
+    width: double.infinity,
+    height: double.infinity,
+    borderRadius: BorderRadius.circular(30.0),
+  );
 }
 

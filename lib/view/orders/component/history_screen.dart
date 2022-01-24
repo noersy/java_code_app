@@ -48,15 +48,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
       setState(() => _loading = true);
 
       _orders = await Provider.of<OrderProviders>(context, listen: false)
-              .getHistoryList() ??
-          [];
+              .getHistoryList() ?? [];
 
       _data = _orders;
 
-      Timer(_duration, () {
+      if(mounted) {
+        Timer(_duration, () {
         setState(() => _loading = false);
         _refreshController.refreshCompleted();
       });
+      }
     }
   }
   void _pickDateRange() async {
@@ -84,7 +85,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       setState(() {});
     }
   }
-  void _changeSatuts(String? newValue) {
+  void _changeStatus(String? newValue) {
 
     if(newValue == "Semua Status") {
       _status = 0;
@@ -158,7 +159,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.w600,
                                   color: ColorSty.black),
-                              onChanged: _changeSatuts,
+                              onChanged: _changeStatus,
                               items: [
                                 for (String item in _item)
                                   DropdownMenuItem<String>(

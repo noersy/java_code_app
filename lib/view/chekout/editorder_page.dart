@@ -142,6 +142,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
     );
   }
   void _showLevel(List<Level> _listLevel) async {
+    if(_listLevel.isEmpty) return;
     Level _value = _listLevel.first;
     _value = await showModalBottomSheet(
       isScrollControlled: true,

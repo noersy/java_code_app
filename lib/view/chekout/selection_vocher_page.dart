@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/models/listvoucher.dart';
 import 'package:java_code_app/providers/order_providers.dart';
@@ -204,16 +205,13 @@ class VoucherCard extends StatefulWidget {
 
 class _VoucherCardState extends State<VoucherCard> {
   bool _isSelected = false;
-  final DateFormat _format = DateFormat('dd/MM/yy');
   late final DateTime _start, _end;
 
   @override
   void initState() {
     _isSelected = widget.isChecked;
-    _start =
-        DateTime.fromMicrosecondsSinceEpoch(widget.voucher?.periodeMulai ?? 0 * 1000);
-    _end = DateTime.fromMicrosecondsSinceEpoch(
-        widget.voucher?.periodeSelesai ??0 * 1000);
+    _start = DateTime.fromMicrosecondsSinceEpoch(widget.voucher?.periodeMulai ?? 0 * 1000);
+    _end = DateTime.fromMicrosecondsSinceEpoch(widget.voucher?.periodeSelesai ??0 * 1000);
     super.initState();
   }
 
@@ -302,7 +300,7 @@ class _VoucherCardState extends State<VoucherCard> {
                                 color: ColorSty.black, fontSize: 12.0),
                           ),
                           Text(
-                            """(${_end.difference(_end).inDays} Month) ${_format.format(_start)} - ${_format.format(_end)} 
+                            """(${_end.difference(_end).inDays} Month) ${dateFormat.format(_start)} - ${dateFormat.format(_end)} 
                           """,
                             style: TypoSty.mini.copyWith(
                                 color: ColorSty.black60, fontSize: 9.0),
