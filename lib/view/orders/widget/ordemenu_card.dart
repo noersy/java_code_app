@@ -18,9 +18,7 @@ class OrderMenuCard extends StatelessWidget {
     required this.data,
   }) : super(key: key);
 
-
-
-  final  List<Color> _colors = [
+  final List<Color> _colors = [
     Colors.blueAccent,
     Colors.orange,
     Colors.green,
@@ -56,7 +54,9 @@ class OrderMenuCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: Image.network(
-                  data.menu.first.foto!,
+                  data.menu.isNotEmpty
+                      ? data.menu.firstWhere((e) => e.foto != null).foto ?? "http://"
+                      : "http://",
                   loadingBuilder: imageOnLoad,
                   errorBuilder: imageError,
                 )),
@@ -80,24 +80,24 @@ class OrderMenuCard extends StatelessWidget {
                               ),
                               const SizedBox(width: SpaceDims.sp4),
                               AnimatedBuilder(
-                                animation: LangProviders(),
-                                builder: (context, snapshot) {
-                                  final lang = context.watch<LangProviders>().lang;
-                                  final  List<String> _status = [
-                                    lang.pesanan.status,
-                                    lang.pesanan.status2,
-                                    lang.pesanan.statusB,
-                                    "",
-                                    "",
-                                    "",
-                                  ];
-                                  return Text(
-                                    _status[data.status],
-                                    style:
-                                    TypoSty.mini.copyWith(color: _colors[data.status]),
-                                  );
-                                }
-                              ),
+                                  animation: LangProviders(),
+                                  builder: (context, snapshot) {
+                                    final lang =
+                                        context.watch<LangProviders>().lang;
+                                    final List<String> _status = [
+                                      lang.pesanan.status,
+                                      lang.pesanan.status2,
+                                      lang.pesanan.statusB,
+                                      "",
+                                      "",
+                                      "",
+                                    ];
+                                    return Text(
+                                      _status[data.status],
+                                      style: TypoSty.mini.copyWith(
+                                          color: _colors[data.status]),
+                                    );
+                                  }),
                             ],
                           ),
                           Text(
@@ -111,12 +111,15 @@ class OrderMenuCard extends StatelessWidget {
                     RichText(
                       overflow: TextOverflow.ellipsis,
                       text: TextSpan(
-                          text: data.menu.first.nama,
+                          text: data.menu.isNotEmpty
+                              ? data.menu.first.nama
+                              : "",
                           style: TypoSty.title,
                           children: [
                             for (final i
-                            in List.generate(data.menu.length, (i) => i))
-                              if (i != 0) TextSpan(text: ", ${data.menu[i].nama}")
+                                in List.generate(data.menu.length, (i) => i))
+                              if (i != 0)
+                                TextSpan(text: ", ${data.menu[i].nama}")
                           ]),
                     ),
                     const SizedBox(height: SpaceDims.sp12),

@@ -71,7 +71,9 @@ class OrderHistoryCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: Image.network(
-                  "${data.menu.first.foto}",
+                  data.menu.isNotEmpty
+                      ? data.menu.first.foto ?? "http://"
+                      : "http://",
                   loadingBuilder: imageOnLoad,
                   errorBuilder: imageError,
                 ),
@@ -131,7 +133,9 @@ class OrderHistoryCard extends StatelessWidget {
                                 child: RichText(
                                   text: TextSpan(
                                       style: TypoSty.title,
-                                      text: data.menu.first.nama,
+                                      text: data.menu.isNotEmpty
+                                          ? data.menu.first.nama
+                                          : "",
                                       children: [
                                         for (final i in List.generate(
                                             data.menu.length, (index) => index))

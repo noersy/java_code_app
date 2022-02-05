@@ -54,12 +54,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
       _data = _orders;
 
-      if (mounted) {
         Timer(_duration, () {
-          setState(() => _loading = false);
+          if(mounted) setState(() => _loading = false);
           _refreshController.refreshCompleted();
         });
-      }
     }
   }
 
