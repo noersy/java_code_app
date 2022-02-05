@@ -2,7 +2,6 @@
 //
 //     final listVoucher = listVoucherFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 ListVoucher listVoucherFromJson(String str) => ListVoucher.fromJson(json.decode(str));

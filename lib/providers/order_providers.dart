@@ -13,8 +13,12 @@ import 'package:java_code_app/models/menulist.dart';
 import 'package:java_code_app/models/orderdetail.dart' as detail;
 import 'package:java_code_app/singletons/random_string.dart';
 import 'package:java_code_app/singletons/user_instance.dart';
+import 'package:logging/logging.dart' as logging;
 
 class OrderProviders extends ChangeNotifier {
+  static final _log = logging.Logger('OrderProvider');
+  static const headers = {"Content-Type": "application/json", "token": "m_app"};
+
   // static int _orderInProgress = 0;
   // static int _checkOrder = 0;
 
@@ -34,8 +38,6 @@ class OrderProviders extends ChangeNotifier {
   List<Promo> get listPromo => _listPromo;
   List<Order> get listOrders => _orders;
 
-  // static final _connectionStatus = ConnectionStatus.getInstance();
-
   clear(){
     _checkOrder = {};
     _orderInProgress = [];
@@ -44,6 +46,8 @@ class OrderProviders extends ChangeNotifier {
     _listDiscount = [];
     _listPromo = [];
     _orders = [];
+
+    _log.fine("clear all orders");
     notifyListeners();
   }
 
@@ -54,7 +58,7 @@ class OrderProviders extends ChangeNotifier {
     Level? level,
     List<Level>? topping,
   }) async {
-    _checkOrder.addAll({
+    final item = {
       "${data["id"]}": {
         "id": data["id"],
         "jenis": data["jenis"],
@@ -67,12 +71,15 @@ class OrderProviders extends ChangeNotifier {
         "catatan": catatan,
         "countOrder": jumlahOrder,
       }
-    });
+    };
+    _checkOrder.addAll(item);
+    _log.fine("add order: ${data["name"]}");
     notifyListeners();
   }
 
   deleteOrder({required String id}) async {
-    _checkOrder.remove(id);
+    final data = _checkOrder.remove(id);
+    _log.fine("delete: ${data["name"]}");
     notifyListeners();
   }
 
@@ -83,7 +90,7 @@ class OrderProviders extends ChangeNotifier {
     Level? level,
     List<Level>? topping,
   }) async {
-    _checkOrder.update(
+    final data = _checkOrder.update(
       id,
       (value) => {
         "id": value["id"],
@@ -98,6 +105,8 @@ class OrderProviders extends ChangeNotifier {
         "countOrder": jumlahOrder,
       },
     );
+
+    _log.fine("Update order: ${data[id]["name"]}");
     notifyListeners();
   }
 
@@ -110,22 +119,21 @@ class OrderProviders extends ChangeNotifier {
       "voucher": voucher ?? {},
     });
 
-    // print(_orderInProgress);
     _checkOrder = {};
+    _log.fine("Submit order");
     notifyListeners();
   }
 
   Future<MenuList?> getMenuList() async {
     try {
       final _api = Uri.https(host, "$sub/api/menu/all");
-      final headers = {"token": "m_app"};
 
+      _log.fine("Tray get all menu.");
       final response = await https.get(_api, headers: headers);
 
-      // print(response.body);
-
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
         _menuList = menuListFromJson(response.body);
+        if(_menuList != null) _log.fine("Success get all menu");
         notifyListeners();
         return _menuList;
       }
@@ -139,18 +147,17 @@ class OrderProviders extends ChangeNotifier {
     try {
       final _api = Uri.https(host, "$sub/api/menu/detail/$id");
 
-      final headers = {"token": "m_app"};
-
+      _log.fine("Try to get menu detail");
       final response = await https.get(_api, headers: headers);
 
-      // print(response.body);
-
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
+        _log.fine("Success get detail menu");
         return menuDetailFromJson(response.body);
       }
       return null;
-    } catch (e) {
-      print(e);
+    }  catch (e, r) {
+      _log.warning(e);
+      _log.warning(r);
       return null;
     }
   }
@@ -161,19 +168,19 @@ class OrderProviders extends ChangeNotifier {
       if(user == null) return false;
       final _api = Uri.https(host, "$sub/api/voucher/user/${user.data.idUser}");
 
-      final headers = {"token": "m_app"};
-
+      _log.fine("Try to get list voucher.");
       final response = await https.get(_api, headers: headers);
 
-      // print(response.body);
-
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
         _listVoucher = listVoucherFromJson(response.body).data;
+        _log.fine("Seccess get list voucher");
         notifyListeners();
         return true;
       }
       return false;
-    } catch (e) {
+    } catch (e, r) {
+      _log.warning(e);
+      _log.warning(r);
       return false;
     }
   }
@@ -184,19 +191,20 @@ class OrderProviders extends ChangeNotifier {
 
     try {
       final _api = Uri.https(host, "$sub/api/diskon/user/${user.data.idUser}");
-      final headers = {"token": "m_app"};
 
+      _log.fine("Try to get list discount");
       final response = await https.get(_api, headers: headers);
 
-      // print(response.body);
-
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
         _listDiscount = listDiscountFromJson(response.body).data;
+        _log.fine("Success get list discount");
         notifyListeners();
         return true;
       }
       return false;
-    } catch (e) {
+    } catch (e, r) {
+      _log.warning(e);
+      _log.warning(r);
       return false;
     }
   }
@@ -208,23 +216,24 @@ class OrderProviders extends ChangeNotifier {
     try {
       final _api = Uri.https(host, "$sub/api/promo/user/${user.data.idUser}");
 
-      final headers = {"token": "m_app"};
-
+      _log.fine("Try to get list promo");
       final response = await https.get(_api, headers: headers);
 
-      // print(response.body);
-
       if(response.statusCode == 204){
+        _log.info("Promo is empty");
         _listPromo = [];
       }
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
         _listPromo = listPromoFromJson(response.body).data;
+        _log.fine("Success get list promo");
         notifyListeners();
         return true;
       }
       return false;
-    } catch (e) {
+    } catch (e, r) {
+      _log.warning(e);
+      _log.warning(r);
       return false;
     }
   }
@@ -235,21 +244,25 @@ class OrderProviders extends ChangeNotifier {
     try {
       final _api = Uri.https(host, "$sub/api/order/proses/${user.data.idUser}");
 
-      final headers = {"token": "m_app"};
-
+      _log.fine("Try to get order in progress");
       final response = await https.get(_api, headers: headers);
 
-      if(response.statusCode  == 204){
+      if(response.statusCode == 204 || json.decode(response.body)["status_code"] == 204){
+        _log.info("Order is empty");
         _orders = [];
       }
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
         _orders = listOrderFromJson(response.body).data;
+        if(_orders.isEmpty) _log.info("Failed get order in progress.");
+        _log.fine("Success get order in progress.");
         notifyListeners();
         return true;
       }
       return false;
-    } catch (e) {
+    } catch (e, r) {
+      _log.warning(e);
+      _log.warning(r);
       return false;
     }
   }
@@ -258,15 +271,17 @@ class OrderProviders extends ChangeNotifier {
     try {
       final _api = Uri.https(host, "$sub/api/order/detail/$id");
 
-      final headers = {"token": "m_app"};
-
+      _log.fine("Tray to get detail order");
       final response = await https.get(_api, headers: headers);
 
-      if (response.statusCode == 200) {
+
+      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
+        _log.fine("Success get detail order");
         return detail.orderDetailFromJson(response.body);
       }
-    } catch (e) {
-      // return null;
+    } catch (e, r) {
+      _log.warning(e);
+      _log.warning(r);
     }
     return null;
   }
@@ -280,21 +295,24 @@ class OrderProviders extends ChangeNotifier {
     try {
       final _api = Uri.https(host, "$sub/api/order/history/${user.data.idUser}");
 
-      final headers = {"token": "m_app"};
-
+      _log.fine("Try to get list history of order");
       final response = await https.get(_api, headers: headers);
 
 
       if(response.statusCode  == 204){
+        _log.info("History if empty");
         return [];
       }
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
+        _log.fine("Success get list history of order");
         return listHistoryFromJson(response.body).data;
       }
-    } catch (e) {
-      // return null;
+    } catch (e, r) {
+      _log.warning(e);
+      _log.warning(r);
     }
+    return null;
     return null;
   }
 
@@ -302,17 +320,18 @@ class OrderProviders extends ChangeNotifier {
     try {
       final _api = Uri.https(host, "$sub/api/order/batal/$idOrder");
 
-      final headers = {"token": "m_app"};
-
+      _log.fine("Tray to cancel a order");
       final response = await https.post(_api, headers: headers);
 
-      // print(response.body);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
+        _log.fine("Success cancel a order");
         return true;
       }
-    } catch (e) {
-      // return null;
+      _log.info("Failed to cancel a order");
+    } catch (e, r) {
+      _log.warning(e);
+      _log.warning(r);
     }
     return false;
   }
@@ -332,11 +351,6 @@ class OrderProviders extends ChangeNotifier {
 
       final _api = Uri.https(host, "$sub/api/order/add");
 
-      final headers = {
-        "Content-Type" : "application/json",
-        "token": "m_app"
-      };
-
       final body = {
         "order": {
           "id_user": user.data.idUser,
@@ -350,6 +364,7 @@ class OrderProviders extends ChangeNotifier {
         "menu": menu
       };
 
+      _log.fine("Tray to checkout order");
       final response = await https.post(
           _api,
           headers: headers,
@@ -357,16 +372,21 @@ class OrderProviders extends ChangeNotifier {
           encoding: Encoding.getByName("utf-8")
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
         submitOrder();
         getListOrder();
 
+        _log.fine("Checkout success");
         notifyListeners();
         return true;
       }
+
+      _log.warning("Checkout failed");
+      _log.info(response.body);
       return false;
-    } catch (e) {
-      print(e);
+    } catch (e, r) {
+      _log.warning(e);
+      _log.warning(r);
       return false;
     }
   }

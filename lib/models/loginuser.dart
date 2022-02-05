@@ -53,21 +53,36 @@ class User {
     required this.idUser,
     required this.email,
     required this.nama,
+    required this.pin,
+    required this.foto,
     required this.mRolesId,
+    required this.isGoogle,
+    required this.isCustomer,
+    required this.roles,
     required this.akses,
   });
 
   final int idUser;
   final String email;
   final String nama;
+  final String pin;
+  final String foto;
   final int mRolesId;
+  final int isGoogle;
+  final int isCustomer;
+  final String roles;
   final Akses akses;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
     idUser: json["id_user"],
     email: json["email"],
     nama: json["nama"],
+    pin: json["pin"],
+    foto: json["foto"],
     mRolesId: json["m_roles_id"],
+    isGoogle: json["is_google"],
+    isCustomer: json["is_customer"],
+    roles: json["roles"],
     akses: Akses.fromJson(json["akses"]),
   );
 
@@ -75,47 +90,60 @@ class User {
     "id_user": idUser,
     "email": email,
     "nama": nama,
+    "pin": pin,
+    "foto": foto,
     "m_roles_id": mRolesId,
+    "is_google": isGoogle,
+    "is_customer": isCustomer,
+    "roles": roles,
     "akses": akses.toJson(),
   };
 }
 
 class Akses {
   Akses({
-    required this.masterRoles,
-    required this.masterUser,
-    required this.masterAkses,
-    required this.penggunaAkses,
-    required this.penggunaUser,
-    required this.appTransaksi1,
-    required this.laporanLaporan1,
+    required this.authUser,
+    required this.authAkses,
+    required this.settingMenu,
+    required this.settingCustomer,
+    required this.settingPromo,
+    required this.settingDiskon,
+    required this.settingVoucher,
+    required this.laporanMenu,
+    required this.laporanCustomer,
   });
 
-  final bool masterRoles;
-  final bool masterUser;
-  final bool masterAkses;
-  final bool penggunaAkses;
-  final bool penggunaUser;
-  final bool appTransaksi1;
-  final bool laporanLaporan1;
+  final bool authUser;
+  final bool authAkses;
+  final bool settingMenu;
+  final bool settingCustomer;
+  final bool settingPromo;
+  final bool settingDiskon;
+  final bool settingVoucher;
+  final bool laporanMenu;
+  final bool laporanCustomer;
 
   factory Akses.fromJson(Map<String, dynamic> json) => Akses(
-    masterRoles: json["master_roles"],
-    masterUser: json["master_user"],
-    masterAkses: json["master_akses"],
-    penggunaAkses: json["pengguna_akses"],
-    penggunaUser: json["pengguna_user"],
-    appTransaksi1: json["app_transaksi1"],
-    laporanLaporan1: json["laporan_laporan1"],
+    authUser: json["auth_user"],
+    authAkses: json["auth_akses"],
+    settingMenu: json["setting_menu"],
+    settingCustomer: json["setting_customer"],
+    settingPromo: json["setting_promo"],
+    settingDiskon: json["setting_diskon"],
+    settingVoucher: json["setting_voucher"],
+    laporanMenu: json["laporan_menu"],
+    laporanCustomer: json["laporan_customer"],
   );
 
   Map<String, dynamic> toJson() => {
-    "master_roles": masterRoles,
-    "master_user": masterUser,
-    "master_akses": masterAkses,
-    "pengguna_akses": penggunaAkses,
-    "pengguna_user": penggunaUser,
-    "app_transaksi1": appTransaksi1,
-    "laporan_laporan1": laporanLaporan1,
+    "auth_user": authUser,
+    "auth_akses": authAkses,
+    "setting_menu": settingMenu,
+    "setting_customer": settingCustomer,
+    "setting_promo": settingPromo,
+    "setting_diskon": settingDiskon,
+    "setting_voucher": settingVoucher,
+    "laporan_menu": laporanMenu,
+    "laporan_customer": laporanCustomer,
   };
 }

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "867038405710",
+    "project_id": "javacodeapp-42f75",
+    "storage_bucket": "javacodeapp-42f75.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:867038405710:android:000d3872ebedfb43ca0f1f",
+        "android_client_info": {
+          "package_name": "com.venturo.javacode.java_code_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "867038405710-btvpbh7vnobl42qhbr8qv9mnq6hfp5ug.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.venturo.javacode.java_code_app",
+            "certificate_hash": "d4cfb494c7b5ca0a769d8cd993d17814026428b6"
+          }
+        },
+        {
+          "client_id": "867038405710-q7v6acatstok89etqfttdbd648spo0cn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUXAgNYWZ8Q0ygDOejOIPtk7VF3vUWPn4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "867038405710-q7v6acatstok89etqfttdbd648spo0cn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

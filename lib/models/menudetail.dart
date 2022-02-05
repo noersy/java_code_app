@@ -2,7 +2,6 @@
 //
 //     final menuDetail = menuDetailFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 MenuDetail menuDetailFromJson(String str) => MenuDetail.fromJson(json.decode(str));

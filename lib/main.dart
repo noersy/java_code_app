@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/providers/auth_providers.dart';
@@ -12,9 +15,29 @@ import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/view/auth/login_page.dart';
 import 'package:java_code_app/view/dashboard_page.dart';
 import 'package:provider/provider.dart';
+import 'package:logging/logging.dart';
 
 void main() {
-  runApp(MyApp());
+  Logger.root.level = Level.OFF;
+  if (kDebugMode) Logger.root.level = Level.ALL;
+  final _log = Logger('Main');
+
+  Logger.root.onRecord.listen((record) {
+    if (kDebugMode) {
+      print('${record.level.name}: ${record.time}: ${record.message}');
+    }
+  });
+
+  runZonedGuarded(() {
+    runApp(MyApp());
+  }, (error, stackTrace) {
+    _log.warning(error);
+    _log.warning(stackTrace);
+  }, zoneSpecification: ZoneSpecification(
+      print: (Zone self, ZoneDelegate parent, Zone zone, String message) {
+    _log.info(message);
+    // parent.print(zone, "a message");
+  }));
 }
 
 class MyApp extends StatelessWidget {

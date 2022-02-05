@@ -72,7 +72,6 @@ class PushNotification {
       ),
     );
 
-    print('token: ${await FirebaseMessaging.instance.getToken()}');
   }
 
   static int _once = 0;

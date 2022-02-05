@@ -8,10 +8,16 @@ import 'package:java_code_app/models/loginuser.dart';
 import 'package:java_code_app/models/userdetail.dart';
 import 'package:java_code_app/singletons/shared_preferences.dart';
 import 'package:java_code_app/singletons/user_instance.dart';
+import 'package:logging/logging.dart';
 
 class AuthProviders extends ChangeNotifier {
   static LoginUser? _loginUser;
   static UserDetail? _user;
+  static const _headers = {
+    "Content-Type": "application/json",
+    "token": "m_app"
+  };
+  static final _log = Logger('AuthProvider');
 
   DUser? user() {
     if (_user != null) return _user!.data;
@@ -33,68 +39,79 @@ class AuthProviders extends ChangeNotifier {
         "is_google": isGoogle! ? "is_google" : "",
       };
 
-      final response = await http.post(_api, body: body);
+      _log.fine("Tray to login.");
+      final response = await http.post(
+        _api,
+        headers: _headers,
+        body: json.encode(body),
+      );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
         _loginUser = loginUserFromJson(response.body);
-        Preferences.getInstance().setIntValue(KeyPrefens.loginID, _loginUser!.data.user.idUser);
+        if (_loginUser == null) _log.info("Login failed");
+        if (_loginUser != null) _log.fine("Login successes");
+
+        Preferences.getInstance()
+            .setIntValue(KeyPrefens.loginID, _loginUser!.data.user.idUser);
         getUser(id: _loginUser!.data.user.idUser);
         notifyListeners();
         return true;
       }
-    } catch (e) {
-      // print(e);
-      // return false;
+    } catch (e, r) {
+      _log.warning(e);
+      _log.warning(r);
     }
-
     return false;
   }
 
   Future<bool> getUser({id}) async {
     final user = UserInstance.getInstance().user;
-    if (user == null && id == null) return false;
+    if (user == null && id == null) return false; //@todo make new exception
+
     final _id = id ?? user!.data.idUser;
     final Uri _api = Uri.https(host, "$sub/api/user/detail/$_id");
 
     try {
-      final headers = {"token": "m_app"};
+      _log.fine("Tray to get data user.");
+      final response = await http.get(_api, headers: _headers);
 
-      final response = await http.get(_api, headers: headers);
-
-      // print(response.body);
-
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
         _user = userDetailFromJson(response.body);
+        if (_user == null) _log.info("Failed get data user.");
+        if (_user != null) _log.fine("Success get data user.");
         UserInstance.getInstance().initialize(user: _user!);
         notifyListeners();
         return true;
       }
-    } catch (e) {
-      // print(e);
-      // return false;
+    } catch (e, r) {
+      _log.warning(e);
+      _log.warning(r);
     }
 
     return false;
   }
 
-
   Future<bool> update({id, key, value}) async {
     final user = UserInstance.getInstance().user;
     if (user == null) return false;
+
     final _id = user.data.idUser;
     final Uri _api = Uri.https(host, "$sub/api/user/update/$_id");
 
     try {
-      final headers = {"token": "m_app"};
-      final body = {"$key" : "$value"};
-      final response = await http.post(_api, headers: headers, body: body);
+      final body = {"$key": "$value"};
 
-      if (response.statusCode == 200) {
+      _log.fine("Tray update user profile.");
+      final response = await http.post(_api, headers: _headers, body: body);
+
+      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
+        _log.fine("Success update $key user.");
         getUser();
         return true;
       }
-    } catch (e) {
-      // return false;
+    } catch (e, r) {
+      _log.warning(e);
+      _log.warning(r);
     }
     return false;
   }
@@ -102,24 +119,26 @@ class AuthProviders extends ChangeNotifier {
   Future<bool> uploadProfileImage(String base64) async {
     final user = UserInstance.getInstance().user;
 
-    if(user == null) return false;
-    final Uri _api = Uri.https(host, "$sub/api/user/profil/${user.data.idUser}");
+    if (user == null) return false;
+
+    final Uri _api = Uri.https(
+      host,
+      "$sub/api/user/profil/${user.data.idUser}",
+    );
 
     try {
-      final headers = {
-        "Content-Type" : "application/json",
-        "token": "m_app",
-      };
-      final body = {"image" : base64};
+      final body = {"image": base64};
+
+      _log.fine("Try update profile image.");
       final response = await http.post(
-          _api,
-          headers: headers,
-          body: jsonEncode(body),
+        _api,
+        headers: _headers,
+        body: jsonEncode(body),
       );
 
-      print(response.body);
-
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
+        if(_user == null) _log.info("Failed Upload profile image.");
+        if(_user != null) _log.fine("Susses Upload profile image.");
         getUser();
         return true;
       }
@@ -132,29 +151,27 @@ class AuthProviders extends ChangeNotifier {
   Future<bool> uploadKtp(String base64) async {
     final user = UserInstance.getInstance().user;
 
-    if(user == null) return false;
+    if (user == null) return false;
     final Uri _api = Uri.https(host, "$sub/api/user/ktp/${user.data.idUser}");
 
     try {
-      final headers = {
-        "Content-Type" : "application/json",
-        "token": "m_app",
-      };
-      final body = {"image" : base64};
+      final body = {"image": base64};
+
+      _log.fine("Tray upload ktp");
       final response = await http.post(
-          _api,
-          headers: headers,
-          body: jsonEncode(body),
+        _api,
+        headers: _headers,
+        body: jsonEncode(body),
       );
 
-      print(response.body);
-
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
+        _log.fine("Successes upload ktp");
         getUser();
         return true;
       }
-    } catch (e) {
-      // return false;
+    } catch (e, r) {
+      _log.warning(e);
+      _log.warning(r);
     }
     return false;
   }

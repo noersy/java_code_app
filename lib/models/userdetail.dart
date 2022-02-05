@@ -2,7 +2,6 @@
 //
 //     final userDetail = userDetailFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 UserDetail userDetailFromJson(String str) => UserDetail.fromJson(json.decode(str));

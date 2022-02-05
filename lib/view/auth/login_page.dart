@@ -26,6 +26,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
+
   // final ConnectionStatus _connectionStatus = ConnectionStatus.getInstance();
   final Preferences _preferences = Preferences.getInstance();
   final _duration = const Duration(seconds: 1);
@@ -35,7 +36,12 @@ class _LoginPageState extends State<LoginPage> {
   _login() async {
     setState(() => _loading = true);
 
-    bool isLogin = await Provider.of<AuthProviders>(context, listen: false).login(_controllerEmail.text, _controllerPassword.text, isGoogle: false);
+    bool isLogin =
+        await Provider.of<AuthProviders>(context, listen: false).login(
+      _controllerEmail.text,
+      _controllerPassword.text,
+      isGoogle: false,
+    );
 
     if (isLogin) {
       await _preferences.setBoolValue(KeyPrefens.login, true);
@@ -49,14 +55,15 @@ class _LoginPageState extends State<LoginPage> {
 
     setState(() => _loading = false);
   }
+
   _loginWithGoogle() async {
     setState(() => _loading = true);
     try {
-
       final user = await GoogleLogin.getInstance().login();
 
       if (user != null) {
-        bool isLogin = await Provider.of<AuthProviders>(context, listen: false).login(
+        bool isLogin =
+            await Provider.of<AuthProviders>(context, listen: false).login(
           user.email,
           _controllerPassword.text,
           isGoogle: true,
@@ -78,9 +85,11 @@ class _LoginPageState extends State<LoginPage> {
     }
     setState(() => _loading = false);
   }
+
   _checkInternet() async {
     // final _isConnected = await _connectionStatus.checkConnection();
   }
+
   _checkPrefens() async {
     bool _isAlreadyLogin = await _preferences.getBoolValue(KeyPrefens.login);
     if (_isAlreadyLogin) {
@@ -88,11 +97,11 @@ class _LoginPageState extends State<LoginPage> {
       final id = await _preferences.getIntValue(KeyPrefens.loginID);
       await Provider.of<AuthProviders>(context, listen: false).getUser(id: id);
 
-      if(mounted) {
+      if (mounted) {
         Timer(_duration, () {
-        Navigate.toFindLocation(context);
-        setState(() => _loading = false);
-      });
+          Navigate.toFindLocation(context);
+          setState(() => _loading = false);
+        });
       }
     }
   }
