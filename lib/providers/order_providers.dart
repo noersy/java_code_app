@@ -106,7 +106,7 @@ class OrderProviders extends ChangeNotifier {
       },
     );
 
-    _log.fine("Update order: ${data[id]["name"]}");
+    _log.fine("Update order: ${data["name"]}");
     notifyListeners();
   }
 
@@ -137,6 +137,9 @@ class OrderProviders extends ChangeNotifier {
         notifyListeners();
         return _menuList;
       }
+
+      _log.info("Fail to get all menu");
+      _log.info(response.body);
       return null;
     } catch (e) {
       return null;
@@ -154,6 +157,9 @@ class OrderProviders extends ChangeNotifier {
         _log.fine("Success get detail menu");
         return menuDetailFromJson(response.body);
       }
+
+      _log.info("Fail to get menu detail");
+      _log.info(response.body);
       return null;
     }  catch (e, r) {
       _log.warning(e);
@@ -177,6 +183,9 @@ class OrderProviders extends ChangeNotifier {
         notifyListeners();
         return true;
       }
+
+      _log.info("Fail to get list voucher");
+      _log.info(response.body);
       return false;
     } catch (e, r) {
       _log.warning(e);
@@ -201,6 +210,9 @@ class OrderProviders extends ChangeNotifier {
         notifyListeners();
         return true;
       }
+
+      _log.info("Fail to get list discount");
+      _log.info(response.body);
       return false;
     } catch (e, r) {
       _log.warning(e);
@@ -230,6 +242,9 @@ class OrderProviders extends ChangeNotifier {
         notifyListeners();
         return true;
       }
+
+      _log.info("Fail to get get list promo");
+      _log.info(response.body);
       return false;
     } catch (e, r) {
       _log.warning(e);
@@ -259,6 +274,8 @@ class OrderProviders extends ChangeNotifier {
         notifyListeners();
         return true;
       }
+      _log.info("Fail to get order in progress");
+      _log.info(response.body);
       return false;
     } catch (e, r) {
       _log.warning(e);
@@ -279,6 +296,8 @@ class OrderProviders extends ChangeNotifier {
         _log.fine("Success get detail order");
         return detail.orderDetailFromJson(response.body);
       }
+      _log.info("Fail to get detail order");
+      _log.info(response.body);
     } catch (e, r) {
       _log.warning(e);
       _log.warning(r);
@@ -308,12 +327,12 @@ class OrderProviders extends ChangeNotifier {
         _log.fine("Success get list history of order");
         return listHistoryFromJson(response.body).data;
       }
+      _log.info("Fail to get liest history");
+      _log.info(response.body);
     } catch (e, r) {
       _log.warning(e);
       _log.warning(r);
     }
-    return null;
-    return null;
   }
 
   Future<bool> cancelOrder({required int idOrder}) async {
@@ -329,6 +348,7 @@ class OrderProviders extends ChangeNotifier {
         return true;
       }
       _log.info("Failed to cancel a order");
+      _log.info(response.body);
     } catch (e, r) {
       _log.warning(e);
       _log.warning(r);
