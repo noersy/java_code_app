@@ -87,7 +87,7 @@ class PushNotification {
   }
 
   void _messageOpen(RemoteMessage message) {
-    print(message.notification?.title);
+    // print(message.notification?.title);
   }
 
     //foreground fcm

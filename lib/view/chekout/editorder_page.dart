@@ -37,12 +37,14 @@ class _EditOrderPageState extends State<EditOrderPage> {
 
   int status = 0;
   int _jumlahOrder = 0;
+  late final num _harga;
+  num _hargaTotal = 0, _hargaLevel = 0, _hargaTopping = 0;
   List<Level> _listLevel = [];
   List<Level> _listTopping = [];
   final TextEditingController _editingController = TextEditingController();
   String _catatan = "";
 
-  Menu? _data;
+  Menu? _menu;
 
   bool _isLoading = true;
 
@@ -51,41 +53,56 @@ class _EditOrderPageState extends State<EditOrderPage> {
     if (mounted) setState(() => _isLoading = true);
 
     if (data != null) {
-      _data = data.data.menu;
+      _menu = data.data.menu;
+      _harga = _menu?.harga ?? 0;
+      _hargaTotal = _harga;
 
       if (data.data.topping?.isNotEmpty ?? false) {
         _selectedTopping = [data.data.topping!.first];
+        _hargaLevel = data.data.topping!.first.harga;
+        _hargaTotal = _harga + _hargaLevel + _hargaTopping;
       }
       if (data.data.level?.isNotEmpty ?? false) {
         _selectedLevel = data.data.level!.first;
+        _hargaTopping = data.data.level!.first.harga;
+        _hargaTotal = _harga + _hargaLevel + _hargaTopping;
       }
 
       _listLevel = data.data.level ?? [];
       _listTopping = data.data.topping ?? [];
 
-
+      ///Get if order already exist
       final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
 
-      if(orders.containsKey("${_data?.idMenu}")){
-        final dat = orders["${_data?.idMenu}"];
+      if (orders.containsKey("${_menu?.idMenu}")) {
+        final dat = orders["${_menu?.idMenu}"];
         _jumlahOrder = dat["countOrder"];
 
-        if(dat["level"] != null) {
-          final _level = data.data.level?.where((element) =>
-          "${element.idDetail}" == dat["level"]);
-          if(_level?.isNotEmpty ?? false) _selectedLevel = _level!.first;
+        if (dat["level"] != null) {
+          final _level = data.data.level
+              ?.where((element) => "${element.idDetail}" == dat["level"]);
+          if (_level?.isNotEmpty ?? false){
+            _selectedLevel = _level!.first;
+            _hargaLevel = _level.first.harga;
+            _hargaTotal = _harga + _hargaLevel + _hargaTopping;
+          }
         }
-        if(dat["topping"] != null) {
-          _selectedTopping = data.data.topping?.where((item) {
-            for(final e in dat["topping"]){
-              if(e == item.idDetail) return true;
+        if (dat["topping"] != null) {
+          final topping = data.data.topping?.where((item) {
+            for (final e in dat["topping"]) {
+              if (e == item.idDetail) return true;
             }
             return false;
-          }).toList() ?? _selectedTopping;
+          }).toList();
+
+          if(topping?.isNotEmpty ?? false){
+            _selectedTopping = topping!;
+            _hargaTopping = topping.map((e) => e.harga).reduce((e, a) => e+a);
+            _hargaTotal = _harga + _hargaLevel + _hargaTopping;
+          }
         }
 
-
-        if(dat["catatan"] != null) _catatan = dat["catatan"];
+        if (dat["catatan"] != null) _catatan = dat["catatan"];
       }
 
       _isLoading = false;
@@ -102,8 +119,8 @@ class _EditOrderPageState extends State<EditOrderPage> {
     super.initState();
   }
 
-  void _showTopping(List<Level>? _listTopping){
-    if(_listTopping?.isEmpty ?? false) return;
+  void _showTopping(List<Level>? _listTopping) {
+    if (_listTopping?.isEmpty ?? false) return;
     showModalBottomSheet(
       barrierColor: ColorSty.grey.withOpacity(0.2),
       elevation: 5,
@@ -123,19 +140,20 @@ class _EditOrderPageState extends State<EditOrderPage> {
               for (final item in _listTopping!)
                 LabelToppingSelection(
                   data: item,
-                  initial: _selectedTopping
-                      .where((e) => e == item)
-                      .isNotEmpty,
+                  initial: _selectedTopping.where((e) => e == item).isNotEmpty,
                   onSelection: (value) {
-                    if (_selectedTopping
-                        .where((e) => e == value)
-                        .isNotEmpty) {
-                      setState(() => _selectedTopping
-                          .remove(value));
+                    if (_selectedTopping.where((e) => e == value).isNotEmpty) {
+                      setState(() => _selectedTopping.remove(value));
                     } else {
-                      setState(() => _selectedTopping
-                          .add(value));
+                      setState(() => _selectedTopping.add(value));
                     }
+                    final _top = _selectedTopping.map((e) => e.harga);
+                    if(_top.isNotEmpty) {
+                      _hargaTopping = _top.reduce((e, a) => e+a);
+                    } else {
+                      _hargaTopping = 0;
+                    }
+                    _hargaTotal = _harga + _hargaLevel + _hargaTopping;
                   },
                 )
             ],
@@ -144,8 +162,9 @@ class _EditOrderPageState extends State<EditOrderPage> {
       ),
     );
   }
+
   void _showLevel(List<Level> _listLevel) async {
-    if(_listLevel.isEmpty) return;
+    if (_listLevel.isEmpty) return;
     Level _value = _listLevel.first;
     _value = await showModalBottomSheet(
       isScrollControlled: true,
@@ -165,6 +184,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
                         data: item,
                         isSelected: item == _selectedLevel,
                         onSelection: (Level value) {
+                          _hargaTotal = _harga + _hargaLevel + _hargaTopping;
                           setState(() => _selectedLevel = value);
                           Navigator.of(context).pop(value);
                         },
@@ -183,16 +203,12 @@ class _EditOrderPageState extends State<EditOrderPage> {
   void _editPesanan() {
     final data = widget.data;
 
-    data["level"] = _selectedLevel;
-    data["topping"] = _selectedTopping;
-    data["catatan"] = _catatan;
-
     if (_jumlahOrder <= 0) {
-      Provider.of<OrderProviders>(context, listen: false)
-          .deleteOrder(id: "${_data?.idMenu}");
+      Provider.of<OrderProviders>(context, listen: false).deleteOrder(id: "${_menu?.idMenu}");
     } else {
       Provider.of<OrderProviders>(context, listen: false).editOrder(
         id: data["id"],
+        hargaTotal: _hargaTotal,
         jumlahOrder: _jumlahOrder,
         level: _selectedLevel,
         catatan: _catatan,
@@ -202,6 +218,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
 
     Navigator.of(context).pop();
   }
+
   void _addCatatan() {
     setState(() => _catatan = _editingController.text);
     Navigator.pop(context);
@@ -219,15 +236,14 @@ class _EditOrderPageState extends State<EditOrderPage> {
         children: [
           const SizedBox(height: SpaceDims.sp24),
           GestureDetector(
-            onTap: () =>
-                Navigate.toViewImage(context, urlImage: "${_data?.foto}"),
+            onTap: () => Navigate.toViewImage(urlImage: "${_menu?.foto}"),
             child: SizedBox(
               width: 234.0,
               height: 182.4,
               child: Hero(
                   tag: 'image',
                   child: Image.network(
-                    _data?.foto ?? "",
+                    _menu?.foto ?? "",
                     loadingBuilder: imageOnLoad,
                     errorBuilder: imageError,
                   )),
@@ -262,9 +278,9 @@ class _EditOrderPageState extends State<EditOrderPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          if (_data != null)
+                          if (_menu != null)
                             Text(
-                              "${_data?.nama}",
+                              "${_menu?.nama}",
                               style: TypoSty.title.copyWith(
                                 color: ColorSty.primary,
                               ),
@@ -293,8 +309,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
                         height: 120,
                         child: _isLoading
                             ? const SkeletonText(height: 12.0)
-                            : Text(_data?.deskripsi ??
-                                "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
+                            : Text(_menu?.deskripsi ?? "none", textAlign: TextAlign.start),
                       ),
                     ),
                     Padding(
@@ -308,7 +323,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
                             icon: IconsCs.cash,
                             isLoading: _isLoading,
                             title: "Harga",
-                            prefix: "${_data?.harga}",
+                            prefix: "$_hargaTotal",
                             onPressed: () {},
                           ),
                           TileListDMenu(
@@ -334,7 +349,9 @@ class _EditOrderPageState extends State<EditOrderPage> {
                                       ? ""
                                       : _selectedTopping.first.keterangan,
                                   children: [
-                                    for (var i = 0; i < _selectedTopping.length; i++)
+                                    for (var i = 0;
+                                        i < _selectedTopping.length;
+                                        i++)
                                       if (i > 0)
                                         TextSpan(
                                           text:
@@ -445,5 +462,4 @@ class _EditOrderPageState extends State<EditOrderPage> {
       ),
     );
   }
-
 }

@@ -44,7 +44,7 @@ class _LabelLevelSelectionState extends State<LabelLevelSelection> {
         child: Row(
           children: [
             const SizedBox(width: SpaceDims.sp4),
-            Text("${widget.data.keterangan}"),
+            Text(widget.data.keterangan),
             const SizedBox(width: SpaceDims.sp4),
             if (widget.isSelected) const Icon(Icons.check, size: 18.0),
           ],

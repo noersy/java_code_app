@@ -55,6 +55,7 @@ class _OngoingScreenState extends State<OngoingScreen> with AutomaticKeepAliveCl
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SmartRefresher(
       onRefresh: _onRefresh,
       controller: _refreshController,

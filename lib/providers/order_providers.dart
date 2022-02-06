@@ -87,6 +87,7 @@ class OrderProviders extends ChangeNotifier {
     required String id,
     required int jumlahOrder,
     required String catatan,
+    num? hargaTotal,
     Level? level,
     List<Level>? topping,
   }) async {
@@ -96,7 +97,7 @@ class OrderProviders extends ChangeNotifier {
         "id": value["id"],
         "jenis": value["jenis"],
         "image": value["image"],
-        "harga": value["harga"],
+        "harga": hargaTotal ?? value["harga"],
         "amount": value["amount"],
         "name": value["name"],
         "level": level == null ? value["topping"] : "${level.idDetail}",
@@ -333,6 +334,7 @@ class OrderProviders extends ChangeNotifier {
       _log.warning(e);
       _log.warning(r);
     }
+    return null;
   }
 
   Future<bool> cancelOrder({required int idOrder}) async {

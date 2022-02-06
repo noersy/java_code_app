@@ -200,7 +200,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 title: lang.profile.br,
                 giveString: true,
                 onComplete: (value) {
-                  print(value);
                   if (value.runtimeType != String) return;
 
                   provider.update(key: "pin", value: "$value");

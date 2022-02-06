@@ -1,8 +1,8 @@
 
 import 'package:java_code_app/constans/key_prefens.dart';
-import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/models/userdetail.dart';
 import 'package:java_code_app/singletons/shared_preferences.dart';
+import 'package:logging/logging.dart' as logging;
 
 class UserInstance {
   //This creates the single instance by calling the `_internal` constructor specified below
@@ -11,7 +11,10 @@ class UserInstance {
 
   //This is what's used to retrieve the instance through the app
   static UserInstance getInstance() => _singleton;
-  
+
+  static final _log = logging.Logger('UserInstance');
+
+
   static UserDetail? _userDetail;
 
   static final _preferences = Preferences.getInstance(); 
@@ -28,7 +31,7 @@ class UserInstance {
       _preferences.setStringValue(KeyPrefens.foto, "${_data.foto}");
       _preferences.setStringValue(KeyPrefens.email, _data.email);
       _preferences.setStringValue(KeyPrefens.pin, _data.pin);
-      print("User has initialize");
+      _log.fine("User has initialize");
     }
   }
   void _getFromPref()async{

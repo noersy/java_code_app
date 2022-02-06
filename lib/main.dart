@@ -16,6 +16,7 @@ import 'package:java_code_app/view/auth/login_page.dart';
 import 'package:java_code_app/view/dashboard_page.dart';
 import 'package:provider/provider.dart';
 import 'package:logging/logging.dart';
+import 'package:device_preview/device_preview.dart';
 
 void main() {
   Logger.root.level = Level.OFF;
@@ -29,7 +30,11 @@ void main() {
   });
 
   runZonedGuarded(() {
-    runApp(MyApp());
+    runApp(    DevicePreview(
+      enabled: false,
+      builder: (_) => const MyApp(),
+    ),
+    );
   }, (error, stackTrace) {
     _log.warning(error);
     _log.warning(stackTrace);
@@ -40,9 +45,11 @@ void main() {
   }));
 }
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<ScaffoldMessengerState> msgKey = GlobalKey<ScaffoldMessengerState>();
+
 class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +77,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           initialRoute: "/",
           navigatorKey: navigatorKey,
+          scaffoldMessengerKey: msgKey,
           routes: {"/dashboard": (_) => const DashboardPage()},
           theme: ThemeData.light().copyWith(
             colorScheme: ThemeData().colorScheme.copyWith(

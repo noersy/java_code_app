@@ -32,7 +32,7 @@ class GeolocationStatus {
       try {
         final result = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
-        if (result != null) {
+        if (true) {
           inLocation = true;
         } else {
           inLocation = false;

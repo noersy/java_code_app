@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:java_code_app/models/listdiscount.dart';
-import 'package:java_code_app/models/listvoucher.dart';
-import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:provider/provider.dart';
 
 class OrderDoneDialog extends StatelessWidget {
 

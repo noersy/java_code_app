@@ -8,12 +8,12 @@ import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
+import 'package:java_code_app/view/branda/widget/bottom_sheet.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
 import 'package:java_code_app/widget/button/addorder_button.dart';
 import 'package:java_code_app/widget/input/label_toppingselection.dart';
 import 'package:java_code_app/widget/list/listmenu_tile.dart';
 import 'package:java_code_app/widget/sheet/detailmenu_sheet.dart';
-import 'package:java_code_app/widget/input/labellevel_selection.dart';
 import 'package:provider/provider.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
@@ -32,6 +32,8 @@ class DetailMenu extends StatefulWidget {
 
 class _DetailMenuState extends State<DetailMenu> {
   int _jumlahOrder = 0;
+  late final num _harga;
+  num _hargaTotal = 0, _hargaLevel = 0, _hargaTopping = 0;
   Level? _selectedLevel;
   List<Level> _selectedTopping = [];
   List<Level> _listLevel = [];
@@ -40,42 +42,67 @@ class _DetailMenuState extends State<DetailMenu> {
   final TextEditingController _editingController = TextEditingController();
   static bool _isLoading = true;
 
-  Menu? _data;
+  Menu? _menu;
+
+  @override
+  void initState() {
+    _jumlahOrder = widget.countOrder;
+    getMenu();
+    super.initState();
+  }
 
   getMenu() async {
     if (mounted) setState(() => _isLoading = true);
     final data = await Provider.of<OrderProviders>(context, listen: false).getDetailMenu(id: widget.id);
 
     if (data != null) {
-      _data = data.data.menu;
+      _menu = data.data.menu;
+      _harga = _menu?.harga ?? 0;
+      _hargaTotal = _harga;
+
 
       if (data.data.topping?.isNotEmpty ?? false) {
         _selectedTopping = [data.data.topping!.first];
+        _hargaLevel = data.data.topping!.first.harga;
+        _hargaTotal = _harga + _hargaLevel + _hargaTopping;
       }
       if (data.data.level?.isNotEmpty ?? false) {
         _selectedLevel = data.data.level!.first;
+        _hargaTopping = data.data.level!.first.harga;
+        _hargaTotal = _harga + _hargaLevel + _hargaTopping;
       }
 
       _listLevel = data.data.level ?? [];
       _listTopping = data.data.topping ?? [];
 
+      ///Get if order already exist
       final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
 
-      if (orders.containsKey("${_data?.idMenu}")) {
-        final dat = orders["${_data?.idMenu}"];
+      if (orders.containsKey("${_menu?.idMenu}")) {
+        final dat = orders["${_menu?.idMenu}"];
 
-        if(dat["level"] != null) {
+        if (dat["level"] != null) {
           final _level = data.data.level?.where((e) => "${e.idDetail}" == dat["level"]);
-          if (_level?.isNotEmpty ?? false) _selectedLevel = _level!.first;
+          if (_level?.isNotEmpty ?? false){
+            _selectedLevel = _level!.first;
+            _hargaLevel = _level.first.harga;
+            _hargaTotal = _harga + _hargaLevel + _hargaTopping;
+          }
         }
 
-        if(dat["topping"] != null) {
-          _selectedTopping = data.data.topping?.where((item) {
-            for(final e in dat["topping"]){
-              if(e == item.idDetail) return true;
-            }
-            return false;
-          }).toList() ?? _selectedTopping;
+        if (dat["topping"] != null) {
+          final topping = data.data.topping?.where((item) {
+                for (final e in dat["topping"]) {
+                  if (e == item.idDetail) return true;
+                }
+                return false;
+              }).toList();
+
+          if(topping?.isNotEmpty ?? false){
+            _selectedTopping = topping!;
+            _hargaTopping = topping.map((e) => e.harga).reduce((e, a) => e+a);
+            _hargaTotal = _harga + _hargaLevel + _hargaTopping;
+          }
         }
 
         if (dat["catatan"] != null) _catatan = dat["catatan"];
@@ -87,17 +114,12 @@ class _DetailMenuState extends State<DetailMenu> {
     if (mounted) setState(() {});
   }
 
-  @override
-  void initState() {
-    _jumlahOrder = widget.countOrder;
-
-    getMenu();
-    super.initState();
-  }
+  void _viewImage() => Navigate.toViewImage(urlImage: _menu?.foto ?? "http://");
 
   _showDialogLevel(List<Level>? _listLevel) async {
     if (_listLevel?.isEmpty ?? false) return;
     Level _value = _listLevel!.first;
+
     _value = await showModalBottomSheet(
       barrierColor: ColorSty.grey.withOpacity(0.2),
       elevation: 5,
@@ -109,31 +131,18 @@ class _DetailMenuState extends State<DetailMenu> {
       ),
       context: context,
       builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (_, setState) {
-            return BottomSheetDetailMenu(
-              title: "Pilih Level",
-              content: Expanded(
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    for (Level item in _listLevel)
-                      LabelLevelSelection(
-                        data: item,
-                        isSelected: item == _selectedLevel,
-                        onSelection: (Level value) {
-                          setState(() => _selectedLevel = value);
-                          Navigator.of(context).pop(value);
-                        },
-                      ),
-                  ],
-                ),
-              ),
-            );
+        return BottomSheetDetailMenuTopping(
+          listLevel: _listLevel,
+          selectedLevel: _selectedLevel,
+          onSelection: (Level value) {
+            _hargaLevel = value.harga;
+            _hargaTotal = _harga + _hargaLevel + _hargaTopping;
+            setState(() => _selectedLevel = value);
           },
         );
       },
     );
+
     setState(() => _selectedLevel = _value);
   }
 
@@ -165,6 +174,13 @@ class _DetailMenuState extends State<DetailMenu> {
                     } else {
                       setState(() => _selectedTopping.add(value));
                     }
+                    final _top = _selectedTopping.map((e) => e.harga);
+                    if(_top.isNotEmpty) {
+                      _hargaTopping = _top.reduce((e, a) => e+a);
+                    } else {
+                      _hargaTopping = 0;
+                    }
+                    _hargaTotal = _harga + _hargaLevel + _hargaTopping;
                   },
                 )
             ],
@@ -174,26 +190,23 @@ class _DetailMenuState extends State<DetailMenu> {
     );
   }
 
-  void _viewImage() => Navigate.toViewImage(context, urlImage: _data?.foto ?? "http://");
-
   void _addCatatan() {
     setState(() => _catatan = _editingController.text);
     Navigator.pop(context);
   }
 
   void _tambahkanPesanan() {
-    if (_data == null) return;
+    if (_menu == null) return;
 
-    final orders =
-        Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
 
     final data = {
       "id": "${widget.id}",
-      "jenis": _data!.kategori,
-      "image": _data!.foto,
-      "harga": _data!.harga,
-      "amount": _data!.status,
-      "name": _data!.nama,
+      "jenis": _menu!.kategori,
+      "image": _menu!.foto,
+      "harga": _hargaTotal,
+      "amount": _menu!.status,
+      "name": _menu!.nama,
     };
 
     if (_jumlahOrder > 0) {
@@ -201,6 +214,7 @@ class _DetailMenuState extends State<DetailMenu> {
         Provider.of<OrderProviders>(context, listen: false).editOrder(
           id: "${widget.id}",
           jumlahOrder: _jumlahOrder,
+          hargaTotal: _hargaTotal,
           topping: _selectedTopping,
           level: _selectedLevel,
           catatan: _catatan,
@@ -239,7 +253,7 @@ class _DetailMenuState extends State<DetailMenu> {
                 child: Hero(
                   tag: "image",
                   child: Image.network(
-                     _data?.foto ?? "http://",
+                    _menu?.foto ?? "http://",
                     loadingBuilder: imageOnLoad,
                     errorBuilder: imageError,
                   ),
@@ -279,7 +293,7 @@ class _DetailMenuState extends State<DetailMenu> {
                           const SkeletonText(height: 16.0)
                         else
                           Text(
-                            "${_data?.nama}",
+                            "${_menu?.nama}",
                             style: TypoSty.title.copyWith(
                               color: ColorSty.primary,
                             ),
@@ -317,7 +331,7 @@ class _DetailMenuState extends State<DetailMenu> {
                         : SizedBox(
                             height: 100.0,
                             child: Text(
-                              _data?.deskripsi ?? "",
+                              _menu?.deskripsi ?? "",
                               overflow: TextOverflow.fade,
                             ),
                           ),
@@ -333,7 +347,7 @@ class _DetailMenuState extends State<DetailMenu> {
                           icon: IconsCs.cash,
                           isLoading: _isLoading,
                           title: "Harga",
-                          prefix: !_isLoading ? "Rp ${_data?.harga}" : "Rp 0",
+                          prefix: !_isLoading ? "Rp $_hargaTotal" : "Rp 0",
                           onPressed: () {},
                         ),
                         TileListDMenu(
@@ -355,15 +369,19 @@ class _DetailMenuState extends State<DetailMenu> {
                             textAlign: TextAlign.end,
                             overflow: TextOverflow.ellipsis,
                             text: TextSpan(
-                                style: TypoSty.captionSemiBold.copyWith(color: ColorSty.black),
+                                style: TypoSty.captionSemiBold
+                                    .copyWith(color: ColorSty.black),
                                 text: _selectedTopping.isEmpty
                                     ? ""
                                     : _selectedTopping.first.keterangan,
                                 children: [
-                                  for (var i = 0; i < _selectedTopping.length; i++)
+                                  for (var i = 0;
+                                      i < _selectedTopping.length;
+                                      i++)
                                     if (i > 0)
                                       TextSpan(
-                                        text: ", ${_selectedTopping[i].keterangan}",
+                                        text:
+                                            ", ${_selectedTopping[i].keterangan}",
                                         style: TypoSty.captionSemiBold.copyWith(
                                           color: ColorSty.black,
                                         ),
@@ -378,9 +396,8 @@ class _DetailMenuState extends State<DetailMenu> {
                           icon: IconsCs.note,
                           isLoading: _isLoading,
                           title: "Catatan",
-                          prefix: _catatan.isEmpty
-                              ? "Tambahkan catatan"
-                              : _catatan,
+                          prefix:
+                              _catatan.isEmpty ? "Tambahkan catatan" : _catatan,
                           onPressed: () => showModalBottomSheet(
                             barrierColor: ColorSty.grey.withOpacity(0.2),
                             elevation: 5,

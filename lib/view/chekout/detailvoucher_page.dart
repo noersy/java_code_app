@@ -6,7 +6,6 @@ import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
-import 'package:intl/intl.dart';
 
 
 class DetailVoucherPage extends StatefulWidget {
@@ -22,7 +21,6 @@ class DetailVoucherPage extends StatefulWidget {
 }
 
 class _DetailVoucherPageState extends State<DetailVoucherPage> {
-  final DateFormat _format = DateFormat('dd/MM/yy');
 
   @override
   Widget build(BuildContext context) {

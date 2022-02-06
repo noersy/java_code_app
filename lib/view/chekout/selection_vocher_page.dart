@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/models/listvoucher.dart';

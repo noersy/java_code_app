@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,7 +6,6 @@ import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/view/branda/widget/menuberanda_card.dart';
-import 'package:skeleton_animation/skeleton_animation.dart';
 
 class ListMenu extends StatefulWidget {
   final String type, title;

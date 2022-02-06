@@ -66,35 +66,9 @@ class _ContentBerandaState extends State<ContentBeranda>
   }
 
   @override
+  @mustCallSuper
   Widget build(BuildContext context) {
-    final _listMenu = <Widget>[
-      Column(
-        children: [
-          ListMenu(
-            type: "makanan",
-            title: "Makanan",
-            data: widget.data,
-          ),
-          ListMenu(
-            type: "minuman",
-            title: "Minuman",
-            data: widget.data,
-          ),
-        ],
-      ),
-      ListMenu(
-        key: const Key("menu-2"),
-        type: "makanan",
-        title: "Makanan",
-        data: widget.data,
-      ),
-      ListMenu(
-        key: const Key("menu-3"),
-        type: "minuman",
-        title: "Minuman",
-        data: widget.data,
-      ),
-    ];
+    super.build(context);
 
     return SingleChildScrollView(
       child: Column(

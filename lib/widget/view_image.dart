@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:java_code_app/helps/image.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:skeleton_animation/skeleton_animation.dart';
 
 class ViewImage extends StatelessWidget {
   final String urlImage;
