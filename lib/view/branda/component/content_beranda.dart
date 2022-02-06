@@ -6,9 +6,9 @@ import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:java_code_app/widget/card_coupun.dart';
-import 'package:java_code_app/widget/label_button.dart';
-import 'package:java_code_app/widget/listmenu.dart';
+import 'package:java_code_app/widget/card/card_coupun.dart';
+import 'package:java_code_app/widget/button/label_button.dart';
+import 'package:java_code_app/widget/list/listmenu.dart';
 
 class ContentBeranda extends StatefulWidget {
   final MenuList data;

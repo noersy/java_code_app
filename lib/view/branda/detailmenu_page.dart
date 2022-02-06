@@ -8,12 +8,12 @@ import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:java_code_app/widget/addorder_button.dart';
-import 'package:java_code_app/widget/appbar.dart';
-import 'package:java_code_app/widget/detailmenu_sheet.dart';
-import 'package:java_code_app/widget/label_toppingselection.dart';
-import 'package:java_code_app/widget/labellevel_selection.dart';
-import 'package:java_code_app/widget/listmenu_tile.dart';
+import 'package:java_code_app/widget/appbar/appbar.dart';
+import 'package:java_code_app/widget/button/addorder_button.dart';
+import 'package:java_code_app/widget/input/label_toppingselection.dart';
+import 'package:java_code_app/widget/list/listmenu_tile.dart';
+import 'package:java_code_app/widget/sheet/detailmenu_sheet.dart';
+import 'package:java_code_app/widget/input/labellevel_selection.dart';
 import 'package:provider/provider.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
@@ -59,24 +59,22 @@ class _DetailMenuState extends State<DetailMenu> {
       _listLevel = data.data.level ?? [];
       _listTopping = data.data.topping ?? [];
 
-      final orders =
-          Provider.of<OrderProviders>(context, listen: false).checkOrder;
+      final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
 
       if (orders.containsKey("${_data?.idMenu}")) {
         final dat = orders["${_data?.idMenu}"];
 
-        // _jumlahOrder = dat["countOrder"];
-
         if(dat["level"] != null) {
-          final _level = data.data.level
-              ?.where((element) => "${element.idDetail}" == dat["level"]);
+          final _level = data.data.level?.where((e) => "${e.idDetail}" == dat["level"]);
           if (_level?.isNotEmpty ?? false) _selectedLevel = _level!.first;
         }
 
         if(dat["topping"] != null) {
-          _selectedTopping = data.data.topping?.where((element) {
-            return dat["topping"].where((e) => e == "${element.idDetail}") !=
-                null;
+          _selectedTopping = data.data.topping?.where((item) {
+            for(final e in dat["topping"]){
+              if(e == item.idDetail) return true;
+            }
+            return false;
           }).toList() ?? _selectedTopping;
         }
 
@@ -176,7 +174,7 @@ class _DetailMenuState extends State<DetailMenu> {
     );
   }
 
-  void _viewImage() => Navigate.toViewImage(context, urlImage: _data?.foto ?? "");
+  void _viewImage() => Navigate.toViewImage(context, urlImage: _data?.foto ?? "http://");
 
   void _addCatatan() {
     setState(() => _catatan = _editingController.text);
@@ -222,7 +220,6 @@ class _DetailMenuState extends State<DetailMenu> {
 
   @override
   Widget build(BuildContext context) {
-    print(_jumlahOrder);
     return Scaffold(
       backgroundColor: ColorSty.bg2,
       appBar: const CostumeAppBar(
@@ -242,7 +239,7 @@ class _DetailMenuState extends State<DetailMenu> {
                 child: Hero(
                   tag: "image",
                   child: Image.network(
-                    _data != null ? _data!.foto ?? "" : "",
+                     _data?.foto ?? "http://",
                     loadingBuilder: imageOnLoad,
                     errorBuilder: imageError,
                   ),
@@ -358,19 +355,15 @@ class _DetailMenuState extends State<DetailMenu> {
                             textAlign: TextAlign.end,
                             overflow: TextOverflow.ellipsis,
                             text: TextSpan(
-                                style: TypoSty.captionSemiBold
-                                    .copyWith(color: ColorSty.black),
+                                style: TypoSty.captionSemiBold.copyWith(color: ColorSty.black),
                                 text: _selectedTopping.isEmpty
                                     ? ""
                                     : _selectedTopping.first.keterangan,
                                 children: [
-                                  for (var i = 0;
-                                      i < _selectedTopping.length;
-                                      i++)
+                                  for (var i = 0; i < _selectedTopping.length; i++)
                                     if (i > 0)
                                       TextSpan(
-                                        text:
-                                            ", ${_selectedTopping[i].keterangan}",
+                                        text: ", ${_selectedTopping[i].keterangan}",
                                         style: TypoSty.captionSemiBold.copyWith(
                                           color: ColorSty.black,
                                         ),
@@ -386,7 +379,7 @@ class _DetailMenuState extends State<DetailMenu> {
                           isLoading: _isLoading,
                           title: "Catatan",
                           prefix: _catatan.isEmpty
-                              ? "Lorem Ipsum sit aaasss"
+                              ? "Tambahkan catatan"
                               : _catatan,
                           onPressed: () => showModalBottomSheet(
                             barrierColor: ColorSty.grey.withOpacity(0.2),

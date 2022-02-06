@@ -9,8 +9,7 @@ import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/view/branda/component/beranda_skeleton.dart';
 import 'package:java_code_app/view/branda/component/content_beranda.dart';
 import 'package:java_code_app/view/branda/component/search_screen.dart';
-import 'package:java_code_app/widget/appbar.dart';
-import 'package:java_code_app/widget/silver_appbar.dart';
+import 'package:java_code_app/widget/appbar/appbar.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 

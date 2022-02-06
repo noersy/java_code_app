@@ -12,8 +12,8 @@ import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/singletons/check_connectivity.dart';
 import 'package:java_code_app/singletons/google_tools.dart';
 import 'package:java_code_app/singletons/shared_preferences.dart';
-import 'package:java_code_app/widget/button_login.dart';
-import 'package:java_code_app/widget/form_login.dart';
+import 'package:java_code_app/widget/button/button_login.dart';
+import 'package:java_code_app/widget/input/form_login.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {

@@ -6,10 +6,9 @@ import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:java_code_app/widget/appbar.dart';
-import 'package:java_code_app/widget/listmenu_tile.dart';
-import 'package:java_code_app/widget/listongoing_card.dart';
-import 'package:java_code_app/widget/silver_appbar.dart';
+import 'package:java_code_app/widget/appbar/appbar.dart';
+import 'package:java_code_app/widget/list/listmenu_tile.dart';
+import 'package:java_code_app/widget/list/listongoing_card.dart';
 import 'package:provider/provider.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 

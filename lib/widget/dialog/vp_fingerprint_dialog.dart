@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:java_code_app/models/listdiscount.dart';
-import 'package:java_code_app/models/listvoucher.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:java_code_app/widget/orderdone_dialog.dart';
-import 'package:java_code_app/widget/vp_pin_dialog.dart';
+import 'package:java_code_app/widget/dialog/vp_pin_dialog.dart';
 import 'package:local_auth/local_auth.dart';
 
 class VFingerPrintDialog extends StatelessWidget {

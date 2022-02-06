@@ -8,12 +8,12 @@ import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/shadows.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:java_code_app/widget/addorder_button.dart';
-import 'package:java_code_app/widget/appbar.dart';
-import 'package:java_code_app/widget/detailmenu_sheet.dart';
-import 'package:java_code_app/widget/label_toppingselection.dart';
-import 'package:java_code_app/widget/labellevel_selection.dart';
-import 'package:java_code_app/widget/listmenu_tile.dart';
+import 'package:java_code_app/widget/appbar/appbar.dart';
+import 'package:java_code_app/widget/button/addorder_button.dart';
+import 'package:java_code_app/widget/input/label_toppingselection.dart';
+import 'package:java_code_app/widget/list/listmenu_tile.dart';
+import 'package:java_code_app/widget/sheet/detailmenu_sheet.dart';
+import 'package:java_code_app/widget/input/labellevel_selection.dart';
 import 'package:provider/provider.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
@@ -76,9 +76,12 @@ class _EditOrderPageState extends State<EditOrderPage> {
           if(_level?.isNotEmpty ?? false) _selectedLevel = _level!.first;
         }
         if(dat["topping"] != null) {
-          _selectedTopping = data.data.topping?.where((element){
-          return dat["topping"].where((e) => e == "${element.idDetail}") != null;
-        }).toList() ?? _selectedTopping;
+          _selectedTopping = data.data.topping?.where((item) {
+            for(final e in dat["topping"]){
+              if(e == item.idDetail) return true;
+            }
+            return false;
+          }).toList() ?? _selectedTopping;
         }
 
 
