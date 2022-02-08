@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:java_code_app/models/menudetail.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -54,7 +53,7 @@ class _LabelToppingSelectionState extends State<LabelToppingSelection> {
         child: Row(
           children: [
             const SizedBox(width: SpaceDims.sp4),
-            Text(widget.data.keterangan),
+            Text('${widget.data.keterangan} - ${widget.data.harga}'),
             const SizedBox(width: SpaceDims.sp4),
             if (_isSelected) const Icon(Icons.check, size: 18.0),
           ],
