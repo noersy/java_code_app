@@ -15,6 +15,7 @@ import 'package:java_code_app/view/orders/ongoingorder_page.dart';
 import 'package:java_code_app/view/branda/promo_page.dart';
 import 'package:java_code_app/view/chekout/selection_vocher_page.dart';
 import 'package:java_code_app/view/profile/penilaian/daftar_penilaian.dart';
+import 'package:java_code_app/view/profile/penilaian/penilaian.dart';
 import 'package:java_code_app/widget/view_image.dart';
 
 class Navigate {
@@ -63,6 +64,9 @@ class Navigate {
       Navigator.of(context).push(routeTransition(OngoingOrderPage(id: id)));
   static void toDaftarPenilaian(context) =>
       Navigator.of(context).push(routeTransition(const DaftarPenilaian()));
+
+  static void toPenilaian(context) =>
+      Navigator.of(context).push(routeTransition(const Penilaian()));
   // static void toViewOrderKasir(context, {required Map<String, dynamic> dataOrders, bool? preparing}) => Navigator.of(context).push(routeTransition(OrderDetailPage(dataOrder: dataOrders, preparing: preparing)));
 
   //Costume route

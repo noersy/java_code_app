@@ -141,7 +141,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   Future<bool> _loadMore() async {
     print("onLoadMore");
-    // await Future.delayed(const Duration(seconds: 0, milliseconds: 2000));
+    // _onRefresh();
+    await Future.delayed(const Duration(seconds: 0, milliseconds: 2000));
     // load();
     // _onRefresh();
     return true;
@@ -155,6 +156,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         onRefresh: _onRefresh,
         controller: _refreshController,
         child: LoadMore(
+          textBuilder: DefaultLoadMoreTextBuilder.english,
           isFinish: _orders.length >= 100,
           onLoadMore: _loadMore,
           child: ListView(
