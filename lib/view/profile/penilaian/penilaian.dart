@@ -138,6 +138,26 @@ class _PenilaianState extends State<Penilaian> {
                                             filled: true),
                                       ),
                                     ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ElevatedButton(
+                                            onPressed: () {},
+                                            child: Text('Kirim Penilaian')),
+                                        RawMaterialButton(
+                                          onPressed: () {},
+                                          elevation: 2.0,
+                                          fillColor: Colors.white,
+                                          child: Icon(
+                                            Icons.pause,
+                                            size: 12.0,
+                                          ),
+                                          padding: EdgeInsets.all(15.0),
+                                          shape: CircleBorder(),
+                                        )
+                                      ],
+                                    )
                                     // TextFormField(
                                     //   style: TextStyle(fontSize: 12),
                                     //   maxLines: 5,
