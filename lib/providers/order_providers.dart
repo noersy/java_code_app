@@ -38,7 +38,7 @@ class OrderProviders extends ChangeNotifier {
   List<Promo> get listPromo => _listPromo;
   List<Order> get listOrders => _orders;
 
-  clear(){
+  clear() {
     _checkOrder = {};
     _orderInProgress = [];
     _menuList = null;
@@ -101,7 +101,9 @@ class OrderProviders extends ChangeNotifier {
         "amount": value["amount"],
         "name": value["name"],
         "level": level == null ? value["topping"] : "${level.idDetail}",
-        "topping": topping == null ? value["topping"] : topping.map((e) => e.idDetail).toList(),
+        "topping": topping == null
+            ? value["topping"]
+            : topping.map((e) => e.idDetail).toList(),
         "catatan": catatan.isEmpty ? value["catatan"] : catatan,
         "countOrder": jumlahOrder,
       },
@@ -132,9 +134,10 @@ class OrderProviders extends ChangeNotifier {
       _log.fine("Tray get all menu.");
       final response = await https.get(_api, headers: headers);
 
-      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
+      if (response.statusCode == 200 &&
+          json.decode(response.body)["status_code"] == 200) {
         _menuList = menuListFromJson(response.body);
-        if(_menuList != null) _log.fine("Success get all menu");
+        if (_menuList != null) _log.fine("Success get all menu");
         notifyListeners();
         return _menuList;
       }
@@ -154,7 +157,8 @@ class OrderProviders extends ChangeNotifier {
       _log.fine("Try to get menu detail");
       final response = await https.get(_api, headers: headers);
 
-      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
+      if (response.statusCode == 200 &&
+          json.decode(response.body)["status_code"] == 200) {
         _log.fine("Success get detail menu");
         return menuDetailFromJson(response.body);
       }
@@ -162,7 +166,7 @@ class OrderProviders extends ChangeNotifier {
       _log.info("Fail to get menu detail");
       _log.info(response.body);
       return null;
-    }  catch (e, r) {
+    } catch (e, r) {
       _log.warning(e);
       _log.warning(r);
       return null;
@@ -172,13 +176,14 @@ class OrderProviders extends ChangeNotifier {
   Future<bool> getListVoucher() async {
     try {
       final user = UserInstance.getInstance().user;
-      if(user == null) return false;
+      if (user == null) return false;
       final _api = Uri.https(host, "$sub/api/voucher/user/${user.data.idUser}");
 
       _log.fine("Try to get list voucher.");
       final response = await https.get(_api, headers: headers);
 
-      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
+      if (response.statusCode == 200 &&
+          json.decode(response.body)["status_code"] == 200) {
         _listVoucher = listVoucherFromJson(response.body).data;
         _log.fine("Seccess get list voucher");
         notifyListeners();
@@ -197,7 +202,7 @@ class OrderProviders extends ChangeNotifier {
 
   Future<bool> getListDisCount() async {
     final user = UserInstance.getInstance().user;
-    if(user == null) return false;
+    if (user == null) return false;
 
     try {
       final _api = Uri.https(host, "$sub/api/diskon/user/${user.data.idUser}");
@@ -205,7 +210,8 @@ class OrderProviders extends ChangeNotifier {
       _log.fine("Try to get list discount");
       final response = await https.get(_api, headers: headers);
 
-      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
+      if (response.statusCode == 200 &&
+          json.decode(response.body)["status_code"] == 200) {
         _listDiscount = listDiscountFromJson(response.body).data;
         _log.fine("Success get list discount");
         notifyListeners();
@@ -224,7 +230,7 @@ class OrderProviders extends ChangeNotifier {
 
   Future<bool> getListPromo() async {
     final user = UserInstance.getInstance().user;
-    if(user == null) return false;
+    if (user == null) return false;
 
     try {
       final _api = Uri.https(host, "$sub/api/promo/user/${user.data.idUser}");
@@ -232,12 +238,13 @@ class OrderProviders extends ChangeNotifier {
       _log.fine("Try to get list promo");
       final response = await https.get(_api, headers: headers);
 
-      if(response.statusCode == 204){
+      if (response.statusCode == 204) {
         _log.info("Promo is empty");
         _listPromo = [];
       }
 
-      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
+      if (response.statusCode == 200 &&
+          json.decode(response.body)["status_code"] == 200) {
         _listPromo = listPromoFromJson(response.body).data;
         _log.fine("Success get list promo");
         notifyListeners();
@@ -256,21 +263,23 @@ class OrderProviders extends ChangeNotifier {
 
   Future<bool> getListOrder() async {
     final user = UserInstance.getInstance().user;
-    if(user == null) return false;
+    if (user == null) return false;
     try {
       final _api = Uri.https(host, "$sub/api/order/proses/${user.data.idUser}");
 
       _log.fine("Try to get order in progress");
       final response = await https.get(_api, headers: headers);
 
-      if(response.statusCode == 204 || json.decode(response.body)["status_code"] == 204){
+      if (response.statusCode == 204 ||
+          json.decode(response.body)["status_code"] == 204) {
         _log.info("Order is empty");
         _orders = [];
       }
 
-      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
+      if (response.statusCode == 200 &&
+          json.decode(response.body)["status_code"] == 200) {
         _orders = listOrderFromJson(response.body).data;
-        if(_orders.isEmpty) _log.info("Failed get order in progress.");
+        if (_orders.isEmpty) _log.info("Failed get order in progress.");
         _log.fine("Success get order in progress.");
         notifyListeners();
         return true;
@@ -292,8 +301,8 @@ class OrderProviders extends ChangeNotifier {
       _log.fine("Tray to get detail order");
       final response = await https.get(_api, headers: headers);
 
-
-      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
+      if (response.statusCode == 200 &&
+          json.decode(response.body)["status_code"] == 200) {
         _log.fine("Success get detail order");
         return detail.orderDetailFromJson(response.body);
       }
@@ -307,24 +316,24 @@ class OrderProviders extends ChangeNotifier {
   }
 
   Future<List<History>?> getHistoryList() async {
-
     final user = UserInstance.getInstance().user;
 
-    if(user == null) return null;
+    if (user == null) return null;
 
     try {
-      final _api = Uri.https(host, "$sub/api/order/history/${user.data.idUser}");
+      final _api =
+          Uri.https(host, "$sub/api/order/history/${user.data.idUser}");
 
       _log.fine("Try to get list history of order");
       final response = await https.get(_api, headers: headers);
 
-
-      if(response.statusCode  == 204){
+      if (response.statusCode == 204) {
         _log.info("History if empty");
         return [];
       }
 
-      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
+      if (response.statusCode == 200 &&
+          json.decode(response.body)["status_code"] == 200) {
         _log.fine("Success get list history of order");
         return listHistoryFromJson(response.body).data;
       }
@@ -344,8 +353,8 @@ class OrderProviders extends ChangeNotifier {
       _log.fine("Tray to cancel a order");
       final response = await https.post(_api, headers: headers);
 
-
-      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
+      if (response.statusCode == 200 &&
+          json.decode(response.body)["status_code"] == 200) {
         _log.fine("Success cancel a order");
         return true;
       }
@@ -369,7 +378,7 @@ class OrderProviders extends ChangeNotifier {
   }) async {
     try {
       final user = UserInstance.getInstance().user;
-      if(user == null) return false;
+      if (user == null) return false;
 
       final _api = Uri.https(host, "$sub/api/order/add");
 
@@ -381,20 +390,19 @@ class OrderProviders extends ChangeNotifier {
           "id_diskon": idDiscount,
           "diskon": discount,
           "total_bayar": totalPay,
-          "total_order" : totalOrder
+          "total_order": totalOrder
         },
         "menu": menu
       };
 
       _log.fine("Tray to checkout order");
-      final response = await https.post(
-          _api,
+      final response = await https.post(_api,
           headers: headers,
           body: jsonEncode(body),
-          encoding: Encoding.getByName("utf-8")
-      );
-
-      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
+          encoding: Encoding.getByName("utf-8"));
+      print('body print $body');
+      if (response.statusCode == 200 &&
+          json.decode(response.body)["status_code"] == 200) {
         submitOrder();
         getListOrder();
 

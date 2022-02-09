@@ -15,12 +15,14 @@ import 'package:java_code_app/models/lang.dart';
 import 'package:java_code_app/providers/auth_providers.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/providers/order_providers.dart';
+import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/singletons/google_tools.dart';
 import 'package:java_code_app/singletons/shared_preferences.dart';
 import 'package:java_code_app/singletons/user_instance.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
+import 'package:java_code_app/transision/route_transisition.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
 import 'package:java_code_app/widget/sheet/detailmenu_sheet.dart';
 import 'package:java_code_app/widget/dialog/vp_pin_dialog.dart';
@@ -28,6 +30,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+
+import 'penilaian/daftar_penilaian.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -45,7 +49,8 @@ class _ProfilePageState extends State<ProfilePage> {
   static final DateFormat _dateFormat = DateFormat('dd/MM/yy');
   static bool _imageProfile = true;
   get provider => Provider.of<AuthProviders>(context, listen: false);
-  static final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  static final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   bool _loading = false;
 
   getInfoDevice() async {
@@ -53,6 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
     _packageInfo = await PackageInfo.fromPlatform();
     setState(() {});
   }
+
   _camera() async {
     final _image = await _picker.pickImage(
       source: ImageSource.camera,
@@ -60,9 +66,10 @@ class _ProfilePageState extends State<ProfilePage> {
     );
 
     Navigator.pop(context);
-    if(_imageProfile) _saveImageProfile(_image);
-    if(!_imageProfile) _sendKTP(_image);
+    if (_imageProfile) _saveImageProfile(_image);
+    if (!_imageProfile) _sendKTP(_image);
   }
+
   _galley() async {
     final _image = await _picker.pickImage(
       source: ImageSource.gallery,
@@ -70,13 +77,14 @@ class _ProfilePageState extends State<ProfilePage> {
     );
 
     Navigator.pop(context);
-    if(_imageProfile) _saveImageProfile(_image);
-    if(!_imageProfile) _sendKTP(_image);
+    if (_imageProfile) _saveImageProfile(_image);
+    if (!_imageProfile) _sendKTP(_image);
   }
+
   _pickImage(bool isImageProfile) {
     setState(() => _imageProfile = isImageProfile);
     final user = UserInstance.getInstance().user?.data;
-    if(!_imageProfile && user?.status != 0) return;
+    if (!_imageProfile && user?.status != 0) return;
     showModalBottomSheet(
       barrierColor: Colors.grey.withOpacity(0.2),
       elevation: 4,
@@ -130,6 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
       },
     );
   }
+
   _saveImageProfile(_image) async {
     if (_image != null) {
       _fileImage = await ImageCropper.cropImage(
@@ -157,12 +166,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
         String base64Image = base64Encode(compressedFile.readAsBytesSync());
 
-        Provider.of<AuthProviders>(context, listen: false).uploadProfileImage(base64Image);
+        Provider.of<AuthProviders>(context, listen: false)
+            .uploadProfileImage(base64Image);
         Provider.of<AuthProviders>(context, listen: false).getUser();
       }
       setState(() {});
     }
   }
+
   _updateTgl() async {
     final value = await showDialog(
       barrierColor: ColorSty.grey.withOpacity(0.2),
@@ -176,16 +187,19 @@ class _ProfilePageState extends State<ProfilePage> {
       if (mounted) setState(() {});
     }
   }
+
   _updateTelepon(String value) {
-    if(value.isEmpty) return;
+    if (value.isEmpty) return;
     provider.update(key: "telepon", value: value);
     if (mounted) setState(() {});
   }
+
   _updateNama(String value) {
-    if(value.isEmpty) return;
+    if (value.isEmpty) return;
     provider.update(key: "nama", value: value);
     if (mounted) setState(() {});
   }
+
   _changePin(Lang lang) {
     showDialog(
       context: context,
@@ -211,6 +225,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+
   _sendKTP(_image) async {
     if (_image != null) {
       _fileImage = await ImageCropper.cropImage(
@@ -242,13 +257,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
         String base64Image = base64Encode(compressedFile.readAsBytesSync());
 
-        Provider.of<AuthProviders>(context, listen: false).uploadKtp(base64Image);
+        Provider.of<AuthProviders>(context, listen: false)
+            .uploadKtp(base64Image);
       }
       setState(() {});
     }
   }
 
-  _logout(){
+  _logout() {
     Navigator.pushReplacementNamed(context, "/");
     Preferences.getInstance().clear();
     GoogleLogin.getInstance().logout();
@@ -263,7 +279,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _onRefresh() async {
-    var _duration = const Duration(seconds:1);
+    var _duration = const Duration(seconds: 1);
     if (mounted) {
       setState(() => _loading = true);
       await Provider.of<AuthProviders>(context, listen: false).getUser();
@@ -348,17 +364,20 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: SpaceDims.sp8, width: double.infinity),
+                                const SizedBox(
+                                    height: SpaceDims.sp8,
+                                    width: double.infinity),
                                 SizedBox(
                                   width: 280,
                                   child: TextButton(
-                                    onPressed: (){
-                                      if(_user?.status == 0) _pickImage(false);
+                                    onPressed: () {
+                                      if (_user?.status == 0) _pickImage(false);
                                     },
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
-                                        if(_user?.status == 2)...[
+                                        if (_user?.status == 2) ...[
                                           const Icon(
                                             Icons.check,
                                             color: ColorSty.primary,
@@ -367,10 +386,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                           const SizedBox(width: SpaceDims.sp4),
                                           Text(
                                             lang.profile.caption.status3,
-                                            style: const TextStyle(color: ColorSty.primary),
+                                            style: const TextStyle(
+                                                color: ColorSty.primary),
                                           ),
                                         ],
-                                        if(_user?.status == 1) ...[
+                                        if (_user?.status == 1) ...[
                                           const Icon(
                                             Icons.schedule_send,
                                             color: ColorSty.primary,
@@ -379,15 +399,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                           const SizedBox(width: SpaceDims.sp4),
                                           Text(
                                             lang.profile.caption.status2,
-                                            style: const TextStyle(color: ColorSty.primary),
+                                            style: const TextStyle(
+                                                color: ColorSty.primary),
                                           ),
                                         ],
-                                        if(_user?.status == 0) ...[
-                                          SvgPicture.asset("assert/image/icons/id-icon.svg"),
+                                        if (_user?.status == 0) ...[
+                                          SvgPicture.asset(
+                                              "assert/image/icons/id-icon.svg"),
                                           const SizedBox(width: SpaceDims.sp4),
                                           Text(
                                             lang.profile.caption.status1,
-                                            style: const TextStyle(color: ColorSty.primary),
+                                            style: const TextStyle(
+                                                color: ColorSty.primary),
                                           ),
                                         ],
                                       ],
@@ -401,8 +424,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: SpaceDims.sp32),
+                                  padding: const EdgeInsets.only(
+                                      left: SpaceDims.sp32),
                                   child: Text(
                                     lang.profile.subtitle,
                                     style: TypoSty.titlePrimary,
@@ -452,20 +475,26 @@ class _ProfilePageState extends State<ProfilePage> {
                                         animation: LangProviders(),
                                         builder: (context, snapshot) {
                                           bool _isIndo =
-                                              Provider.of<LangProviders>(context)
+                                              Provider.of<LangProviders>(
+                                                      context)
                                                   .isIndo;
                                           return TileListProfile(
                                             title: lang.profile.bhs,
-                                            suffix:
-                                                _isIndo ? 'Indonesia' : 'English',
-                                            onPressed: () => showModalBottomSheet(
-                                              barrierColor:
-                                                  ColorSty.grey.withOpacity(0.2),
+                                            suffix: _isIndo
+                                                ? 'Indonesia'
+                                                : 'English',
+                                            onPressed: () =>
+                                                showModalBottomSheet(
+                                              barrierColor: ColorSty.grey
+                                                  .withOpacity(0.2),
                                               elevation: 5,
-                                              shape: const RoundedRectangleBorder(
+                                              shape:
+                                                  const RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(30.0),
-                                                  topRight: Radius.circular(30.0),
+                                                  topLeft:
+                                                      Radius.circular(30.0),
+                                                  topRight:
+                                                      Radius.circular(30.0),
                                                 ),
                                               ),
                                               context: context,
@@ -481,12 +510,45 @@ class _ProfilePageState extends State<ProfilePage> {
                                 const SizedBox(height: SpaceDims.sp22),
                               ],
                             ),
+                            Container(
+                              alignment: Alignment.center,
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: SpaceDims.sp24,
+                                vertical: SpaceDims.sp12,
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: SpaceDims.sp8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: ColorSty.grey60,
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                              child: Column(
+                                children: [
+                                  // ListTile(
+                                  //   leading: Text('Penilaian'),
+                                  //   title: Text('nilai sekarang'),
+                                  // ),
+                                  TileListProfile(
+                                    top: false,
+                                    enable: false,
+                                    title: 'Penilaian',
+                                    suffix: 'nilai sekarang',
+                                    onPressed: () {
+                                      print('navigate daftar penilaian');
+                                      Navigate.toDaftarPenilaian(context);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: SpaceDims.sp22),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: SpaceDims.sp32),
+                                  padding: const EdgeInsets.only(
+                                      left: SpaceDims.sp32),
                                   child: Text(
                                     lang.profile.subtitle2,
                                     style: TypoSty.titlePrimary,
@@ -533,8 +595,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                     width: 204,
                                     child: Align(
                                       alignment: Alignment.center,
-                                      child:
-                                          Text("Log Out", style: TypoSty.button),
+                                      child: Text("Log Out",
+                                          style: TypoSty.button),
                                     ),
                                   ),
                                   style: ElevatedButton.styleFrom(
