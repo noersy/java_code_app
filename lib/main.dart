@@ -30,10 +30,11 @@ void main() {
   });
 
   runZonedGuarded(() {
-    runApp(    DevicePreview(
-      enabled: false,
-      builder: (_) => const MyApp(),
-    ),
+    runApp(
+      DevicePreview(
+        enabled: false,
+        builder: (_) => const MyApp(),
+      ),
     );
   }, (error, stackTrace) {
     _log.warning(error);
@@ -46,7 +47,8 @@ void main() {
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-final GlobalKey<ScaffoldMessengerState> msgKey = GlobalKey<ScaffoldMessengerState>();
+final GlobalKey<ScaffoldMessengerState> msgKey =
+    GlobalKey<ScaffoldMessengerState>();
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -54,10 +56,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ConnectionStatus.getInstance().initialize(navigatorKey);
-    GeolocationStatus.getInstance().initialize();
+    // GeolocationStatus.getInstance().initialize();
     Preferences.getInstance().initialize();
     UserInstance.getInstance().initialize();
-    PushNotification.getInstance().initialize();
+    // PushNotification.getInstance().initialize();
 
     return MultiProvider(
       providers: [
