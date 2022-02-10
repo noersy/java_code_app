@@ -319,17 +319,20 @@ class OrderProviders extends ChangeNotifier {
     return null;
   }
 
-  Future<List<History>?> getHistoryLimit() async {
+  Future<List<History>?> getHistoryLimit(limit, start) async {
     final user = UserInstance.getInstance().user;
 
     if (user == null) return null;
 
     try {
-      final _api =
-          Uri.http(host, "$sub/jacode/api/order/history/${user.data.idUser}");
+      final _api = Uri.http(host,
+          "$sub/jacode/api/order/history/${user.data.idUser}?limit=$limit&start=$start"); //tambahkan url kayak di postman get history limit
 
       _log.fine("Try to get list history of order");
-      final response = await http.get(_api, headers: headers,);
+      final response = await http.get(
+        _api,
+        headers: headers,
+      );
 
       if (response.statusCode == 204) {
         _log.info("History if empty");
