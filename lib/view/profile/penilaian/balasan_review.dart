@@ -98,7 +98,7 @@ class _BalasanReviewState extends State<BalasanReview> {
                           left: 10.0,
                           right: 5,
                           top: 5,
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                          bottom: MediaQuery.of(context).viewInsets.bottom + 5),
                       child: Container(
                         decoration: BoxDecoration(
                             color: Colors.blue,
@@ -120,7 +120,13 @@ class _BalasanReviewState extends State<BalasanReview> {
                       ),
                     ),
                   ),
-                  ElevatedButton(onPressed: () {}, child: Icon(Icons.send)),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        right: 10,
+                        bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: ElevatedButton(
+                        onPressed: () {}, child: Icon(Icons.send)),
+                  ),
                 ],
               ),
             ),
