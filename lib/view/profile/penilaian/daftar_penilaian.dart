@@ -21,6 +21,10 @@ class _DaftarPenilaianState extends State<DaftarPenilaian> {
         builder: (context, snapshot) {
           final lang = Provider.of<LangProviders>(context).lang;
           return Scaffold(
+            floatingActionButton: FloatingActionButton(
+                onPressed: () {},
+                child: Icon(Icons.add),
+                backgroundColor: Colors.blue),
             appBar: CostumeAppBar(
               title: '',
               profileTitle: 'Daftar Penilaian',
@@ -40,7 +44,7 @@ class _DaftarPenilaianState extends State<DaftarPenilaian> {
                             itemCount: 5,
                             itemBuilder: (context, index) {
                               return GestureDetector(
-                                onTap: () => Navigate.toPenilaian(context),
+                                onTap: () => Navigate.toBalasanReview(context),
                                 child: Column(
                                   children: [
                                     Container(
