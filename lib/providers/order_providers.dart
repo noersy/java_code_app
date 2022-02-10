@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as https;
+import 'package:http/http.dart' as http;
 import 'package:java_code_app/constans/hosts.dart';
 import 'package:java_code_app/models/listdiscount.dart';
 import 'package:java_code_app/models/listhistory.dart';
@@ -129,10 +129,10 @@ class OrderProviders extends ChangeNotifier {
 
   Future<MenuList?> getMenuList() async {
     try {
-      final _api = Uri.https(host, "$sub/api/menu/all");
+      final _api = Uri.http(host, "$sub/jacode/api/menu/all");
 
       _log.fine("Tray get all menu.");
-      final response = await https.get(_api, headers: headers);
+      final response = await http.get(_api, headers: headers);
 
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
@@ -152,10 +152,10 @@ class OrderProviders extends ChangeNotifier {
 
   Future<MenuDetail?> getDetailMenu({required int id}) async {
     try {
-      final _api = Uri.https(host, "$sub/api/menu/detail/$id");
+      final _api = Uri.http(host, "$sub/jacode/api/menu/detail/$id");
 
       _log.fine("Try to get menu detail");
-      final response = await https.get(_api, headers: headers);
+      final response = await http.get(_api, headers: headers);
 
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
@@ -177,10 +177,11 @@ class OrderProviders extends ChangeNotifier {
     try {
       final user = UserInstance.getInstance().user;
       if (user == null) return false;
-      final _api = Uri.https(host, "$sub/api/voucher/user/${user.data.idUser}");
+      final _api =
+          Uri.http(host, "$sub/jacode/api/voucher/user/${user.data.idUser}");
 
       _log.fine("Try to get list voucher.");
-      final response = await https.get(_api, headers: headers);
+      final response = await http.get(_api, headers: headers);
 
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
@@ -205,10 +206,11 @@ class OrderProviders extends ChangeNotifier {
     if (user == null) return false;
 
     try {
-      final _api = Uri.https(host, "$sub/api/diskon/user/${user.data.idUser}");
+      final _api =
+          Uri.http(host, "$sub/jacode/api/diskon/user/${user.data.idUser}");
 
       _log.fine("Try to get list discount");
-      final response = await https.get(_api, headers: headers);
+      final response = await http.get(_api, headers: headers);
 
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
@@ -233,10 +235,11 @@ class OrderProviders extends ChangeNotifier {
     if (user == null) return false;
 
     try {
-      final _api = Uri.https(host, "$sub/api/promo/user/${user.data.idUser}");
+      final _api =
+          Uri.http(host, "$sub/jacode/api/promo/user/${user.data.idUser}");
 
       _log.fine("Try to get list promo");
-      final response = await https.get(_api, headers: headers);
+      final response = await http.get(_api, headers: headers);
 
       if (response.statusCode == 204) {
         _log.info("Promo is empty");
@@ -265,10 +268,11 @@ class OrderProviders extends ChangeNotifier {
     final user = UserInstance.getInstance().user;
     if (user == null) return false;
     try {
-      final _api = Uri.https(host, "$sub/api/order/proses/${user.data.idUser}");
+      final _api =
+          Uri.http(host, "$sub/jacode/api/order/proses/${user.data.idUser}");
 
       _log.fine("Try to get order in progress");
-      final response = await https.get(_api, headers: headers);
+      final response = await http.get(_api, headers: headers);
 
       if (response.statusCode == 204 ||
           json.decode(response.body)["status_code"] == 204) {
@@ -296,10 +300,10 @@ class OrderProviders extends ChangeNotifier {
 
   Future<detail.OrderDetail?> getDetailOrder({required int id}) async {
     try {
-      final _api = Uri.https(host, "$sub/api/order/detail/$id");
+      final _api = Uri.http(host, "$sub/jacode/api/order/detail/$id");
 
       _log.fine("Tray to get detail order");
-      final response = await https.get(_api, headers: headers);
+      final response = await http.get(_api, headers: headers);
 
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
@@ -315,6 +319,37 @@ class OrderProviders extends ChangeNotifier {
     return null;
   }
 
+  Future<List<History>?> getHistoryLimit() async {
+    final user = UserInstance.getInstance().user;
+
+    if (user == null) return null;
+
+    try {
+      final _api =
+          Uri.http(host, "$sub/jacode/api/order/history/${user.data.idUser}");
+
+      _log.fine("Try to get list history of order");
+      final response = await http.get(_api, headers: headers,);
+
+      if (response.statusCode == 204) {
+        _log.info("History if empty");
+        return [];
+      }
+
+      if (response.statusCode == 200 &&
+          json.decode(response.body)["status_code"] == 200) {
+        _log.fine("Success get list history of order");
+        return listHistoryFromJson(response.body).data;
+      }
+      _log.info("Fail to get liest history");
+      _log.info(response.body);
+    } catch (e, r) {
+      _log.warning(e);
+      _log.warning(r);
+    }
+    return null;
+  }
+
   Future<List<History>?> getHistoryList() async {
     final user = UserInstance.getInstance().user;
 
@@ -322,10 +357,10 @@ class OrderProviders extends ChangeNotifier {
 
     try {
       final _api =
-          Uri.https(host, "$sub/api/order/history/${user.data.idUser}");
+          Uri.http(host, "$sub/jacode/api/order/history/${user.data.idUser}");
 
       _log.fine("Try to get list history of order");
-      final response = await https.get(_api, headers: headers);
+      final response = await http.get(_api, headers: headers);
 
       if (response.statusCode == 204) {
         _log.info("History if empty");
@@ -348,10 +383,10 @@ class OrderProviders extends ChangeNotifier {
 
   Future<bool> cancelOrder({required int idOrder}) async {
     try {
-      final _api = Uri.https(host, "$sub/api/order/batal/$idOrder");
+      final _api = Uri.http(host, "$sub/jacode/api/order/batal/$idOrder");
 
       _log.fine("Tray to cancel a order");
-      final response = await https.post(_api, headers: headers);
+      final response = await http.post(_api, headers: headers);
 
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
@@ -380,7 +415,7 @@ class OrderProviders extends ChangeNotifier {
       final user = UserInstance.getInstance().user;
       if (user == null) return false;
 
-      final _api = Uri.https(host, "$sub/api/order/add");
+      final _api = Uri.http(host, "$sub/jacode/api/order/add");
 
       final body = {
         "order": {
@@ -396,7 +431,7 @@ class OrderProviders extends ChangeNotifier {
       };
 
       _log.fine("Tray to checkout order");
-      final response = await https.post(_api,
+      final response = await http.post(_api,
           headers: headers,
           body: jsonEncode(body),
           encoding: Encoding.getByName("utf-8"));
