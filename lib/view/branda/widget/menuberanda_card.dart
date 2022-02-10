@@ -29,15 +29,18 @@ class _CardMenuState extends State<CardMenu> {
   late final int status, id, harga;
   late final Map<String, dynamic> _data;
 
-  void  _add(){
+  void _add() {
+    if (_jumlahOrder < 1) {
+      Navigate.toChekOut(context);
+    }
     setState(() => _jumlahOrder++);
-    if(_jumlahOrder == 1){
+    if (_jumlahOrder >= 1) {
       Provider.of<OrderProviders>(context, listen: false).addOrder(
         jumlahOrder: _jumlahOrder,
         data: _data,
         catatan: '',
       );
-    }else{
+    } else {
       Provider.of<OrderProviders>(context, listen: false).editOrder(
         jumlahOrder: _jumlahOrder,
         id: "${widget.data.idMenu}",
@@ -48,7 +51,7 @@ class _CardMenuState extends State<CardMenu> {
 
   void _min() async {
     setState(() => _jumlahOrder--);
-    if(_jumlahOrder >= 1){
+    if (_jumlahOrder >= 1) {
       Provider.of<OrderProviders>(context, listen: false).editOrder(
         jumlahOrder: _jumlahOrder,
         id: "${widget.data.idMenu}",
@@ -60,8 +63,9 @@ class _CardMenuState extends State<CardMenu> {
         data: _data,
         catatan: '',
       );
-    }else{
-      await showDialog(context: context,
+    } else {
+      await showDialog(
+        context: context,
         builder: (_) => DeleteMenuInCheckoutDialog(id: "${widget.data.idMenu}"),
       );
     }
@@ -72,23 +76,22 @@ class _CardMenuState extends State<CardMenu> {
     status = widget.data.status;
     id = widget.data.idMenu;
 
-    _jumlahOrder =  0;
+    _jumlahOrder = 0;
     nama = widget.data.nama;
     harga = widget.data.harga;
     url = widget.data.foto ?? "";
 
-
     _data = {
-    "id": "${widget.data.idMenu}",
-    "jenis": widget.data.kategori,
-    "image": widget.data.foto,
-    "harga": widget.data.harga,
-    "amount": widget.data.status,
-    "name": widget.data.nama,
-    "level": "",
-    "topping": [],
-    "catatan": "",
-    "countOrder": _jumlahOrder,
+      "id": "${widget.data.idMenu}",
+      "jenis": widget.data.kategori,
+      "image": widget.data.foto,
+      "harga": widget.data.harga,
+      "amount": widget.data.status,
+      "name": widget.data.nama,
+      "level": "",
+      "topping": [],
+      "catatan": "",
+      "countOrder": _jumlahOrder,
     };
 
     super.initState();
@@ -102,13 +105,15 @@ class _CardMenuState extends State<CardMenu> {
         vertical: SpaceDims.sp8,
       ),
       child: ElevatedButton(
-        onPressed: status == 0 ? null: () {
-          Navigate.toDetailMenu(
-            context,
-            id: widget.data.idMenu,
-            countOrder: _jumlahOrder,
-          );
-        },
+        onPressed: status == 0
+            ? null
+            : () {
+                Navigate.toDetailMenu(
+                  context,
+                  id: widget.data.idMenu,
+                  countOrder: _jumlahOrder,
+                );
+              },
         style: ElevatedButton.styleFrom(
           elevation: 3,
           primary: ColorSty.white80,
@@ -128,13 +133,12 @@ class _CardMenuState extends State<CardMenu> {
                   height: 74,
                   width: 74,
                   child: Padding(
-                    padding: const EdgeInsets.all(SpaceDims.sp4),
-                    child: Image.network(
-                      url,
-                      loadingBuilder: imageOnLoad,
-                      errorBuilder: imageError,
-                    )
-                  ),
+                      padding: const EdgeInsets.all(SpaceDims.sp4),
+                      child: Image.network(
+                        url,
+                        loadingBuilder: imageOnLoad,
+                        errorBuilder: imageError,
+                      )),
                   decoration: BoxDecoration(
                     color: ColorSty.grey60,
                     borderRadius: BorderRadius.circular(10.0),
@@ -162,26 +166,29 @@ class _CardMenuState extends State<CardMenu> {
                         SvgPicture.asset("assert/image/icons/note-icon.svg"),
                         const SizedBox(width: SpaceDims.sp4),
                         AnimatedBuilder(
-                          animation: OrderProviders(),
-                          builder: (context, snapshot) {
-                            final _orders = Provider.of<OrderProviders>(context).checkOrder;
-                            String _catatan = "";
+                            animation: OrderProviders(),
+                            builder: (context, snapshot) {
+                              final _orders =
+                                  Provider.of<OrderProviders>(context)
+                                      .checkOrder;
+                              String _catatan = "";
 
-                            if(_orders.containsKey("$id")) {
-                              _catatan = _orders["$id"]["catatan"] ?? "";
-                            }
+                              if (_orders.containsKey("$id")) {
+                                _catatan = _orders["$id"]["catatan"] ?? "";
+                              }
 
-                            return Text(
-                              _catatan.isEmpty ? "Tambahkan Catatan" : _catatan,
-                              overflow: TextOverflow.ellipsis,
-                              style: TypoSty.caption2.copyWith(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 12.0,
-                                color: ColorSty.grey,
-                              ),
-                            );
-                          }
-                        ),
+                              return Text(
+                                _catatan.isEmpty
+                                    ? "Tambahkan Catatan"
+                                    : _catatan,
+                                overflow: TextOverflow.ellipsis,
+                                style: TypoSty.caption2.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12.0,
+                                  color: ColorSty.grey,
+                                ),
+                              );
+                            }),
                       ],
                     ),
                   ],
@@ -194,7 +201,8 @@ class _CardMenuState extends State<CardMenu> {
                 child: AnimatedBuilder(
                     animation: OrderProviders(),
                     builder: (context, snapshot) {
-                      final orders = Provider.of<OrderProviders>(context).checkOrder;
+                      final orders =
+                          Provider.of<OrderProviders>(context).checkOrder;
                       if (orders.keys.contains("$id")) {
                         _jumlahOrder = orders["$id"]["countOrder"];
                       }
@@ -226,8 +234,7 @@ class _CardMenuState extends State<CardMenu> {
                               primary: ColorSty.white,
                               backgroundColor: ColorSty.primary,
                             ),
-                            child:
-                                const Icon(Icons.add, color: ColorSty.white),
+                            child: const Icon(Icons.add, color: ColorSty.white),
                           )
                         ],
                       );
