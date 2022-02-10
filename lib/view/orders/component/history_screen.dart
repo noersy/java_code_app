@@ -134,7 +134,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
     print("load");
     setState(() {
       // list.addAll(List.generate(3, (v) => v));
-      list = _orders;
+
+      _orders.add(_orders[0]);
       print("data count = ${list.length}");
     });
   }
@@ -143,7 +144,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     print("onLoadMore");
     // _onRefresh();
     await Future.delayed(const Duration(seconds: 0, milliseconds: 2000));
-    // load();
+    load();
     // _onRefresh();
     return true;
   }
