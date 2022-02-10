@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
 
@@ -10,6 +12,43 @@ class BalasanReview extends StatefulWidget {
 }
 
 class _BalasanReviewState extends State<BalasanReview> {
+  btmHeight() {
+    double height = 50;
+    if (keyboardVisibilityController.isVisible) {
+      height = MediaQuery.of(context).viewInsets.bottom + 100;
+    } else
+      height = 50;
+    return height;
+  }
+
+  late StreamSubscription<bool> keyboardSubscription;
+
+  var keyboardVisibilityController = KeyboardVisibilityController();
+  @override
+  void initState() {
+    super.initState();
+
+    // Query
+    print(
+        'Keyboard visibility direct query: ${keyboardVisibilityController.isVisible}');
+
+    // Subscribe
+    keyboardSubscription =
+        keyboardVisibilityController.onChange.listen((bool visible) {
+      print('Keyboard visibility update. Is visible: $visible');
+    });
+  }
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  //   KeyboardVisibilityNotification().addNewListener(
+  //     onChange: (bool visible) {
+  //       print(visible);
+  //     },
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -44,43 +83,46 @@ class _BalasanReviewState extends State<BalasanReview> {
               ),
             ),
             bottomNavigationBar: Container(
-              decoration: const BoxDecoration(
+              // height: MediaQuery.of(context).viewInsets.bottom,
+              decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30.0),
                     topRight: Radius.circular(30.0),
                   )),
-              child: ConstrainedBox(
-                  constraints: BoxConstraints.tight(const Size(200, 50)),
-                  child: Row(
-                    children: [
-                      Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: 10.0,
+                          right: 5,
+                          top: 5,
+                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(40.0),
+                              topRight: Radius.circular(40.0),
+                              bottomLeft: Radius.circular(40.0),
+                              bottomRight: Radius.circular(40.0),
+                            )),
                         child: Padding(
                           padding: EdgeInsets.only(
-                              left: 10.0, right: 5, top: 5, bottom: 5),
-                          child: Container(
-                            decoration: const BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(40.0),
-                                  topRight: Radius.circular(40.0),
-                                  bottomLeft: Radius.circular(40.0),
-                                  bottomRight: Radius.circular(40.0),
-                                )),
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 8.0),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                    border: InputBorder.none, hintText: 'Name'),
-                              ),
-                            ),
+                            left: 8.0,
+                          ),
+                          child: TextField(
+                            decoration: InputDecoration(
+                                border: InputBorder.none, hintText: 'Name'),
                           ),
                         ),
                       ),
-                      ElevatedButton(
-                          onPressed: () {}, child: const Icon(Icons.send)),
-                    ],
-                  )),
+                    ),
+                  ),
+                  ElevatedButton(onPressed: () {}, child: Icon(Icons.send)),
+                ],
+              ),
             ),
           );
         });
