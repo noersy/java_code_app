@@ -28,11 +28,38 @@ class _BalasanReviewState extends State<BalasanReview> {
               // profileTitle: lang.profile.title,
               back: true,
             ),
-            body: Stack(
-              children: [
-                Image.asset("assert/image/bg_daftarpenilaian.png"),
-              ],
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                // height: 300.0,
+                // height: MediaQuery.of(context).size.height / 1.3,
+                color: Colors.transparent,
+                child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(40.0),
+                          topRight: Radius.circular(40.0),
+                          bottomLeft: Radius.circular(40.0),
+                          bottomRight: Radius.circular(40.0),
+                        )),
+                    child: Center(
+                      child: Text("Hi modal sheet"),
+                    )),
+              ),
             ),
+            bottomNavigationBar: ConstrainedBox(
+                constraints: BoxConstraints.tight(const Size(200, 50)),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(hintText: 'Name'),
+                      ),
+                    ),
+                    ElevatedButton(onPressed: () {}, child: Icon(Icons.send)),
+                  ],
+                )),
           );
         });
   }
