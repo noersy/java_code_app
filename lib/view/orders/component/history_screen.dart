@@ -30,6 +30,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   static final List<String> _item = ["Semua Status", "Selesai", "Dibatalkan"];
   static List<History> _data = [];
   static List<History> _orders = [];
+  static List<History> _ordersLimit = [];
   static int _status = 0;
   static final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -47,12 +48,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   Future<void> _onRefresh() async {
     _orders.clear();
+
     var _duration = const Duration(seconds: 1);
     if (mounted) {
       setState(() => _loading = true);
 
       _orders = await Provider.of<OrderProviders>(context, listen: false)
-              .getHistoryList() ??
+              .getHistoryLimit(1, 1) ??
           [];
 
       _data = _orders;
@@ -118,8 +120,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   void initState() {
-    _onRefresh();
+    _clearAllList();
+    // _onRefresh();
     super.initState();
+  }
+
+  _clearAllList() {
+    _data.clear();
+    _orders.clear();
+    _ordersLimit.clear();
+    print(
+        '_clearAllList _data:${_data.length} _ordersLimit: ${_ordersLimit.length} | _orders: ${_orders.length}');
   }
 
   bool _openStatus = false;
@@ -134,18 +145,31 @@ class _HistoryScreenState extends State<HistoryScreen> {
     print("load");
     setState(() {
       // list.addAll(List.generate(3, (v) => v));
-
       _orders.add(_orders[0]);
-      print("data count = ${list.length}");
+      // print("data count = ${list.length}");
     });
   }
 
   Future<bool> _loadMore() async {
-    print("onLoadMore");
-    // _onRefresh();
-    await Future.delayed(const Duration(seconds: 0, milliseconds: 2000));
-    load();
-    // _onRefresh();
+    _ordersLimit.clear();
+    // print(
+    //     'loadmore _ordersLimit.length: ${_ordersLimit.length} | _orders.length: ${_orders.length}');
+
+    var _duration = const Duration(seconds: 1);
+    if (mounted) {
+      setState(() => _loading = true);
+
+      _ordersLimit = await Provider.of<OrderProviders>(context, listen: false)
+              .getHistoryLimit(1, _orders.length) ??
+          [];
+      _orders.addAll(_ordersLimit);
+      _data = _orders;
+
+      Timer(_duration, () {
+        if (mounted) setState(() => _loading = false);
+        _refreshController.refreshCompleted();
+      });
+    }
     return true;
   }
 
@@ -154,7 +178,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     // tambahkan loadmore
     return Scaffold(
       body: SmartRefresher(
-        onRefresh: _onRefresh,
+        onRefresh: _loadMore,
         controller: _refreshController,
         child: LoadMore(
           textBuilder: DefaultLoadMoreTextBuilder.english,
@@ -180,6 +204,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 else
                                   Column(
                                     children: [
+                                      Text(
+                                          '_orders.isNotEmpty: ${_orders.length}'),
+                                      //  tampil order history card
                                       for (final item in _data)
                                         OrderHistoryCard(
                                           onPressed: () {},
@@ -192,264 +219,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               ],
                             ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: 160,
-                                child: Stack(
-                                  alignment: Alignment.topCenter,
-                                  children: [
-                                    if (_openStatus)
-                                      Positioned(
-                                        top: 25,
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          height: 123,
-                                          width: 170,
-                                          padding: const EdgeInsets.only(
-                                            top: SpaceDims.sp12,
-                                            left: SpaceDims.sp8,
-                                            right: SpaceDims.sp8,
-                                          ),
-                                          decoration: const BoxDecoration(
-                                              color: ColorSty.white,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  blurRadius: 1,
-                                                  spreadRadius: 0.2,
-                                                  offset: Offset(0, 0),
-                                                  color: ColorSty.grey,
-                                                )
-                                              ],
-                                              borderRadius: BorderRadius.only(
-                                                bottomRight:
-                                                    Radius.circular(20.0),
-                                                bottomLeft:
-                                                    Radius.circular(20.0),
-                                              )),
-                                          child: AnimatedBuilder(
-                                              animation: LangProviders(),
-                                              builder: (context, snapshot) {
-                                                final lang = context
-                                                    .watch<LangProviders>()
-                                                    .lang;
-                                                return Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    const SizedBox(
-                                                        height: SpaceDims.sp16),
-                                                    GestureDetector(
-                                                      onTap: () =>
-                                                          _changeStatus(
-                                                              "Semua Status"),
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                horizontal:
-                                                                    SpaceDims
-                                                                        .sp12),
-                                                        child: Text(
-                                                          lang.pesanan
-                                                              .allStatus,
-                                                          style: TypoSty.caption
-                                                              .copyWith(
-                                                            fontSize: 13.0,
-                                                            color: _status == 0
-                                                                ? ColorSty
-                                                                    .primary
-                                                                : ColorSty
-                                                                    .black,
-                                                            fontWeight:
-                                                                _status == 0
-                                                                    ? FontWeight
-                                                                        .bold
-                                                                    : FontWeight
-                                                                        .w600,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const Divider(
-                                                        thickness: 1.5),
-                                                    GestureDetector(
-                                                      onTap: () =>
-                                                          _changeStatus(
-                                                              "Selesai"),
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                horizontal:
-                                                                    SpaceDims
-                                                                        .sp12),
-                                                        child: Text(
-                                                          lang.pesanan.status3,
-                                                          style: TypoSty.caption
-                                                              .copyWith(
-                                                            fontSize: 13.0,
-                                                            color: _status == 3
-                                                                ? ColorSty
-                                                                    .primary
-                                                                : ColorSty
-                                                                    .black,
-                                                            fontWeight:
-                                                                _status == 3
-                                                                    ? FontWeight
-                                                                        .bold
-                                                                    : FontWeight
-                                                                        .w600,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const Divider(
-                                                        thickness: 1.5),
-                                                    GestureDetector(
-                                                      onTap: () =>
-                                                          _changeStatus(
-                                                              "Dibatalkan"),
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                horizontal:
-                                                                    SpaceDims
-                                                                        .sp12),
-                                                        child: Text(
-                                                          lang.pesanan.status4,
-                                                          style: TypoSty.caption
-                                                              .copyWith(
-                                                            fontSize: 13.0,
-                                                            color: _status == 4
-                                                                ? ColorSty
-                                                                    .primary
-                                                                : ColorSty
-                                                                    .black,
-                                                            fontWeight:
-                                                                _status == 4
-                                                                    ? FontWeight
-                                                                        .bold
-                                                                    : FontWeight
-                                                                        .w600,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                );
-                                              }),
-                                        ),
-                                      ),
-                                    TextButton(
-                                      style: TextButton.styleFrom(
-                                        backgroundColor: ColorSty.grey60,
-                                        minimumSize: const Size(0, 0),
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: SpaceDims.sp8 + 0.5,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          side: const BorderSide(
-                                            color: ColorSty.primary,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(30.0),
-                                        ),
-                                      ),
-                                      onPressed: _setStatus,
-                                      child: SizedBox(
-                                        width: 170.0,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const SizedBox(
-                                                width: SpaceDims.sp12),
-                                            AnimatedBuilder(
-                                                animation: LangProviders(),
-                                                builder: (context, snapshot) {
-                                                  final lang = context
-                                                      .watch<LangProviders>()
-                                                      .lang;
-                                                  String _ttile =
-                                                      lang.pesanan.allStatus;
-                                                  if (_dropdownValue ==
-                                                      "Selesai") {
-                                                    _ttile =
-                                                        lang.pesanan.status3;
-                                                  }
-                                                  if (_dropdownValue ==
-                                                      "Dibatalkan") {
-                                                    _ttile =
-                                                        lang.pesanan.status4;
-                                                  }
-                                                  return Text(
-                                                    _ttile,
-                                                    textAlign: TextAlign.center,
-                                                    style: TypoSty.caption
-                                                        .copyWith(
-                                                      fontSize: 13.0,
-                                                      color: ColorSty.black60,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  );
-                                                }),
-                                            const SizedBox(
-                                                width: SpaceDims.sp8),
-                                            const Icon(Icons.arrow_drop_down,
-                                                size: 18.0,
-                                                color: ColorSty.black),
-                                            const SizedBox(
-                                                width: SpaceDims.sp8),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              TextButton(
-                                style: TextButton.styleFrom(
-                                  backgroundColor: ColorSty.grey60,
-                                  minimumSize: const Size(0, 0),
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: SpaceDims.sp8 + 0.5),
-                                  shape: RoundedRectangleBorder(
-                                    side: const BorderSide(
-                                        color: ColorSty.primary),
-                                    borderRadius: BorderRadius.circular(30.0),
-                                  ),
-                                ),
-                                onPressed: _pickDateRange,
-                                child: SizedBox(
-                                  width: 170.0,
-                                  child: Row(
-                                    children: [
-                                      const SizedBox(width: SpaceDims.sp12),
-                                      Text(
-                                        _dateRange,
-                                        style: TypoSty.caption2.copyWith(
-                                          fontSize: 13.0,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      const SizedBox(width: SpaceDims.sp8),
-                                      const Icon(
-                                        IconsCs.date,
-                                        size: 18.0,
-                                        color: ColorSty.primary,
-                                      ),
-                                      const SizedBox(width: SpaceDims.sp8),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                          PilihStatus(),
                         ],
                       )
                     : SizedBox(
@@ -530,6 +300,215 @@ class _HistoryScreenState extends State<HistoryScreen> {
               ),
             )
           : null,
+    );
+  }
+
+  PilihStatus() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          height: 160,
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              if (_openStatus)
+                Positioned(
+                  top: 25,
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 123,
+                    width: 170,
+                    padding: const EdgeInsets.only(
+                      top: SpaceDims.sp12,
+                      left: SpaceDims.sp8,
+                      right: SpaceDims.sp8,
+                    ),
+                    decoration: const BoxDecoration(
+                        color: ColorSty.white,
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 1,
+                            spreadRadius: 0.2,
+                            offset: Offset(0, 0),
+                            color: ColorSty.grey,
+                          )
+                        ],
+                        borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(20.0),
+                          bottomLeft: Radius.circular(20.0),
+                        )),
+                    child: AnimatedBuilder(
+                        animation: LangProviders(),
+                        builder: (context, snapshot) {
+                          final lang = context.watch<LangProviders>().lang;
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: SpaceDims.sp16),
+                              GestureDetector(
+                                onTap: () => _changeStatus("Semua Status"),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: SpaceDims.sp12),
+                                  child: Text(
+                                    lang.pesanan.allStatus,
+                                    style: TypoSty.caption.copyWith(
+                                      fontSize: 13.0,
+                                      color: _status == 0
+                                          ? ColorSty.primary
+                                          : ColorSty.black,
+                                      fontWeight: _status == 0
+                                          ? FontWeight.bold
+                                          : FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const Divider(thickness: 1.5),
+                              GestureDetector(
+                                onTap: () => _changeStatus("Selesai"),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: SpaceDims.sp12),
+                                  child: Text(
+                                    lang.pesanan.status3,
+                                    style: TypoSty.caption.copyWith(
+                                      fontSize: 13.0,
+                                      color: _status == 3
+                                          ? ColorSty.primary
+                                          : ColorSty.black,
+                                      fontWeight: _status == 3
+                                          ? FontWeight.bold
+                                          : FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const Divider(thickness: 1.5),
+                              GestureDetector(
+                                onTap: () => _changeStatus("Dibatalkan"),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: SpaceDims.sp12),
+                                  child: Text(
+                                    lang.pesanan.status4,
+                                    style: TypoSty.caption.copyWith(
+                                      fontSize: 13.0,
+                                      color: _status == 4
+                                          ? ColorSty.primary
+                                          : ColorSty.black,
+                                      fontWeight: _status == 4
+                                          ? FontWeight.bold
+                                          : FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                  ),
+                ),
+              TxtButtonStatus(),
+            ],
+          ),
+        ),
+        pilihTgl(),
+      ],
+    );
+  }
+
+  TextButton TxtButtonStatus() {
+    return TextButton(
+      style: TextButton.styleFrom(
+        backgroundColor: ColorSty.grey60,
+        minimumSize: const Size(0, 0),
+        padding: const EdgeInsets.symmetric(
+          vertical: SpaceDims.sp8 + 0.5,
+        ),
+        shape: RoundedRectangleBorder(
+          side: const BorderSide(
+            color: ColorSty.primary,
+          ),
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+      ),
+      onPressed: _setStatus,
+      child: SizedBox(
+        width: 170.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(width: SpaceDims.sp12),
+            AnimatedBuilder(
+                animation: LangProviders(),
+                builder: (context, snapshot) {
+                  final lang = context.watch<LangProviders>().lang;
+                  String _ttile = lang.pesanan.allStatus;
+                  if (_dropdownValue == "Selesai") {
+                    _ttile = lang.pesanan.status3;
+                  }
+                  if (_dropdownValue == "Dibatalkan") {
+                    _ttile = lang.pesanan.status4;
+                  }
+                  return Text(
+                    _ttile,
+                    textAlign: TextAlign.center,
+                    style: TypoSty.caption.copyWith(
+                      fontSize: 13.0,
+                      color: ColorSty.black60,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                }),
+            const SizedBox(width: SpaceDims.sp8),
+            const Icon(Icons.arrow_drop_down,
+                size: 18.0, color: ColorSty.black),
+            const SizedBox(width: SpaceDims.sp8),
+          ],
+        ),
+      ),
+    );
+  }
+
+  TextButton pilihTgl() {
+    return TextButton(
+      style: TextButton.styleFrom(
+        backgroundColor: ColorSty.grey60,
+        minimumSize: const Size(0, 0),
+        padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp8 + 0.5),
+        shape: RoundedRectangleBorder(
+          side: const BorderSide(color: ColorSty.primary),
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+      ),
+      onPressed: _pickDateRange,
+      child: SizedBox(
+        // width: 164,
+        // width: 170.0,
+        child: Row(
+          children: [
+            const SizedBox(width: SpaceDims.sp12),
+            Text(
+              _dateRange,
+              style: TypoSty.caption2.copyWith(
+                fontSize: 13.0,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(width: SpaceDims.sp8),
+            const Icon(
+              IconsCs.date,
+              size: 18.0,
+              color: ColorSty.primary,
+            ),
+            const SizedBox(width: SpaceDims.sp8),
+          ],
+        ),
+      ),
     );
   }
 }
