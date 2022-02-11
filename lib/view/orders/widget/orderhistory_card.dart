@@ -84,7 +84,7 @@ class OrderHistoryCard extends StatelessWidget {
                     final lang = context.watch<LangProviders>().lang;
                     return Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.only(top: SpaceDims.sp8),
+                        padding: EdgeInsets.only(top: SpaceDims.sp8),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -140,7 +140,8 @@ class OrderHistoryCard extends StatelessWidget {
                                         for (final i in List.generate(
                                             data.menu.length, (index) => index))
                                           if (i == 0)
-                                            TextSpan(text: ", ${data.menu[i].nama}")
+                                            TextSpan(
+                                                text: ", ${data.menu[i].nama}")
                                       ]),
                                 ),
                               ),
@@ -163,14 +164,41 @@ class OrderHistoryCard extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            Row(
-                              children: [
-                                if (data.status == 3)
+                            Expanded(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (data.status == 3)
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        minimumSize: Size.zero,
+                                        primary: ColorSty.white,
+                                        onPrimary: ColorSty.primary,
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: SpaceDims.sp8,
+                                          horizontal: SpaceDims.sp12,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          side: const BorderSide(
+                                            color: ColorSty.primaryDark,
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(30.0),
+                                        ),
+                                      ),
+                                      onPressed: () {},
+                                      child: Text(
+                                        lang.pesanan.buttonPe,
+                                        style: TypoSty.button
+                                            .copyWith(fontSize: 11.0),
+                                      ),
+                                    ),
+                                  const SizedBox(width: SpaceDims.sp8),
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       minimumSize: Size.zero,
-                                      primary: ColorSty.white,
-                                      onPrimary: ColorSty.primary,
+                                      primary: ColorSty.primary,
                                       padding: const EdgeInsets.symmetric(
                                         vertical: SpaceDims.sp8,
                                         horizontal: SpaceDims.sp12,
@@ -184,38 +212,15 @@ class OrderHistoryCard extends StatelessWidget {
                                             BorderRadius.circular(30.0),
                                       ),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () => _pesanLagi(context),
                                     child: Text(
                                       lang.pesanan.buttonPe,
                                       style: TypoSty.button
                                           .copyWith(fontSize: 11.0),
                                     ),
-                                  ),
-                                const SizedBox(width: SpaceDims.sp8),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    minimumSize: Size.zero,
-                                    primary: ColorSty.primary,
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: SpaceDims.sp8,
-                                      horizontal: SpaceDims.sp12,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      side: const BorderSide(
-                                        color: ColorSty.primaryDark,
-                                        width: 2,
-                                      ),
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ),
-                                  ),
-                                  onPressed: () => _pesanLagi(context),
-                                  child: Text(
-                                    lang.pesanan.buttonPe,
-                                    style:
-                                        TypoSty.button.copyWith(fontSize: 11.0),
-                                  ),
-                                )
-                              ],
+                                  )
+                                ],
+                              ),
                             ),
                           ],
                         ),
