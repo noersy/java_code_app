@@ -48,13 +48,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   Future<void> _onRefresh() async {
     _orders.clear();
-
+    _data.clear();
     var _duration = const Duration(seconds: 1);
     if (mounted) {
       setState(() => _loading = true);
 
       _orders = await Provider.of<OrderProviders>(context, listen: false)
-              .getHistoryLimit(1, 1) ??
+              .getHistoryList() ??
           [];
 
       _data = _orders;
@@ -122,6 +122,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   void initState() {
     _clearAllList();
     // _onRefresh();
+    _loadStart();
     super.initState();
   }
 
@@ -139,38 +140,71 @@ class _HistoryScreenState extends State<HistoryScreen> {
     setState(() => _openStatus = !_openStatus);
   }
 
-  List<History> list = [];
-
-  void load() {
-    print("load");
+  // Future<bool> _loadMore() async {
+  //   var _duration = const Duration(seconds: 1);
+  //   if (mounted) {
+  //     setState(() => _loading = true);
+  //     _orders = (await Provider.of<OrderProviders>(context, listen: false)
+  //             .getHistoryLimit(2, _orders.length)
+  //             .then((value) {
+  //           print('orders loadmore ${_orders[0].noStruk}');
+  //           _data.addAll(_orders);
+  //           Timer(_duration, () {
+  //             if (mounted) setState(() => _loading = false);
+  //           });
+  //         })) ??
+  //         [];
+  //   }
+  //   return true;
+  // }
+  Future<bool> _loadMore() async {
+    Menu addMenu = Menu(
+        idMenu: 2,
+        kategori: 'makanan',
+        nama: 'Ayam',
+        jumlah: 9,
+        harga: '9999',
+        total: 99999);
+    List<Menu> lMenu = [];
+    for (var i = 0; i < 5; i++) {
+      lMenu.add(addMenu);
+    }
+    History dataLimit = History(
+        idOrder: 9,
+        noStruk: '9',
+        nama: 'latif',
+        totalBayar: 9,
+        tanggal: _dateNow,
+        status: 1,
+        menu: lMenu);
     setState(() {
-      // list.addAll(List.generate(3, (v) => v));
-      _orders.add(_orders[0]);
-      // print("data count = ${list.length}");
+      _data.add(dataLimit);
     });
+    return true;
   }
 
-  Future<bool> _loadMore() async {
+  Future<void> _loadStart() async {
+    print('load start');
     _ordersLimit.clear();
-    // print(
-    //     'loadmore _ordersLimit.length: ${_ordersLimit.length} | _orders.length: ${_orders.length}');
-
-    var _duration = const Duration(seconds: 1);
+    _orders.clear();
+    _data.clear();
     if (mounted) {
+      var _duration = const Duration(seconds: 1);
       setState(() => _loading = true);
 
-      _ordersLimit = await Provider.of<OrderProviders>(context, listen: false)
-              .getHistoryLimit(1, _orders.length) ??
+      _orders = (await Provider.of<OrderProviders>(context, listen: false)
+              .getHistoryLimit(3, 1)) ??
           [];
-      _orders.addAll(_ordersLimit);
       _data = _orders;
-
-      Timer(_duration, () {
-        if (mounted) setState(() => _loading = false);
-        _refreshController.refreshCompleted();
+      setState(() {
+        _loading = false;
       });
     }
-    return true;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
