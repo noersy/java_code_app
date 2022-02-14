@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -122,6 +123,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   void initState() {
     _clearAllList();
     // _onRefresh();
+    loadTotalHistory();
     _loadStart();
     super.initState();
   }
@@ -142,12 +144,23 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   Future<bool> _loadMore() async {
     print('_data.length ${_data.length}');
-    _orders = (await Provider.of<OrderProviders>(context, listen: false)
-            .getHistoryLimit(5, 1)) ??
-        [];
-    setState(() {
-      _data.addAll(_orders);
-    });
+    if (_data.length < totalHistory) {
+      if (mounted) {
+        setState(() => _loading = true);
+        _orders = (await Provider.of<OrderProviders>(context, listen: false)
+                .getHistoryLimit(5, _data.length)) ??
+            [];
+        setState(() {
+          _data.addAll(_orders);
+        });
+        if (mounted) {
+          setState(() {
+            _loading = false;
+          });
+        }
+      }
+    }
+
     return true;
   }
 
@@ -191,7 +204,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   Future<void> _loadStart() async {
-    print('load start: ${_data.length}');
     _orders.clear();
     _data.clear();
     var _duration = const Duration(seconds: 1);
@@ -199,7 +211,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       setState(() => _loading = true);
 
       _orders = (await Provider.of<OrderProviders>(context, listen: false)
-              .getHistoryLimit(5, 0)) ??
+              .getHistoryLimit(10, 0)) ??
           [];
       _data = _orders;
       Timer(_duration, () {
@@ -210,6 +222,22 @@ class _HistoryScreenState extends State<HistoryScreen> {
         }
       });
     }
+    print('load start: ${_data.length}');
+  }
+
+  var totalHistory = 0;
+  Future<void> loadTotalHistory() async {
+    print('dataConvert: ');
+    var data = (await Provider.of<OrderProviders>(context, listen: false)
+            .getTotalHistory()
+            .then((value) {
+          Map json = jsonDecode(value);
+          TotalHistory ttlHstry = TotalHistory.fromJson(json['data']);
+          print('total history: ttlHstry ${ttlHstry.totalHistory} ');
+          totalHistory = ttlHstry.totalHistory;
+          print('total history: $totalHistory | ${json['data']}');
+        })) ??
+        [];
   }
 
   @override
