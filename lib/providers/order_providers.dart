@@ -15,6 +15,14 @@ import 'package:java_code_app/singletons/random_string.dart';
 import 'package:java_code_app/singletons/user_instance.dart';
 import 'package:logging/logging.dart' as logging;
 
+class TotalHistory {
+  var totalHistory;
+  TotalHistory({this.totalHistory});
+  factory TotalHistory.fromJson(Map<String, dynamic> json) {
+    return TotalHistory(totalHistory: json['total_order']);
+  }
+}
+
 class OrderProviders extends ChangeNotifier {
   static final _log = logging.Logger('OrderProvider');
   static const headers = {"Content-Type": "application/json", "token": "m_app"};
@@ -129,7 +137,7 @@ class OrderProviders extends ChangeNotifier {
 
   Future<MenuList?> getMenuList() async {
     try {
-      final _api = Uri.http(host, "$sub/jacode/api/menu/all");
+      final _api = Uri.http(host, "$sub/api/menu/all");
 
       _log.fine("Tray get all menu.");
       final response = await http.get(_api, headers: headers);
@@ -152,7 +160,7 @@ class OrderProviders extends ChangeNotifier {
 
   Future<MenuDetail?> getDetailMenu({required int id}) async {
     try {
-      final _api = Uri.http(host, "$sub/jacode/api/menu/detail/$id");
+      final _api = Uri.http(host, "$sub/api/menu/detail/$id");
 
       _log.fine("Try to get menu detail");
       final response = await http.get(_api, headers: headers);
@@ -177,8 +185,7 @@ class OrderProviders extends ChangeNotifier {
     try {
       final user = UserInstance.getInstance().user;
       if (user == null) return false;
-      final _api =
-          Uri.http(host, "$sub/jacode/api/voucher/user/${user.data.idUser}");
+      final _api = Uri.http(host, "$sub/api/voucher/user/${user.data.idUser}");
 
       _log.fine("Try to get list voucher.");
       final response = await http.get(_api, headers: headers);
@@ -206,8 +213,7 @@ class OrderProviders extends ChangeNotifier {
     if (user == null) return false;
 
     try {
-      final _api =
-          Uri.http(host, "$sub/jacode/api/diskon/user/${user.data.idUser}");
+      final _api = Uri.http(host, "$sub/api/diskon/user/${user.data.idUser}");
 
       _log.fine("Try to get list discount");
       final response = await http.get(_api, headers: headers);
@@ -235,8 +241,7 @@ class OrderProviders extends ChangeNotifier {
     if (user == null) return false;
 
     try {
-      final _api =
-          Uri.http(host, "$sub/jacode/api/promo/user/${user.data.idUser}");
+      final _api = Uri.http(host, "$sub/api/promo/user/${user.data.idUser}");
 
       _log.fine("Try to get list promo");
       final response = await http.get(_api, headers: headers);
@@ -268,8 +273,7 @@ class OrderProviders extends ChangeNotifier {
     final user = UserInstance.getInstance().user;
     if (user == null) return false;
     try {
-      final _api =
-          Uri.http(host, "$sub/jacode/api/order/proses/${user.data.idUser}");
+      final _api = Uri.http(host, "$sub/api/order/proses/${user.data.idUser}");
 
       _log.fine("Try to get order in progress");
       final response = await http.get(_api, headers: headers);
@@ -300,7 +304,7 @@ class OrderProviders extends ChangeNotifier {
 
   Future<detail.OrderDetail?> getDetailOrder({required int id}) async {
     try {
-      final _api = Uri.http(host, "$sub/jacode/api/order/detail/$id");
+      final _api = Uri.http(host, "$sub/api/order/detail/$id");
 
       _log.fine("Tray to get detail order");
       final response = await http.get(_api, headers: headers);
@@ -319,21 +323,21 @@ class OrderProviders extends ChangeNotifier {
     return null;
   }
 
-  Future<List<History>?> getHistoryLimit(limit, start) async {
+  Future getTotalHistory() async {
     final user = UserInstance.getInstance().user;
 
     if (user == null) return null;
 
     try {
-      final _api = Uri.http(host,
-          "$sub/jacode/api/order/history/${user.data.idUser}?limit=$limit&start=$start"); //tambahkan url kayak di postman get history limit
-
       _log.fine("Try to get list history of order");
       final response = await http.get(
-        _api,
-        headers: headers,
-      );
-
+          Uri.parse("http://jacode.decko.my.id/api/order/history/total/1"),
+          headers: headers);
+      // final response = await http.get(
+      //   _api,
+      //   headers: headers,
+      // );
+      // print('response.limit: ${response.body}');
       if (response.statusCode == 204) {
         _log.info("History if empty");
         return [];
@@ -341,7 +345,44 @@ class OrderProviders extends ChangeNotifier {
 
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
-        _log.fine("Success get list history of order");
+        _log.fine("Success get list history of order:");
+        return response.body;
+        // return listHistoryFromJson(response.body).data;
+      }
+      _log.info("Fail to get liest history");
+      _log.info(response.body);
+    } catch (e, r) {
+      _log.warning(e);
+      _log.warning(r);
+    }
+    return null;
+  }
+
+  Future<List<History>?> getHistoryLimit(limit, start) async {
+    final user = UserInstance.getInstance().user;
+
+    if (user == null) return null;
+
+    try {
+      _log.fine("Try to get list history of order");
+      final response = await http.get(
+          Uri.parse(
+              "http://jacode.decko.my.id/api/order/history/1?limit=$limit&start=$start"),
+          headers: headers);
+      // final response = await http.get(
+      //   _api,
+      //   headers: headers,
+      // );
+      // print('response.limit: ${response.body}');
+      if (response.statusCode == 204) {
+        _log.info("History if empty");
+        return [];
+      }
+
+      if (response.statusCode == 200 &&
+          json.decode(response.body)["status_code"] == 200) {
+        _log.fine("Success get list history of order:");
+        // print('body sukses:\n${response.body}');
         return listHistoryFromJson(response.body).data;
       }
       _log.info("Fail to get liest history");
@@ -359,8 +400,7 @@ class OrderProviders extends ChangeNotifier {
     if (user == null) return null;
 
     try {
-      final _api =
-          Uri.http(host, "$sub/jacode/api/order/history/${user.data.idUser}");
+      final _api = Uri.http(host, "$sub/api/order/history/${user.data.idUser}");
 
       _log.fine("Try to get list history of order");
       final response = await http.get(_api, headers: headers);
@@ -386,7 +426,7 @@ class OrderProviders extends ChangeNotifier {
 
   Future<bool> cancelOrder({required int idOrder}) async {
     try {
-      final _api = Uri.http(host, "$sub/jacode/api/order/batal/$idOrder");
+      final _api = Uri.http(host, "$sub/api/order/batal/$idOrder");
 
       _log.fine("Tray to cancel a order");
       final response = await http.post(_api, headers: headers);
@@ -418,7 +458,7 @@ class OrderProviders extends ChangeNotifier {
       final user = UserInstance.getInstance().user;
       if (user == null) return false;
 
-      final _api = Uri.http(host, "$sub/jacode/api/order/add");
+      final _api = Uri.http(host, "$sub/api/order/add");
 
       final body = {
         "order": {
