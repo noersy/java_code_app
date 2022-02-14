@@ -143,10 +143,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   Future<bool> _loadMore() async {
-    print('_data.length ${_data.length}');
+    print('_loadMore _data.length ${_data.length}');
     if (_data.length < totalHistory) {
       if (mounted) {
-        setState(() => _loading = true);
+        // setState(() => _loading = true);
         _orders = (await Provider.of<OrderProviders>(context, listen: false)
                 .getHistoryLimit(5, _data.length)) ??
             [];
@@ -159,9 +159,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
           });
         }
       }
+      return true;
+    } else {
+      LoadMoreStatus.nomore;
+      //data habis
+      return true;
     }
-
-    return true;
   }
 
   Future<bool> _loadMoreOffline() async {
@@ -254,7 +257,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         controller: _refreshController,
         child: LoadMore(
           textBuilder: DefaultLoadMoreTextBuilder.english,
-          isFinish: _orders.length >= 100,
+          isFinish: _data.length >= totalHistory,
           onLoadMore: _loadMore,
           child: ListView(
             children: [
