@@ -140,64 +140,74 @@ class _HistoryScreenState extends State<HistoryScreen> {
     setState(() => _openStatus = !_openStatus);
   }
 
-  // Future<bool> _loadMore() async {
-  //   var _duration = const Duration(seconds: 1);
-  //   if (mounted) {
-  //     setState(() => _loading = true);
-  //     _orders = (await Provider.of<OrderProviders>(context, listen: false)
-  //             .getHistoryLimit(2, _orders.length)
-  //             .then((value) {
-  //           print('orders loadmore ${_orders[0].noStruk}');
-  //           _data.addAll(_orders);
-  //           Timer(_duration, () {
-  //             if (mounted) setState(() => _loading = false);
-  //           });
-  //         })) ??
-  //         [];
-  //   }
-  //   return true;
-  // }
   Future<bool> _loadMore() async {
-    Menu addMenu = Menu(
-        idMenu: 2,
-        kategori: 'makanan',
-        nama: 'Ayam',
-        jumlah: 9,
-        harga: '9999',
-        total: 99999);
-    List<Menu> lMenu = [];
-    for (var i = 0; i < 5; i++) {
-      lMenu.add(addMenu);
-    }
-    History dataLimit = History(
-        idOrder: 9,
-        noStruk: '9',
-        nama: 'latif',
-        totalBayar: 9,
-        tanggal: _dateNow,
-        status: 1,
-        menu: lMenu);
+    print('_data.length ${_data.length}');
+    _orders = (await Provider.of<OrderProviders>(context, listen: false)
+            .getHistoryLimit(5, 1)) ??
+        [];
     setState(() {
-      _data.add(dataLimit);
+      _data.addAll(_orders);
     });
     return true;
   }
 
-  Future<void> _loadStart() async {
-    print('load start');
-    _ordersLimit.clear();
-    _orders.clear();
-    _data.clear();
+  Future<bool> _loadMoreOffline() async {
     if (mounted) {
-      var _duration = const Duration(seconds: 1);
       setState(() => _loading = true);
 
       _orders = (await Provider.of<OrderProviders>(context, listen: false)
-              .getHistoryLimit(3, 1)) ??
+              .getHistoryLimit(5, 0)) ??
           [];
       _data = _orders;
-      setState(() {
-        _loading = false;
+      if (mounted) {
+        setState(() {
+          _loading = false;
+        });
+      }
+    }
+    // Menu addMenu = Menu(
+    //     idMenu: 2,
+    //     kategori: 'makanan',
+    //     nama: 'Ayam',
+    //     jumlah: 9,
+    //     harga: '9999',
+    //     total: 99999);
+    // List<Menu> lMenu = [];
+    // for (var i = 0; i < 5; i++) {
+    //   lMenu.add(addMenu);
+    // }
+    // History dataLimit = History(
+    //     idOrder: 9,
+    //     noStruk: '9',
+    //     nama: 'latif',
+    //     totalBayar: 9,
+    //     tanggal: _dateNow,
+    //     status: 1,
+    //     menu: lMenu);
+    // setState(() {
+    //   _data.add(dataLimit);
+    // });
+    return true;
+  }
+
+  Future<void> _loadStart() async {
+    print('load start: ${_data.length}');
+    _orders.clear();
+    _data.clear();
+    var _duration = const Duration(seconds: 1);
+    if (mounted) {
+      setState(() => _loading = true);
+
+      _orders = (await Provider.of<OrderProviders>(context, listen: false)
+              .getHistoryLimit(5, 0)) ??
+          [];
+      _data = _orders;
+      Timer(_duration, () {
+        if (mounted) {
+          setState(() {
+            _loading = false;
+          });
+        }
       });
     }
   }
