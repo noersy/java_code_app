@@ -30,22 +30,40 @@ class _CardMenuState extends State<CardMenu> {
   late final Map<String, dynamic> _data;
 
   void _add() {
-    if (_jumlahOrder < 1) {
-      Navigate.toChekOut(context);
-    }
-    setState(() => _jumlahOrder++);
-    if (_jumlahOrder >= 1) {
-      Provider.of<OrderProviders>(context, listen: false).addOrder(
-        jumlahOrder: _jumlahOrder,
-        data: _data,
-        catatan: '',
-      );
+    if (_jumlahOrder != 0) {
+      setState(() => _jumlahOrder++);
+      print('jumlah order: $_jumlahOrder');
+      if (_jumlahOrder >= 1) {
+        Provider.of<OrderProviders>(context, listen: false).addOrder(
+          jumlahOrder: _jumlahOrder,
+          data: _data,
+          catatan: '',
+        );
+      } else {
+        Provider.of<OrderProviders>(context, listen: false).editOrder(
+          jumlahOrder: _jumlahOrder,
+          id: "${widget.data.idMenu}",
+          catatan: '',
+        );
+      }
     } else {
-      Provider.of<OrderProviders>(context, listen: false).editOrder(
-        jumlahOrder: _jumlahOrder,
-        id: "${widget.data.idMenu}",
-        catatan: '',
-      );
+      setState(() => _jumlahOrder++);
+      Navigate.toDetailMenu(context,
+          id: widget.data.idMenu, countOrder: _jumlahOrder);
+      print('jumlah order: $_jumlahOrder');
+      if (_jumlahOrder >= 1) {
+        Provider.of<OrderProviders>(context, listen: false).addOrder(
+          jumlahOrder: _jumlahOrder,
+          data: _data,
+          catatan: '',
+        );
+      } else {
+        Provider.of<OrderProviders>(context, listen: false).editOrder(
+          jumlahOrder: _jumlahOrder,
+          id: "${widget.data.idMenu}",
+          catatan: '',
+        );
+      }
     }
   }
 

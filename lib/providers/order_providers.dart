@@ -331,7 +331,7 @@ class OrderProviders extends ChangeNotifier {
     try {
       _log.fine("Try to get list history of order");
       final response = await http.get(
-          Uri.parse("http://jacode.decko.my.id/api/order/history/total/1"),
+          Uri.parse("https://$host/api/order/history/total/1"),
           headers: headers);
       // final response = await http.get(
       //   _api,
@@ -367,7 +367,7 @@ class OrderProviders extends ChangeNotifier {
       _log.fine("Try to get list history of order");
       final response = await http.get(
           Uri.parse(
-              "http://jacode.decko.my.id/api/order/history/1?limit=$limit&start=$start"),
+              "https://$host/api/order/history/1?limit=$limit&start=$start"),
           headers: headers);
       // final response = await http.get(
       //   _api,

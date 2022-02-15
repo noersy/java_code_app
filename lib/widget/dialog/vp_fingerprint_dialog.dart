@@ -7,12 +7,11 @@ import 'package:java_code_app/widget/dialog/vp_pin_dialog.dart';
 import 'package:local_auth/local_auth.dart';
 
 class VFingerPrintDialog extends StatelessWidget {
-
-  final ValueChanged<bool> onSumint;
+  final ValueChanged<bool> onSubmit;
 
   const VFingerPrintDialog({
     Key? key,
-    required this.onSumint,
+    required this.onSubmit,
   }) : super(key: key);
 
   static final localAuth = LocalAuthentication();
@@ -22,14 +21,14 @@ class VFingerPrintDialog extends StatelessWidget {
     // final availableBiometrics = await localAuth.getAvailableBiometrics();
     // print(availableBiometrics);
 
-    if(canCheckBiometrics){
+    if (canCheckBiometrics) {
       bool didAuthenticate = await localAuth.authenticate(
         biometricOnly: true,
         localizedReason: 'Please authenticate to continue',
       );
 
       // if(didAuthenticate) {
-        onSumint(didAuthenticate);
+      onSubmit(didAuthenticate);
       // }
     }
   }
@@ -59,7 +58,7 @@ class VFingerPrintDialog extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: ()=> _chekFingerPrint(context),
+                onTap: () => _chekFingerPrint(context),
                 child: Column(
                   children: [
                     const SizedBox(height: 28),
@@ -75,7 +74,7 @@ class VFingerPrintDialog extends StatelessWidget {
                     const Expanded(child: Divider(thickness: 3)),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 14),
-                      child:  Text("Atau", style: TypoSty.caption2),
+                      child: Text("Atau", style: TypoSty.caption2),
                     ),
                     const Expanded(child: Divider(thickness: 3)),
                   ],
@@ -84,13 +83,15 @@ class VFingerPrintDialog extends StatelessWidget {
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  showDialog(context: context, builder: (_)=> VPinDialog(
-                    onComplete: (value){
-                      if(value.runtimeType == bool){
-                        onSumint(value as bool);
-                      }
-                    },
-                  ));
+                  showDialog(
+                      context: context,
+                      builder: (_) => VPinDialog(
+                            onComplete: (value) {
+                              if (value.runtimeType == bool) {
+                                onSubmit(value as bool);
+                              }
+                            },
+                          ));
                 },
                 child: Text(
                   "Verifikasi Menggunakan PIN",

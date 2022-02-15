@@ -30,7 +30,7 @@ class AuthProviders extends ChangeNotifier {
     bool? isGoogle = false,
     String? nama = "",
   }) async {
-    final Uri _api = Uri.https(host, "$sub/api/auth/login");
+    final Uri _api = Uri.http(host, "$sub/api/auth/login");
     try {
       final body = <String, dynamic>{
         "email": email,
@@ -39,14 +39,15 @@ class AuthProviders extends ChangeNotifier {
         "is_google": isGoogle! ? "is_google" : "",
       };
 
-      _log.fine("Tray to login.");
+      _log.fine("Tray to login." + '\n$email' + '\n$password');
       final response = await http.post(
         _api,
         headers: _headers,
         body: json.encode(body),
       );
-
-      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
+      print('error login ');
+      if (response.statusCode == 200 &&
+          json.decode(response.body)["status_code"] == 200) {
         _loginUser = loginUserFromJson(response.body);
         if (_loginUser == null) _log.info("Login failed");
         if (_loginUser != null) _log.fine("Login successes");
@@ -69,13 +70,14 @@ class AuthProviders extends ChangeNotifier {
     if (user == null && id == null) return false; //@todo make new exception
 
     final _id = id ?? user!.data.idUser;
-    final Uri _api = Uri.https(host, "$sub/api/user/detail/$_id");
+    final Uri _api = Uri.http(host, "$sub/api/user/detail/$_id");
 
     try {
       _log.fine("Tray to get data user.");
       final response = await http.get(_api, headers: _headers);
 
-      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
+      if (response.statusCode == 200 &&
+          json.decode(response.body)["status_code"] == 200) {
         _user = userDetailFromJson(response.body);
         if (_user == null) _log.info("Failed get data user.");
         if (_user != null) _log.fine("Success get data user.");
@@ -96,7 +98,7 @@ class AuthProviders extends ChangeNotifier {
     if (user == null) return false;
 
     final _id = user.data.idUser;
-    final Uri _api = Uri.https(host, "$sub/api/user/update/$_id");
+    final Uri _api = Uri.http(host, "$sub/api/user/update/$_id");
 
     try {
       final body = {"$key": "$value"};
@@ -104,7 +106,8 @@ class AuthProviders extends ChangeNotifier {
       _log.fine("Tray update user profile.");
       final response = await http.post(_api, headers: _headers, body: body);
 
-      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
+      if (response.statusCode == 200 &&
+          json.decode(response.body)["status_code"] == 200) {
         _log.fine("Success update $key user.");
         getUser();
         return true;
@@ -121,7 +124,7 @@ class AuthProviders extends ChangeNotifier {
 
     if (user == null) return false;
 
-    final Uri _api = Uri.https(
+    final Uri _api = Uri.http(
       host,
       "$sub/api/user/profil/${user.data.idUser}",
     );
@@ -136,9 +139,10 @@ class AuthProviders extends ChangeNotifier {
         body: jsonEncode(body),
       );
 
-      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
-        if(_user == null) _log.info("Failed Upload profile image.");
-        if(_user != null) _log.fine("Susses Upload profile image.");
+      if (response.statusCode == 200 &&
+          json.decode(response.body)["status_code"] == 200) {
+        if (_user == null) _log.info("Failed Upload profile image.");
+        if (_user != null) _log.fine("Susses Upload profile image.");
         getUser();
         return true;
       }
@@ -152,7 +156,8 @@ class AuthProviders extends ChangeNotifier {
     final user = UserInstance.getInstance().user;
 
     if (user == null) return false;
-    final Uri _api = Uri.https(host, "$sub/api/user/ktp/${user.data.idUser}");
+    final Uri _api =
+        Uri.http(host, "$sub/api/user/ktp/${user.data.idUser}");
 
     try {
       final body = {"image": base64};
@@ -164,7 +169,8 @@ class AuthProviders extends ChangeNotifier {
         body: jsonEncode(body),
       );
 
-      if (response.statusCode == 200 && json.decode(response.body)["status_code"] == 200) {
+      if (response.statusCode == 200 &&
+          json.decode(response.body)["status_code"] == 200) {
         _log.fine("Successes upload ktp");
         getUser();
         return true;

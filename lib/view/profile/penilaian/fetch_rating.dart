@@ -1,10 +1,10 @@
+// ignore_for_file: non_constant_identifier_names, prefer_typing_uninitialized_variables
+
 library java_code_app.fetch_rating;
 
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:java_code_app/constans/hosts.dart';
-import 'package:java_code_app/models/listreview.dart';
 import 'package:java_code_app/singletons/user_instance.dart';
 import 'package:logging/logging.dart' as logging;
 

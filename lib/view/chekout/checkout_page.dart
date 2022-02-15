@@ -82,7 +82,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
     showDialog(
       context: context,
       builder: (_) => VFingerPrintDialog(
-        onSumint: (bool value) async {
+        onSubmit: (bool value) async {
           if (value) {
             Provider.of<OrderProviders>(context, listen: false).sendCheckOut(
               idVoucher: _selectedVoucher?.idVoucher,

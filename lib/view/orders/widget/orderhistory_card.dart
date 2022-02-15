@@ -84,10 +84,11 @@ class OrderHistoryCard extends StatelessWidget {
                     final lang = context.watch<LangProviders>().lang;
                     return Expanded(
                       child: Padding(
-                        padding: EdgeInsets.only(top: SpaceDims.sp8),
+                        padding: const EdgeInsets.only(top: SpaceDims.sp8),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Text(data.noStruk),
                             Padding(
                               padding:
                                   const EdgeInsets.only(right: SpaceDims.sp18),

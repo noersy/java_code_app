@@ -2,10 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:java_code_app/models/listreview.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/route/route.dart';
-import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
 import 'fetch_rating.dart';
 
@@ -19,12 +17,10 @@ class DaftarPenilaian extends StatefulWidget {
 class _DaftarPenilaianState extends State<DaftarPenilaian>
     with TickerProviderStateMixin {
   loadReview() {
-    print('loadReview: ');
     Future data = getAllReview();
     data.then((value) {
       Map json = jsonDecode(value);
       for (var i in json['data']) {
-        print('loadReview i: $i');
         Review rv = Review.fromJson(i);
         listReview.add(rv);
       }
@@ -32,14 +28,6 @@ class _DaftarPenilaianState extends State<DaftarPenilaian>
         widgetListReview();
       });
     });
-    // Future data = Review;
-    //     .then((value) {
-    //   print('loadReview value:');
-    //   Map json = jsonDecode(value);
-    //   Review rview = Review.fromJson(json['data']);
-    //   print('daftar review ');
-    // })) ??
-    // [];
   }
 
   @override
@@ -125,15 +113,16 @@ class _DaftarPenilaianState extends State<DaftarPenilaian>
                             SvgPicture.asset(
                               "assert/image/icons/kalender.svg",
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             Text(
                               '${listReview[index].type}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Color.fromARGB(255, 1, 154, 173)),
                             ),
                             RatingBar.builder(
+                              ignoreGestures: true,
                               itemSize: 20.0,
                               initialRating: listReview[index].score.toDouble(),
                               minRating: 1,
@@ -152,7 +141,7 @@ class _DaftarPenilaianState extends State<DaftarPenilaian>
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 10, bottom: 10),
+                        padding: const EdgeInsets.only(left: 10, bottom: 10),
                         child: Text(
                           '${listReview[index].review}',
                           textAlign: TextAlign.start,
