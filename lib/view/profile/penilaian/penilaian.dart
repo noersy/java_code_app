@@ -1,6 +1,7 @@
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
+import 'package:java_code_app/view/profile/penilaian/post_penilaian.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
 
 class Penilaian extends StatefulWidget {
@@ -106,7 +107,6 @@ class _PenilaianState extends State<Penilaian> {
                                                 print(rating);
                                               },
                                             ),
-                                        
                                           ],
                                         ),
                                       ),
@@ -176,7 +176,9 @@ class _PenilaianState extends State<Penilaian> {
                                           MainAxisAlignment.center,
                                       children: [
                                         ElevatedButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              postPenilaian();
+                                            },
                                             child:
                                                 const Text('Kirim Penilaian')),
                                         RawMaterialButton(
