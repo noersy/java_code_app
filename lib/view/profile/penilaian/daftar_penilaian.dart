@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:java_code_app/models/listreview.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/route/route.dart';
+import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
 import 'fetch_rating.dart';
 
@@ -43,8 +44,13 @@ class _DaftarPenilaianState extends State<DaftarPenilaian>
 
   @override
   void initState() {
+    clearList();
     loadReview();
     super.initState();
+  }
+
+  clearList() {
+    listReview.clear();
   }
 
   @override
@@ -145,11 +151,12 @@ class _DaftarPenilaianState extends State<DaftarPenilaian>
                           ],
                         ),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.only(left: 10, bottom: 10),
                         child: Text(
-                          'keterangan  ',
+                          '${listReview[index].review}',
                           textAlign: TextAlign.start,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       )
                     ],
