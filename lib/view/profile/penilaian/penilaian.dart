@@ -1,7 +1,9 @@
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/view/profile/penilaian/post_penilaian.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
@@ -189,7 +191,9 @@ class _PenilaianState extends State<Penilaian> {
                     },
                     child: const Text('Kirim Penilaian')),
                 RawMaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _showPicker(context);
+                  },
                   elevation: 2.0,
                   fillColor: Colors.white,
                   child: const Icon(
@@ -213,6 +217,45 @@ class _PenilaianState extends State<Penilaian> {
             // )
           ],
         ));
+  }
+
+  File? _image = null;
+
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              color: Colors.white,
+              child: new Wrap(
+                children: <Widget>[
+                  new ListTile(
+                      tileColor: Colors.white,
+                      leading: new Icon(Icons.photo_library),
+                      title: new Text('Galeri'),
+                      onTap: () {}),
+                  new ListTile(
+                    leading: new Icon(Icons.photo_camera),
+                    title: new Text('Kamera'),
+                    onTap: () {
+                      _imgKamera();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  _imgKamera() async {
+    final picker = ImagePicker();
+    final image =
+        await picker.getImage(source: ImageSource.camera, imageQuality: 20);
+    setState(() {
+      _image = File(image!.path);
+    });
   }
 
   var selectedType = 'Fasilitas';
