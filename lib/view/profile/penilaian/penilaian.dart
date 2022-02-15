@@ -137,12 +137,13 @@ class _PenilaianState extends State<Penilaian> {
   }
 
   List listType = [
-    'Harga'
-        'Rasa'
-        'Penyajian Makanan'
-        'Pelayanan'
-        'Fasilitas'
+    'Harga',
+    'Rasa',
+    'Penyajian Makanan',
+    'Pelayanan',
+    'Fasilitas'
   ];
+  TextEditingController textReview = TextEditingController();
   Container widgetType(BuildContext context) {
     return Container(
         width: MediaQuery.of(context).size.height,
@@ -158,17 +159,6 @@ class _PenilaianState extends State<Penilaian> {
                 for (var i in listType) widgetButtonType(i),
               ],
             ),
-            // Wrap(
-            //   // mainAxisSize: MainAxisSize.min,
-            //   children: [
-            //     TextButton(onPressed: () {}, child: const Text('Harga')),
-            //     TextButton(onPressed: () {}, child: const Text('Rasa')),
-            //     TextButton(
-            //         onPressed: () {}, child: const Text('Penyajian Makanan')),
-            //     TextButton(onPressed: () {}, child: const Text('Pelayanan')),
-            //     TextButton(onPressed: () {}, child: const Text('Fasilitas')),
-            //   ],
-            // ),
             const Padding(
               padding: EdgeInsets.all(8.0),
               child: Divider(
@@ -177,13 +167,13 @@ class _PenilaianState extends State<Penilaian> {
             ),
             const Text('Tulis Review'),
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: EdgeInsets.all(10.0),
               child: TextFormField(
-                style: const TextStyle(fontSize: 12),
+                enabled: true,
+                style: TextStyle(fontSize: 12),
                 maxLines: 5,
-                initialValue:
-                    'Mohon Menjaga Kebersihan, Kemarin Meja Masih Kotor',
-                decoration: const InputDecoration(
+                controller: textReview,
+                decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: '',
                     fillColor: Colors.white,
@@ -195,7 +185,7 @@ class _PenilaianState extends State<Penilaian> {
               children: [
                 ElevatedButton(
                     onPressed: () {
-                      postPenilaian(score, 'Fasilitas', 'review fasilitas');
+                      postPenilaian(score, selectedType, '${textReview.text}');
                     },
                     child: const Text('Kirim Penilaian')),
                 RawMaterialButton(
@@ -225,24 +215,44 @@ class _PenilaianState extends State<Penilaian> {
         ));
   }
 
-  var selectedType = '';
+  var selectedType = 'Fasilitas';
   Widget widgetButtonType(i) {
     if (i == selectedType) {
       return TextButton(
+        style: ButtonStyle(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                    side: BorderSide(color: Color.fromRGBO(0, 154, 173, 1))))),
         onPressed: () {},
-        child: Text('${i}'),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('${i}'),
+            SizedBox(
+              width: 5,
+            ),
+            Icon(Icons.check_circle)
+          ],
+        ),
       );
     } else {
       return TextButton(
-        style: TextButton.styleFrom(
-          primary: Color.fromARGB(255, 170, 170, 170),
-        ),
+        style: ButtonStyle(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                    side:
+                        BorderSide(color: Color.fromRGBO(170, 170, 170, 1))))),
         onPressed: () {
           setState(() {
             selectedType = i;
           });
         },
-        child: Text('${i}'),
+        child: Text(
+          '${i}',
+          style: TextStyle(color: Color.fromRGBO(170, 170, 170, 1)),
+        ),
       );
     }
   }
