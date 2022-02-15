@@ -16,7 +16,6 @@ class DaftarPenilaian extends StatefulWidget {
 
 class _DaftarPenilaianState extends State<DaftarPenilaian>
     with TickerProviderStateMixin {
-  List _listReview = [];
   loadReview() {
     print('loadReview: ');
     Future data = getAllReview();
@@ -25,7 +24,7 @@ class _DaftarPenilaianState extends State<DaftarPenilaian>
       for (var i in json['data']) {
         print('loadReview i: $i');
         Review rv = Review.fromJson(i);
-        _listReview.add(i);
+        listReview.add(rv);
       }
       setState(() {
         widgetListReview();
@@ -98,7 +97,7 @@ class _DaftarPenilaianState extends State<DaftarPenilaian>
   ListView widgetListReview() {
     return ListView.builder(
         shrinkWrap: true,
-        itemCount: _listReview.length,
+        itemCount: listReview.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () => Navigate.toBalasanReview(context),
@@ -123,7 +122,7 @@ class _DaftarPenilaianState extends State<DaftarPenilaian>
                               width: 10,
                             ),
                             Text(
-                              '${_listReview[index].type}',
+                              '${listReview[index].type}',
                               style: TextStyle(
                                   color: Color.fromARGB(255, 1, 154, 173)),
                             ),
