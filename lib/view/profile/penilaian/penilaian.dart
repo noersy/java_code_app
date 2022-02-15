@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
@@ -76,6 +78,7 @@ class _PenilaianState extends State<Penilaian> {
                                               onRatingUpdate: (rating) {
                                                 // ignore: avoid_print
                                                 setState(() {
+                                                  score = rating;
                                                   if (rating == 1) {
                                                     RatingText = 'jelek sekali';
                                                   }
@@ -177,7 +180,8 @@ class _PenilaianState extends State<Penilaian> {
                                       children: [
                                         ElevatedButton(
                                             onPressed: () {
-                                              postPenilaian();
+                                              postPenilaian(score, 'Fasilitas',
+                                                  'review fasilitas');
                                             },
                                             child:
                                                 const Text('Kirim Penilaian')),
@@ -219,6 +223,7 @@ class _PenilaianState extends State<Penilaian> {
   }
 
   String RatingText = 'rating now';
+  double score = 1.0;
   Widget widgetTextRating(text) {
     return Padding(
       padding: EdgeInsets.only(right: 10.0),
