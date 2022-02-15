@@ -10,6 +10,43 @@ import 'package:logging/logging.dart' as logging;
 
 final _log = logging.Logger('OrderProvider');
 const headers = {"Content-Type": "application/json", "token": "m_app"};
+
+class Review {
+  var id_review, id_user, nama, score, type, review, image, created_at;
+  Review(
+      {this.id_review,
+      this.id_user,
+      this.nama,
+      this.score,
+      this.type,
+      this.review,
+      this.image,
+      this.created_at});
+  factory Review.fromJson(Map<String, dynamic> json) {
+    return Review(
+      id_review: json['id_review'],
+      id_user: json['id_user'],
+      nama: json['nama'],
+      score: json['score'],
+      type: json['type'],
+      review: json['review'],
+      image: json['image'],
+      created_at: json['created_at'],
+    );
+  }
+  Map<String, dynamic> toJson() => {
+        'id_review': id_review,
+        'id_user': id_user,
+        'nama': nama,
+        'score': score,
+        'type': type,
+        'review': review,
+        'image': image,
+        'created_at': created_at,
+      };
+}
+
+List listReview = [];
 Future getAllReview() async {
   final user = UserInstance.getInstance().user;
   if (user == null) return null;

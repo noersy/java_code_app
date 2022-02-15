@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:java_code_app/models/listreview.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
@@ -126,12 +127,20 @@ class _DaftarPenilaianState extends State<DaftarPenilaian>
                               style: TextStyle(
                                   color: Color.fromARGB(255, 1, 154, 173)),
                             ),
-                            Image.asset('assert/image/icons/star_yellow.png'),
-                            Image.asset('assert/image/icons/star_yellow.png'),
-                            Image.asset('assert/image/icons/star_yellow.png'),
-                            Image.asset('assert/image/icons/star_yellow.png'),
-                            SvgPicture.asset(
-                              "assert/image/icons/star_gray.svg",
+                            RatingBar.builder(
+                              itemSize: 20.0,
+                              initialRating: listReview[index].score.toDouble(),
+                              minRating: 1,
+                              direction: Axis.horizontal,
+                              allowHalfRating: true,
+                              itemCount: 5,
+                              itemPadding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              itemBuilder: (context, _) => const Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                              onRatingUpdate: (rating) {},
                             ),
                           ],
                         ),
