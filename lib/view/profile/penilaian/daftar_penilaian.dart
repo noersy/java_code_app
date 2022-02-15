@@ -1,10 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:java_code_app/models/listreview.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
+import 'package:java_code_app/providers/rating_providers.dart';
 import 'package:java_code_app/route/route.dart';
-import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
 import 'package:provider/provider.dart';
+
+import 'fetch_rating.dart';
 
 class DaftarPenilaian extends StatefulWidget {
   const DaftarPenilaian({Key? key}) : super(key: key);
@@ -13,19 +18,57 @@ class DaftarPenilaian extends StatefulWidget {
   _DaftarPenilaianState createState() => _DaftarPenilaianState();
 }
 
-class _DaftarPenilaianState extends State<DaftarPenilaian> {
+class _DaftarPenilaianState extends State<DaftarPenilaian>
+    with TickerProviderStateMixin {
+  Future loadReview() async {
+    print('loadReview: ');
+    Future data = getAllReview();
+    data.then((value) {
+      Map json = jsonDecode(value);
+      for (var i in json['data']) {
+        print('loadReview i: $i');
+      }
+    });
+    // Future data = Review;
+    //     .then((value) {
+    //   print('loadReview value:');
+    //   Map json = jsonDecode(value);
+    //   Review rview = Review.fromJson(json['data']);
+    //   print('daftar review ');
+    // })) ??
+    // [];
+  }
+
+  @override
+  void initState() {
+    loadReview();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
         animation: LangProviders(),
         builder: (context, snapshot) {
-          final lang = Provider.of<LangProviders>(context).lang;
           return Scaffold(
             floatingActionButton: FloatingActionButton(
-                onPressed: () {},
-                child: Icon(Icons.add),
-                backgroundColor: Colors.blue),
-            appBar: CostumeAppBar(
+              child: Container(
+                width: 60,
+                height: 60,
+                child: const Icon(
+                  Icons.add,
+                  size: 40,
+                ),
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(colors: [
+                      Color.fromARGB(255, 64, 179, 174),
+                      Color.fromARGB(255, 1, 154, 173),
+                    ])),
+              ),
+              onPressed: () => Navigate.toPenilaian(context),
+            ),
+            appBar: const CostumeAppBar(
               title: '',
               profileTitle: 'Daftar Penilaian',
               // profileTitle: lang.profile.title,
@@ -64,6 +107,9 @@ class _DaftarPenilaianState extends State<DaftarPenilaian> {
                                                 SvgPicture.asset(
                                                   "assert/image/icons/kalender.svg",
                                                 ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
                                                 Text(
                                                   'Penyajian Makanan',
                                                   style: TextStyle(
@@ -84,8 +130,8 @@ class _DaftarPenilaianState extends State<DaftarPenilaian> {
                                               ],
                                             ),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
+                                          const Padding(
+                                            padding: EdgeInsets.only(
                                                 left: 10, bottom: 10),
                                             child: Text(
                                               'keterangan  ',
@@ -95,7 +141,7 @@ class _DaftarPenilaianState extends State<DaftarPenilaian> {
                                         ],
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
                                   ],
