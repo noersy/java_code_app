@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element, avoid_print, unused_local_variable, non_constant_identifier_names
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -28,9 +30,11 @@ class HistoryScreen extends StatefulWidget {
 
 class _HistoryScreenState extends State<HistoryScreen> {
   static String _dropdownValue = 'Semua Status';
+  // ignore: unused_field
   static final List<String> _item = ["Semua Status", "Selesai", "Dibatalkan"];
   static List<History> _data = [];
   static List<History> _orders = [];
+  // ignore: prefer_final_fields
   static List<History> _ordersLimit = [];
   static int _status = 0;
   static final RefreshController _refreshController =
@@ -163,6 +167,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
     } else {
       LoadMoreStatus.nomore;
       //data habis
+      if (mounted) {
+        setState(() {
+          _loading = false;
+        });
+      }
       return true;
     }
   }
@@ -517,7 +526,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(width: SpaceDims.sp12),
+            const SizedBox(width: SpaceDims.sp12),
             AnimatedBuilder(
                 animation: LangProviders(),
                 builder: (context, snapshot) {
