@@ -43,27 +43,53 @@ class _BalasanReviewState extends State<BalasanReview> {
                       children: [
                         Image.asset("assert/image/bg_daftarpenilaian.png"),
                         Column(children: [
-                          Container(
-                              decoration: BoxDecoration(
-                                  color: Color.fromRGBO(223, 239, 241, 0.5),
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(40.0),
-                                    topRight: Radius.circular(40.0),
-                                    bottomLeft: Radius.circular(40.0),
-                                    bottomRight: Radius.circular(40.0),
-                                  )),
-                              child: Column(
-                                // mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text('jam'),
-                                        Icon(Icons.person)
-                                      ]),
-                                  Text('user'),
-                                ],
-                              )),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Container(
+                                width: MediaQuery.of(context).size.width / 2,
+                                decoration: BoxDecoration(
+                                    color: Color.fromRGBO(223, 239, 241, 0.5),
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(40.0),
+                                      topRight: Radius.circular(40.0),
+                                      bottomLeft: Radius.circular(40.0),
+                                      bottomRight: Radius.circular(40.0),
+                                    )),
+                                child: Column(
+                                  // mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 15, right: 20.0),
+                                      child: Align(
+                                        alignment: Alignment.topRight,
+                                        child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                '05.05 pm',
+                                                textAlign: TextAlign.right,
+                                              ),
+                                              Icon(Icons.person)
+                                            ]),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        right: 20.0,
+                                        left: 20.0,
+                                        bottom: 20.0,
+                                      ),
+                                      child: Text(
+                                        'In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available',
+                                        textAlign: TextAlign.justify,
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                          ),
                         ]),
                       ],
                     ))),
