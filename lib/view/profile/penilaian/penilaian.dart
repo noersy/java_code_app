@@ -189,7 +189,13 @@ class _PenilaianState extends State<Penilaian> {
                 ElevatedButton(
                     onPressed: () {
                       postPenilaian(score, selectedType, '${textReview.text}',
-                          base64Image);
+                              base64Image)
+                          .then((value) {
+                        imageBytes = [];
+                        base64Image = '';
+                        print(
+                            'clearing imageBytes:${imageBytes.length} | base64Image:${base64Image}');
+                      });
                     },
                     child: const Text('Kirim Penilaian'),
                     style: ButtonStyle(
@@ -263,9 +269,7 @@ class _PenilaianState extends State<Penilaian> {
   List<int> imageBytes = [];
   String base64Image = '';
   void submit() async {
-    imageBytes.clear();
     imageBytes = _image!.readAsBytesSync();
-    print(imageBytes);
     base64Image = base64Encode(imageBytes);
   }
 
