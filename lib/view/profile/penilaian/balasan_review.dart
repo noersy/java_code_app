@@ -10,6 +10,7 @@ class BalasanReview extends StatefulWidget {
 }
 
 class _BalasanReviewState extends State<BalasanReview> {
+  List listBoxChat = [true, false, false, true];
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -42,14 +43,20 @@ class _BalasanReviewState extends State<BalasanReview> {
                         child: Stack(
                       children: [
                         Image.asset("assert/image/bg_daftarpenilaian.png"),
-                        ListView(children: [
-                          boxChat(context, Alignment.centerRight),
-                          boxChat(context, Alignment.centerLeft),
-                          boxChat(context, Alignment.centerRight),
-                          boxChat(context, Alignment.centerLeft),
-                          boxChat(context, Alignment.centerRight),
-                          boxChat(context, Alignment.centerLeft),
-                        ]),
+                        ListView.builder(
+                          itemCount: listBoxChat.length,
+                          itemBuilder: (context, index) {
+                            return boxChat(context, listBoxChat[index]);
+                          },
+                        ),
+                        // ListView(children: [
+                        //   boxChat(context, Alignment.centerRight),
+                        //   boxChat(context, Alignment.centerLeft),
+                        //   boxChat(context, Alignment.centerRight),
+                        //   boxChat(context, Alignment.centerLeft),
+                        //   boxChat(context, Alignment.centerRight),
+                        //   boxChat(context, Alignment.centerLeft),
+                        // ]),
                       ],
                     ))),
               ),
@@ -123,6 +130,11 @@ class _BalasanReviewState extends State<BalasanReview> {
   }
 
   Padding boxChat(BuildContext context, positionBox) {
+    if (positionBox == true) {
+      positionBox = Alignment.centerRight;
+    } else if (positionBox == false) {
+      positionBox = Alignment.centerLeft;
+    }
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Align(
