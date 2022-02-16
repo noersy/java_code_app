@@ -39,8 +39,34 @@ class _BalasanReviewState extends State<BalasanReview> {
                           bottomRight: Radius.circular(40.0),
                         )),
                     child: Center(
-                        child: Image.asset(
-                            "assert/image/bg_daftarpenilaian.png"))),
+                        child: Stack(
+                      children: [
+                        Image.asset("assert/image/bg_daftarpenilaian.png"),
+                        Column(children: [
+                          Container(
+                              decoration: BoxDecoration(
+                                  color: Color.fromRGBO(223, 239, 241, 0.5),
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(40.0),
+                                    topRight: Radius.circular(40.0),
+                                    bottomLeft: Radius.circular(40.0),
+                                    bottomRight: Radius.circular(40.0),
+                                  )),
+                              child: Column(
+                                // mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text('jam'),
+                                        Icon(Icons.person)
+                                      ]),
+                                  Text('user'),
+                                ],
+                              )),
+                        ]),
+                      ],
+                    ))),
               ),
             ),
             bottomNavigationBar: Container(
