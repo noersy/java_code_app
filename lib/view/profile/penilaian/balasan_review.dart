@@ -68,7 +68,6 @@ class _BalasanReviewState extends State<BalasanReview> {
                     child: Padding(
                       padding: EdgeInsets.only(
                           left: 18.0,
-                          right: 5,
                           top: 5,
                           bottom:
                               MediaQuery.of(context).viewInsets.bottom + 10),
@@ -84,13 +83,24 @@ class _BalasanReviewState extends State<BalasanReview> {
                               bottomRight: Radius.circular(40.0),
                             )),
                         child: Padding(
-                          padding: EdgeInsets.only(
-                            left: 8.0,
+                          padding: const EdgeInsets.only(
+                            left: 15.0,
                           ),
-                          child: TextField(
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Tulis Pesan ...'),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'Tulis Pesan ...'),
+                                ),
+                              ),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon:
+                                      Icon(Icons.add_photo_alternate_outlined)),
+                            ],
                           ),
                         ),
                       ),
