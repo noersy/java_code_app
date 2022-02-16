@@ -189,32 +189,35 @@ class _PenilaianState extends State<Penilaian> {
                     onPressed: () {
                       postPenilaian(score, selectedType, '${textReview.text}');
                     },
-                    child: const Text('Kirim Penilaian')),
-                RawMaterialButton(
-                  onPressed: () {
-                    _showPicker(context);
-                  },
-                  elevation: 2.0,
-                  fillColor: Colors.white,
-                  child: const Icon(
-                    Icons.pause,
-                    size: 12.0,
+                    child: const Text('Kirim Penilaian'),
+                    style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    )))),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  width: 40,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Color.fromRGBO(0, 154, 173, 1), width: 2),
+                    color: Colors.white,
+                    shape: BoxShape.circle,
                   ),
-                  padding: const EdgeInsets.all(15.0),
-                  shape: const CircleBorder(),
-                )
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.add_photo_alternate,
+                      size: 20.0,
+                      color: Color.fromRGBO(0, 154, 173, 1),
+                    ),
+                  ),
+                ),
               ],
             )
-            // TextFormField(
-            //   style: TextStyle(fontSize: 12),
-            //   maxLines: 5,
-            //   initialValue:
-            //       'Mohon Menjaga Kebersihan, Kemarin Meja Masih Kotor',
-            //   decoration: InputDecoration(
-            //       border: OutlineInputBorder(),
-            //       hintText: '',
-            //       fillColor: Colors.white),
-            // )
           ],
         ));
   }
@@ -228,16 +231,18 @@ class _PenilaianState extends State<Penilaian> {
           return SafeArea(
             child: Container(
               color: Colors.white,
-              child: new Wrap(
+              child: Wrap(
                 children: <Widget>[
-                  new ListTile(
+                  ListTile(
                       tileColor: Colors.white,
-                      leading: new Icon(Icons.photo_library),
-                      title: new Text('Galeri'),
-                      onTap: () {}),
-                  new ListTile(
-                    leading: new Icon(Icons.photo_camera),
-                    title: new Text('Kamera'),
+                      leading: Icon(Icons.photo_library),
+                      title: Text('Galeri'),
+                      onTap: () {
+                        _imgGaleri();
+                      }),
+                  ListTile(
+                    leading: Icon(Icons.photo_camera),
+                    title: Text('Kamera'),
                     onTap: () {
                       _imgKamera();
                     },
@@ -256,6 +261,26 @@ class _PenilaianState extends State<Penilaian> {
     setState(() {
       _image = File(image!.path);
     });
+  }
+
+  _imgGaleri() async {
+    final picker = ImagePicker();
+    final image = await picker.getImage(
+        source: ImageSource.gallery,
+        imageQuality: 50,
+        maxHeight: 600,
+        maxWidth: 600);
+    setState(() {
+      _image = File(image!.path);
+    });
+    _imgKamera() async {
+      final picker = ImagePicker();
+      final image =
+          await picker.getImage(source: ImageSource.camera, imageQuality: 20);
+      setState(() {
+        _image = File(image!.path);
+      });
+    }
   }
 
   var selectedType = 'Fasilitas';
