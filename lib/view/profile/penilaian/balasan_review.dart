@@ -10,7 +10,10 @@ class BalasanReview extends StatefulWidget {
 }
 
 class _BalasanReviewState extends State<BalasanReview> {
-  List listBoxChat = [true, false, false, true];
+  List listBoxChat = [
+    true,
+    false,
+  ];
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -21,15 +24,11 @@ class _BalasanReviewState extends State<BalasanReview> {
             appBar: const CostumeAppBar(
               title: '',
               profileTitle: 'BalasanReview',
-              // profileTitle: lang.profile.title,
               back: true,
             ),
             body: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                // height: 300.0,
-                // height: MediaQuery.of(context).size.height / 1.3,
-                // color: Color.fromARGB(255, 98, 97, 97),
                 child: Container(
                     decoration: const BoxDecoration(
                         color: Colors.white,
@@ -49,20 +48,11 @@ class _BalasanReviewState extends State<BalasanReview> {
                             return boxChat(context, listBoxChat[index]);
                           },
                         ),
-                        // ListView(children: [
-                        //   boxChat(context, Alignment.centerRight),
-                        //   boxChat(context, Alignment.centerLeft),
-                        //   boxChat(context, Alignment.centerRight),
-                        //   boxChat(context, Alignment.centerLeft),
-                        //   boxChat(context, Alignment.centerRight),
-                        //   boxChat(context, Alignment.centerLeft),
-                        // ]),
                       ],
                     ))),
               ),
             ),
             bottomNavigationBar: Container(
-              // height: MediaQuery.of(context).viewInsets.bottom,
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -130,19 +120,64 @@ class _BalasanReviewState extends State<BalasanReview> {
   }
 
   Padding boxChat(BuildContext context, positionBox) {
+    var colorBoxChat = Color.fromRGBO(223, 239, 241, 0.5);
+    var timeBoxChat;
     if (positionBox == true) {
       positionBox = Alignment.centerRight;
+      colorBoxChat = Color.fromRGBO(223, 239, 241, 0.5);
+      timeBoxChat = Padding(
+        padding: const EdgeInsets.only(top: 15, right: 20.0, left: 20.0),
+        child: Align(
+          alignment: positionBox,
+          child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  '05.05',
+                  textAlign: TextAlign.right,
+                ),
+                Icon(Icons.person)
+              ]),
+        ),
+      );
     } else if (positionBox == false) {
       positionBox = Alignment.centerLeft;
+      colorBoxChat = Color.fromRGBO(240, 240, 240, 0.5);
+      timeBoxChat = Padding(
+        padding: const EdgeInsets.only(top: 15, right: 20.0, left: 20.0),
+        child: Align(
+          alignment: positionBox,
+          child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Icon(
+                  Icons.person,
+                  color: Color.fromRGBO(0, 154, 173, 1),
+                ),
+                Text(
+                  'Bro Gil ',
+                  style: TextStyle(
+                    color: Color.fromRGBO(0, 154, 173, 1),
+                  ),
+                ),
+                Text(
+                  '05.05',
+                  textAlign: TextAlign.right,
+                ),
+              ]),
+        ),
+      );
     }
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Align(
         alignment: positionBox,
         child: Container(
-            width: MediaQuery.of(context).size.width / 2,
+            width: MediaQuery.of(context).size.width / 1.5,
             decoration: BoxDecoration(
-                color: Color.fromRGBO(223, 239, 241, 0.5),
+                color: colorBoxChat,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(40.0),
                   topRight: Radius.circular(40.0),
@@ -150,24 +185,8 @@ class _BalasanReviewState extends State<BalasanReview> {
                   bottomRight: Radius.circular(40.0),
                 )),
             child: Column(
-              // mainAxisSize: MainAxisSize.min,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 15, right: 20.0),
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            '05.05 pm',
-                            textAlign: TextAlign.right,
-                          ),
-                          Icon(Icons.person)
-                        ]),
-                  ),
-                ),
+                timeBoxChat,
                 Padding(
                   padding: const EdgeInsets.only(
                     right: 20.0,
