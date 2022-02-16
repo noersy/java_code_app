@@ -67,13 +67,16 @@ class _BalasanReviewState extends State<BalasanReview> {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.only(
-                          left: 10.0,
+                          left: 18.0,
                           right: 5,
                           top: 5,
-                          bottom: MediaQuery.of(context).viewInsets.bottom + 5),
+                          bottom:
+                              MediaQuery.of(context).viewInsets.bottom + 10),
                       child: Container(
                         decoration: BoxDecoration(
-                            color: Colors.blue,
+                            border: Border.all(
+                                color: Color.fromRGBO(46, 46, 46, 0.25)),
+                            color: Color.fromRGBO(255, 255, 255, 1),
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(40.0),
                               topRight: Radius.circular(40.0),
@@ -86,19 +89,22 @@ class _BalasanReviewState extends State<BalasanReview> {
                           ),
                           child: TextField(
                             decoration: InputDecoration(
-                                border: InputBorder.none, hintText: 'Name'),
+                                border: InputBorder.none,
+                                hintText: 'Tulis Pesan ...'),
                           ),
                         ),
                       ),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(
-                        right: 10,
-                        bottom: MediaQuery.of(context).viewInsets.bottom),
-                    child: ElevatedButton(
-                        onPressed: () {}, child: Icon(Icons.send)),
-                  ),
+                      padding: EdgeInsets.only(
+                          right: 15,
+                          bottom: MediaQuery.of(context).viewInsets.bottom + 5),
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: Icon(Icons.send),
+                        color: Color.fromRGBO(0, 154, 173, 1),
+                      )),
                 ],
               ),
             ),
