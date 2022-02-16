@@ -267,7 +267,7 @@ class _PenilaianState extends State<Penilaian> {
   }
 
   List<int> imageBytes = [];
-  String base64Image = '';
+  var base64Image;
   void submit() async {
     imageBytes = _image!.readAsBytesSync();
     base64Image = base64Encode(imageBytes);
