@@ -19,6 +19,8 @@ import 'package:java_code_app/view/profile/penilaian/daftar_penilaian.dart';
 import 'package:java_code_app/view/profile/penilaian/penilaian.dart';
 import 'package:java_code_app/widget/view_image.dart';
 
+import '../view/profile/penilaian/chatt_page.dart';
+
 class Navigate {
   static Future to(Widget target) async =>
       await navigatorKey.currentState?.push(routeTransition(target));
@@ -71,6 +73,8 @@ class Navigate {
 
   static void toBalasanReview(context) =>
       Navigator.of(context).push(routeTransition(const BalasanReview()));
+  static void toChattReview(context) =>
+      Navigator.of(context).push(routeTransition(const ChatPage()));
   // static void toViewOrderKasir(context, {required Map<String, dynamic> dataOrders, bool? preparing}) => Navigator.of(context).push(routeTransition(OrderDetailPage(dataOrder: dataOrders, preparing: preparing)));
 
   //Costume route

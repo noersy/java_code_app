@@ -54,6 +54,11 @@ dependencies:
   logging: ^1.0.2
   loadmore: any
   flutter_rating_bar: ^4.0.0
+  flutter_chat_ui: ^1.5.5
+  mime: ^1.0.1
+  open_file: ^3.2.1
+  uuid: ^3.0.5
+  file_picker: ^4.4.0
 
 dev_dependencies:
   flutter_test:
