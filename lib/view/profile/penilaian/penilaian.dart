@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 
@@ -187,7 +188,8 @@ class _PenilaianState extends State<Penilaian> {
               children: [
                 ElevatedButton(
                     onPressed: () {
-                      postPenilaian(score, selectedType, '${textReview.text}');
+                      postPenilaian(score, selectedType, '${textReview.text}',
+                          base64Image);
                     },
                     child: const Text('Kirim Penilaian'),
                     style: ButtonStyle(
@@ -208,7 +210,9 @@ class _PenilaianState extends State<Penilaian> {
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _showPicker(context);
+                    },
                     icon: Icon(
                       Icons.add_photo_alternate,
                       size: 20.0,
@@ -239,12 +243,14 @@ class _PenilaianState extends State<Penilaian> {
                       title: Text('Galeri'),
                       onTap: () {
                         _imgGaleri();
+                        Navigator.of(context).pop();
                       }),
                   ListTile(
                     leading: Icon(Icons.photo_camera),
                     title: Text('Kamera'),
                     onTap: () {
                       _imgKamera();
+                      Navigator.of(context).pop();
                     },
                   ),
                 ],
@@ -254,6 +260,15 @@ class _PenilaianState extends State<Penilaian> {
         });
   }
 
+  List<int> imageBytes = [];
+  String base64Image = '';
+  void submit() async {
+    imageBytes.clear();
+    imageBytes = _image!.readAsBytesSync();
+    print(imageBytes);
+    base64Image = base64Encode(imageBytes);
+  }
+
   _imgKamera() async {
     final picker = ImagePicker();
     final image =
@@ -261,6 +276,7 @@ class _PenilaianState extends State<Penilaian> {
     setState(() {
       _image = File(image!.path);
     });
+    submit();
   }
 
   _imgGaleri() async {
@@ -273,14 +289,7 @@ class _PenilaianState extends State<Penilaian> {
     setState(() {
       _image = File(image!.path);
     });
-    _imgKamera() async {
-      final picker = ImagePicker();
-      final image =
-          await picker.getImage(source: ImageSource.camera, imageQuality: 20);
-      setState(() {
-        _image = File(image!.path);
-      });
-    }
+    submit();
   }
 
   var selectedType = 'Fasilitas';

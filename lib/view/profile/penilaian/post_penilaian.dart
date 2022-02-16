@@ -15,12 +15,12 @@ const headers = {"Content-Type": "application/json", "token": "m_app"};
 Future postPenilaian(
   score,
   type,
-  review,
+  review,img
 ) async {
   final user = UserInstance.getInstance().user;
   if (user == null) return null;
   try {
-    print('score: $score | type: $type | review: $review ');
+    print('score: $score | type: $type | review: $review  | image: $img ');
     // final body = <String, dynamic>{
     //   'id_user': '${user.data.idUser}',
     //   'score': '$score',
