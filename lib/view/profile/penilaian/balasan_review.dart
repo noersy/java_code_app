@@ -7,7 +7,8 @@ import 'package:java_code_app/widget/appbar/appbar.dart';
 import 'get_all_chat.dart';
 
 class BalasanReview extends StatefulWidget {
-  const BalasanReview({Key? key}) : super(key: key);
+  final idReview;
+  BalasanReview({Key? key, this.idReview}) : super(key: key);
 
   @override
   _BalasanReviewState createState() => _BalasanReviewState();
@@ -20,13 +21,13 @@ class _BalasanReviewState extends State<BalasanReview> {
   ];
   loadChat() {
     listChat.clear();
-    Future data = getAllChat();
+    Future data = getAllChat(widget.idReview);
     data.then((value) {
       Map json = jsonDecode(value);
       // print('json: ${json['data']}');
       var jsonData = json['data'];
-      var getidReview = jsonData['review'];
-      print('getidReview ${getidReview['id_review']}');
+      // var getidReview = jsonData['review'];
+      // print('getidReview ${getidReview['id_review']}');
       for (var i in jsonData['answer']) {
         // print('i: $i');
         Answer ans = Answer.fromJson(i);
@@ -34,12 +35,11 @@ class _BalasanReviewState extends State<BalasanReview> {
       }
       setState(() {
         widgetListChat();
-        idReview = getidReview['id_review'];
+        // idReview = getidReview['id_review'];
       });
     });
   }
 
-  int idReview = 0;
   sendChat(answer, idReview) {
     Future data = postChat(answer, idReview);
     data.then((value) {
@@ -147,8 +147,8 @@ class _BalasanReviewState extends State<BalasanReview> {
                       child: IconButton(
                         onPressed: () {
                           print(
-                              'pesan: ${_pesanController.text} | id review: $idReview');
-                          sendChat(_pesanController.text, idReview);
+                              'pesan: ${_pesanController.text} | id review: ${widget.idReview}');
+                          sendChat(_pesanController.text, widget.idReview);
                           _pesanController.clear();
                         },
                         icon: Icon(Icons.send),

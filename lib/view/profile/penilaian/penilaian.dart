@@ -6,6 +6,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
+import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/view/profile/penilaian/post_penilaian.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
 
@@ -191,6 +192,36 @@ class _PenilaianState extends State<Penilaian> {
                       postPenilaian(score, selectedType, '${textReview.text}',
                               base64Image)
                           .then((value) {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              if (value.toString().contains('berhasil')) {
+                                return AlertDialog(
+                                  title: Text('Alert!'),
+                                  content: Text('$value'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigate.toDaftarPenilaian(context);
+                                        },
+                                        child: Text('Close')),
+                                  ],
+                                );
+                              } else {
+                                return AlertDialog(
+                                  title: Text('Gagal!'),
+                                  content: Text('$value'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text('Close')),
+                                  ],
+                                );
+                              }
+                            });
                         imageBytes = [];
                         base64Image = '';
                         print(
@@ -299,40 +330,47 @@ class _PenilaianState extends State<Penilaian> {
   var selectedType = 'Fasilitas';
   Widget widgetButtonType(i) {
     if (i == selectedType) {
-      return TextButton(
-        style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                    side: BorderSide(color: Color.fromRGBO(0, 154, 173, 1))))),
-        onPressed: () {},
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('${i}'),
-            SizedBox(
-              width: 5,
-            ),
-            Icon(Icons.check_circle)
-          ],
+      return Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: TextButton(
+          style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                      side:
+                          BorderSide(color: Color.fromRGBO(0, 154, 173, 1))))),
+          onPressed: () {},
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('${i}'),
+              SizedBox(
+                width: 5,
+              ),
+              Icon(Icons.check_circle)
+            ],
+          ),
         ),
       );
     } else {
-      return TextButton(
-        style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                    side:
-                        BorderSide(color: Color.fromRGBO(170, 170, 170, 1))))),
-        onPressed: () {
-          setState(() {
-            selectedType = i;
-          });
-        },
-        child: Text(
-          '${i}',
-          style: TextStyle(color: Color.fromRGBO(170, 170, 170, 1)),
+      return Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: TextButton(
+          style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                      side: BorderSide(
+                          color: Color.fromRGBO(170, 170, 170, 1))))),
+          onPressed: () {
+            setState(() {
+              selectedType = i;
+            });
+          },
+          child: Text(
+            '${i}',
+            style: TextStyle(color: Color.fromRGBO(170, 170, 170, 1)),
+          ),
         ),
       );
     }

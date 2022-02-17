@@ -71,8 +71,10 @@ class Navigate {
   static void toPenilaian(context) =>
       Navigator.of(context).push(routeTransition(const Penilaian()));
 
-  static void toBalasanReview(context) =>
-      Navigator.of(context).push(routeTransition(const BalasanReview()));
+  static void toBalasanReview(context, idReviews) =>
+      Navigator.of(context).push(routeTransition(BalasanReview(
+        idReview: idReviews,
+      )));
   static void toChattReview(context) =>
       Navigator.of(context).push(routeTransition(const ChatPage()));
   // static void toViewOrderKasir(context, {required Map<String, dynamic> dataOrders, bool? preparing}) => Navigator.of(context).push(routeTransition(OrderDetailPage(dataOrder: dataOrders, preparing: preparing)));

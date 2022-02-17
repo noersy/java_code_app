@@ -95,7 +95,10 @@ class _DaftarPenilaianState extends State<DaftarPenilaian>
         itemCount: listReview.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () => Navigate.toBalasanReview(context),
+            onTap: () {
+              // print('review detail id: ${listReview[index].id_review}');
+              Navigate.toBalasanReview(context, listReview[index].id_review);
+            },
             // onTap: () => Navigate.toChattReview(context),
             child: Column(
               children: [

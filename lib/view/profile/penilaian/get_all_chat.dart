@@ -52,13 +52,13 @@ class Answer {
 }
 
 List<Answer> listChat = [];
-Future getAllChat() async {
+Future getAllChat(idReview) async {
   final user = UserInstance.getInstance().user;
   if (user == null) return null;
   try {
     _log.fine("Try to get list review");
     final response = await http.get(
-        Uri.parse("https://$host/api/review/detail/${user.data.idUser}"),
+        Uri.parse("https://$host/api/review/detail/$idReview"),
         headers: headers);
     if (response.statusCode == 204) {
       _log.info("review if empty");

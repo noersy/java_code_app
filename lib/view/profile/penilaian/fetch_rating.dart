@@ -52,8 +52,9 @@ Future getAllReview() async {
   if (user == null) return null;
   try {
     _log.fine("Try to get list review");
-    final response =
-        await http.get(Uri.parse("https://$host/api/review/${user.data.idUser}"), headers: headers);
+    final response = await http.get(
+        Uri.parse("https://$host/api/review/${user.data.idUser}"),
+        headers: headers);
     if (response.statusCode == 204) {
       _log.info("review if empty");
       // return [];
