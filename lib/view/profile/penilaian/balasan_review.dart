@@ -19,20 +19,32 @@ class _BalasanReviewState extends State<BalasanReview> {
     false,
   ];
   loadChat() {
+    listChat.clear();
     Future data = getAllChat();
     data.then((value) {
       Map json = jsonDecode(value);
       // print('json: ${json['data']}');
       var jsonData = json['data'];
-      // print('jsonData ${jsonData['answer']}');
+      var getidReview = jsonData['review'];
+      print('getidReview ${getidReview['id_review']}');
       for (var i in jsonData['answer']) {
-        print('i: $i');
+        // print('i: $i');
         Answer ans = Answer.fromJson(i);
         listChat.add(ans);
       }
       setState(() {
         widgetListChat();
+        idReview = getidReview['id_review'];
       });
+    });
+  }
+
+  int idReview = 0;
+  sendChat(answer, idReview) {
+    Future data = postChat(answer, idReview);
+    data.then((value) {
+      loadChat();
+      print('value post chat: $value');
     });
   }
 
@@ -42,6 +54,7 @@ class _BalasanReviewState extends State<BalasanReview> {
     super.initState();
   }
 
+  TextEditingController _pesanController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -111,6 +124,7 @@ class _BalasanReviewState extends State<BalasanReview> {
                             children: [
                               Expanded(
                                 child: TextField(
+                                  controller: _pesanController,
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText: 'Tulis Pesan ...'),
@@ -131,7 +145,12 @@ class _BalasanReviewState extends State<BalasanReview> {
                           right: 15,
                           bottom: MediaQuery.of(context).viewInsets.bottom + 5),
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          print(
+                              'pesan: ${_pesanController.text} | id review: $idReview');
+                          sendChat(_pesanController.text, idReview);
+                          _pesanController.clear();
+                        },
                         icon: Icon(Icons.send),
                         color: Color.fromRGBO(0, 154, 173, 1),
                       )),
@@ -218,7 +237,7 @@ class _BalasanReviewState extends State<BalasanReview> {
                 )),
             child: Column(
               children: [
-                timeBoxChat,  
+                timeBoxChat,
                 Padding(
                   padding: const EdgeInsets.only(
                     right: 20.0,

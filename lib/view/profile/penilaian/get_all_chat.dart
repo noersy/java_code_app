@@ -80,3 +80,39 @@ Future getAllChat() async {
   }
   return null;
 }
+
+Future postChat(answer, idReview) async {
+  final user = UserInstance.getInstance().user;
+  if (user == null) return null;
+
+  try {
+    final bodys = jsonEncode(<String, dynamic>{
+      'answer': '$answer',
+      'id_user': '${user.data.idUser}',
+      'id_review': '$idReview'
+    });
+    _log.fine("Try to get postChat ${bodys}");
+    final response = await http.post(
+        Uri.parse("https://$host/api/review/answer/add"),
+        headers: headers,
+        body: bodys);
+    if (response.statusCode == 204) {
+      _log.info("postChat empty");
+      // return [];
+    }
+
+    if (response.statusCode == 200 &&
+        json.decode(response.body)["status_code"] == 200) {
+      _log.fine("Success get all review:");
+      return (response.body);
+      // print('body sukses:\n${response.body}');
+      // return listHistoryFromJson(response.body).data;
+    }
+    _log.info("Fail to post answer");
+    _log.info(response.body);
+  } catch (e, r) {
+    _log.warning(e);
+    _log.warning(r);
+  }
+  return null;
+}
