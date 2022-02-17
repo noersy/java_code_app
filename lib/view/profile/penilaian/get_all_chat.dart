@@ -51,14 +51,15 @@ class Answer {
       };
 }
 
-List listReview = [];
+List<Answer> listChat = [];
 Future getAllChat() async {
   final user = UserInstance.getInstance().user;
   if (user == null) return null;
   try {
     _log.fine("Try to get list review");
-    final response = await http
-        .get(Uri.parse("https://$host/api/review/detail/"), headers: headers);
+    final response = await http.get(
+        Uri.parse("https://$host/api/review/detail/${user.data.idUser}"),
+        headers: headers);
     if (response.statusCode == 204) {
       _log.info("review if empty");
       // return [];

@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
+
+import 'get_all_chat.dart';
 
 class BalasanReview extends StatefulWidget {
   const BalasanReview({Key? key}) : super(key: key);
@@ -14,6 +18,25 @@ class _BalasanReviewState extends State<BalasanReview> {
     true,
     false,
   ];
+  loadChat() {
+    Future data = getAllChat();
+    data.then((value) {
+      Map json = jsonDecode(value);
+      // print('json: ${json['data']}');
+      var jsonData = json['data'];
+      // print('jsonData ${jsonData['answer']}');
+      for (var i in jsonData['answer']) {
+        print('i: $i');
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    loadChat();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -42,12 +65,7 @@ class _BalasanReviewState extends State<BalasanReview> {
                         child: Stack(
                       children: [
                         Image.asset("assert/image/bg_daftarpenilaian.png"),
-                        ListView.builder(
-                          itemCount: listBoxChat.length,
-                          itemBuilder: (context, index) {
-                            return boxChat(context, listBoxChat[index]);
-                          },
-                        ),
+                        widgetListChat(),
                       ],
                     ))),
               ),
@@ -117,6 +135,15 @@ class _BalasanReviewState extends State<BalasanReview> {
             ),
           );
         });
+  }
+
+  ListView widgetListChat() {
+    return ListView.builder(
+      itemCount: listChat.length,
+      itemBuilder: (context, index) {
+        return boxChat(context, listChat[index].is_customer);
+      },
+    );
   }
 
   Padding boxChat(BuildContext context, positionBox) {
