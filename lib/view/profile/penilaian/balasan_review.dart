@@ -27,7 +27,12 @@ class _BalasanReviewState extends State<BalasanReview> {
       // print('jsonData ${jsonData['answer']}');
       for (var i in jsonData['answer']) {
         print('i: $i');
+        Answer ans = Answer.fromJson(i);
+        listChat.add(ans);
       }
+      setState(() {
+        widgetListChat();
+      });
     });
   }
 
