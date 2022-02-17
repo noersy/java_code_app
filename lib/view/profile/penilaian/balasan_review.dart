@@ -146,12 +146,12 @@ class _BalasanReviewState extends State<BalasanReview> {
     return ListView.builder(
       itemCount: listChat.length,
       itemBuilder: (context, index) {
-        return boxChat(context, listChat[index].is_customer);
+        return boxChat(context, listChat[index].is_customer, index);
       },
     );
   }
 
-  Padding boxChat(BuildContext context, positionBox) {
+  Padding boxChat(BuildContext context, positionBox, index) {
     var colorBoxChat = Color.fromRGBO(223, 239, 241, 0.5);
     var timeBoxChat;
     if (positionBox == true) {
@@ -189,7 +189,7 @@ class _BalasanReviewState extends State<BalasanReview> {
                   color: Color.fromRGBO(0, 154, 173, 1),
                 ),
                 Text(
-                  'Bro Gil ',
+                  '${listChat[index].nama} ',
                   style: TextStyle(
                     color: Color.fromRGBO(0, 154, 173, 1),
                   ),
@@ -218,7 +218,7 @@ class _BalasanReviewState extends State<BalasanReview> {
                 )),
             child: Column(
               children: [
-                timeBoxChat,
+                timeBoxChat,  
                 Padding(
                   padding: const EdgeInsets.only(
                     right: 20.0,
@@ -226,7 +226,7 @@ class _BalasanReviewState extends State<BalasanReview> {
                     bottom: 20.0,
                   ),
                   child: Text(
-                    'In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available',
+                    '${listChat[index].answer}',
                     textAlign: TextAlign.justify,
                   ),
                 ),
