@@ -54,37 +54,37 @@ class CostumeAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           )
       ],
-      title: costumeTitle ?? Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (icon != null) ...[
-                  icon!,
-                  const SizedBox(width: SpaceDims.sp8),
-                  if (dense ?? false) const SizedBox(width: SpaceDims.sp12),
-                ],
-                if (profileTitle != null)
-                  const SizedBox(width: SpaceDims.sp46 + 3),
-                Text(title, style: TypoSty.title),
-                if (profileTitle != null)
-                  Column(
-                    children: [
-                      Text(profileTitle!,
-                          style:
-                              TypoSty.title.copyWith(color: ColorSty.primary)),
-                      const SizedBox(height: SpaceDims.sp2),
-                      Container(
-                        width: 55,
-                        height: 2,
-                        color: ColorSty.primary,
-                      )
-                    ],
-                  ),
-                if (onDelete == null) ...[
-                  const SizedBox(width: SpaceDims.sp32),
-                  const SizedBox(width: SpaceDims.sp24),
-                ],
+      title: costumeTitle ??
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (icon != null) ...[
+                icon!,
+                const SizedBox(width: SpaceDims.sp8),
+                if (dense ?? false) const SizedBox(width: SpaceDims.sp12),
               ],
-            ),
+              if (profileTitle != null)
+                const SizedBox(width: SpaceDims.sp46 + 3),
+              Text(title, style: TypoSty.title),
+              if (profileTitle != null)
+                Column(
+                  children: [
+                    Text(profileTitle!,
+                        style: TypoSty.title.copyWith(color: ColorSty.primary)),
+                    const SizedBox(height: SpaceDims.sp2),
+                    Container(
+                      width: 55,
+                      height: 2,
+                      color: ColorSty.primary,
+                    )
+                  ],
+                ),
+              if (onDelete == null) ...[
+                const SizedBox(width: SpaceDims.sp32),
+                const SizedBox(width: SpaceDims.sp24),
+              ],
+            ],
+          ),
     );
   }
 }

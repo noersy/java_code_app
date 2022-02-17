@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
+import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
 
 import 'get_all_chat.dart';
@@ -55,6 +56,23 @@ class _BalasanReviewState extends State<BalasanReview> {
   }
 
   TextEditingController _pesanController = TextEditingController();
+  AppBar widgetAppBar() {
+    return AppBar(
+        backgroundColor: Colors.white,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+          bottomRight: Radius.circular(10),
+          bottomLeft: Radius.circular(10),
+        )),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: ColorSty.primary),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text('Balasan Review',
+            style: TextStyle(color: Colors.black),
+            textAlign: TextAlign.center));
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -62,39 +80,34 @@ class _BalasanReviewState extends State<BalasanReview> {
         builder: (context, snapshot) {
           return Scaffold(
             backgroundColor: Color.fromARGB(255, 229, 229, 229),
-            appBar: const CostumeAppBar(
-              title: '',
-              profileTitle: 'BalasanReview',
-              back: true,
-            ),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
+            appBar: widgetAppBar(),
+            body: Container(
               child: Container(
-                child: Container(
-                    decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(40.0),
-                          topRight: Radius.circular(40.0),
-                          bottomLeft: Radius.circular(40.0),
-                          bottomRight: Radius.circular(40.0),
-                        )),
-                    child: Center(
-                        child: Stack(
-                      children: [
-                        Image.asset("assert/image/bg_daftarpenilaian.png"),
-                        widgetListChat(),
-                      ],
-                    ))),
-              ),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    // borderRadius: BorderRadius.only(
+                    //   topLeft: Radius.circular(40.0),
+                    //   topRight: Radius.circular(40.0),
+                    //   bottomLeft: Radius.circular(40.0),
+                    //   bottomRight: Radius.circular(40.0),
+                    // )
+                  ),
+                  child: Center(
+                      child: Stack(
+                    children: [
+                      Image.asset("assert/image/bg_daftarpenilaian.png"),
+                      widgetListChat(),
+                    ],
+                  ))),
             ),
             bottomNavigationBar: Container(
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
-                  )),
+                color: Colors.white,
+                // borderRadius: BorderRadius.only(
+                //   topLeft: Radius.circular(30.0),
+                //   topRight: Radius.circular(30.0),
+                // )
+              ),
               child: Row(
                 children: [
                   Expanded(
