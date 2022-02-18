@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:java_code_app/models/menulist.dart';
 import 'package:java_code_app/theme/spacing.dart';
@@ -10,7 +9,8 @@ class SearchScreen extends StatefulWidget {
 
   const SearchScreen({
     Key? key,
-    required this.result, required this.data,
+    required this.result,
+    required this.data,
   }) : super(key: key);
 
   @override
@@ -22,8 +22,10 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void initState() {
-    data = widget.data.data.where((element) => element.nama.toLowerCase()
-        .contains(widget.result.toLowerCase())).toList();
+    data = widget.data.data
+        .where((element) =>
+            element.nama.toLowerCase().contains(widget.result.toLowerCase()))
+        .toList();
     super.initState();
   }
 
@@ -36,15 +38,22 @@ class _SearchScreenState extends State<SearchScreen> {
           width: double.infinity,
           child: SingleChildScrollView(
             physics: const NeverScrollableScrollPhysics(),
-            child: Column(
-              children: [
-                for (DMenu item in data)
-                  CardMenu(data: item),
-              ],
-            ),
+            child: widgetListMenu(),
           ),
         ),
       ],
     );
+  }
+
+  Widget widgetListMenu() {
+    if (data.isNotEmpty) {
+      return Column(
+        children: [
+          for (DMenu item in data) CardMenu(data: item),
+        ],
+      );  
+    } else {
+      return Center(child: Text('data tidak dtiemukan'));
+    }
   }
 }
