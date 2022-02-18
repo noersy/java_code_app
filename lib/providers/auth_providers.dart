@@ -45,7 +45,6 @@ class AuthProviders extends ChangeNotifier {
         headers: _headers,
         body: json.encode(body),
       );
-      print('error login ');
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
         _loginUser = loginUserFromJson(response.body);
@@ -56,7 +55,11 @@ class AuthProviders extends ChangeNotifier {
             .setIntValue(KeyPrefens.loginID, _loginUser!.data.user.idUser);
         getUser(id: _loginUser!.data.user.idUser);
         notifyListeners();
-        return true;
+        if (_loginUser != null) {
+          return true;
+        } else {
+          return false;
+        }
       }
     } catch (e, r) {
       _log.warning(e);
@@ -156,8 +159,7 @@ class AuthProviders extends ChangeNotifier {
     final user = UserInstance.getInstance().user;
 
     if (user == null) return false;
-    final Uri _api =
-        Uri.http(host, "$sub/api/user/ktp/${user.data.idUser}");
+    final Uri _api = Uri.http(host, "$sub/api/user/ktp/${user.data.idUser}");
 
     try {
       final body = {"image": base64};

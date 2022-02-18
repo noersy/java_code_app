@@ -35,7 +35,6 @@ class _LoginPageState extends State<LoginPage> {
 
   _login() async {
     setState(() => _loading = true);
-
     bool isLogin =
         await Provider.of<AuthProviders>(context, listen: false).login(
       _controllerEmail.text,
@@ -51,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
         setState(() => _loading = false);
       });
       return;
-    } else {
+    } else if (isLogin == false) {
       showDialog(
           context: context,
           builder: (context) {

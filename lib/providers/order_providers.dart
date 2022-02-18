@@ -26,7 +26,6 @@ class TotalHistory {
 class OrderProviders extends ChangeNotifier {
   static final _log = logging.Logger('OrderProvider');
   static const headers = {"Content-Type": "application/json", "token": "m_app"};
-
   // static int _orderInProgress = 0;
   // static int _checkOrder = 0;
 
