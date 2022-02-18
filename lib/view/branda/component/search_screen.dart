@@ -51,7 +51,7 @@ class _SearchScreenState extends State<SearchScreen> {
         children: [
           for (DMenu item in data) CardMenu(data: item),
         ],
-      );  
+      );
     } else {
       return Center(child: Text('data tidak dtiemukan'));
     }
