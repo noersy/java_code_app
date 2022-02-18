@@ -92,13 +92,12 @@ class _BalasanReviewState extends State<BalasanReview> {
                     //   bottomRight: Radius.circular(40.0),
                     // )
                   ),
-                  child: Center(
-                      child: Stack(
+                  child: Stack(
                     children: [
                       Image.asset("assert/image/bg_daftarpenilaian.png"),
                       widgetListChat(),
                     ],
-                  ))),
+                  )),
             ),
             bottomNavigationBar: Container(
               decoration: BoxDecoration(
@@ -187,83 +186,68 @@ class _BalasanReviewState extends State<BalasanReview> {
     var colorBoxChat = Color.fromRGBO(223, 239, 241, 0.5);
     var timeBoxChat;
     if (positionBox == true) {
-      positionBox = Alignment.centerRight;
+      positionBox = Alignment.topRight;
       colorBoxChat = Color.fromRGBO(223, 239, 241, 0.5);
-      timeBoxChat = Padding(
-        padding: const EdgeInsets.only(top: 15, right: 20.0, left: 20.0),
-        child: Align(
-          alignment: positionBox,
-          child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  '05.05',
-                  textAlign: TextAlign.right,
-                ),
-                Icon(Icons.person)
-              ]),
+      timeBoxChat = Row(children: [
+        Text(
+          '${listChat[index].created_at.toString().substring(12, 17)}',
         ),
-      );
+        Icon(Icons.person)
+      ]);
     } else if (positionBox == false) {
       positionBox = Alignment.centerLeft;
       colorBoxChat = Color.fromRGBO(240, 240, 240, 0.5);
-      timeBoxChat = Padding(
-        padding: const EdgeInsets.only(top: 15, right: 20.0, left: 20.0),
-        child: Align(
-          alignment: positionBox,
-          child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Icon(
-                  Icons.person,
-                  color: Color.fromRGBO(0, 154, 173, 1),
-                ),
-                Text(
-                  '${listChat[index].nama} ',
-                  style: TextStyle(
-                    color: Color.fromRGBO(0, 154, 173, 1),
-                  ),
-                ),
-                Text(
-                  '05.05',
-                  textAlign: TextAlign.right,
-                ),
-              ]),
-        ),
-      );
+      timeBoxChat = Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Icon(
+              Icons.person,
+              color: Color.fromRGBO(0, 154, 173, 1),
+            ),
+            Text(
+              '${listChat[index].nama} ',
+              style: TextStyle(
+                color: Color.fromRGBO(0, 154, 173, 1),
+              ),
+            ),
+            Text(
+              '05.05',
+              textAlign: TextAlign.right,
+            ),
+          ]);
     }
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Align(
         alignment: positionBox,
-        child: Container(
-            width: MediaQuery.of(context).size.width / 1.5,
-            decoration: BoxDecoration(
-                color: colorBoxChat,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(40.0),
-                  topRight: Radius.circular(40.0),
-                  bottomLeft: Radius.circular(40.0),
-                  bottomRight: Radius.circular(40.0),
-                )),
-            child: Column(
-              children: [
-                timeBoxChat,
-                Padding(
-                  padding: const EdgeInsets.only(
-                    right: 20.0,
-                    left: 20.0,
-                    bottom: 20.0,
+        child: FittedBox(
+          child: Container(
+              decoration: BoxDecoration(
+                  color: colorBoxChat,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(40.0),
+                    topRight: Radius.circular(40.0),
+                    bottomLeft: Radius.circular(40.0),
+                    bottomRight: Radius.circular(40.0),
+                  )),
+              child: Column(
+                children: [
+                  timeBoxChat,
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(bottom: 8.0, right: 10, left: 20),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Text(
+                        '${listChat[index].answer}',
+                        textAlign: TextAlign.justify,
+                      ),
+                    ),
                   ),
-                  child: Text(
-                    '${listChat[index].answer}',
-                    textAlign: TextAlign.justify,
-                  ),
-                ),
-              ],
-            )),
+                ],
+              )),
+        ),
       ),
     );
   }

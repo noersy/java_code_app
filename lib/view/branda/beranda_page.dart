@@ -45,6 +45,20 @@ class _BerandaPageState extends State<BerandaPage> {
     }
   }
 
+  Future<void> _onSearchMenu() async {
+    if (mounted) setState(() => _loading = true);
+    var _duration = const Duration(seconds: 0);
+
+    await Provider.of<OrderProviders>(context, listen: false).getMenuList();
+
+    if (mounted) {
+      Timer(_duration, () {
+        setState(() => _loading = false);
+        _refreshController.refreshCompleted();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +70,10 @@ class _BerandaPageState extends State<BerandaPage> {
             controller: _editingController,
             onChanged: (value) {
               result = value;
-              setState(() {});
+              setState(() {
+                //get data by parameter
+                _onSearchMenu();
+              });
             },
             decoration: InputDecoration(
               isDense: true,
@@ -95,7 +112,8 @@ class _BerandaPageState extends State<BerandaPage> {
               ),
             ),
           ),
-        ), title: '',
+        ),
+        title: '',
       ),
       body: SmartRefresher(
         controller: _refreshController,

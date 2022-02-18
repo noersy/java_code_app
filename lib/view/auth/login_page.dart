@@ -15,7 +15,6 @@ import 'package:java_code_app/widget/input/form_login.dart';
 import 'package:provider/provider.dart';
 import 'package:logging/logging.dart' as logging;
 
-
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -52,6 +51,22 @@ class _LoginPageState extends State<LoginPage> {
         setState(() => _loading = false);
       });
       return;
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Email/password anda salah!\nAnda belum mendaftar?'),
+              // content: Text('email '),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('Close')),
+              ],
+            );
+          });
     }
 
     setState(() => _loading = false);
