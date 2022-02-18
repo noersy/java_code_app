@@ -25,12 +25,18 @@ class _AddOrderButtonState extends State<AddOrderButton> {
     super.initState();
   }
 
+  bacaJumlahOrder() {
+    final _co = Provider.of<OrderProviders>(context).checkOrder;
+    Map<String, dynamic> data = _co;
+    print('jumlah order: ${data['countOrder']}');
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: OrderProviders(),
       builder: (context, snapshot) {
-        final _orders = Provider.of<OrderProviders>(context).checkOrder;
+        final _co = Provider.of<OrderProviders>(context).checkOrder;
         return Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -47,11 +53,15 @@ class _AddOrderButtonState extends State<AddOrderButton> {
                 ),
                 child: const Icon(Icons.remove),
               ),
-            if (jumlahOrder != 0) Text("$jumlahOrder", style: TypoSty.subtitle),
+            if (jumlahOrder != 0)
+              Text("${jumlahOrder}", style: TypoSty.subtitle),
             TextButton(
               onPressed: () {
-                setState(() => jumlahOrder++);
-                widget.onChange(jumlahOrder);
+                Map<String, dynamic> data = _co;
+                final dataCo = data['2'];
+                print('$_co\n' + 'jumlah order: ${dataCo['countOrder']}');
+                // setState(() => jumlahOrder++);
+                // widget.onChange(jumlahOrder);
               },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.zero,
