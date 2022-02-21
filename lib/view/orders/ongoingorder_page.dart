@@ -142,12 +142,7 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                           ],
                         ),
                         if (data != null)
-                          Text(
-                            "Rp ${data?.data.order.totalBayar}",
-                            style: TypoSty.subtitle.copyWith(
-                              color: ColorSty.primary,
-                            ),
-                          )
+                          totalPesanan()
                         else
                           Skeleton(height: 16.0, width: 50),
                       ],
@@ -328,6 +323,19 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget totalPesanan() {
+    var totalPesanan = 0;
+    for (var i = 0; i < data!.data.detail.length; i++) {
+      totalPesanan += data!.data.detail[i].total;
+    }
+    return Text(
+      "Rp $totalPesanan",
+      style: TypoSty.subtitle.copyWith(
+        color: ColorSty.primary,
       ),
     );
   }
