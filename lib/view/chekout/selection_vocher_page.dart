@@ -78,6 +78,8 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
                       Provider.of<OrderProviders>(context).listVoucher;
                   return Column(
                     children: [
+                      if (_listVoucher.length <= 0)
+                        Text('Maaf, Anda Tidak Memiliki Voucher'),
                       if (_loading)
                         VoucherCard(
                           voucher: _selectedVoucher,
@@ -106,7 +108,7 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
                           onPressed: (String value) {
                             setState(() => _selectedVoucher = null);
                           },
-                        )
+                        ),
                     ],
                   );
                 }),
