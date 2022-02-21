@@ -53,13 +53,13 @@ class _DetailMenuState extends State<DetailMenu> {
 
   getMenu() async {
     if (mounted) setState(() => _isLoading = true);
-    final data = await Provider.of<OrderProviders>(context, listen: false).getDetailMenu(id: widget.id);
+    final data = await Provider.of<OrderProviders>(context, listen: false)
+        .getDetailMenu(id: widget.id);
 
     if (data != null) {
       _menu = data.data.menu;
       _harga = _menu?.harga ?? 0;
       _hargaTotal = _harga;
-
 
       if (data.data.topping?.isNotEmpty ?? false) {
         _selectedTopping = [data.data.topping!.first];
@@ -76,14 +76,16 @@ class _DetailMenuState extends State<DetailMenu> {
       _listTopping = data.data.topping ?? [];
 
       ///Get if order already exist
-      final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+      final orders =
+          Provider.of<OrderProviders>(context, listen: false).checkOrder;
 
       if (orders.containsKey("${_menu?.idMenu}")) {
         final dat = orders["${_menu?.idMenu}"];
 
         if (dat["level"] != null) {
-          final _level = data.data.level?.where((e) => "${e.idDetail}" == dat["level"]);
-          if (_level?.isNotEmpty ?? false){
+          final _level =
+              data.data.level?.where((e) => "${e.idDetail}" == dat["level"]);
+          if (_level?.isNotEmpty ?? false) {
             _selectedLevel = _level!.first;
             _hargaLevel = _level.first.harga;
             _hargaTotal = _harga + _hargaLevel + _hargaTopping;
@@ -92,15 +94,15 @@ class _DetailMenuState extends State<DetailMenu> {
 
         if (dat["topping"] != null) {
           final topping = data.data.topping?.where((item) {
-                for (final e in dat["topping"]) {
-                  if (e == item.idDetail) return true;
-                }
-                return false;
-              }).toList();
+            for (final e in dat["topping"]) {
+              if (e == item.idDetail) return true;
+            }
+            return false;
+          }).toList();
 
-          if(topping?.isNotEmpty ?? false){
+          if (topping?.isNotEmpty ?? false) {
             _selectedTopping = topping!;
-            _hargaTopping = topping.map((e) => e.harga).reduce((e, a) => e+a);
+            _hargaTopping = topping.map((e) => e.harga).reduce((e, a) => e + a);
             _hargaTotal = _harga + _hargaLevel + _hargaTopping;
           }
         }
@@ -175,8 +177,8 @@ class _DetailMenuState extends State<DetailMenu> {
                       setState(() => _selectedTopping.add(value));
                     }
                     final _top = _selectedTopping.map((e) => e.harga);
-                    if(_top.isNotEmpty) {
-                      _hargaTopping = _top.reduce((e, a) => e+a);
+                    if (_top.isNotEmpty) {
+                      _hargaTopping = _top.reduce((e, a) => e + a);
                     } else {
                       _hargaTopping = 0;
                     }
@@ -198,7 +200,8 @@ class _DetailMenuState extends State<DetailMenu> {
   void _tambahkanPesanan() {
     if (_menu == null) return;
 
-    final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    final orders =
+        Provider.of<OrderProviders>(context, listen: false).checkOrder;
 
     final data = {
       "id": "${widget.id}",
@@ -459,7 +462,7 @@ class _DetailMenuState extends State<DetailMenu> {
                             child: Align(
                               alignment: Alignment.center,
                               child: Text(
-                                "Tambahkan Ke Pesanan",
+                                "Tambahkan Ke Keranjang",
                                 style: TypoSty.button,
                               ),
                             ),
