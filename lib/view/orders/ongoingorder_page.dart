@@ -206,7 +206,7 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                         TileListDMenu(
                           dense: true,
                           title: "Total Pembayaran",
-                          prefix: "Rp 4.000",
+                          prefix: "${data?.data.order.totalBayar}",
                           textStylePrefix: TypoSty.titlePrimary,
                           icon: Icons.wine_bar,
                           isLoading: _isLoading,
