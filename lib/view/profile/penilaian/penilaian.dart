@@ -147,7 +147,7 @@ class _PenilaianState extends State<Penilaian> {
     'Pelayanan',
     'Fasilitas'
   ];
-  TextEditingController textReview = TextEditingController();
+  TextEditingController textReviewController = TextEditingController();
   Container widgetType(BuildContext context) {
     return Container(
         width: MediaQuery.of(context).size.height,
@@ -176,7 +176,7 @@ class _PenilaianState extends State<Penilaian> {
                 enabled: true,
                 style: TextStyle(fontSize: 12),
                 maxLines: 5,
-                controller: textReview,
+                controller: textReviewController,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: '',
@@ -189,8 +189,8 @@ class _PenilaianState extends State<Penilaian> {
               children: [
                 ElevatedButton(
                     onPressed: () {
-                      postPenilaian(score, selectedType, '${textReview.text}',
-                              base64Image)
+                      postPenilaian(score, selectedType,
+                              '${textReviewController.text}', base64Image)
                           .then((value) {
                         showDialog(
                             context: context,
@@ -202,7 +202,9 @@ class _PenilaianState extends State<Penilaian> {
                                   actions: <Widget>[
                                     TextButton(
                                         onPressed: () {
-                                          Navigate.toDaftarPenilaian(context);
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                          textReviewController.clear();
                                         },
                                         child: Text('Close')),
                                   ],
@@ -216,6 +218,7 @@ class _PenilaianState extends State<Penilaian> {
                                         onPressed: () {
                                           Navigator.pop(context);
                                           Navigator.pop(context);
+                                          textReviewController.clear();
                                         },
                                         child: Text('Close')),
                                   ],
