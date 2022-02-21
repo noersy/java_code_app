@@ -21,7 +21,18 @@ class BottomNav {
 }
 
 class LangProfile {
-  final String nam, tgl, tlp, ub, ro, role, role2, br, lm, bhs;
+  final String nam,
+      tgl,
+      tlp,
+      ub,
+      ro,
+      role,
+      role2,
+      br,
+      lm,
+      bhs,
+      penilaian,
+      nilai_sekarang;
   final String title, subtitle, subtitle2;
 
   final ProfileCation caption;
@@ -41,6 +52,8 @@ class LangProfile {
     required this.br,
     required this.lm,
     required this.bhs,
+    required this.penilaian,
+    required this.nilai_sekarang,
   });
 }
 
@@ -58,7 +71,7 @@ class LangPesanan {
   final String tap, tap2;
   final String mini, ongoingCaption;
   final String riwayatCaption, riwayatCaption2;
-  final String allStatus, status, status2, statusB,  status3, status4;
+  final String allStatus, status, status2, statusB, status3, status4;
   final String buttonPe, buttonLa;
   final String totalOr;
 
@@ -80,4 +93,3 @@ class LangPesanan {
     required this.totalOr,
   });
 }
-

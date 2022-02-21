@@ -274,7 +274,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    getInfoDevice();
+    // getInfoDevice();
     super.initState();
   }
 
@@ -525,15 +525,12 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                               child: Column(
                                 children: [
-                                  // ListTile(
-                                  //   leading: Text('Penilaian'),
-                                  //   title: Text('nilai sekarang'),
-                                  // ),
                                   TileListProfile(
                                     top: false,
                                     enable: false,
-                                    title: 'Penilaian',
-                                    suffix: 'nilai sekarang',
+                                    title:
+                                        '${lang.profile.penilaian.toString()}',
+                                    suffix: '${lang.profile.nilai_sekarang}',
                                     onPressed: () {
                                       print('navigate daftar penilaian');
                                       Navigate.toDaftarPenilaian(context);
