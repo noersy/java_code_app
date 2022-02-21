@@ -7,7 +7,6 @@ import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
-
 class DetailVoucherPage extends StatefulWidget {
   final LVoucher voucher;
 
@@ -21,7 +20,6 @@ class DetailVoucherPage extends StatefulWidget {
 }
 
 class _DetailVoucherPageState extends State<DetailVoucherPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +31,10 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
       body: Column(
         children: [
           const SizedBox(height: SpaceDims.sp12),
-          CardDetailVoucher(urlImage: widget.voucher.infoVoucher, title: widget.voucher.nama),
+          CardDetailVoucher(
+              urlImage: widget.voucher.infoVoucher,
+              title: widget.voucher.nama,
+              nominal: widget.voucher.nominal.toString()),
           const SizedBox(height: SpaceDims.sp12),
           Expanded(
             child: Container(
@@ -111,7 +112,8 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
                               Text("Valid Date", style: TypoSty.button),
                             ],
                           ),
-                          Text("${DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeMulai)} - ${DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeSelesai)}"),
+                          Text(
+                              "${DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeMulai)} - ${DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeSelesai)}"),
                         ],
                       ),
                     ),
@@ -163,7 +165,7 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
           padding: const EdgeInsets.symmetric(
               horizontal: SpaceDims.sp12, vertical: SpaceDims.sp8),
           child: ElevatedButton(
-            onPressed: (){
+            onPressed: () {
               Navigator.of(context).pop(true);
             },
             style: ElevatedButton.styleFrom(
@@ -182,13 +184,14 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
 }
 
 class CardDetailVoucher extends StatelessWidget {
-  final String urlImage, title;
+  final String urlImage, title, nominal;
 
-  const CardDetailVoucher({
-    Key? key,
-    required this.urlImage,
-    required this.title,
-  }) : super(key: key);
+  const CardDetailVoucher(
+      {Key? key,
+      required this.urlImage,
+      required this.title,
+      required this.nominal})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -208,24 +211,41 @@ class CardDetailVoucher extends StatelessWidget {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20.0),
-          child: Image.network(
-            urlImage,
-            loadingBuilder: (_, child, ImageChunkEvent? loadingProgress) {
-              if (loadingProgress != null) {
-                return Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Skeleton(height: 160, width: double.infinity),
-                    Text(
-                      loadingProgress.toStringShort(),
-                      style: const TextStyle(color: Colors.grey),
-                    )
-                  ],
-                );
-              } else {
-                return child;
-              }
-            },
+          child: Stack(
+            children: [
+              Image.network(
+                urlImage,
+                loadingBuilder: (_, child, ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress != null) {
+                    return Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Skeleton(height: 160, width: double.infinity),
+                        Text(
+                          loadingProgress.toStringShort(),
+                          style: const TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return child;
+                  }
+                },
+              ),
+              Positioned(
+                right: 0.0,
+                bottom: 70.0,
+                child: Text(
+                  "   ${nominal.toString().substring(0, 2)} K   ",
+                  style: TextStyle(
+                    backgroundColor: Colors.white,
+                    color: Color.fromRGBO(0, 154, 173, 1),
+                    fontSize: 35.0,
+                    decorationThickness: 2.85,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

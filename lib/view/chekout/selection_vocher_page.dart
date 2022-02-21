@@ -74,10 +74,11 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
             child: AnimatedBuilder(
                 animation: OrderProviders(),
                 builder: (context, snapshot) {
-                  _listVoucher = Provider.of<OrderProviders>(context).listVoucher;
+                  _listVoucher =
+                      Provider.of<OrderProviders>(context).listVoucher;
                   return Column(
                     children: [
-                      if(_loading)
+                      if (_loading)
                         VoucherCard(
                           voucher: _selectedVoucher,
                           isChecked: false,
@@ -209,8 +210,10 @@ class _VoucherCardState extends State<VoucherCard> {
   @override
   void initState() {
     _isSelected = widget.isChecked;
-    _start = DateTime.fromMicrosecondsSinceEpoch(widget.voucher?.periodeMulai ?? 0 * 1000);
-    _end = DateTime.fromMicrosecondsSinceEpoch(widget.voucher?.periodeSelesai ??0 * 1000);
+    _start = DateTime.fromMicrosecondsSinceEpoch(
+        widget.voucher?.periodeMulai ?? 0 * 1000);
+    _end = DateTime.fromMicrosecondsSinceEpoch(
+        widget.voucher?.periodeSelesai ?? 0 * 1000);
     super.initState();
   }
 
@@ -220,13 +223,17 @@ class _VoucherCardState extends State<VoucherCard> {
       padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp8),
       child: ElevatedButton(
         clipBehavior: Clip.antiAlias,
-        onPressed: widget.voucher != null ? () async {
-          _isSelected = (await Navigate.toDetailVoucherPage(context, voucher: widget.voucher!)) ?? false;
+        onPressed: widget.voucher != null
+            ? () async {
+                _isSelected = (await Navigate.toDetailVoucherPage(context,
+                        voucher: widget.voucher!)) ??
+                    false;
 
-          if (_isSelected && widget.onChanged != null) {
-            widget.onChanged!(widget.voucher!.nama);
-          }
-        } : (){},
+                if (_isSelected && widget.onChanged != null) {
+                  widget.onChanged!(widget.voucher!.nama);
+                }
+              }
+            : () {},
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.all(0),
           primary: ColorSty.bg2,
@@ -285,6 +292,19 @@ class _VoucherCardState extends State<VoucherCard> {
                         "${widget.voucher?.infoVoucher}",
                         errorBuilder: imageError,
                         loadingBuilder: imageOnLoad,
+                      ),
+                    ),
+                    Positioned(
+                      right: 0.0,
+                      bottom: 60.0,
+                      child: Text(
+                        "   ${widget.voucher?.nominal.toString().substring(0, 2)} K   ",
+                        style: TextStyle(
+                          backgroundColor: Colors.white,
+                          color: Color.fromRGBO(0, 154, 173, 1),
+                          fontSize: 35.0,
+                          decorationThickness: 2.85,
+                        ),
                       ),
                     ),
                     Positioned(

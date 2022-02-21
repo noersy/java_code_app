@@ -197,7 +197,7 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                           TileListDMenu(
                             dense: true,
                             title: "Pembayaran",
-                            prefix: "Pay Leter",
+                            prefix: "Pay La ter",
                             icon: IconsCs.coins,
                             isLoading: _isLoading,
                             onPressed: () {},
