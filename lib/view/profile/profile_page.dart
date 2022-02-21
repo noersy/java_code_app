@@ -719,6 +719,9 @@ class _TileListProfileState extends State<TileListProfile> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(widget.title, style: TypoSty.captionSemiBold),
+                SizedBox(
+                  width: 20,
+                ),
                 Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -734,7 +737,7 @@ class _TileListProfileState extends State<TileListProfile> {
                         ),
                       ),
                       const Icon(
-                        Icons.arrow_forward_ios,
+                        Icons.edit,
                         color: ColorSty.grey,
                         size: 16.0,
                       )

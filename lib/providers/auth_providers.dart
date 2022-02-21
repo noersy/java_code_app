@@ -101,14 +101,14 @@ class AuthProviders extends ChangeNotifier {
     if (user == null) return false;
 
     final _id = user.data.idUser;
-    final Uri _api = Uri.http(host, "$sub/api/user/update/$_id");
-
+    final Uri _api = Uri.http(host, "/api/user/update/$_id");
+    print('ker: $key | value: $value');
     try {
-      final body = {"$key": "$value"};
+      final body = jsonEncode({"$key": "$value"});
 
       _log.fine("Tray update user profile.");
       final response = await http.post(_api, headers: _headers, body: body);
-
+      print('response edit nama ${response.body}');
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
         _log.fine("Success update $key user.");
