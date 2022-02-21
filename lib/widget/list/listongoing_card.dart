@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/helps/image.dart';
@@ -8,7 +7,6 @@ import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 
 class ListOrderOngoing extends StatelessWidget {
-
   final String type, title;
   final List<Detail> detail;
   const ListOrderOngoing({
@@ -23,14 +21,17 @@ class ListOrderOngoing extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: SpaceDims.sp22),
-        if(detail.where((element) => element.kategori == type).isEmpty)
+        if (detail.where((element) => element.kategori == type).isEmpty)
           Padding(
             padding: const EdgeInsets.only(left: SpaceDims.sp24),
             child: Row(
               children: [
                 type.compareTo("makanan") == 0
-                    ? SvgPicture.asset("assert/image/icons/ep_food.svg", height: 22)
-                    : SvgPicture.asset("assert/image/icons/ep_coffee.svg", height: 26),                const SizedBox(width: SpaceDims.sp4),
+                    ? SvgPicture.asset("assert/image/icons/ep_food.svg",
+                        height: 22)
+                    : SvgPicture.asset("assert/image/icons/ep_coffee.svg",
+                        height: 26),
+                const SizedBox(width: SpaceDims.sp4),
                 Text(
                   title,
                   style: TypoSty.title.copyWith(
@@ -55,7 +56,6 @@ class ListOrderOngoing extends StatelessWidget {
     );
   }
 }
-
 
 class CardMenuOngoing extends StatefulWidget {
   final Detail data;
@@ -87,9 +87,10 @@ class _CardMenuOngoingState extends State<CardMenuOngoing> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp18, vertical: SpaceDims.sp2),
+      padding: const EdgeInsets.symmetric(
+          horizontal: SpaceDims.sp18, vertical: SpaceDims.sp2),
       child: ElevatedButton(
-        onPressed: (){},
+        onPressed: () {},
         style: ElevatedButton.styleFrom(
           primary: ColorSty.grey90,
           onPrimary: ColorSty.grey90,
@@ -108,13 +109,12 @@ class _CardMenuOngoingState extends State<CardMenuOngoing> {
                   height: 74,
                   width: 74,
                   child: Padding(
-                    padding: const EdgeInsets.all(SpaceDims.sp4),
-                    child: Image.network(
+                      padding: const EdgeInsets.all(SpaceDims.sp4),
+                      child: Image.network(
                         url,
-                      errorBuilder: imageError,
-                      loadingBuilder: imageOnLoad,
-                    )
-                  ),
+                        errorBuilder: imageError,
+                        loadingBuilder: imageOnLoad,
+                      )),
                   decoration: BoxDecoration(
                     color: ColorSty.grey60,
                     borderRadius: BorderRadius.circular(10.0),
@@ -154,38 +154,40 @@ class _CardMenuOngoingState extends State<CardMenuOngoing> {
               ],
             ),
             Positioned.fill(
-              right: 0,
+              right: 20,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  // if (_jumlahOrder != 0)
+                  //   TextButton(
+                  //     onPressed: () {
+                  //       // setState(() => _jumlahOrder--)
+                  //     },
+                  //     style: TextButton.styleFrom(
+                  //       padding: EdgeInsets.zero,
+                  //       minimumSize: const Size(25, 25),
+                  //       side: const BorderSide(
+                  //         color: ColorSty.primary, width: 2,
+                  //       ),
+                  //     ),
+                  //     child: const Icon(Icons.remove),
+                  //   ),
                   if (_jumlahOrder != 0)
-                    TextButton(
-                      onPressed: () {
-                        // setState(() => _jumlahOrder--)
-                      },
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: const Size(25, 25),
-                        side: const BorderSide(
-                          color: ColorSty.primary, width: 2,
-                        ),
-                      ),
-                      child: const Icon(Icons.remove),
-                    ),
-                  if (_jumlahOrder != 0)
-                    Text("$_jumlahOrder", style: TypoSty.subtitle.copyWith(color: ColorSty.primary)),
-                  TextButton(
-                    onPressed: (){
-                      // setState(() => _jumlahOrder++);
-                    },
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      minimumSize: const Size(25, 25),
-                      primary: ColorSty.white,
-                      backgroundColor: ColorSty.primary,
-                    ),
-                    child: const Icon(Icons.add, color: ColorSty.white),
-                  )
+                    Text("$_jumlahOrder",
+                        style:
+                            TypoSty.subtitle.copyWith(color: ColorSty.primary)),
+                  // TextButton(
+                  //   onPressed: (){
+                  //     // setState(() => _jumlahOrder++);
+                  //   },
+                  //   style: TextButton.styleFrom(
+                  //     padding: EdgeInsets.zero,
+                  //     minimumSize: const Size(25, 25),
+                  //     primary: ColorSty.white,
+                  //     backgroundColor: ColorSty.primary,
+                  //   ),
+                  //   child: const Icon(Icons.add, color: ColorSty.white),
+                  // )
                 ],
               ),
             )

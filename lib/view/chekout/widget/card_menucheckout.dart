@@ -44,6 +44,7 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
       );
     }
   }
+
   void _min() async {
     setState(() => _jumlahOrder--);
     final orders =
@@ -169,7 +170,7 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
             ),
             if (status != 0)
               Positioned(
-                right: 0,
+                right: 20,
                 child: AnimatedBuilder(
                     animation: OrderProviders(),
                     builder: (context, snapshot) {
@@ -181,36 +182,7 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
                       if (!orders.keys.contains(widget.data["id"])) {
                         _jumlahOrder = 0;
                       }
-
-                      return Row(
-                        children: [
-                          if (_jumlahOrder != 0)
-                            TextButton(
-                              onPressed: _min,
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                minimumSize: const Size(24, 24),
-                                side: const BorderSide(
-                                  color: ColorSty.primary,
-                                  width: 2,
-                                ),
-                              ),
-                              child: const Icon(Icons.remove),
-                            ),
-                          if (_jumlahOrder != 0)
-                            Text("$_jumlahOrder", style: TypoSty.subtitle),
-                          TextButton(
-                            onPressed: _add,
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              minimumSize: const Size(24, 24),
-                              primary: ColorSty.white,
-                              backgroundColor: ColorSty.primary,
-                            ),
-                            child: const Icon(Icons.add, color: ColorSty.white),
-                          )
-                        ],
-                      );
+                      return Text("$_jumlahOrder", style: TypoSty.subtitle);
                     }),
               )
           ],

@@ -28,24 +28,28 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
 
   getOrder() async {
     setState(() => _isLoading = true);
-    data =
-    await Provider.of<OrderProviders>(context, listen: false).getDetailOrder(
-        id: widget.id);
+    data = await Provider.of<OrderProviders>(context, listen: false)
+        .getDetailOrder(id: widget.id);
     if (data != null) status = data!.data.order.status;
     setState(() => _isLoading = false);
   }
 
-  _cancelOrder() async{
-    await showDialog(context: context, builder: (_) =>  ConfirmationDialog(
-      onSubmit: () async{
-        setState(() => _isLoading = true);
-        if(data != null) {
-          final result = await Provider.of<OrderProviders>(context, listen: false).cancelOrder(idOrder: data!.data.order.idOrder);
-          Provider.of<OrderProviders>(context, listen: false).getListOrder();
-          if(result) Navigator.pop(context);
-        }
-      },
-    ));
+  _cancelOrder() async {
+    await showDialog(
+        context: context,
+        builder: (_) => ConfirmationDialog(
+              onSubmit: () async {
+                setState(() => _isLoading = true);
+                if (data != null) {
+                  final result =
+                      await Provider.of<OrderProviders>(context, listen: false)
+                          .cancelOrder(idOrder: data!.data.order.idOrder);
+                  Provider.of<OrderProviders>(context, listen: false)
+                      .getListOrder();
+                  if (result) Navigator.pop(context);
+                }
+              },
+            ));
     Navigator.pop(context);
   }
 
@@ -63,19 +67,16 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
         back: true,
         title: 'Pesanan',
         icon: const Icon(IconsCs.pesanan, size: 28.0, color: ColorSty.primary),
-        onDelete: status == 0
-            ? _cancelOrder
-            : null,
+        onDelete: status == 0 ? _cancelOrder : null,
       ),
       body: SingleChildScrollView(
         primary: true,
         child: Column(
           children: [
-            if(data != null)
+            if (data != null)
               Column(
                 children: [
-                  if (data!
-                      .data.detail
+                  if (data!.data.detail
                       .where((e) => e.kategori == "makanan")
                       .isNotEmpty)
                     ListOrderOngoing(
@@ -83,8 +84,7 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                       title: 'Makanan',
                       type: 'makanan',
                     ),
-                  if (data!
-                      .data.detail
+                  if (data!.data.detail
                       .where((e) => e.kategori == "minuman")
                       .isNotEmpty)
                     ListOrderOngoing(
@@ -112,10 +112,8 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                   color: ColorSty.grey60,
                   offset: Offset(0, -1),
                   spreadRadius: 1,
-                  blurRadius: 1
-              )
-            ]
-        ),
+                  blurRadius: 1)
+            ]),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -126,7 +124,7 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                 children: [
                   Padding(
                     padding:
-                    const EdgeInsets.symmetric(horizontal: SpaceDims.sp24),
+                        const EdgeInsets.symmetric(horizontal: SpaceDims.sp24),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -136,19 +134,20 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                               "Total Pesanan ",
                               style: TypoSty.captionSemiBold,
                             ),
-                            if (data != null) Text(
-                                "(${data?.data.detail.length} Menu) :",
-                                style: TypoSty.caption)
+                            if (data != null)
+                              Text("(${data?.data.detail.length} Menu) :",
+                                  style: TypoSty.caption)
                             else
                               Skeleton(height: 16.0, width: 20),
                           ],
                         ),
-                        if (data != null) Text(
-                          "Rp ${data?.data.order.totalBayar}",
-                          style: TypoSty.subtitle.copyWith(
-                            color: ColorSty.primary,
-                          ),
-                        )
+                        if (data != null)
+                          Text(
+                            "Rp ${data?.data.order.totalBayar}",
+                            style: TypoSty.subtitle.copyWith(
+                              color: ColorSty.primary,
+                            ),
+                          )
                         else
                           Skeleton(height: 16.0, width: 50),
                       ],
@@ -182,15 +181,16 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                                     : "${data?.data.order.diskon}%",
                                 style: TypoSty.mini,
                                 overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.right,)
+                                textAlign: TextAlign.right,
+                              )
                             ],
                           ),
                           isLoading: _isLoading,
                           iconSvg: data?.data.order.namaVoucher != null
                               ? SvgPicture.asset(
-                              "assert/image/icons/voucher-icon.svg")
+                                  "assert/image/icons/voucher-icon.svg")
                               : SvgPicture.asset(
-                              "assert/image/icons/la_coins.svg"),
+                                  "assert/image/icons/la_coins.svg"),
                           onPressed: () {},
                         ),
                         Stack(children: [
@@ -226,7 +226,7 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                           ),
                           child: Row(
                             children: [
-                              if(status == 1)
+                              if (status == 1)
                                 const Icon(
                                   Icons.check_circle,
                                   color: ColorSty.primary,
@@ -241,7 +241,7 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                                       decoration: BoxDecoration(
                                         color: ColorSty.grey,
                                         borderRadius:
-                                        BorderRadius.circular(100.0),
+                                            BorderRadius.circular(100.0),
                                       ),
                                     ),
                                   ),
@@ -249,7 +249,7 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                               const SizedBox(width: SpaceDims.sp8),
                               const Expanded(child: Divider(thickness: 2)),
                               const SizedBox(width: SpaceDims.sp8),
-                              if(status == 2)
+                              if (status == 2)
                                 const Icon(
                                   Icons.check_circle,
                                   color: ColorSty.primary,
@@ -264,14 +264,15 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                                       decoration: BoxDecoration(
                                         color: ColorSty.grey,
                                         borderRadius:
-                                        BorderRadius.circular(100.0),
+                                            BorderRadius.circular(100.0),
                                       ),
                                     ),
                                   ),
-                                ), const SizedBox(width: SpaceDims.sp8),
+                                ),
+                              const SizedBox(width: SpaceDims.sp8),
                               const Expanded(child: Divider(thickness: 2)),
                               const SizedBox(width: SpaceDims.sp8),
-                              if(status == 3)
+                              if (status == 3)
                                 const Icon(
                                   Icons.check_circle,
                                   color: ColorSty.primary,
@@ -286,7 +287,7 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                                       decoration: BoxDecoration(
                                         color: ColorSty.grey,
                                         borderRadius:
-                                        BorderRadius.circular(100.0),
+                                            BorderRadius.circular(100.0),
                                       ),
                                     ),
                                   ),
@@ -345,9 +346,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30.0)
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
       child: SizedBox(
         height: 340,
         width: double.infinity,
@@ -357,12 +356,13 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(Icons.delete_outline, size: 124.0),
-                Text("Hapus", style: TypoSty.heading),
+                Text("Batal", style: TypoSty.heading),
                 const SizedBox(height: SpaceDims.sp12),
                 Text(
-                    "Anda yakin ingin menghapus pesanan ini?",
-                    textAlign: TextAlign.center,
-                    style: TypoSty.title.copyWith(fontSize: 16.0, fontWeight: FontWeight.w600),
+                  "Anda yakin ingin menghamembatalkan pesanan ini?",
+                  textAlign: TextAlign.center,
+                  style: TypoSty.title
+                      .copyWith(fontSize: 16.0, fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: SpaceDims.sp12),
                 Row(
@@ -370,11 +370,9 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
                   children: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0)
-                        )
-                      ),
-                      onPressed: ()=> Navigator.pop(context),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0))),
+                      onPressed: () => Navigator.pop(context),
                       child: const SizedBox(
                         width: 90,
                         child: Text("Tidak", textAlign: TextAlign.center),
@@ -383,16 +381,14 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
                     const SizedBox(width: SpaceDims.sp12),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: ColorSty.white,
-                        onPrimary: Colors.red,
-                        shape: RoundedRectangleBorder(
-                          side: const BorderSide(color: Colors.red),
-                          borderRadius: BorderRadius.circular(30.0)
-                        )
-                      ),
-                      onPressed: (){
+                          primary: ColorSty.white,
+                          onPrimary: Colors.red,
+                          shape: RoundedRectangleBorder(
+                              side: const BorderSide(color: Colors.red),
+                              borderRadius: BorderRadius.circular(30.0))),
+                      onPressed: () {
                         setState(() => _isLoading = true);
-                        if(widget.onSubmit != null) widget.onSubmit!();
+                        if (widget.onSubmit != null) widget.onSubmit!();
                         // if(mounted) setState(() => _isLoading = false);
                       },
                       child: const SizedBox(
@@ -404,15 +400,14 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
                 )
               ],
             ),
-            if(_isLoading)
-            Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: ColorSty.grey.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(30.0)
-              ),
-              child: const RefreshProgressIndicator(),
-            )
+            if (_isLoading)
+              Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: ColorSty.grey.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(30.0)),
+                child: const RefreshProgressIndicator(),
+              )
           ],
         ),
       ),
