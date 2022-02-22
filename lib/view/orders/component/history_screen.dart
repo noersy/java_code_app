@@ -42,7 +42,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   static final DateTime _dateNow = DateTime.now();
   static DateTime? _dateStart;
   static DateTime? _dateEnd;
-
+  bool isFinisfLoadmore = false;
   String _dateRange = dateFormat.format(_dateNow) +
       " - " +
       dateFormat.format(
@@ -128,8 +128,20 @@ class _HistoryScreenState extends State<HistoryScreen> {
     _clearAllList();
     // _onRefresh();
     loadTotalHistory();
-    _loadStart();
+    _loadStart().then((value) => {
+          setState(() {
+            _loading = false;
+          })
+        });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _loadStart();
+    loadTotalHistory();
+    _loadMore();
+    super.dispose();
   }
 
   _clearAllList() {
@@ -157,21 +169,23 @@ class _HistoryScreenState extends State<HistoryScreen> {
         setState(() {
           _data.addAll(_orders);
         });
-        if (mounted) {
-          setState(() {
-            _loading = false;
-          });
-        }
+        // if (mounted) {
+        //   setState(() {
+        //     _loading = false;
+        //   });
+        // }
+        isFinisfLoadmore = true;
       }
       return true;
     } else {
       LoadMoreStatus.nomore;
+      isFinisfLoadmore = true;
       //data habis
-      if (mounted) {
-        setState(() {
-          _loading = false;
-        });
-      }
+      // if (mounted) {
+      //   setState(() {
+      //     _loading = false;
+      //   });
+      // }
       return true;
     }
   }
@@ -190,28 +204,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
         });
       }
     }
-    // Menu addMenu = Menu(
-    //     idMenu: 2,
-    //     kategori: 'makanan',
-    //     nama: 'Ayam',
-    //     jumlah: 9,
-    //     harga: '9999',
-    //     total: 99999);
-    // List<Menu> lMenu = [];
-    // for (var i = 0; i < 5; i++) {
-    //   lMenu.add(addMenu);
-    // }
-    // History dataLimit = History(
-    //     idOrder: 9,
-    //     noStruk: '9',
-    //     nama: 'latif',
-    //     totalBayar: 9,
-    //     tanggal: _dateNow,
-    //     status: 1,
-    //     menu: lMenu);
-    // setState(() {
-    //   _data.add(dataLimit);
-    // });
     return true;
   }
 
@@ -226,15 +218,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
               .getHistoryLimit(10, 0)) ??
           [];
       _data = _orders;
-      Timer(_duration, () {
-        if (mounted) {
-          setState(() {
-            _loading = false;
-          });
-        }
-      });
+
+      // Timer(_duration, () {
+      //   if (mounted) {
+      //     setState(() {
+      //       _loading = false;
+      //     });
+      //   }
+      // });
     }
     print('load start: ${_data.length}');
+    // return true;
   }
 
   var totalHistory = 0;
@@ -253,11 +247,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     // tambahkan loadmore
     return Scaffold(
@@ -266,7 +255,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         controller: _refreshController,
         child: LoadMore(
           textBuilder: DefaultLoadMoreTextBuilder.english,
-          isFinish: _data.length >= totalHistory,
+          isFinish: isFinisfLoadmore,
           onLoadMore: _loadMore,
           child: ListView(
             children: [
@@ -612,8 +601,11 @@ class DateRangePickerDialog extends StatelessWidget {
             width: double.infinity,
             child: SfDateRangePicker(
               onSubmit: (value) {
+                print('date value: $value');
                 if (value.runtimeType == PickerDateRange &&
                     (value as PickerDateRange).endDate != null) {
+                  Navigator.pop(context, value);
+                } else {
                   Navigator.pop(context, value);
                 }
               },

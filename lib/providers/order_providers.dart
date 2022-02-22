@@ -24,7 +24,6 @@ class TotalHistory {
 }
 
 class OrderProviders extends ChangeNotifier {
-  
   static final _log = logging.Logger('OrderProvider');
   static const headers = {"Content-Type": "application/json", "token": "m_app"};
   // static int _orderInProgress = 0;
@@ -360,6 +359,7 @@ class OrderProviders extends ChangeNotifier {
 
   Future<List<History>?> getHistoryLimit(limit, start) async {
     final user = UserInstance.getInstance().user;
+    // print('user: ${user!.data.idUser}');
 
     if (user == null) return null;
 
@@ -367,7 +367,7 @@ class OrderProviders extends ChangeNotifier {
       _log.fine("Try to get list history of order");
       final response = await http.get(
           Uri.parse(
-              "https://$host/api/order/history/1?limit=$limit&start=$start"),
+              "https://$host/api/order/history/${user.data.idUser}?limit=$limit&start=$start"),
           headers: headers);
       // final response = await http.get(
       //   _api,
