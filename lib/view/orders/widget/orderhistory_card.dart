@@ -88,7 +88,7 @@ class OrderHistoryCard extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(data.noStruk),
+                            // Text(data.noStruk),
                             Padding(
                               padding:
                                   const EdgeInsets.only(right: SpaceDims.sp18),
@@ -188,7 +188,9 @@ class OrderHistoryCard extends StatelessWidget {
                                               BorderRadius.circular(30.0),
                                         ),
                                       ),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigate.toPenilaian(context);
+                                      },
                                       child: Text(
                                         lang.pesanan.buttonPe,
                                         style: TypoSty.button
