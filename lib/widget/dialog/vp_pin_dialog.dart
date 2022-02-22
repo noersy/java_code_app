@@ -30,7 +30,7 @@ class _VPinDialogState extends State<VPinDialog> {
 
   final FocusNode _pinPutFocusNode = FocusNode();
   bool _isHide = true;
-
+  var visibilityPinIcon = Icons.visibility_off;
   BoxDecoration get _pinPutDecoration {
     return BoxDecoration(
       border: Border.all(color: ColorSty.primary),
@@ -143,11 +143,17 @@ class _VPinDialogState extends State<VPinDialog> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: SpaceDims.sp12),
+                      padding: EdgeInsets.only(left: SpaceDims.sp12),
                       child: GestureDetector(
-                        onTap: () => setState(() => _isHide = !_isHide),
-                        child: const Icon(Icons.visibility_off,
-                            color: ColorSty.grey),
+                        onTap: () => setState(() {
+                          _isHide = !_isHide;
+                          if (_isHide) {
+                            visibilityPinIcon = Icons.visibility;
+                          } else {
+                            visibilityPinIcon = Icons.visibility_off;
+                          }
+                        }),
+                        child: Icon(visibilityPinIcon, color: ColorSty.grey),
                       ),
                     )
                   ],
