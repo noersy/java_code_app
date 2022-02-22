@@ -601,11 +601,8 @@ class DateRangePickerDialog extends StatelessWidget {
             width: double.infinity,
             child: SfDateRangePicker(
               onSubmit: (value) {
-                print('date value: $value');
                 if (value.runtimeType == PickerDateRange &&
                     (value as PickerDateRange).endDate != null) {
-                  Navigator.pop(context, value);
-                } else {
                   Navigator.pop(context, value);
                 }
               },
