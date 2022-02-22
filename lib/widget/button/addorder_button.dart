@@ -59,9 +59,16 @@ class _AddOrderButtonState extends State<AddOrderButton> {
               onPressed: () {
                 Map<String, dynamic> data = _co;
                 final dataCo = data['2'];
-                print('$_co\n' + 'jumlah order: ${dataCo['countOrder']}');
-                // setState(() => jumlahOrder++);
-                // widget.onChange(jumlahOrder);
+                setState(() => jumlahOrder++);
+                Provider.of<OrderProviders>(context, listen: false).addOrder(
+                  jumlahOrder: jumlahOrder,
+                  data: data, //data dianggap nulll
+
+                  catatan: '',
+                );
+                print('\n_co: $data\n' +
+                    'dataCo: ${dataCo}\n' + //data dianggap nulll
+                    'jumlah order: $jumlahOrder\n');
               },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.zero,
