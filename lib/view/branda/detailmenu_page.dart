@@ -235,14 +235,71 @@ class _DetailMenuState extends State<DetailMenu> {
     }
   }
 
+  void _onGoback() async {
+    print('detailmenu _onGoback');
+    if (_menu == null) return;
+
+    final orders =
+        Provider.of<OrderProviders>(context, listen: false).checkOrder;
+
+    final data = {
+      "id": "${widget.id}",
+      "jenis": _menu!.kategori,
+      "image": _menu!.foto,
+      "harga": _hargaTotal,
+      "amount": _menu!.status,
+      "name": _menu!.nama,
+    };
+
+    if (_jumlahOrder > 0) {
+      if (orders.keys.contains("${widget.id}")) {
+        await Provider.of<OrderProviders>(context, listen: false).editOrder(
+          id: "${widget.id}",
+          jumlahOrder: _jumlahOrder,
+          hargaTotal: _hargaTotal,
+          topping: _selectedTopping,
+          level: _selectedLevel,
+          catatan: _catatan,
+        );
+      } else {
+        await Provider.of<OrderProviders>(context, listen: false).addOrder(
+          data: data,
+          jumlahOrder: _jumlahOrder,
+          topping: _selectedTopping,
+          level: _selectedLevel,
+          catatan: _catatan,
+        );
+      }
+      Navigator.of(context).pop();
+    }
+  }
+
+  AppBar appBarDetailMenu() {
+    return AppBar(
+      title: Text(
+        'Detail Menu',
+        style: TypoSty.title,
+      ),
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        bottomRight: Radius.circular(30),
+        bottomLeft: Radius.circular(30),
+      )),
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios, color: ColorSty.primary),
+        onPressed: () => {
+          _onGoback(),
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorSty.bg2,
-      appBar: const CostumeAppBar(
-        title: 'Detail Menu',
-        back: true,
-      ),
+      appBar: appBarDetailMenu(),
       body: SingleChildScrollView(
         primary: true,
         child: Column(

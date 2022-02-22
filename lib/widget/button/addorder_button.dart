@@ -43,7 +43,7 @@ class _AddOrderButtonState extends State<AddOrderButton> {
             if (jumlahOrder != 0)
               TextButton(
                 onPressed: () {
-                  setState(() => jumlahOrder--);
+                  if (jumlahOrder > 1) setState(() => jumlahOrder--);
                   widget.onChange(jumlahOrder);
                 },
                 style: TextButton.styleFrom(
