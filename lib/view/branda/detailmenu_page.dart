@@ -415,47 +415,50 @@ class _DetailMenuState extends State<DetailMenu> {
                           prefix: !_isLoading ? "Rp $_hargaTotal" : "Rp 0",
                           onPressed: () {},
                         ),
-                        TileListDMenu(
-                          prefixIcon: true,
-                          isLoading: _isLoading,
-                          icon: IconsCs.fire,
-                          title: "Level",
-                          prefix: _selectedLevel?.keterangan,
-                          onPressed: () => _showDialogLevel(_listLevel),
-                        ),
-                        TileListDMenu(
-                          prefixIcon: true,
-                          isLoading: _isLoading,
-                          iconSvg: SvgPicture.asset(
-                            "assert/image/icons/topping-icon.svg",
-                            height: 22.0,
+                        if (_selectedLevel != null)
+                          TileListDMenu(
+                            prefixIcon: true,
+                            isLoading: _isLoading,
+                            icon: IconsCs.fire,
+                            title: "Level",
+                            prefix: _selectedLevel?.keterangan,
+                            onPressed: () => _showDialogLevel(_listLevel),
                           ),
-                          prefixCostume: RichText(
-                            textAlign: TextAlign.end,
-                            overflow: TextOverflow.ellipsis,
-                            text: TextSpan(
-                                style: TypoSty.captionSemiBold
-                                    .copyWith(color: ColorSty.black),
-                                text: _selectedTopping.isEmpty
-                                    ? ""
-                                    : _selectedTopping.first.keterangan,
-                                children: [
-                                  for (var i = 0;
-                                      i < _selectedTopping.length;
-                                      i++)
-                                    if (i > 0)
-                                      TextSpan(
-                                        text:
-                                            ", ${_selectedTopping[i].keterangan}",
-                                        style: TypoSty.captionSemiBold.copyWith(
-                                          color: ColorSty.black,
-                                        ),
-                                      )
-                                ]),
+                        if (_selectedTopping.isNotEmpty)
+                          TileListDMenu(
+                            prefixIcon: true,
+                            isLoading: _isLoading,
+                            iconSvg: SvgPicture.asset(
+                              "assert/image/icons/topping-icon.svg",
+                              height: 22.0,
+                            ),
+                            prefixCostume: RichText(
+                              textAlign: TextAlign.end,
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                  style: TypoSty.captionSemiBold
+                                      .copyWith(color: ColorSty.black),
+                                  text: _selectedTopping.isEmpty
+                                      ? ""
+                                      : _selectedTopping.first.keterangan,
+                                  children: [
+                                    for (var i = 0;
+                                        i < _selectedTopping.length;
+                                        i++)
+                                      if (i > 0)
+                                        TextSpan(
+                                          text:
+                                              ", ${_selectedTopping[i].keterangan}",
+                                          style:
+                                              TypoSty.captionSemiBold.copyWith(
+                                            color: ColorSty.black,
+                                          ),
+                                        )
+                                  ]),
+                            ),
+                            title: "Topping",
+                            onPressed: () => _showDialogTopping(_listTopping),
                           ),
-                          title: "Topping",
-                          onPressed: () => _showDialogTopping(_listTopping),
-                        ),
                         TileListDMenu(
                           prefixIcon: true,
                           icon: IconsCs.note,
