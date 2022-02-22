@@ -215,7 +215,7 @@ class OrderHistoryCard extends StatelessWidget {
                                     ),
                                     onPressed: () => _pesanLagi(context),
                                     child: Text(
-                                      lang.pesanan.buttonPe,
+                                      lang.pesanan.buttonLa,
                                       style: TypoSty.button
                                           .copyWith(fontSize: 11.0),
                                     ),
