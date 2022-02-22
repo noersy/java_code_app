@@ -288,8 +288,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 else
                                   Column(
                                     children: [
-                                      Text(
-                                          '_orders.isNotEmpty: ${_orders.length}'),
                                       //  tampil order history card
                                       for (final item in _data)
                                         OrderHistoryCard(
