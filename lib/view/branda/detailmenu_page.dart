@@ -289,7 +289,12 @@ class _DetailMenuState extends State<DetailMenu> {
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_ios, color: ColorSty.primary),
         onPressed: () => {
-          _onGoback(),
+          if (_jumlahOrder > 0)
+            {
+              _onGoback(),
+            }
+          else
+            {Navigator.pop(context)}
         },
       ),
     );
