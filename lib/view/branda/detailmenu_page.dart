@@ -116,7 +116,7 @@ class _DetailMenuState extends State<DetailMenu> {
     if (mounted) setState(() {});
   }
 
-  void _viewImage() => Navigate.toViewImage(urlImage: _menu?.foto ?? "http://");
+  void _viewImage() => Navigate.toDetailGambar(context, _menu!.foto);
 
   _showDialogLevel(List<Level>? _listLevel) async {
     if (_listLevel?.isEmpty ?? false) return;

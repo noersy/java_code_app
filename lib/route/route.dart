@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:java_code_app/main.dart';
 import 'package:java_code_app/models/listvoucher.dart';
 import 'package:java_code_app/transision/route_transisition.dart';
+import 'package:java_code_app/view/branda/detail_gambar.dart';
 import 'package:java_code_app/view/chekout/checkout_page.dart';
 import 'package:java_code_app/view/dashboard_page.dart';
 import 'package:java_code_app/view/branda/detailmenu_page.dart';
@@ -78,7 +79,10 @@ class Navigate {
   static void toChattReview(context) =>
       Navigator.of(context).push(routeTransition(const ChatPage()));
   // static void toViewOrderKasir(context, {required Map<String, dynamic> dataOrders, bool? preparing}) => Navigator.of(context).push(routeTransition(OrderDetailPage(dataOrder: dataOrders, preparing: preparing)));
-
+  static void toDetailGambar(context, foto) =>
+      Navigator.of(context).push(routeTransition(DetailGambar(
+        foto: foto,
+      )));
   //Costume route
   static Future? toViewImage({required String urlImage, File? file}) async =>
       await Navigate.toRaw(PageRouteBuilder(
