@@ -7,7 +7,6 @@ import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:java_code_app/view/chekout/widget/delete_chekcout_dialog.dart';
 import 'package:provider/provider.dart';
 
 class CardMenuCheckout extends StatefulWidget {
@@ -27,49 +26,7 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
   late final String nama, harga, url;
   late final int status;
 
-  void _add() {
-    if (_jumlahOrder >= 99) return;
-    setState(() => _jumlahOrder++);
-    if (_jumlahOrder == 1) {
-      Provider.of<OrderProviders>(context, listen: false).addOrder(
-        catatan: '',
-        data: widget.data,
-        jumlahOrder: _jumlahOrder,
-      );
-    } else {
-      Provider.of<OrderProviders>(context, listen: false).editOrder(
-        id: widget.data["id"],
-        catatan: '',
-        jumlahOrder: _jumlahOrder,
-      );
-    }
-  }
 
-  void _min() async {
-    setState(() => _jumlahOrder--);
-    final orders =
-        Provider.of<OrderProviders>(context, listen: false).checkOrder;
-    if (_jumlahOrder >= 1) {
-      Provider.of<OrderProviders>(context, listen: false).editOrder(
-        jumlahOrder: _jumlahOrder,
-        id: widget.data["id"],
-        catatan: '',
-      );
-    } else if (_jumlahOrder != 0) {
-      Provider.of<OrderProviders>(context, listen: false).addOrder(
-        jumlahOrder: _jumlahOrder,
-        data: widget.data,
-        catatan: '',
-      );
-    } else {
-      await showDialog(
-        context: context,
-        builder: (_) => DeleteMenuInCheckoutDialog(id: widget.data["id"]),
-      );
-
-      if (orders.isEmpty) Navigator.pop(context);
-    }
-  }
 
   @override
   void initState() {

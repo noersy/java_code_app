@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
-import 'package:java_code_app/widget/appbar/appbar.dart';
 
 import 'get_all_chat.dart';
 
 class BalasanReview extends StatefulWidget {
+  // ignore: prefer_typing_uninitialized_variables
   final idReview;
-  BalasanReview({Key? key, this.idReview}) : super(key: key);
+  const BalasanReview({Key? key, this.idReview}) : super(key: key);
 
   @override
   _BalasanReviewState createState() => _BalasanReviewState();
@@ -45,7 +45,7 @@ class _BalasanReviewState extends State<BalasanReview> {
     Future data = postChat(answer, idReview);
     data.then((value) {
       loadChat();
-      print('value post chat: $value');
+      // print('value post chat: $value');
     });
   }
 
@@ -55,7 +55,7 @@ class _BalasanReviewState extends State<BalasanReview> {
     super.initState();
   }
 
-  TextEditingController _pesanController = TextEditingController();
+  final TextEditingController _pesanController = TextEditingController();
   AppBar widgetAppBar() {
     return AppBar(
         backgroundColor: Colors.white,
@@ -68,7 +68,7 @@ class _BalasanReviewState extends State<BalasanReview> {
           icon: const Icon(Icons.arrow_back_ios, color: ColorSty.primary),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text('Balasan Review',
+        title: const Text('Balasan Review',
             style: TextStyle(color: Colors.black),
             textAlign: TextAlign.center));
   }
@@ -79,28 +79,26 @@ class _BalasanReviewState extends State<BalasanReview> {
         animation: LangProviders(),
         builder: (context, snapshot) {
           return Scaffold(
-            backgroundColor: Color.fromARGB(255, 229, 229, 229),
+            backgroundColor: const Color.fromARGB(255, 229, 229, 229),
             appBar: widgetAppBar(),
             body: Container(
-              child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    // borderRadius: BorderRadius.only(
-                    //   topLeft: Radius.circular(40.0),
-                    //   topRight: Radius.circular(40.0),
-                    //   bottomLeft: Radius.circular(40.0),
-                    //   bottomRight: Radius.circular(40.0),
-                    // )
-                  ),
-                  child: Stack(
-                    children: [
-                      Image.asset("assert/image/bg_daftarpenilaian.png"),
-                      widgetListChat(),
-                    ],
-                  )),
-            ),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  // borderRadius: BorderRadius.only(
+                  //   topLeft: Radius.circular(40.0),
+                  //   topRight: Radius.circular(40.0),
+                  //   bottomLeft: Radius.circular(40.0),
+                  //   bottomRight: Radius.circular(40.0),
+                  // )
+                ),
+                child: Stack(
+                  children: [
+                    Image.asset("assert/image/bg_daftarpenilaian.png"),
+                    widgetListChat(),
+                  ],
+                )),
             bottomNavigationBar: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 // borderRadius: BorderRadius.only(
                 //   topLeft: Radius.circular(30.0),
@@ -119,9 +117,9 @@ class _BalasanReviewState extends State<BalasanReview> {
                       child: Container(
                         decoration: BoxDecoration(
                             border: Border.all(
-                                color: Color.fromRGBO(46, 46, 46, 0.25)),
-                            color: Color.fromRGBO(255, 255, 255, 1),
-                            borderRadius: BorderRadius.only(
+                                color: const Color.fromRGBO(46, 46, 46, 0.25)),
+                            color: const Color.fromRGBO(255, 255, 255, 1),
+                            borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(40.0),
                               topRight: Radius.circular(40.0),
                               bottomLeft: Radius.circular(40.0),
@@ -137,7 +135,7 @@ class _BalasanReviewState extends State<BalasanReview> {
                               Expanded(
                                 child: TextField(
                                   controller: _pesanController,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                       border: InputBorder.none,
                                       hintText: 'Tulis Pesan ...'),
                                 ),
@@ -145,7 +143,7 @@ class _BalasanReviewState extends State<BalasanReview> {
                               IconButton(
                                   onPressed: () {},
                                   icon:
-                                      Icon(Icons.add_photo_alternate_outlined)),
+                                      const Icon(Icons.add_photo_alternate_outlined)),
                             ],
                           ),
                         ),
@@ -158,13 +156,13 @@ class _BalasanReviewState extends State<BalasanReview> {
                           bottom: MediaQuery.of(context).viewInsets.bottom + 5),
                       child: IconButton(
                         onPressed: () {
-                          print(
-                              'pesan: ${_pesanController.text} | id review: ${widget.idReview}');
+                          // print(
+                          //     'pesan: ${_pesanController.text} | id review: ${widget.idReview}');
                           sendChat(_pesanController.text, widget.idReview);
                           _pesanController.clear();
                         },
-                        icon: Icon(Icons.send),
-                        color: Color.fromRGBO(0, 154, 173, 1),
+                        icon: const Icon(Icons.send),
+                        color: const Color.fromRGBO(0, 154, 173, 1),
                       )),
                 ],
               ),
@@ -183,35 +181,36 @@ class _BalasanReviewState extends State<BalasanReview> {
   }
 
   Padding boxChat(BuildContext context, positionBox, index) {
-    var colorBoxChat = Color.fromRGBO(223, 239, 241, 0.5);
+    var colorBoxChat = const Color.fromRGBO(223, 239, 241, 0.5);
+    // ignore: prefer_typing_uninitialized_variables
     var timeBoxChat;
     if (positionBox == true) {
       positionBox = Alignment.topRight;
-      colorBoxChat = Color.fromRGBO(223, 239, 241, 0.5);
+      colorBoxChat = const Color.fromRGBO(223, 239, 241, 0.5);
       timeBoxChat = Row(children: [
         Text(
-          '${listChat[index].created_at.toString().substring(12, 17)}',
+          listChat[index].created_at.toString().substring(12, 17),
         ),
-        Icon(Icons.person)
+        const Icon(Icons.person)
       ]);
     } else if (positionBox == false) {
       positionBox = Alignment.centerLeft;
-      colorBoxChat = Color.fromRGBO(240, 240, 240, 0.5);
+      colorBoxChat = const Color.fromRGBO(240, 240, 240, 0.5);
       timeBoxChat = Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Icon(
+            const Icon(
               Icons.person,
               color: Color.fromRGBO(0, 154, 173, 1),
             ),
             Text(
               '${listChat[index].nama} ',
-              style: TextStyle(
+              style: const TextStyle(
                 color: Color.fromRGBO(0, 154, 173, 1),
               ),
             ),
-            Text(
+            const Text(
               '05.05',
               textAlign: TextAlign.right,
             ),
@@ -225,7 +224,7 @@ class _BalasanReviewState extends State<BalasanReview> {
           child: Container(
               decoration: BoxDecoration(
                   color: colorBoxChat,
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(40.0),
                     topRight: Radius.circular(40.0),
                     bottomLeft: Radius.circular(40.0),

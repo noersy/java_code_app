@@ -22,7 +22,6 @@ import 'package:java_code_app/singletons/user_instance.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:java_code_app/transision/route_transisition.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
 import 'package:java_code_app/widget/sheet/detailmenu_sheet.dart';
 import 'package:java_code_app/widget/dialog/vp_pin_dialog.dart';
@@ -31,7 +30,6 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-import 'penilaian/daftar_penilaian.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -51,7 +49,6 @@ class _ProfilePageState extends State<ProfilePage> {
   get provider => Provider.of<AuthProviders>(context, listen: false);
   static final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  bool _loading = false;
 
   getInfoDevice() async {
     _androidInfo = await deviceInfo.androidInfo;
@@ -281,11 +278,9 @@ class _ProfilePageState extends State<ProfilePage> {
   void _onRefresh() async {
     var _duration = const Duration(seconds: 1);
     if (mounted) {
-      setState(() => _loading = true);
       await Provider.of<AuthProviders>(context, listen: false).getUser();
 
       Timer(_duration, () {
-        setState(() => _loading = false);
       });
     }
     _refreshController.refreshCompleted();
@@ -529,10 +524,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                     top: false,
                                     enable: false,
                                     title:
-                                        '${lang.profile.penilaian.toString()}',
-                                    suffix: '${lang.profile.nilai_sekarang}',
+                                        lang.profile.penilaian.toString(),
+                                    suffix: lang.profile.nilai_sekarang,
                                     onPressed: () {
-                                      print('navigate daftar penilaian');
+                                      // print('navigate daftar penilaian');
                                       Navigate.toDaftarPenilaian(context);
                                     },
                                   ),
@@ -716,7 +711,7 @@ class _TileListProfileState extends State<TileListProfile> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(widget.title, style: TypoSty.captionSemiBold),
-                SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
                 Expanded(

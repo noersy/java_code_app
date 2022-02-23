@@ -78,8 +78,8 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
                       Provider.of<OrderProviders>(context).listVoucher;
                   return Column(
                     children: [
-                      if (_listVoucher.length <= 0)
-                        Text('Maaf, Anda Tidak Memiliki Voucher'),
+                      if (_listVoucher.isEmpty)
+                        const Text('Maaf, Anda Tidak Memiliki Voucher'),
                       if (_loading)
                         VoucherCard(
                           voucher: _selectedVoucher,
@@ -301,7 +301,7 @@ class _VoucherCardState extends State<VoucherCard> {
                       bottom: 60.0,
                       child: Text(
                         " ${widget.voucher?.nominal.toString()} ",
-                        style: TextStyle(
+                        style: const TextStyle(
                           backgroundColor: Colors.white,
                           color: Color.fromRGBO(0, 154, 173, 1),
                           fontSize: 35.0,

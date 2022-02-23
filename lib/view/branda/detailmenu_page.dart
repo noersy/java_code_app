@@ -9,7 +9,6 @@ import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/view/branda/widget/bottom_sheet.dart';
-import 'package:java_code_app/widget/appbar/appbar.dart';
 import 'package:java_code_app/widget/button/addorder_button.dart';
 import 'package:java_code_app/widget/input/label_toppingselection.dart';
 import 'package:java_code_app/widget/list/listmenu_tile.dart';
@@ -236,7 +235,7 @@ class _DetailMenuState extends State<DetailMenu> {
   }
 
   void _onGoback() async {
-    print('detailmenu _onGoback');
+    // print('detailmenu _onGoback');
     if (_menu == null) return;
 
     final orders =

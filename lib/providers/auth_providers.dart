@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_adjacent_string_concatenation
+
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -102,13 +104,13 @@ class AuthProviders extends ChangeNotifier {
 
     final _id = user.data.idUser;
     final Uri _api = Uri.http(host, "/api/user/update/$_id");
-    print('ker: $key | value: $value');
+    // print('ker: $key | value: $value');
     try {
       final body = jsonEncode({"$key": "$value"});
 
       _log.fine("Tray update user profile.");
       final response = await http.post(_api, headers: _headers, body: body);
-      print('response edit nama ${response.body}');
+      // print('response edit nama ${response.body}');
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
         _log.fine("Success update $key user.");

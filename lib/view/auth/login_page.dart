@@ -55,14 +55,14 @@ class _LoginPageState extends State<LoginPage> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text('Email/password anda salah!\nAnda belum mendaftar?'),
+              title: const Text('Email/password anda salah!\nAnda belum mendaftar?'),
               // content: Text('email '),
               actions: <Widget>[
                 TextButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text('Close')),
+                    child: const Text('Close')),
               ],
             );
           });

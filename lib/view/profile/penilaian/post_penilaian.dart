@@ -27,7 +27,7 @@ Future postPenilaian(score, type, review, img) async {
     _log.fine("Try to post review");
     final response = await http.post(Uri.parse("https://$host/api/review/add"),
         headers: headers, body: json.encode(body));
-    print('response: ${response.body}');
+    // print('response: ${response.body}');
     if (response.statusCode == 204) {
       _log.info("review if empty");
       return [];
@@ -36,7 +36,7 @@ Future postPenilaian(score, type, review, img) async {
     if (response.statusCode == 200 &&
         json.decode(response.body)["status_code"] == 200) {
       _log.fine("Success get all review:");
-      print('body sukses:\n${response.body}');
+      // print('body sukses:\n${response.body}');
       return 'input berhasil!';
       // return listHistoryFromJson(response.body).data;
     }

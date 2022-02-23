@@ -237,7 +237,7 @@ class CardDetailVoucher extends StatelessWidget {
                 bottom: 70.0,
                 child: Text(
                   "   ${nominal.toString()} ",
-                  style: TextStyle(
+                  style: const TextStyle(
                     backgroundColor: Colors.white,
                     color: Color.fromRGBO(0, 154, 173, 1),
                     fontSize: 35.0,

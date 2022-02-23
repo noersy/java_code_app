@@ -143,7 +143,7 @@ class _VPinDialogState extends State<VPinDialog> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: SpaceDims.sp12),
+                      padding: const EdgeInsets.only(left: SpaceDims.sp12),
                       child: GestureDetector(
                         onTap: () => setState(() {
                           _isHide = !_isHide;

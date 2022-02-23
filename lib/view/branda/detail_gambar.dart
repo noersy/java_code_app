@@ -1,23 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/helps/image.dart';
-import 'package:java_code_app/models/menudetail.dart';
-import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
-import 'package:java_code_app/theme/icons_cs_icons.dart';
-import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:java_code_app/view/branda/widget/bottom_sheet.dart';
-import 'package:java_code_app/widget/appbar/appbar.dart';
-import 'package:java_code_app/widget/button/addorder_button.dart';
-import 'package:java_code_app/widget/input/label_toppingselection.dart';
-import 'package:java_code_app/widget/list/listmenu_tile.dart';
-import 'package:java_code_app/widget/sheet/detailmenu_sheet.dart';
-import 'package:provider/provider.dart';
-import 'package:skeleton_animation/skeleton_animation.dart';
 
 class DetailGambar extends StatefulWidget {
+  // ignore: prefer_typing_uninitialized_variables
   final foto;
 
   const DetailGambar({

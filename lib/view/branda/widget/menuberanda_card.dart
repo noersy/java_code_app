@@ -32,7 +32,7 @@ class _CardMenuState extends State<CardMenu> {
   void _add() {
     if (_jumlahOrder != 0) {
       setState(() => _jumlahOrder++);
-      print('jumlah order: $_jumlahOrder');
+      // print('jumlah order: $_jumlahOrder');
       if (_jumlahOrder >= 1) {
         Provider.of<OrderProviders>(context, listen: false).addOrder(
           jumlahOrder: _jumlahOrder,
@@ -50,7 +50,7 @@ class _CardMenuState extends State<CardMenu> {
       setState(() => _jumlahOrder++);
       Navigate.toDetailMenu(context,
           id: widget.data.idMenu, countOrder: _jumlahOrder);
-      print('jumlah order: $_jumlahOrder');
+      // print('jumlah order: $_jumlahOrder');
       if (_jumlahOrder >= 1) {
         Provider.of<OrderProviders>(context, listen: false).addOrder(
           jumlahOrder: _jumlahOrder,

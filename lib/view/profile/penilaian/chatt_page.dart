@@ -1,14 +1,9 @@
 import 'dart:convert';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:mime/mime.dart';
-import 'package:open_file/open_file.dart';
 import 'package:uuid/uuid.dart';
 import 'package:bubble/bubble.dart';
 
@@ -22,7 +17,6 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   List<types.Message> _messages = [];
   final _user = const types.User(id: '06c33e8b-e835-4736-80f4-63f44b66666c');
-  final _user2 = const types.User(id: '06c33e8b-e835-4736-80f4-63f44b66666d');
 
   @override
   void initState() {
@@ -67,8 +61,8 @@ class _ChatPageState extends State<ChatPage> {
       child: child,
       color: _user.id != message.author.id ||
               message.type == types.MessageType.image
-          ? Color.fromRGBO(240, 240, 240, 0.5)
-          : Color.fromRGBO(239, 247, 248, 1),
+          ? const Color.fromRGBO(240, 240, 240, 0.5)
+          : const Color.fromRGBO(239, 247, 248, 1),
       margin: nextMessageInGroup
           ? const BubbleEdges.symmetric(horizontal: 6)
           : null,
@@ -86,7 +80,7 @@ class _ChatPageState extends State<ChatPage> {
       body: SafeArea(
         bottom: false,
         child: Chat(
-          theme: DefaultChatTheme(
+          theme: const DefaultChatTheme(
               attachmentButtonIcon: Icon(Icons.send),
               primaryColor: Color.fromRGBO(0, 154, 173, 1)),
           messages: _messages,

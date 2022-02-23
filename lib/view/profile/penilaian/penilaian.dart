@@ -1,12 +1,10 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
-import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/view/profile/penilaian/post_penilaian.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
 
@@ -111,7 +109,7 @@ class _PenilaianState extends State<Penilaian> {
                                                     RatingText = 'bagus banget';
                                                   }
                                                 });
-                                                print(rating);
+                                                // print(rating);
                                               },
                                             ),
                                           ],
@@ -120,7 +118,7 @@ class _PenilaianState extends State<Penilaian> {
                                     ],
                                   ),
                                   const Spacer(),
-                                  widgetTextRating('$RatingText')
+                                  widgetTextRating(RatingText)
                                 ],
                               ),
                             ),
@@ -171,13 +169,13 @@ class _PenilaianState extends State<Penilaian> {
             ),
             const Text('Tulis Review'),
             Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: TextFormField(
                 enabled: true,
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
                 maxLines: 5,
                 controller: textReviewController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: '',
                     fillColor: Colors.white,
@@ -190,14 +188,14 @@ class _PenilaianState extends State<Penilaian> {
                 ElevatedButton(
                     onPressed: () {
                       postPenilaian(score, selectedType,
-                              '${textReviewController.text}', base64Image)
+                              textReviewController.text, base64Image)
                           .then((value) {
                         showDialog(
                             context: context,
                             builder: (context) {
                               if (value.toString().contains('berhasil')) {
                                 return AlertDialog(
-                                  title: Text('Alert!'),
+                                  title: const Text('Alert!'),
                                   content: Text('$value'),
                                   actions: <Widget>[
                                     TextButton(
@@ -206,12 +204,12 @@ class _PenilaianState extends State<Penilaian> {
                                           Navigator.pop(context);
                                           textReviewController.clear();
                                         },
-                                        child: Text('Close')),
+                                        child: const Text('Close')),
                                   ],
                                 );
                               } else {
                                 return AlertDialog(
-                                  title: Text('Gagal!'),
+                                  title: const Text('Gagal!'),
                                   content: Text('$value'),
                                   actions: <Widget>[
                                     TextButton(
@@ -220,15 +218,15 @@ class _PenilaianState extends State<Penilaian> {
                                           Navigator.pop(context);
                                           textReviewController.clear();
                                         },
-                                        child: Text('Close')),
+                                        child: const Text('Close')),
                                   ],
                                 );
                               }
                             });
                         imageBytes = [];
                         base64Image = '';
-                        print(
-                            'clearing imageBytes:${imageBytes.length} | base64Image:${base64Image}');
+                        // print(
+                        //     'clearing imageBytes:${imageBytes.length} | base64Image:${base64Image}');
                       });
                     },
                     child: const Text('Kirim Penilaian'),
@@ -238,14 +236,14 @@ class _PenilaianState extends State<Penilaian> {
                                 RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0),
                     )))),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Container(
                   width: 40,
                   decoration: BoxDecoration(
                     border: Border.all(
-                        color: Color.fromRGBO(0, 154, 173, 1), width: 2),
+                        color: const Color.fromRGBO(0, 154, 173, 1), width: 2),
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
@@ -253,7 +251,7 @@ class _PenilaianState extends State<Penilaian> {
                     onPressed: () {
                       _showPicker(context);
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.add_photo_alternate,
                       size: 20.0,
                       color: Color.fromRGBO(0, 154, 173, 1),
@@ -266,6 +264,7 @@ class _PenilaianState extends State<Penilaian> {
         ));
   }
 
+  // ignore: avoid_init_to_null
   File? _image = null;
 
   void _showPicker(context) {
@@ -279,15 +278,15 @@ class _PenilaianState extends State<Penilaian> {
                 children: <Widget>[
                   ListTile(
                       tileColor: Colors.white,
-                      leading: Icon(Icons.photo_library),
-                      title: Text('Galeri'),
+                      leading: const Icon(Icons.photo_library),
+                      title: const Text('Galeri'),
                       onTap: () {
                         _imgGaleri();
                         Navigator.of(context).pop();
                       }),
                   ListTile(
-                    leading: Icon(Icons.photo_camera),
-                    title: Text('Kamera'),
+                    leading: const Icon(Icons.photo_camera),
+                    title: const Text('Kamera'),
                     onTap: () {
                       _imgKamera();
                       Navigator.of(context).pop();
@@ -301,6 +300,7 @@ class _PenilaianState extends State<Penilaian> {
   }
 
   List<int> imageBytes = [];
+  // ignore: prefer_typing_uninitialized_variables
   var base64Image;
   void submit() async {
     imageBytes = _image!.readAsBytesSync();
@@ -341,16 +341,16 @@ class _PenilaianState extends State<Penilaian> {
                   RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0),
                       side:
-                          BorderSide(color: Color.fromRGBO(0, 154, 173, 1))))),
+                          const BorderSide(color: Color.fromRGBO(0, 154, 173, 1))))),
           onPressed: () {},
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('${i}'),
-              SizedBox(
+              Text('$i'),
+              const SizedBox(
                 width: 5,
               ),
-              Icon(Icons.check_circle)
+              const Icon(Icons.check_circle)
             ],
           ),
         ),
@@ -363,7 +363,7 @@ class _PenilaianState extends State<Penilaian> {
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0),
-                      side: BorderSide(
+                      side: const BorderSide(
                           color: Color.fromRGBO(170, 170, 170, 1))))),
           onPressed: () {
             setState(() {
@@ -371,8 +371,8 @@ class _PenilaianState extends State<Penilaian> {
             });
           },
           child: Text(
-            '${i}',
-            style: TextStyle(color: Color.fromRGBO(170, 170, 170, 1)),
+            '$i',
+            style: const TextStyle(color: Color.fromRGBO(170, 170, 170, 1)),
           ),
         ),
       );
@@ -383,7 +383,7 @@ class _PenilaianState extends State<Penilaian> {
   double score = 1.0;
   Widget widgetTextRating(text) {
     return Padding(
-      padding: EdgeInsets.only(right: 10.0),
+      padding: const EdgeInsets.only(right: 10.0),
       child: Text('$text'),
     );
   }

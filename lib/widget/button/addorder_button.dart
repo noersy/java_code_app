@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:provider/provider.dart';
 
 class AddOrderButton extends StatefulWidget {
   final ValueChanged<int> onChange;
@@ -26,9 +25,7 @@ class _AddOrderButtonState extends State<AddOrderButton> {
   }
 
   bacaJumlahOrder() {
-    final _co = Provider.of<OrderProviders>(context).checkOrder;
-    Map<String, dynamic> data = _co;
-    print('jumlah order: ${data['countOrder']}');
+    // print('jumlah order: ${data['countOrder']}');
   }
 
   @override
@@ -36,7 +33,6 @@ class _AddOrderButtonState extends State<AddOrderButton> {
     return AnimatedBuilder(
       animation: OrderProviders(),
       builder: (context, snapshot) {
-        final _co = Provider.of<OrderProviders>(context).checkOrder;
         return Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -54,7 +50,7 @@ class _AddOrderButtonState extends State<AddOrderButton> {
                 child: const Icon(Icons.remove),
               ),
             if (jumlahOrder != 0)
-              Text("${jumlahOrder}", style: TypoSty.subtitle),
+              Text("$jumlahOrder", style: TypoSty.subtitle),
             TextButton(
               onPressed: () {
                 setState(() => jumlahOrder++);

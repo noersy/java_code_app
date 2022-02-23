@@ -65,7 +65,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
     await Provider.of<OrderProviders>(context, listen: false).getListVoucher();
     cekVoucher =
         Provider.of<OrderProviders>(context, listen: false).listVoucher;
-    print('cek cekVoucher:${cekVoucher.length} ');
+    // print('cek cekVoucher:${cekVoucher.length} ');
     await Provider.of<OrderProviders>(context, listen: false).getListDisCount();
     final _orders =
         Provider.of<OrderProviders>(context, listen: false).checkOrder;
