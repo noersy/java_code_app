@@ -300,7 +300,7 @@ class _VoucherCardState extends State<VoucherCard> {
                       right: 0.0,
                       bottom: 60.0,
                       child: Text(
-                        "   ${widget.voucher?.nominal.toString().substring(0, 2)} K   ",
+                        " ${widget.voucher?.nominal.toString()} ",
                         style: TextStyle(
                           backgroundColor: Colors.white,
                           color: Color.fromRGBO(0, 154, 173, 1),

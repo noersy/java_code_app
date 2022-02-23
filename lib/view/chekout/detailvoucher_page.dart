@@ -236,7 +236,7 @@ class CardDetailVoucher extends StatelessWidget {
                 right: 0.0,
                 bottom: 70.0,
                 child: Text(
-                  "   ${nominal.toString().substring(0, 2)} K   ",
+                  "   ${nominal.toString()} ",
                   style: TextStyle(
                     backgroundColor: Colors.white,
                     color: Color.fromRGBO(0, 154, 173, 1),

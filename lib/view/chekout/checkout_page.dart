@@ -30,6 +30,7 @@ class CheckOutPage extends StatefulWidget {
 }
 
 class _CheckOutPageState extends State<CheckOutPage> {
+  var cekVoucher = [];
   LVoucher? _selectedVoucher;
   int totalDiscout = 0,
       totalOrders = 0,
@@ -37,10 +38,11 @@ class _CheckOutPageState extends State<CheckOutPage> {
       totalDisP = 0,
       numOrders = 0;
 
-  static final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  static final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   bool _loading = false;
   Future<void> _onRefresh() async {
-    var _duration = const Duration(seconds:1);
+    var _duration = const Duration(seconds: 1);
     if (mounted) {
       setState(() => _loading = true);
 
@@ -59,26 +61,33 @@ class _CheckOutPageState extends State<CheckOutPage> {
     super.initState();
   }
 
-  _getData() async{
+  _getData() async {
+    await Provider.of<OrderProviders>(context, listen: false).getListVoucher();
+    cekVoucher =
+        Provider.of<OrderProviders>(context, listen: false).listVoucher;
+    print('cek cekVoucher:${cekVoucher.length} ');
     await Provider.of<OrderProviders>(context, listen: false).getListDisCount();
-    final _orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
-    final _discount = Provider.of<OrderProviders>(context, listen: false).listDiscount;
+    final _orders =
+        Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    final _discount =
+        Provider.of<OrderProviders>(context, listen: false).listDiscount;
     totalDiscout = _discount.isNotEmpty
         ? _discount.map((e) => e.diskon).reduce((a, b) => a + b)
         : totalDiscout;
 
     totalOrders = _orders.values.map((e) => e["harga"]).reduce((a, b) => a + b);
 
-
     totalDisP = (totalOrders * (totalDiscout / 100)).toInt();
     totalPay = totalOrders - totalDisP;
     numOrders = _orders.length;
-    if(mounted) setState(() {});
+    if (mounted) setState(() {});
   }
 
   void _checkOut() {
-    final _orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
-    final _discount = Provider.of<OrderProviders>(context, listen: false).listDiscount;
+    final _orders =
+        Provider.of<OrderProviders>(context, listen: false).checkOrder;
+    final _discount =
+        Provider.of<OrderProviders>(context, listen: false).listDiscount;
     showDialog(
       context: context,
       builder: (_) => VFingerPrintDialog(
@@ -86,22 +95,24 @@ class _CheckOutPageState extends State<CheckOutPage> {
           if (value) {
             Provider.of<OrderProviders>(context, listen: false).sendCheckOut(
               idVoucher: _selectedVoucher?.idVoucher,
-              idDiscount : _discount.map((e) => e.idDiskon).toList(),
+              idDiscount: _discount.map((e) => e.idDiskon).toList(),
               discount: totalDiscout,
               totalPotong: totalDisP,
               totalPay: totalPay,
               totalOrder: totalOrders,
-              menu: _orders.values.map((e) => {
-                "id_menu": e["id"],
-                "harga": e["harga"],
-                "level": e["level"],
-                "topping": e["topping"],
-                "jumlah": e["countOrder"],
-                "catatan": e["catatan"]
-              }).toList(),
+              menu: _orders.values
+                  .map((e) => {
+                        "id_menu": e["id"],
+                        "harga": e["harga"],
+                        "level": e["level"],
+                        "topping": e["topping"],
+                        "jumlah": e["countOrder"],
+                        "catatan": e["catatan"]
+                      })
+                  .toList(),
             );
 
-            if(value) Navigator.pop(context);
+            if (value) Navigator.pop(context);
             await showDialog(
               context: context,
               builder: (_) => const OrderDoneDialog(),
@@ -111,155 +122,166 @@ class _CheckOutPageState extends State<CheckOutPage> {
       ),
     );
   }
+
   void _setVoucher() async {
-    try{
+    try {
       final data = await Navigate.toSelectionVoucherPage(
         context,
         initialData: _selectedVoucher,
       );
 
-      if(mounted) {
+      if (mounted) {
         setState(() {
-        _selectedVoucher = data;
-        if (data != null) {
-          totalPay = totalOrders - (data as LVoucher).nominal;
-          if (totalPay < 0) totalPay = 0;
-        }
-      });
+          _selectedVoucher = data;
+          if (data != null) {
+            totalPay = totalOrders - (data as LVoucher).nominal;
+            if (totalPay < 0) totalPay = 0;
+          }
+        });
       }
-    }catch(e){
+    } catch (e) {
       return;
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-        animation: OrderProviders(),
-        builder: (_, __) {
-          final _orders = Provider.of<OrderProviders>(context).checkOrder;
-          final _discount = Provider.of<OrderProviders>(context).listDiscount;
+      animation: OrderProviders(),
+      builder: (_, __) {
+        final _orders = Provider.of<OrderProviders>(context).checkOrder;
+        final _discount = Provider.of<OrderProviders>(context).listDiscount;
 
-          if (_discount.isNotEmpty) {
-            totalDiscout = _discount.map((e) => e.diskon).reduce((a, b) => a + b);
-          }
+        if (_discount.isNotEmpty) {
+          totalDiscout = _discount.map((e) => e.diskon).reduce((a, b) => a + b);
+        }
 
-          if (_orders.isNotEmpty) {
-            totalOrders = _orders.values.map((e) => e["harga"] * e["countOrder"]).reduce((a, b) => a + b);
-            totalDisP = (totalOrders * (totalDiscout / 100)).toInt();
-            if(_selectedVoucher == null) totalPay = totalOrders - totalDisP;
-            numOrders = _orders.length;
-          }
+        if (_orders.isNotEmpty) {
+          totalOrders = _orders.values
+              .map((e) => e["harga"] * e["countOrder"])
+              .reduce((a, b) => a + b);
+          totalDisP = (totalOrders * (totalDiscout / 100)).toInt();
+          if (_selectedVoucher == null) totalPay = totalOrders - totalDisP;
+          numOrders = _orders.length;
+        }
 
-          final isMin = _orders.values.where((element) => element["jenis"] == "minuman").isNotEmpty;
-          final isMak = _orders.values.where((element) => element["jenis"] == "makanan").isNotEmpty;
-          return Scaffold(
-            appBar: const CostumeAppBar(
-              back: true,
-              icon: Icon(IconsCs.pesanan, size: 28.0, color: ColorSty.primary),
-              title: 'Pesanan',
-            ),
-            body: SmartRefresher(
-              controller: _refreshController,
-              onRefresh: _onRefresh,
-              child: SingleChildScrollView(
-                primary: true,
-                child: Column(
-                  children: [
-                    Column(
-                      children: [
-                        if (isMak)
-                          ListOrder(
-                            orders: _orders,
-                            title: 'Makanan',
-                            type: 'makanan',
-                          ),
-                        if (isMin)
-                          ListOrder(
-                            orders: _orders,
-                            title: 'Minuman',
-                            type: 'minuman',
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: SpaceDims.sp24),
-                  ],
-                ),
-              ),
-            ),
-            bottomNavigationBar: Container(
-              width: double.infinity,
-              height: _selectedVoucher == null ? 300 : 240,
-              decoration: const BoxDecoration(
-                color: ColorSty.grey80,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30.0),
-                  topRight: Radius.circular(30.0),
-                ),
-              ),
+        final isMin = _orders.values
+            .where((element) => element["jenis"] == "minuman")
+            .isNotEmpty;
+        final isMak = _orders.values
+            .where((element) => element["jenis"] == "makanan")
+            .isNotEmpty;
+        return Scaffold(
+          appBar: const CostumeAppBar(
+            back: true,
+            icon: Icon(IconsCs.pesanan, size: 28.0, color: ColorSty.primary),
+            title: 'Pesanan',
+          ),
+          body: SmartRefresher(
+            controller: _refreshController,
+            onRefresh: _onRefresh,
+            child: SingleChildScrollView(
+              primary: true,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: SpaceDims.sp24),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: SpaceDims.sp24.w,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    "Total Pesanan ",
-                                    style: TypoSty.captionSemiBold,
-                                  ),
-                                  _loading
-                                      ? const SizedBox(width: 30,child: SkeletonText(height: 18.0))
-                                      : Text("($numOrders Menu) :",
-                                      style: TypoSty.caption),
-                                ],
-                              ),
-                              _loading
-                                  ? const SizedBox(width: 100,child: SkeletonText(height: 18.0))
-                                  : Text(
-                                "Rp ${oCcy.format(totalOrders)}",
-                                style: TypoSty.subtitle.copyWith(
-                                  color: ColorSty.primary,
-                                ),
-                              ),
-                            ],
-                          ),
+                  Column(
+                    children: [
+                      if (isMak)
+                        ListOrder(
+                          orders: _orders,
+                          title: 'Makanan',
+                          type: 'makanan',
                         ),
-                        const SizedBox(height: SpaceDims.sp14),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: SpaceDims.sp24,
-                          ),
-                          child: Column(
-                            children: [
-                              if (_selectedVoucher == null)
-                                TileListDMenu(
-                                  dense: true,
-                                  prefixIcon: true,
-                                  title: "Diskon $totalDiscout%",
-                                  prefix: "Rp ${oCcy.format(totalDisP)}",
-                                  textStylePrefix:
-                                      const TextStyle(color: Colors.red),
-                                  iconSvg: SvgPicture.asset(
-                                      "assert/image/icons/discount-icon.svg",
-                                      height: 24.0),
-                                  onPressed: () => showDialog(
-                                    context: context,
-                                    builder: (_) => const InfoDiscountDialog(),
-                                  ),
-                                  isLoading: _loading,
+                      if (isMin)
+                        ListOrder(
+                          orders: _orders,
+                          title: 'Minuman',
+                          type: 'minuman',
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: SpaceDims.sp24),
+                ],
+              ),
+            ),
+          ),
+          bottomNavigationBar: Container(
+            width: double.infinity,
+            height: _selectedVoucher == null ? 300 : 240,
+            decoration: const BoxDecoration(
+              color: ColorSty.grey80,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30.0),
+                topRight: Radius.circular(30.0),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: SpaceDims.sp24),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: SpaceDims.sp24.w,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  "Total Pesanan ",
+                                  style: TypoSty.captionSemiBold,
                                 ),
+                                _loading
+                                    ? const SizedBox(
+                                        width: 30,
+                                        child: SkeletonText(height: 18.0))
+                                    : Text("($numOrders Menu) :",
+                                        style: TypoSty.caption),
+                              ],
+                            ),
+                            _loading
+                                ? const SizedBox(
+                                    width: 100,
+                                    child: SkeletonText(height: 18.0))
+                                : Text(
+                                    "Rp ${oCcy.format(totalOrders)}",
+                                    style: TypoSty.subtitle.copyWith(
+                                      color: ColorSty.primary,
+                                    ),
+                                  ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: SpaceDims.sp14),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: SpaceDims.sp24,
+                        ),
+                        child: Column(
+                          children: [
+                            if (_selectedVoucher == null)
+                              TileListDMenu(
+                                dense: true,
+                                prefixIcon: true,
+                                title: "Diskon $totalDiscout%",
+                                prefix: "Rp ${oCcy.format(totalDisP)}",
+                                textStylePrefix:
+                                    const TextStyle(color: Colors.red),
+                                iconSvg: SvgPicture.asset(
+                                    "assert/image/icons/discount-icon.svg",
+                                    height: 24.0),
+                                onPressed: () => showDialog(
+                                  context: context,
+                                  builder: (_) => const InfoDiscountDialog(),
+                                ),
+                                isLoading: _loading,
+                              ),
+                            if (cekVoucher.isNotEmpty)
                               TileListDMenu(
                                 dense: true,
                                 prefixIcon: true,
@@ -293,88 +315,85 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                 onPressed: _setVoucher,
                                 isLoading: _loading,
                               ),
-                              TileListDMenu(
-                                dense: true,
-                                isLoading: _loading,
-                                title: "Pembayaran",
-                                prefix: "Pay Later",
-                                // icon: IconsCs.coins,
-                                iconSvg: SvgPicture.asset(
-                                  "assert/image/icons/la_coins.svg",
-                                ),
-                                onPressed: () {},
+                            TileListDMenu(
+                              dense: true,
+                              isLoading: _loading,
+                              title: "Pembayaran",
+                              prefix: "Pay Later",
+                              // icon: IconsCs.coins,
+                              iconSvg: SvgPicture.asset(
+                                "assert/image/icons/la_coins.svg",
                               ),
-                            ],
+                              onPressed: () {},
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 60.0,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: ColorSty.white,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(30.0),
+                      topRight: Radius.circular(30.0),
+                    ),
+                    boxShadow: ShadowsB.boxShadow1,
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SpaceDims.sp24.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(
+                              IconsCs.shopingbag,
+                              color: ColorSty.primary,
+                            ),
+                            SizedBox(width: SpaceDims.sp14.w),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Total Pembayaran",
+                                  style: TextStyle(color: ColorSty.black60),
+                                ),
+                                Text(
+                                  "Rp ${oCcy.format(totalPay)}",
+                                  style: TypoSty.titlePrimary,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        ElevatedButton(
+                          onPressed: _checkOut,
+                          style: ElevatedButton.styleFrom(
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(30.0),
+                              ),
+                            ),
+                          ),
+                          child: Text(
+                            "Pesan Sekarang",
+                            style: TypoSty.button,
                           ),
                         )
                       ],
                     ),
                   ),
-                  Container(
-                    height: 60.0,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: ColorSty.white,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(30.0),
-                        topRight: Radius.circular(30.0),
-                      ),
-                      boxShadow: ShadowsB.boxShadow1,
-                    ),
-                    child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: SpaceDims.sp24.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(
-                                IconsCs.shopingbag,
-                                color: ColorSty.primary,
-                              ),
-                              SizedBox(width: SpaceDims.sp14.w),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    "Total Pembayaran",
-                                    style: TextStyle(color: ColorSty.black60),
-                                  ),
-                                  Text(
-                                    "Rp ${oCcy.format(totalPay)}",
-                                    style: TypoSty.titlePrimary,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          ElevatedButton(
-                            onPressed: _checkOut,
-                            style: ElevatedButton.styleFrom(
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(30.0),
-                                ),
-                              ),
-                            ),
-                            child: Text(
-                              "Pesan Sekarang",
-                              style: TypoSty.button,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
+                )
+              ],
             ),
-          );
-        },
+          ),
+        );
+      },
     );
   }
 }
-
-

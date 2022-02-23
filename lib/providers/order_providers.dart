@@ -192,7 +192,7 @@ class OrderProviders extends ChangeNotifier {
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
         _listVoucher = listVoucherFromJson(response.body).data;
-        _log.fine("Seccess get list voucher");
+        _log.fine("Success get list voucher");
         notifyListeners();
         return true;
       }
