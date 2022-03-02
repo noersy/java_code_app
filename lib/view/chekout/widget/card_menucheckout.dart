@@ -7,26 +7,46 @@ import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
+import 'package:java_code_app/view/chekout/widget/delete_chekcout_dialog.dart';
 import 'package:provider/provider.dart';
 
 class CardMenuCheckout extends StatefulWidget {
+  final ValueChanged<int>? onChange;
   final Map<String, dynamic> data;
 
-  const CardMenuCheckout({
-    Key? key,
-    required this.data,
-  }) : super(key: key);
+  CardMenuCheckout({Key? key, required this.data, this.onChange})
+      : super(key: key);
 
   @override
   State<CardMenuCheckout> createState() => _CardMenuCheckoutState();
 }
 
 class _CardMenuCheckoutState extends State<CardMenuCheckout> {
+  void _min() async {
+    setState(() => _jumlahOrder--);
+    if (_jumlahOrder >= 1) {
+      Provider.of<OrderProviders>(context, listen: false).editOrder(
+        jumlahOrder: _jumlahOrder,
+        id: "${widget.data['id']}",
+        catatan: '',
+      );
+    } else if (_jumlahOrder != 0) {
+      // Provider.of<OrderProviders>(context, listen: false).addOrder(
+      //   jumlahOrder: _jumlahOrder,
+      //   data: _data,
+      //   catatan: '',
+      // );
+    } else {
+      await showDialog(
+        context: context,
+        builder: (_) => DeleteMenuInCheckoutDialog(id: "${widget.data['id']}"),
+      );
+    }
+  }
+
   int _jumlahOrder = 0;
   late final String nama, harga, url;
   late final int status;
-
-
 
   @override
   void initState() {
@@ -127,7 +147,7 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
             ),
             if (status != 0)
               Positioned(
-                right: 20,
+                right: 10,
                 child: AnimatedBuilder(
                     animation: OrderProviders(),
                     builder: (context, snapshot) {
@@ -139,7 +159,43 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
                       if (!orders.keys.contains(widget.data["id"])) {
                         _jumlahOrder = 0;
                       }
-                      return Text("$_jumlahOrder", style: TypoSty.subtitle);
+                      return Row(
+                        children: [
+                          if (_jumlahOrder != 0)
+                            TextButton(
+                              onPressed: () {
+                                _min();
+                                // if (_jumlahOrder >= 1) {
+                                //   // setState(() => _jumlahOrder--);
+                                //   // print('minus: $_jumlahOrder ');
+                                // }
+                                // // widget.onChange(_jumlahOrder);
+                              },
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                minimumSize: const Size(25, 25),
+                                side: const BorderSide(
+                                    color: ColorSty.primary, width: 2),
+                              ),
+                              child: const Icon(Icons.remove),
+                            ),
+                          Text("$_jumlahOrder", style: TypoSty.subtitle),
+                          TextButton(
+                            onPressed: () {
+                              // setState(() => _jumlahOrder++);
+                              // print('plus: $_jumlahOrder ');
+                              // widget.onChange(_jumlahOrder);
+                            },
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              minimumSize: const Size(25, 25),
+                              primary: ColorSty.white,
+                              backgroundColor: ColorSty.primary,
+                            ),
+                            child: const Icon(Icons.add, color: ColorSty.white),
+                          )
+                        ],
+                      );
                     }),
               )
           ],

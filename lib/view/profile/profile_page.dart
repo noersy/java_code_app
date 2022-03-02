@@ -30,7 +30,6 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
@@ -280,8 +279,7 @@ class _ProfilePageState extends State<ProfilePage> {
     if (mounted) {
       await Provider.of<AuthProviders>(context, listen: false).getUser();
 
-      Timer(_duration, () {
-      });
+      Timer(_duration, () {});
     }
     _refreshController.refreshCompleted();
   }
@@ -521,14 +519,14 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: Column(
                                 children: [
                                   TileListProfile(
+                                    btn: true,
                                     top: false,
                                     enable: false,
-                                    title:
-                                        lang.profile.penilaian.toString(),
+                                    title: lang.profile.penilaian.toString(),
                                     suffix: lang.profile.nilai_sekarang,
                                     onPressed: () {
                                       // print('navigate daftar penilaian');
-                                      Navigate.toDaftarPenilaian(context);
+                                      // Navigate.toDaftarPenilaian(context);
                                     },
                                   ),
                                 ],
@@ -618,17 +616,18 @@ class TileListProfile extends StatefulWidget {
   final String title, suffix;
   final Function()? onPressed;
   final Function(String value)? onSubmit;
-
-  const TileListProfile({
-    Key? key,
-    this.top = true,
-    this.bottom = false,
-    required this.title,
-    required this.suffix,
-    this.onPressed,
-    this.enable = true,
-    this.onSubmit,
-  }) : super(key: key);
+  final bool? btn;
+  const TileListProfile(
+      {Key? key,
+      this.top = true,
+      this.bottom = false,
+      required this.title,
+      required this.suffix,
+      this.onPressed,
+      this.enable = true,
+      this.onSubmit,
+      this.btn})
+      : super(key: key);
 
   @override
   State<TileListProfile> createState() => _TileListProfileState();
@@ -670,17 +669,24 @@ class _TileListProfileState extends State<TileListProfile> {
                         title: widget.title,
                         content: Row(
                           children: [
-                            Expanded(
-                              child: TextFormField(
-                                maxLength: 100,
-                                enabled: widget.enable,
-                                controller: _editingController,
-                                decoration: InputDecoration(
-                                  hintText: widget.suffix,
-                                  contentPadding: const EdgeInsets.all(0),
+                            if (widget.btn == true)
+                              ElevatedButton(
+                                  onPressed: () {
+                                    Navigate.toDaftarPenilaian(context);
+                                  },
+                                  child: Text('${widget.suffix}')),
+                            if (widget.btn == null)
+                              Expanded(
+                                child: TextFormField(
+                                  maxLength: 100,
+                                  enabled: widget.enable,
+                                  controller: _editingController,
+                                  decoration: InputDecoration(
+                                    hintText: widget.suffix,
+                                    contentPadding: const EdgeInsets.all(0),
+                                  ),
                                 ),
                               ),
-                            ),
                             if (widget.enable!)
                               ElevatedButton(
                                 onPressed: () {
