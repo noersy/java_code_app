@@ -30,18 +30,21 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
         id: "${widget.data['id']}",
         catatan: '',
       );
-    } else if (_jumlahOrder != 0) {
-      // Provider.of<OrderProviders>(context, listen: false).addOrder(
-      //   jumlahOrder: _jumlahOrder,
-      //   data: _data,
-      //   catatan: '',
-      // );
     } else {
       await showDialog(
         context: context,
         builder: (_) => DeleteMenuInCheckoutDialog(id: "${widget.data['id']}"),
-      );
+      ).then((value) => Navigator.pop(context));
     }
+  }
+
+  void _add() {
+    setState(() => _jumlahOrder++);
+    Provider.of<OrderProviders>(context, listen: false).editOrder(
+      jumlahOrder: _jumlahOrder,
+      id: "${widget.data['id']}",
+      catatan: '',
+    );
   }
 
   int _jumlahOrder = 0;
@@ -165,11 +168,6 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
                             TextButton(
                               onPressed: () {
                                 _min();
-                                // if (_jumlahOrder >= 1) {
-                                //   // setState(() => _jumlahOrder--);
-                                //   // print('minus: $_jumlahOrder ');
-                                // }
-                                // // widget.onChange(_jumlahOrder);
                               },
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,
@@ -182,9 +180,7 @@ class _CardMenuCheckoutState extends State<CardMenuCheckout> {
                           Text("$_jumlahOrder", style: TypoSty.subtitle),
                           TextButton(
                             onPressed: () {
-                              // setState(() => _jumlahOrder++);
-                              // print('plus: $_jumlahOrder ');
-                              // widget.onChange(_jumlahOrder);
+                              _add();
                             },
                             style: TextButton.styleFrom(
                               padding: EdgeInsets.zero,
