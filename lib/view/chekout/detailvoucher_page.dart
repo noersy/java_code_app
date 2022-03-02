@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/models/listvoucher.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
@@ -20,6 +21,14 @@ class DetailVoucherPage extends StatefulWidget {
 }
 
 class _DetailVoucherPageState extends State<DetailVoucherPage> {
+  @override
+  late final DateTime _start, _end;
+  void initState() {
+    _start = DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeMulai);
+    _end = DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeSelesai);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,7 +122,12 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
                             ],
                           ),
                           Text(
-                              "${DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeMulai)} - ${DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeSelesai)}"),
+                            """(${_end.difference(_end).inDays} Month) ${dateFormat.format(_start)} - ${dateFormat.format(_end)}""",
+                            // style: TypoSty.mini.copyWith(
+                            //     color: ColorSty.black60, fontSize: 12.0),
+                          ),
+                          // Text(
+                          //     "${DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeMulai)} - ${DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeSelesai)}"),
                         ],
                       ),
                     ),
