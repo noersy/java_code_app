@@ -60,6 +60,8 @@ dependencies:
   uuid: ^3.0.5
   file_picker: ^4.4.0
   bubble: ^1.2.1
+  sign_in_with_apple: ^3.3.0 
+  firebase_auth: ^3.3.9
 
 dev_dependencies:
   flutter_test:

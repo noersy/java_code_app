@@ -17,6 +17,7 @@ import 'package:java_code_app/widget/input/form_login.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:logging/logging.dart' as logging;
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -104,6 +105,50 @@ class _LoginPageState extends State<LoginPage> {
       _log.warning(r);
     }
     setState(() => _loading = false);
+  }
+
+  _loginWithApple() async {
+    final appleIdCredential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+    );
+    // final oAuthProvider = OAuthProvider(providerId: 'apple.com');
+    // final credential = oAuthProvider.getCredential(
+    //   idToken: appleIdCredential.identityToken,
+    //   accessToken: appleIdCredential.authorizationCode,
+    // );
+    // await FirebaseAuth.instance.signInWithCredential(credential);
+    print(appleIdCredential.email);
+    // setState(() => _loading = true);
+    // try {
+    //   final user = await GoogleLogin.getInstance().login();
+
+    //   if (user != null) {
+    //     bool isLogin =
+    //         await Provider.of<AuthProviders>(context, listen: false).login(
+    //       user.email,
+    //       _controllerPassword.text,
+    //       isGoogle: true,
+    //       nama: user.displayName,
+    //     );
+
+    //     if (!isLogin) throw Exception("Error : ");
+
+    //     await _preferences.setBoolValue(KeyPrefens.login, true);
+
+    //     Timer(_duration, () {
+    //       Navigate.toFindLocation(context);
+    //       setState(() => _loading = false);
+    //     });
+    //     return;
+    //   }
+    // } catch (e, r) {
+    //   _log.warning(e);
+    //   _log.warning(r);
+    // }
+    // setState(() => _loading = false);
   }
 
   _checkInternet() async {
@@ -227,12 +272,13 @@ class _LoginPageState extends State<LoginPage> {
                         //kalau device ios
                         if (Platform.isIOS)
                           ButtonLogin(
-                            title: 'Masuk menggunakan',
-                            boldTitle: "Apple",
-                            icon: "assert/image/icon_apple.png",
-                            bgColors: ColorSty.black,
-                            onPressed: () {},
-                          ),
+                              title: 'Masuk menggunakan',
+                              boldTitle: "Apple",
+                              icon: "assert/image/icon_apple.png",
+                              bgColors: ColorSty.black,
+                              onPressed: () async {
+                                _loginWithApple();
+                              }),
                         SizedBox(height: SpaceDims.sp22.h)
                       ],
                     ),

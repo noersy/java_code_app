@@ -40,6 +40,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   static final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   static AndroidDeviceInfo? _androidInfo;
+  static IosDeviceInfo? _iosInfo;
   static PackageInfo? _packageInfo;
   static final ImagePicker _picker = ImagePicker();
   static File? _fileImage;
@@ -51,6 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   getInfoDevice() async {
     _androidInfo = await deviceInfo.androidInfo;
+    _iosInfo = await deviceInfo.iosInfo;
     _packageInfo = await PackageInfo.fromPlatform();
     setState(() {});
   }
@@ -270,7 +272,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    // getInfoDevice();
+    getInfoDevice();
     super.initState();
   }
 
