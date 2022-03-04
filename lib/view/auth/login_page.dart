@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/constans/key_prefens.dart';
@@ -12,6 +14,7 @@ import 'package:java_code_app/singletons/google_tools.dart';
 import 'package:java_code_app/singletons/shared_preferences.dart';
 import 'package:java_code_app/widget/button/button_login.dart';
 import 'package:java_code_app/widget/input/form_login.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:logging/logging.dart' as logging;
 
@@ -55,7 +58,8 @@ class _LoginPageState extends State<LoginPage> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: const Text('Email/password anda salah!\nAnda belum mendaftar?'),
+              title: const Text(
+                  'Email/password anda salah!\nAnda belum mendaftar?'),
               // content: Text('email '),
               actions: <Widget>[
                 TextButton(
@@ -210,21 +214,25 @@ class _LoginPageState extends State<LoginPage> {
                           ],
                         ),
                         SizedBox(height: SpaceDims.sp16.h),
-                        ButtonLogin(
-                          title: 'Masuk menggunakan',
-                          boldTitle: "Google",
-                          bgColors: ColorSty.white,
-                          icon: "assert/image/icon_google.png",
-                          onPressed: _loginWithGoogle,
-                        ),
+                        //kalau devices android
+                        if (Platform.isAndroid)
+                          ButtonLogin(
+                            title: 'Masuk menggunakan',
+                            boldTitle: "Google",
+                            bgColors: ColorSty.white,
+                            icon: "assert/image/icon_google.png",
+                            onPressed: _loginWithGoogle,
+                          ),
                         SizedBox(height: SpaceDims.sp8.h),
-                        ButtonLogin(
-                          title: 'Masuk menggunakan',
-                          boldTitle: "Apple",
-                          icon: "assert/image/icon_apple.png",
-                          bgColors: ColorSty.black,
-                          onPressed: () {},
-                        ),
+                        //kalau device ios
+                        if (Platform.isIOS)
+                          ButtonLogin(
+                            title: 'Masuk menggunakan',
+                            boldTitle: "Apple",
+                            icon: "assert/image/icon_apple.png",
+                            bgColors: ColorSty.black,
+                            onPressed: () {},
+                          ),
                         SizedBox(height: SpaceDims.sp22.h)
                       ],
                     ),
