@@ -1,20 +1,17 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:java_code_app/constans/key_prefens.dart';
 import 'package:java_code_app/providers/auth_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:java_code_app/singletons/google_tools.dart';
 import 'package:java_code_app/singletons/shared_preferences.dart';
 import 'package:java_code_app/widget/button/button_login.dart';
 import 'package:java_code_app/widget/input/form_login.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:logging/logging.dart' as logging;
 
@@ -75,34 +72,55 @@ class _LoginPageState extends State<LoginPage> {
     setState(() => _loading = false);
   }
 
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    // Optional clientId
+    // clientId: '479882132969-9i9aqik3jfjd7qhci1nqf0bm2g71rm1u.apps.googleusercontent.com',
+    scopes: <String>[
+      'email',
+      'https://www.googleapis.com/auth/contacts.readonly',
+    ],
+  );
   _loginWithGoogle() async {
-    setState(() => _loading = true);
-    try {
-      final user = await GoogleLogin.getInstance().login();
+    // setState(() => _loading = true);
+    // try {
+    GoogleSignInAccount? _currentUser;
+    print('GoogleSignInAccount $_currentUser');
+    await _googleSignIn.signIn();
+    print(
+        'GoogleSignInAccount ${_googleSignIn.currentUser?.displayName} | Pwd: ${_googleSignIn.currentUser?.email}');
+    bool isLogin =
+        await Provider.of<AuthProviders>(context, listen: false).loginGoogle(
+      _googleSignIn.currentUser!.email,
+      isGoogle: true,
+      nama: _googleSignIn.currentUser?.displayName,
+    );
+    if (isLogin) {
+      await _preferences.setBoolValue(KeyPrefens.login, true);
 
-      if (user != null) {
-        bool isLogin =
-            await Provider.of<AuthProviders>(context, listen: false).login(
-          user.email,
-          _controllerPassword.text,
-          isGoogle: true,
-          nama: user.displayName,
-        );
-
-        if (!isLogin) throw Exception("Error : ");
-
-        await _preferences.setBoolValue(KeyPrefens.login, true);
-
-        Timer(_duration, () {
-          Navigate.toFindLocation(context);
-          setState(() => _loading = false);
-        });
-        return;
-      }
-    } catch (e, r) {
-      _log.warning(e);
-      _log.warning(r);
+      Timer(_duration, () {
+        Navigate.toFindLocation(context);
+        setState(() => _loading = false);
+      });
+      return;
+    } else if (isLogin == false) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text(
+                  'Email/password anda salah!\nAnda belum mendaftar?'),
+              // content: Text('email '),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Close')),
+              ],
+            );
+          });
     }
+
     setState(() => _loading = false);
   }
 
@@ -111,6 +129,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _checkPrefens() async {
+    print('_checkPrefens');
     bool _isAlreadyLogin = await _preferences.getBoolValue(KeyPrefens.login);
     if (_isAlreadyLogin) {
       setState(() => _loading = true);

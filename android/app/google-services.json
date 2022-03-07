@@ -1,42 +1,101 @@
 {
   "project_info": {
-    "project_number": "867038405710",
-    "project_id": "javacodeapp-42f75",
-    "storage_bucket": "javacodeapp-42f75.appspot.com"
+    "project_number": "38374150542",
+    "project_id": "javacode-16d18",
+    "storage_bucket": "javacode-16d18.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:867038405710:android:000d3872ebedfb43ca0f1f",
+        "mobilesdk_app_id": "1:38374150542:android:01ce99096056d8d29dd4df",
         "android_client_info": {
-          "package_name": "com.venturo.javacode.java_code_app"
+          "package_name": "com.example.java_code"
         }
       },
       "oauth_client": [
         {
-          "client_id": "867038405710-btvpbh7vnobl42qhbr8qv9mnq6hfp5ug.apps.googleusercontent.com",
+          "client_id": "38374150542-neieatvhfc77f0210f9fnu8bftofpq5c.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.venturo.javacode.java_code_app",
-            "certificate_hash": "d4cfb494c7b5ca0a769d8cd993d17814026428b6"
+            "package_name": "com.example.java_code",
+            "certificate_hash": "ef47763d441728bca15c8720147c068a5e4694e5"
           }
         },
         {
-          "client_id": "867038405710-q7v6acatstok89etqfttdbd648spo0cn.apps.googleusercontent.com",
+          "client_id": "38374150542-ulivs6u3ec611gtoctcj0tbqv0cm4119.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.java_code",
+            "certificate_hash": "bdded3af0d7f013c8746afa2aa8ba423f5798759"
+          }
+        },
+        {
+          "client_id": "38374150542-91gbc0d5bmip4kofe5q8masl46udslvs.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAUXAgNYWZ8Q0ygDOejOIPtk7VF3vUWPn4"
+          "current_key": "AIzaSyDum3eQ8mDW7mo7ufExSLYTG84oabuP-6E"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "867038405710-q7v6acatstok89etqfttdbd648spo0cn.apps.googleusercontent.com",
+              "client_id": "38374150542-91gbc0d5bmip4kofe5q8masl46udslvs.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "38374150542-m0pa65pmuia3nbaa3e8v5qdf7r13r7d2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.idbolong"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:38374150542:android:2ced17c288ae6b529dd4df",
+        "android_client_info": {
+          "package_name": "com.venturo.javacode.java_code_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "38374150542-jf6pkgbrv1toriio3v741314jpqerlj3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.venturo.javacode.java_code_app",
+            "certificate_hash": "bdded3af0d7f013c8746afa2aa8ba423f5798759"
+          }
+        },
+        {
+          "client_id": "38374150542-91gbc0d5bmip4kofe5q8masl46udslvs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDum3eQ8mDW7mo7ufExSLYTG84oabuP-6E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "38374150542-91gbc0d5bmip4kofe5q8masl46udslvs.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "38374150542-m0pa65pmuia3nbaa3e8v5qdf7r13r7d2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.idbolong"
+              }
             }
           ]
         }
