@@ -179,7 +179,7 @@ class AuthProviders extends ChangeNotifier {
     try {
       final body = {"image": base64};
 
-      _log.fine("Try update profile image.");
+      _log.fine("Try update profile image.\n$base64");
       final response = await http.post(
         _api,
         headers: _headers,
@@ -189,7 +189,8 @@ class AuthProviders extends ChangeNotifier {
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
         if (_user == null) _log.info("Failed Upload profile image.");
-        if (_user != null) _log.fine("Susses Upload profile image.");
+        if (_user != null)
+          _log.fine("Susses Upload profile image./nBody:${response.body}");
         getUser();
         return true;
       }

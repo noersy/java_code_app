@@ -367,7 +367,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
                 Text("Batal", style: TypoSty.heading),
                 const SizedBox(height: SpaceDims.sp12),
                 Text(
-                  "Anda yakin ingin menghamembatalkan pesanan ini?",
+                  "Anda yakin ingin membatalkan pesanan ini?",
                   textAlign: TextAlign.center,
                   style: TypoSty.title
                       .copyWith(fontSize: 16.0, fontWeight: FontWeight.w600),

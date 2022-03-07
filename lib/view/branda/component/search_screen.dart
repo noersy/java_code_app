@@ -53,7 +53,7 @@ class _SearchScreenState extends State<SearchScreen> {
         ],
       );
     } else {
-      return const Center(child: Text('data tidak dtiemukan'));
+      return const Center(child: Text('data tidak ditemukan'));
     }
   }
 }

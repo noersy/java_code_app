@@ -130,7 +130,7 @@ class OrderHistoryCard extends StatelessWidget {
                             SizedBox(
                               height: 42,
                               child: Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
+                                padding: EdgeInsets.only(right: 8.0),
                                 child: RichText(
                                   text: TextSpan(
                                       style: TypoSty.title,
@@ -138,15 +138,44 @@ class OrderHistoryCard extends StatelessWidget {
                                           ? data.menu.first.nama
                                           : "",
                                       children: [
-                                        for (final i in List.generate(
-                                            data.menu.length, (index) => index))
-                                          if (i == 0)
+                                        for (var i = 0;
+                                            i < data.menu.length;
+                                            i++)
+                                          if (i != 0 || i < 1 )
                                             TextSpan(
-                                                text: ", ${data.menu[i].nama}")
-                                      ]),
+                                                text: ', ${data.menu[i].nama}')
+                                      ]
+                                      // children: [
+                                      //   for (final i in List.generate(
+                                      //       data.menu.length, (index) => index))
+                                      //     if (i == 0)
+                                      //       TextSpan(
+                                      //           text: ", ${data.menu[i].nama}")
+                                      // ]
+                                      ),
                                 ),
                               ),
                             ),
+                            // SizedBox(
+                            //   height: 42,
+                            //   child: Padding(
+                            //     padding: const EdgeInsets.only(right: 8.0),
+                            //     child: RichText(
+                            //       text: TextSpan(
+                            //           style: TypoSty.title,
+                            //           text: data.menu.isNotEmpty
+                            //               ? data.menu.first.nama
+                            //               : "",
+                            //           children: [
+                            //             for (final i in List.generate(
+                            //                 data.menu.length, (index) => index))
+                            //               if (i == 0)
+                            //                 TextSpan(
+                            //                     text: ", ${data.menu[i].nama}")
+                            //           ]),
+                            //     ),
+                            //   ),
+                            // ),
                             const SizedBox(height: SpaceDims.sp4),
                             Row(
                               children: [
