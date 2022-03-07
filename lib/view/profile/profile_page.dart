@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -676,6 +677,10 @@ class _TileListProfileState extends State<TileListProfile> {
                                   maxLength: 100,
                                   enabled: widget.enable,
                                   controller: _editingController,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
                                   decoration: InputDecoration(
                                     hintText: widget.suffix,
                                     contentPadding: const EdgeInsets.all(0),
