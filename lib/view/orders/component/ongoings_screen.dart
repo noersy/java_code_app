@@ -20,20 +20,20 @@ class OngoingScreen extends StatefulWidget {
   State<OngoingScreen> createState() => _OngoingScreenState();
 }
 
-class _OngoingScreenState extends State<OngoingScreen> with AutomaticKeepAliveClientMixin<OngoingScreen> {
-
+class _OngoingScreenState extends State<OngoingScreen>
+    with AutomaticKeepAliveClientMixin<OngoingScreen> {
   @override
   bool get wantKeepAlive => true;
 
   bool _loading = false;
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   Future<void> _onRefresh() async {
     var _duration = const Duration(seconds: 1);
     if (mounted) setState(() => _loading = true);
 
     await Provider.of<OrderProviders>(context, listen: false).getListOrder();
-
 
     Timer(_duration, () {
       if (mounted) setState(() => _loading = false);
@@ -50,6 +50,7 @@ class _OngoingScreenState extends State<OngoingScreen> with AutomaticKeepAliveCl
   @override
   void initState() {
     getListOrder();
+    _onRefresh();
     super.initState();
   }
 
@@ -102,16 +103,16 @@ class _OngoingScreenState extends State<OngoingScreen> with AutomaticKeepAliveCl
                           ),
                           const SizedBox(height: SpaceDims.sp22),
                           AnimatedBuilder(
-                            animation: LangProviders(),
-                            builder: (context, snapshot) {
-                              final lang = Provider.of<LangProviders>(context).lang;
-                              return Text(
-                                lang.pesanan.ongoingCaption,
-                                textAlign: TextAlign.center,
-                                style: TypoSty.title2,
-                              );
-                            }
-                          ),
+                              animation: LangProviders(),
+                              builder: (context, snapshot) {
+                                final lang =
+                                    Provider.of<LangProviders>(context).lang;
+                                return Text(
+                                  lang.pesanan.ongoingCaption,
+                                  textAlign: TextAlign.center,
+                                  style: TypoSty.title2,
+                                );
+                              }),
                         ],
                       )
                     ],
@@ -125,5 +126,3 @@ class _OngoingScreenState extends State<OngoingScreen> with AutomaticKeepAliveCl
     );
   }
 }
-
-
