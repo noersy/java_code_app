@@ -414,7 +414,9 @@ class _DetailMenuState extends State<DetailMenu> {
                           prefix: !_isLoading ? "Rp $_hargaTotal" : "Rp 0",
                           onPressed: () {},
                         ),
-                        if (_selectedLevel != null)
+
+                        //if level ada
+                        if (_listLevel.isNotEmpty)
                           TileListDMenu(
                             prefixIcon: true,
                             isLoading: _isLoading,
@@ -423,7 +425,8 @@ class _DetailMenuState extends State<DetailMenu> {
                             prefix: _selectedLevel?.keterangan,
                             onPressed: () => _showDialogLevel(_listLevel),
                           ),
-                        if (_selectedTopping.isNotEmpty)
+                        //if topping ada
+                        if (_listTopping.isNotEmpty)
                           TileListDMenu(
                             prefixIcon: true,
                             isLoading: _isLoading,
