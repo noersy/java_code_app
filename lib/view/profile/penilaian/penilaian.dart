@@ -46,79 +46,88 @@ class _PenilaianState extends State<Penilaian> {
                               ),
                               child: Row(
                                 children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Padding(
-                                        padding:
-                                            EdgeInsets.only(left: 10, top: 10),
-                                        child: Text(
-                                          'Berikan Penilaianmu',
+                                  Flexible(
+                                    flex: 3,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 10, top: 10),
+                                          child: Text(
+                                            'Berikan Penilaianmu',
+                                          ),
                                         ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 10,
-                                        ),
-                                        child: Column(
-                                          children: [
-                                            RatingBar.builder(
-                                              initialRating: 3,
-                                              minRating: 1,
-                                              direction: Axis.horizontal,
-                                              allowHalfRating: true,
-                                              itemCount: 5,
-                                              itemPadding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 4.0),
-                                              itemBuilder: (context, _) =>
-                                                  const Icon(
-                                                Icons.star,
-                                                color: Colors.amber,
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 10,
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              RatingBar.builder(
+                                                itemSize: 30,
+                                                initialRating: 3,
+                                                minRating: 1,
+                                                direction: Axis.horizontal,
+                                                allowHalfRating: true,
+                                                itemCount: 5,
+                                                itemPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 4.0),
+                                                itemBuilder: (context, _) =>
+                                                    const Icon(
+                                                  Icons.star,
+                                                  color: Colors.amber,
+                                                ),
+                                                onRatingUpdate: (rating) {
+                                                  // ignore: avoid_print
+                                                  setState(() {
+                                                    score = rating;
+                                                    if (rating == 1) {
+                                                      RatingText =
+                                                          'jelek sekali';
+                                                    }
+                                                    if (rating == 1.5) {
+                                                      RatingText = 'jelek';
+                                                    }
+                                                    if (rating == 2) {
+                                                      RatingText =
+                                                          'biasa sekali';
+                                                    }
+                                                    if (rating == 2.5) {
+                                                      RatingText = 'biasa';
+                                                    }
+                                                    if (rating == 3) {
+                                                      RatingText = 'lumayan';
+                                                    }
+                                                    if (rating == 3.5) {
+                                                      RatingText = 'cukup';
+                                                    }
+                                                    if (rating == 4) {
+                                                      RatingText = 'cukup baik';
+                                                    }
+                                                    if (rating == 4.5) {
+                                                      RatingText = 'baik';
+                                                    }
+                                                    if (rating == 5) {
+                                                      RatingText =
+                                                          'bagus sekali';
+                                                    }
+                                                  });
+                                                  // print(rating);
+                                                },
                                               ),
-                                              onRatingUpdate: (rating) {
-                                                // ignore: avoid_print
-                                                setState(() {
-                                                  score = rating;
-                                                  if (rating == 1) {
-                                                    RatingText = 'jelek sekali';
-                                                  }
-                                                  if (rating == 1.5) {
-                                                    RatingText = 'jelek';
-                                                  }
-                                                  if (rating == 2) {
-                                                    RatingText = 'biasa sekali';
-                                                  }
-                                                  if (rating == 2.5) {
-                                                    RatingText = 'biasa';
-                                                  }
-                                                  if (rating == 3) {
-                                                    RatingText = 'lumayan';
-                                                  }
-                                                  if (rating == 3.5) {
-                                                    RatingText = 'cukup';
-                                                  }
-                                                  if (rating == 4) {
-                                                    RatingText = 'cukup baik';
-                                                  }
-                                                  if (rating == 4.5) {
-                                                    RatingText = 'baik';
-                                                  }
-                                                  if (rating == 5) {
-                                                    RatingText = 'bagus banget';
-                                                  }
-                                                });
-                                                // print(rating);
-                                              },
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                  const Spacer(),
-                                  widgetTextRating(RatingText)
+                                  const Spacer(flex: 1),
+                                  Flexible(
+                                      flex: 1,
+                                      child: widgetTextRating(RatingText))
                                 ],
                               ),
                             ),
@@ -340,8 +349,8 @@ class _PenilaianState extends State<Penilaian> {
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0),
-                      side:
-                          const BorderSide(color: Color.fromRGBO(0, 154, 173, 1))))),
+                      side: const BorderSide(
+                          color: Color.fromRGBO(0, 154, 173, 1))))),
           onPressed: () {},
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -382,6 +391,12 @@ class _PenilaianState extends State<Penilaian> {
   String RatingText = 'rating now';
   double score = 1.0;
   Widget widgetTextRating(text) {
+    // return Container(
+    //     child: Row(
+    //   children: <Widget>[
+    //     Flexible(child: Text("A looooooooooooooooooong text"))
+    //   ],
+    // ));
     return Padding(
       padding: const EdgeInsets.only(right: 10.0),
       child: Text('$text'),
