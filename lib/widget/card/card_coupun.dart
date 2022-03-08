@@ -14,7 +14,9 @@ class CardCoupon extends StatelessWidget {
     this.discount,
     required this.title,
     this.nominal,
-    required this.police, this.disable = false, this.color,
+    required this.police,
+    this.disable = false,
+    this.color,
   }) : super(key: key);
 
   @override
@@ -25,34 +27,44 @@ class CardCoupon extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
       margin: const EdgeInsets.symmetric(horizontal: SpaceDims.sp12),
       child: TextButton(
-        onPressed: disable ? null : () => Navigate.toPromoPage(
-          context,
-          title: title,
-          police: police,
-          discount: discount,
-          nominal: nominal,
-        ),
+        onPressed: disable
+            ? null
+            : () => Navigate.toPromoPage(
+                  context,
+                  title: title,
+                  police: police,
+                  discount: discount,
+                  nominal: nominal,
+                ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  discount != null ? "Diskon" : "Voucher",
-                  style: TypoSty.heading.copyWith(
-                    color: ColorSty.white,
+                Flexible(
+                  flex: 3,
+                  child: Text(
+                    discount != null ? "Diskon  " : "Voucher  ",
+                    style: TypoSty.heading
+                        .copyWith(color: ColorSty.white, fontSize: 25),
                   ),
                 ),
-                const SizedBox(width: SpaceDims.sp12),
-                Text(
-                  discount != null ? discount != 0 ? "$discount %" : "-" : "Rp $nominal",
-                  style: TypoSty.heading.copyWith(
-                    fontSize: discount != null ? 36.0 : 22.0,
-                    foreground: Paint()
-                      ..style = PaintingStyle.stroke
-                      ..strokeWidth = 1
-                      ..color = ColorSty.white,
+                Flexible(
+                  flex: 3,
+                  child: Text(
+                    discount != null
+                        ? discount != 0
+                            ? "$discount %"
+                            : "-"
+                        : "Rp $nominal",
+                    style: TypoSty.heading.copyWith(
+                      fontSize: discount != null ? 36.0 : 22.0,
+                      foreground: Paint()
+                        ..style = PaintingStyle.stroke
+                        ..strokeWidth = 1
+                        ..color = ColorSty.white,
+                    ),
                   ),
                 ),
               ],
