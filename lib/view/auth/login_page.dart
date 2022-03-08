@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:java_code_app/constans/key_prefens.dart';
-import 'package:java_code_app/providers/auth_providers.dart';
-import 'package:java_code_app/route/route.dart';
+import 'package:java_code_app/providers/auth_providers.dart'; 
+import 'package:java_code_app/route/route.dart'; 
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
@@ -81,8 +81,9 @@ class _LoginPageState extends State<LoginPage> {
     ],
   );
   _loginWithGoogle() async {
-    // setState(() => _loading = true);
+    setState(() => _loading = true);
     // try {
+    await _googleSignIn.disconnect();
     GoogleSignInAccount? _currentUser;
     print('GoogleSignInAccount $_currentUser');
     await _googleSignIn.signIn();
@@ -203,13 +204,13 @@ class _LoginPageState extends State<LoginPage> {
                           type: TextInputType.visiblePassword,
                           editingController: _controllerPassword,
                         ),
-                        SizedBox(height: 25.0.h),
+                        SizedBox(height: 10.0.h),
                         ButtonLogin(
                           title: 'Masuk',
                           onPressed: _login,
                           bgColors: ColorSty.primary,
                         ),
-                        SizedBox(height: 40.0.h),
+                        SizedBox(height: 5.0.h),
                         Row(
                           children: [
                             const Expanded(
@@ -220,8 +221,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: SpaceDims.sp8,
-                              ),
+                                  horizontal: SpaceDims.sp2),
                               child: Text("atau", style: TypoSty.caption2),
                             ),
                             const Expanded(
@@ -232,7 +232,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: SpaceDims.sp16.h),
+                        SizedBox(height: SpaceDims.sp6.h),
                         //kalau devices android
                         if (Platform.isAndroid)
                           ButtonLogin(
