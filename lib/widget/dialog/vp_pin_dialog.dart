@@ -12,14 +12,15 @@ class VPinDialog extends StatefulWidget {
   final String? title;
   final bool? giveString;
   final ValueChanged<Object>? onComplete;
-
-  const VPinDialog({
-    Key? key,
-    this.voucher,
-    this.title = "Verifikasi Pesanan",
-    this.onComplete,
-    this.giveString = false,
-  }) : super(key: key);
+  final bool? pesananPin;
+  const VPinDialog(
+      {Key? key,
+      this.voucher,
+      this.title = "Verifikasi Pesanan",
+      this.onComplete,
+      this.giveString = false,
+      this.pesananPin})
+      : super(key: key);
 
   @override
   State<VPinDialog> createState() => _VPinDialogState();
@@ -88,7 +89,9 @@ class _VPinDialogState extends State<VPinDialog> {
                           if (user == null) return;
                           final correct =
                               user.data.pin == _pinPutController.text;
-                          Navigator.pop(context, correct == true);
+                          if (widget.pesananPin == true) {
+                            Navigator.pop(context, correct == true);
+                          }
                           print('giveString ${widget.giveString}');
                           if (correct == false) {
                             showDialog(
