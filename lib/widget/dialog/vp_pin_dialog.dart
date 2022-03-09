@@ -88,13 +88,31 @@ class _VPinDialogState extends State<VPinDialog> {
                           if (user == null) return;
                           final correct =
                               user.data.pin == _pinPutController.text;
-                          Navigator.pop(context, correct);
-                          // print('correct $correct');
+                          Navigator.pop(context, correct == true);
+                          print('giveString ${widget.giveString}');
+                          if (correct == false) {
+                            showDialog(
+                              context: context,
+                              builder: (_) => Dialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                ),
+                                child: const SizedBox(
+                                  height: 90.0,
+                                  width: double.infinity,
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Text("Pin Salah"),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
                           if (widget.onComplete != null &&
                               !widget.giveString!) {
                             widget.onComplete!(correct);
 
-                            if (!correct) {
+                            if (correct == false) {
                               showDialog(
                                 context: context,
                                 builder: (_) => Dialog(

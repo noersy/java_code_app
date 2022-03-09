@@ -198,22 +198,26 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   _changePin(Lang lang) {
+    print('_changePin');
     showDialog(
       context: context,
       builder: (_) => VPinDialog(
         title: lang.profile.lm,
         onComplete: (value) {
+          print('1 complete: $value');
+
           if (value.runtimeType != bool) return;
-          if ((value as bool)) {
+          if (value == true) {
+            print('2 complete: $value');
             showDialog(
               context: context,
               builder: (_) => VPinDialog(
                 title: lang.profile.br,
                 giveString: true,
                 onComplete: (value) {
+                  print('complete:');
                   if (value.runtimeType != String) return;
-
-                  provider.update(key: "pin", value: "$value");
+                  // provider.update(key: "pin", value: "$value");
                 },
               ),
             );
