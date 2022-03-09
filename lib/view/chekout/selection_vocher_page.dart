@@ -208,14 +208,18 @@ class VoucherCard extends StatefulWidget {
 class _VoucherCardState extends State<VoucherCard> {
   bool _isSelected = false;
   late final DateTime _start, _end;
-
+  late int _difference;
+  late int _months;
   @override
   void initState() {
     _isSelected = widget.isChecked;
-    _start = DateTime.fromMicrosecondsSinceEpoch(
-        widget.voucher?.periodeMulai ?? 0 * 1000);
-    _end = DateTime.fromMicrosecondsSinceEpoch(
-        widget.voucher?.periodeSelesai ?? 0 * 1000);
+    _start = DateTime.fromMillisecondsSinceEpoch(
+        widget.voucher!.periodeMulai * 1000);
+    _end = DateTime.fromMillisecondsSinceEpoch(
+        widget.voucher!.periodeSelesai * 1000);
+    _difference = _end.difference(_start).inDays;
+    int years = _difference ~/ 365;
+    _months = (_difference - years * 365) ~/ 30;
     super.initState();
   }
 
@@ -320,12 +324,20 @@ class _VoucherCardState extends State<VoucherCard> {
                             style: TextStyle(
                                 color: ColorSty.black, fontSize: 12.0),
                           ),
-                          Text(
-                            """(${_end.difference(_end).inDays} Month) ${dateFormat.format(_start)} - ${dateFormat.format(_end)} 
+                          if (_end.difference(_start).inDays < 31)
+                            Text(
+                              """(${_end.difference(_start).inDays} Days) ${dateFormat.format(_start)} - ${dateFormat.format(_end)} 
                           """,
-                            style: TypoSty.mini.copyWith(
-                                color: ColorSty.black60, fontSize: 9.0),
-                          ),
+                              style: TypoSty.mini.copyWith(
+                                  color: ColorSty.black60, fontSize: 9.0),
+                            ),
+                          if (_end.difference(_start).inDays > 31)
+                            Text(
+                              """($_months Month) ${dateFormat.format(_start)} - ${dateFormat.format(_end)} 
+                          """,
+                              style: TypoSty.mini.copyWith(
+                                  color: ColorSty.black60, fontSize: 9.0),
+                            ),
                         ],
                       ),
                     ),
