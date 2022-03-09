@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:java_code_app/constans/key_prefens.dart';
-import 'package:java_code_app/providers/auth_providers.dart'; 
-import 'package:java_code_app/route/route.dart'; 
+import 'package:java_code_app/providers/auth_providers.dart';
+import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
@@ -82,8 +82,7 @@ class _LoginPageState extends State<LoginPage> {
   );
   _loginWithGoogle() async {
     setState(() => _loading = true);
-    // try {
-    await _googleSignIn.disconnect();
+    if (_googleSignIn.currentUser != null) await _googleSignIn.disconnect();
     GoogleSignInAccount? _currentUser;
     print('GoogleSignInAccount $_currentUser');
     await _googleSignIn.signIn();

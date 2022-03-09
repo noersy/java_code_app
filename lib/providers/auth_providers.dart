@@ -75,6 +75,7 @@ class AuthProviders extends ChangeNotifier {
     bool? isGoogle = true,
     String? nama = "",
   }) async {
+    var editResponse;
     final Uri _api = Uri.http(host, "$sub/api/auth/login");
     try {
       final body = <String, dynamic>{
@@ -91,7 +92,20 @@ class AuthProviders extends ChangeNotifier {
       );
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
-        _loginUser = loginUserFromJson(response.body);
+        editResponse = json.decode(response.body);
+        if (json.decode(response.body)["data"]["user"]["foto"] == null) {
+          editResponse["data"]["user"]["foto"] =
+              '''https://javacode.landa.id/img/1/review/review_1_620e0269b96d2.png''';
+          print(
+              'cek foto ${editResponse["data"]["user"]["foto"]} | editResponse type: ${editResponse.runtimeType}\n\n\n');
+          print('cek editResponse ${(editResponse)} '
+              '\nbody ${response.body}'
+              '\neditResponse ${json.encode(editResponse)}');
+          editResponse = json.encode(editResponse);
+        }
+
+        // _loginUser = loginUserFromJson(response.body);
+        _loginUser = loginUserFromJson(editResponse.toString());
         if (_loginUser == null) _log.info("Login failed");
         if (_loginUser != null) _log.fine("Login successes");
 
@@ -99,6 +113,8 @@ class AuthProviders extends ChangeNotifier {
             .setIntValue(KeyPrefens.loginID, _loginUser!.data.user.idUser);
         getUser(id: _loginUser!.data.user.idUser);
         notifyListeners();
+
+        print('GoogleSignInAccount: loginGoogle ${_loginUser!.data.user.foto}');
         if (_loginUser != null) {
           return true;
         } else {
