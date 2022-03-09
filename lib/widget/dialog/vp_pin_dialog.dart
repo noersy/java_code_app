@@ -13,13 +13,16 @@ class VPinDialog extends StatefulWidget {
   final bool? giveString;
   final ValueChanged<Object>? onComplete;
   final bool? pesananPin;
+  final bool? firstChangePin;
+
   const VPinDialog(
       {Key? key,
       this.voucher,
       this.title = "Verifikasi Pesanan",
       this.onComplete,
       this.giveString = false,
-      this.pesananPin})
+      this.pesananPin,
+      this.firstChangePin})
       : super(key: key);
 
   @override
@@ -136,7 +139,9 @@ class _VPinDialogState extends State<VPinDialog> {
                           } else if (widget.giveString!) {
                             widget.onComplete!(_pinPutController.text);
                           }
-                          Navigator.pop(context);
+                          if (widget.firstChangePin != true) {
+                            Navigator.pop(context);
+                          }
                         },
                         separator: Padding(
                           padding: const EdgeInsets.all(SpaceDims.sp4),

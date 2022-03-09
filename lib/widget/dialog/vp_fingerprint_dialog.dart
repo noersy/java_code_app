@@ -85,7 +85,8 @@ class VFingerPrintDialog extends StatelessWidget {
                   Navigator.pop(context);
                   showDialog(
                       context: context,
-                      builder: (_) => VPinDialog(pesananPin:true,
+                      builder: (_) => VPinDialog(
+                            pesananPin: true,
                             onComplete: (value) {
                               if (value.runtimeType == bool) {
                                 onSubmit(value as bool);
