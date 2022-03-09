@@ -271,7 +271,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    // getInfoDevice();
+    getInfoDevice();
     super.initState();
   }
 
@@ -562,15 +562,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                   child: Column(
                                     children: [
                                       TileListProfile(
+                                        noIcon: true,
                                         top: false,
                                         enable: false,
                                         title: 'Device Info',
-                                        suffix: _androidInfo?.product ?? "",
+                                        suffix: _androidInfo?.model ?? "",
                                       ),
                                       TileListProfile(
+                                        noIcon: true,
                                         enable: false,
                                         title: 'Version',
-                                        suffix: _packageInfo?.version ?? '',
+                                        // suffix: _packageInfo?.version ?? '',
+                                        suffix: '1.0.0',
                                       ),
                                     ],
                                   ),
@@ -619,6 +622,7 @@ class TileListProfile extends StatefulWidget {
   final Function()? onPressed;
   final Function(String value)? onSubmit;
   final bool? btn;
+  final bool? noIcon;
   TileListProfile(
       {Key? key,
       this.top = true,
@@ -628,7 +632,8 @@ class TileListProfile extends StatefulWidget {
       this.onPressed,
       this.enable = true,
       this.onSubmit,
-      this.btn})
+      this.btn,
+      this.noIcon})
       : super(key: key);
 
   @override
@@ -741,7 +746,7 @@ class _TileListProfileState extends State<TileListProfile> {
                             ),
                           ),
                         ),
-                      if (widget.btn != true)
+                      if (widget.btn != true && widget.noIcon != true)
                         Icon(
                           Icons.edit,
                           color: ColorSty.grey,
