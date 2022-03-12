@@ -8,6 +8,7 @@ import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:provider/provider.dart';
+import 'package:geocoding/geocoding.dart';
 
 class FindLocationPage extends StatefulWidget {
   const FindLocationPage({Key? key}) : super(key: key);
@@ -62,15 +63,41 @@ class _FindLocationPageState extends State<FindLocationPage> {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
 
-    return await Geolocator.getCurrentPosition()
-        .then((value) => currentLoctaion = value);
+    return await Geolocator.getCurrentPosition().then(
+      (value) {
+        setState(() {
+          _currentLoctaion = value;
+        });
+        return _currentLoctaion;
+      },
+    );
   }
 
-  var currentLoctaion;
+  late Position _currentLoctaion;
+  var _currentAddress;
+  _getAddressFromLatLng() async {
+    try {
+      print(
+          '_getAddressFromLatLng: $_currentLoctaion\n${_currentLoctaion.latitude} ${_currentLoctaion.longitude}');
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+          _currentLoctaion.latitude, _currentLoctaion.longitude);
+      // List<Placemark> placemarks =
+      //     await placemarkFromCoordinates(15.8343747, 74.5165815);
+      print('placemarks: ${placemarks[0]}');
+      Placemark place = placemarks[0];
+      print('place: $place');
+      setState(() {
+        _currentAddress =
+            "${place.street},${place.locality}, ${place.postalCode}, ${place.country}";
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   void initState() {
-    _determinePosition();
+    _determinePosition().then((value) => _getAddressFromLatLng());
     // _startTime();
     super.initState();
   }
@@ -90,6 +117,16 @@ class _FindLocationPageState extends State<FindLocationPage> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
+                  Positioned(
+                    top: 100,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          print('press');
+                          _determinePosition()
+                              .then((value) => _getAddressFromLatLng());
+                        },
+                        child: Text('get location')),
+                  ),
                   Positioned.fill(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
@@ -105,7 +142,7 @@ class _FindLocationPageState extends State<FindLocationPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Mencari Lokasimu ... ${currentLoctaion}",
+                          "Mencari Lokasimu ... ${_currentLoctaion}\n$_currentAddress",
                           textAlign: TextAlign.center,
                           style: TypoSty.title2,
                         ),

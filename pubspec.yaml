@@ -61,6 +61,7 @@ dependencies:
   file_picker: ^4.4.0
   bubble: ^1.2.1
   location: ^4.3.0
+  geocoding: ^2.0.4
 
 dev_dependencies:
   flutter_test:
