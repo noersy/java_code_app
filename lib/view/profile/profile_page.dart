@@ -208,22 +208,7 @@ class _ProfilePageState extends State<ProfilePage> {
         onComplete: (value) {
           value1 = value;
           print('1 complete: $value');
-          Navigator.pop(context);
-          // if (value == true) {
-          //   print('2 complete: $value');
-          //   showDialog(
-          //     context: context,
-          //     builder: (_) => VPinDialog(
-          //       title: lang.profile.br,
-          //       giveString: true,
-          //       onComplete: (value) {
-          //         print('complete:');
-          //         if (value.runtimeType != String) return;
-          //         // provider.update(key: "pin", value: "$value");
-          //       },
-          //     ),
-          //   );
-          // }
+          Navigator.pop(context); 
         },
       ),
     ).then((value) {
