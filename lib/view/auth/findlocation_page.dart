@@ -97,7 +97,9 @@ class _FindLocationPageState extends State<FindLocationPage> {
 
   @override
   void initState() {
-    _determinePosition().then((value) => _getAddressFromLatLng());
+    _determinePosition()
+        .then((value) => _getAddressFromLatLng())
+        .then((value) => _navigationPage());
     // _startTime();
     super.initState();
   }
@@ -117,16 +119,6 @@ class _FindLocationPageState extends State<FindLocationPage> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Positioned(
-                    top: 100,
-                    child: ElevatedButton(
-                        onPressed: () {
-                          print('press');
-                          _determinePosition()
-                              .then((value) => _getAddressFromLatLng());
-                        },
-                        child: Text('get location')),
-                  ),
                   Positioned.fill(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
@@ -142,23 +134,24 @@ class _FindLocationPageState extends State<FindLocationPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Mencari Lokasimu ... ${_currentLoctaion}\n$_currentAddress",
+                          "Mencari Lokasimu ...",
                           textAlign: TextAlign.center,
                           style: TypoSty.title2,
                         ),
                         const SizedBox(height: SpaceDims.sp2),
                         Image.asset("assert/image/maps_ilustrasion.png"),
                         const SizedBox(height: SpaceDims.sp24),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: SpaceDims.sp16,
+                        if (_currentAddress != null)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: SpaceDims.sp16,
+                            ),
+                            child: Text(
+                              "$_currentAddress",
+                              textAlign: TextAlign.center,
+                              style: TypoSty.title.copyWith(fontSize: 20.0),
+                            ),
                           ),
-                          child: Text(
-                            "Perumahan\nGriyashanta Permata\nN-524, Mojolangu,\nKec. Lowokwaru,\nKota Malang",
-                            textAlign: TextAlign.center,
-                            style: TypoSty.title.copyWith(fontSize: 20.0),
-                          ),
-                        ),
                         const SizedBox(height: SpaceDims.sp24),
                       ],
                     ),
