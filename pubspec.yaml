@@ -60,6 +60,7 @@ dependencies:
   uuid: ^3.0.5
   file_picker: ^4.4.0
   bubble: ^1.2.1
+  location: ^4.3.0
 
 dev_dependencies:
   flutter_test:

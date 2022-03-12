@@ -6,7 +6,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/providers/auth_providers.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/providers/order_providers.dart';
-import 'package:java_code_app/singletons/check_connectivity.dart'; 
+import 'package:java_code_app/singletons/check_connectivity.dart';
+import 'package:java_code_app/singletons/check_location.dart';
+import 'package:java_code_app/singletons/fcm.dart';
 import 'package:java_code_app/singletons/shared_preferences.dart';
 import 'package:java_code_app/singletons/user_instance.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -54,10 +56,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ConnectionStatus.getInstance().initialize(navigatorKey);
-    // GeolocationStatus.getInstance().initialize();
+    GeolocationStatus.getInstance().initialize();
     Preferences.getInstance().initialize();
     UserInstance.getInstance().initialize();
-    // PushNotification.getInstance().initialize();
+    PushNotification.getInstance().initialize();
 
     return MultiProvider(
       providers: [
