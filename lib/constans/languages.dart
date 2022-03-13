@@ -35,7 +35,7 @@ class ConstLang {
         penilaian: "Rating",
         nilai_sekarang: "Rate Now"),
     pesanan: LangPesanan(
-      tap: "Ongoing",
+      tap: "In Progress",
       tap2: "History",
       mini: "Being Prepared",
       allStatus: "All Status",
