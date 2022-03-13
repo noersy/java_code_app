@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/providers/auth_providers.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
+import 'package:java_code_app/providers/location_provider.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/singletons/check_connectivity.dart';
 import 'package:java_code_app/singletons/check_location.dart';
@@ -71,6 +72,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => AuthProviders(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => LocationProvider(),
         ),
       ],
       child: ScreenUtilInit(
