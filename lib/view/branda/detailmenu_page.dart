@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/helps/image.dart';
+import 'package:java_code_app/models/lang.dart';
 import 'package:java_code_app/models/menudetail.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
@@ -15,6 +16,8 @@ import 'package:java_code_app/widget/list/listmenu_tile.dart';
 import 'package:java_code_app/widget/sheet/detailmenu_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
+
+import '../../providers/lang_providers.dart';
 
 class DetailMenu extends StatefulWidget {
   final int countOrder, id;
@@ -410,7 +413,10 @@ class _DetailMenuState extends State<DetailMenu> {
                         TileListDMenu(
                           icon: IconsCs.cash,
                           isLoading: _isLoading,
-                          title: "Harga",
+                          title: Provider.of<LangProviders>(context)
+                              .lang
+                              .detailMenu!
+                              .harga,
                           prefix: !_isLoading ? "Rp $_hargaTotal" : "Rp 0",
                           onPressed: () {},
                         ),
@@ -421,7 +427,10 @@ class _DetailMenuState extends State<DetailMenu> {
                             prefixIcon: true,
                             isLoading: _isLoading,
                             icon: IconsCs.fire,
-                            title: "Level",
+                            title: Provider.of<LangProviders>(context)
+                                .lang
+                                .detailMenu!
+                                .level,
                             prefix: _selectedLevel?.keterangan,
                             onPressed: () => _showDialogLevel(_listLevel),
                           ),
@@ -458,14 +467,20 @@ class _DetailMenuState extends State<DetailMenu> {
                                         )
                                   ]),
                             ),
-                            title: "Topping",
+                            title: Provider.of<LangProviders>(context)
+                                .lang
+                                .detailMenu!
+                                .topping,
                             onPressed: () => _showDialogTopping(_listTopping),
                           ),
                         TileListDMenu(
                           prefixIcon: true,
                           icon: IconsCs.note,
                           isLoading: _isLoading,
-                          title: "Catatan",
+                          title: Provider.of<LangProviders>(context)
+                              .lang
+                              .detailMenu!
+                              .catatan,
                           prefix:
                               _catatan.isEmpty ? "Tambahkan catatan" : _catatan,
                           onPressed: () => showModalBottomSheet(
@@ -529,7 +544,7 @@ class _DetailMenuState extends State<DetailMenu> {
                             child: Align(
                               alignment: Alignment.center,
                               child: Text(
-                                "Tambahkan Ke Keranjang",
+                                 Provider.of<LangProviders>(context).lang.detailMenu!.tambahKeranjang,
                                 style: TypoSty.button,
                               ),
                             ),

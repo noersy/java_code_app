@@ -1,17 +1,31 @@
 // ignore_for_file: non_constant_identifier_names
 
 class Lang {
+  final LangDetailMenu? detailMenu;
   final LangBeranda? beranda;
   final BottomNav bottomNav;
   final LangProfile profile;
   final LangPesanan pesanan;
 
   Lang({
+    this.detailMenu,
     this.beranda,
     required this.bottomNav,
     required this.profile,
     required this.pesanan,
   });
+}
+
+class LangDetailMenu {
+  final String detailMenu, harga, level, topping, catatan, tambahKeranjang;
+
+  LangDetailMenu(
+      {required this.tambahKeranjang,
+      required this.detailMenu,
+      required this.harga,
+      required this.level,
+      required this.topping,
+      required this.catatan});
 }
 
 class LangBeranda {

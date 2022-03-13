@@ -2,6 +2,13 @@ import 'package:java_code_app/models/lang.dart';
 
 class ConstLang {
   static Lang eng = Lang(
+    detailMenu: LangDetailMenu(
+        detailMenu: 'Detail Menu',
+        harga: 'Price',
+        level: 'Level',
+        topping: 'Topping',
+        catatan: 'Notes',
+        tambahKeranjang: 'Add to cart'),
     beranda: LangBeranda(
         pencarian: 'Search',
         promoTersedia: 'Avaible promos',
@@ -55,6 +62,13 @@ class ConstLang {
   );
 
   static Lang ind = Lang(
+    detailMenu: LangDetailMenu(
+        detailMenu: 'Detail Menu',
+        harga: 'Harga',
+        level: 'Level',
+        topping: 'Topping',
+        catatan: 'Catatan',
+        tambahKeranjang: 'Tambahkan ke keranjang'),
     beranda: LangBeranda(
         pencarian: 'pencarian',
         promoTersedia: 'Promo yang tersedia',
