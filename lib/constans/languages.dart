@@ -2,6 +2,12 @@ import 'package:java_code_app/models/lang.dart';
 
 class ConstLang {
   static Lang eng = Lang(
+    beranda: LangBeranda(
+        pencarian: 'Search',
+        promoTersedia: 'Avaible promos',
+        semuaMenu: 'All Menu',
+        semuaMakanan: 'Food',
+        semuaMinuman: 'Beverage'),
     bottomNav: BottomNav(
       nav1: "Home",
       nav2: "Orders",
@@ -35,11 +41,11 @@ class ConstLang {
       allStatus: "All Status",
       status: "In queue",
       status2: "On cooking",
-      statusB: "Can take",
+      statusB: "Can pick up",
       status3: "Complete",
       status4: "Canceled",
       buttonPe: "Give Rating",
-      buttonLa: "Order Again",
+      buttonLa: "Reorder",
       ongoingCaption: "Already Ordered?\nTrack your order here.",
       riwayatCaption: 'Start ordering.',
       riwayatCaption2:
@@ -49,6 +55,12 @@ class ConstLang {
   );
 
   static Lang ind = Lang(
+    beranda: LangBeranda(
+        pencarian: 'pencarian',
+        promoTersedia: 'Promo yang tersedia',
+        semuaMenu: 'Semua Menu',
+        semuaMakanan: 'Makanan',
+        semuaMinuman: 'Minuman'),
     bottomNav: BottomNav(
       nav1: "Beranda",
       nav2: "Pesanan",

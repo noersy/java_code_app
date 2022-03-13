@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
@@ -77,7 +78,8 @@ class _BerandaPageState extends State<BerandaPage> {
             },
             decoration: InputDecoration(
               isDense: true,
-              hintText: "Pencarian",
+              hintText:
+                  Provider.of<LangProviders>(context).lang.beranda!.pencarian,
               hintStyle: TypoSty.captionSemiBold.copyWith(color: ColorSty.grey),
               prefixIcon: const Icon(
                 IconsCs.search,

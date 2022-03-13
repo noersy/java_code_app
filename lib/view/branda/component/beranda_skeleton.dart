@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/widget/button/label_button.dart';
+import 'package:provider/provider.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
 class BerandaSkeleton extends StatelessWidget {
@@ -27,7 +29,7 @@ class BerandaSkeleton extends StatelessWidget {
               ),
               const SizedBox(width: SpaceDims.sp22),
               Text(
-                "Promo yang Tersedia",
+                Provider.of<LangProviders>(context).lang.beranda!.promoTersedia,
                 style: TypoSty.title,
               ),
             ],
@@ -116,13 +118,17 @@ class BerandaSkeleton extends StatelessWidget {
               LabelButton(
                 color: ColorSty.black,
                 onPressed: () {},
-                title: "Semua Menu",
+                title:
+                    Provider.of<LangProviders>(context).lang.beranda!.semuaMenu,
                 icon: Icons.list,
               ),
               LabelButton(
                 color: ColorSty.primary,
                 onPressed: () {},
-                title: "Makanan",
+                title: Provider.of<LangProviders>(context)
+                    .lang
+                    .beranda!
+                    .semuaMakanan,
                 svgPicture: SvgPicture.asset(
                   "assert/image/icons/ep_food.svg",
                   color: ColorSty.white,
@@ -132,7 +138,10 @@ class BerandaSkeleton extends StatelessWidget {
               LabelButton(
                 color: ColorSty.primary,
                 onPressed: () {},
-                title: "Minuman",
+                title: Provider.of<LangProviders>(context)
+                    .lang
+                    .beranda!
+                    .semuaMinuman,
                 icon: IconsCs.coffee,
               ),
             ],
@@ -151,7 +160,10 @@ class BerandaSkeleton extends StatelessWidget {
                   ),
                   const SizedBox(width: SpaceDims.sp4),
                   Text(
-                    "Makanan",
+                    Provider.of<LangProviders>(context)
+                        .lang
+                        .beranda!
+                        .semuaMakanan,
                     style: TypoSty.title.copyWith(color: ColorSty.primary),
                   ),
                 ],
@@ -166,8 +178,8 @@ class BerandaSkeleton extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: SpaceDims.sp22,
-                            vertical: SpaceDims.sp8,
+                          horizontal: SpaceDims.sp22,
+                          vertical: SpaceDims.sp8,
                         ),
                         child: ElevatedButton(
                           onPressed: () {},
@@ -188,12 +200,10 @@ class BerandaSkeleton extends StatelessWidget {
                                 height: 74,
                                 width: 74,
                                 child: Padding(
-                                  padding:
-                                  const EdgeInsets.all(SpaceDims.sp4),
+                                  padding: const EdgeInsets.all(SpaceDims.sp4),
                                   child: Skeleton(
                                       height: 100,
-                                      borderRadius:
-                                      BorderRadius.circular(7.0)),
+                                      borderRadius: BorderRadius.circular(7.0)),
                                 ),
                                 decoration: BoxDecoration(
                                   color: ColorSty.grey60,
@@ -224,8 +234,8 @@ class BerandaSkeleton extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: SpaceDims.sp22,
-                            vertical: SpaceDims.sp8,
+                          horizontal: SpaceDims.sp22,
+                          vertical: SpaceDims.sp8,
                         ),
                         child: ElevatedButton(
                           onPressed: () {},
@@ -246,12 +256,10 @@ class BerandaSkeleton extends StatelessWidget {
                                 height: 74,
                                 width: 74,
                                 child: Padding(
-                                  padding:
-                                  const EdgeInsets.all(SpaceDims.sp4),
+                                  padding: const EdgeInsets.all(SpaceDims.sp4),
                                   child: Skeleton(
                                       height: 100,
-                                      borderRadius:
-                                      BorderRadius.circular(7.0)),
+                                      borderRadius: BorderRadius.circular(7.0)),
                                 ),
                                 decoration: BoxDecoration(
                                   color: ColorSty.grey60,
@@ -263,7 +271,7 @@ class BerandaSkeleton extends StatelessWidget {
                                   child: Skeleton(
                                       height: 60.0,
                                       borderRadius:
-                                      BorderRadius.circular(7.0))),
+                                          BorderRadius.circular(7.0))),
                               const SizedBox(width: SpaceDims.sp8),
                             ],
                           ),
@@ -287,7 +295,10 @@ class BerandaSkeleton extends StatelessWidget {
                   ),
                   const SizedBox(width: SpaceDims.sp4),
                   Text(
-                    "Minuman",
+                    Provider.of<LangProviders>(context)
+                        .lang
+                        .beranda!
+                        .semuaMinuman,
                     style: TypoSty.title.copyWith(color: ColorSty.primary),
                   ),
                 ],
