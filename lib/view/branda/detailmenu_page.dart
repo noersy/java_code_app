@@ -253,7 +253,7 @@ class _DetailMenuState extends State<DetailMenu> {
       "name": _menu!.nama,
     };
 
-    if (_jumlahOrder > 0) {
+    if (_jumlahOrder >= 0) {
       if (orders.keys.contains("${widget.id}")) {
         await Provider.of<OrderProviders>(context, listen: false).editOrder(
           id: "${widget.id}",
@@ -291,7 +291,7 @@ class _DetailMenuState extends State<DetailMenu> {
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_ios, color: ColorSty.primary),
         onPressed: () => {
-          if (_jumlahOrder > 0)
+          if (_jumlahOrder >= 0)
             {
               _onGoback(),
             }
@@ -544,7 +544,10 @@ class _DetailMenuState extends State<DetailMenu> {
                             child: Align(
                               alignment: Alignment.center,
                               child: Text(
-                                 Provider.of<LangProviders>(context).lang.detailMenu!.tambahKeranjang,
+                                Provider.of<LangProviders>(context)
+                                    .lang
+                                    .detailMenu!
+                                    .tambahKeranjang,
                                 style: TypoSty.button,
                               ),
                             ),

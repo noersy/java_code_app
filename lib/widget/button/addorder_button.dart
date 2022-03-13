@@ -39,7 +39,7 @@ class _AddOrderButtonState extends State<AddOrderButton> {
             if (jumlahOrder != 0)
               TextButton(
                 onPressed: () {
-                  if (jumlahOrder > 1) setState(() => jumlahOrder--);
+                  if (jumlahOrder >= 1) setState(() => jumlahOrder--);
                   widget.onChange(jumlahOrder);
                 },
                 style: TextButton.styleFrom(
@@ -49,8 +49,7 @@ class _AddOrderButtonState extends State<AddOrderButton> {
                 ),
                 child: const Icon(Icons.remove),
               ),
-            if (jumlahOrder != 0)
-              Text("$jumlahOrder", style: TypoSty.subtitle),
+            if (jumlahOrder != 0) Text("$jumlahOrder", style: TypoSty.subtitle),
             TextButton(
               onPressed: () {
                 setState(() => jumlahOrder++);
