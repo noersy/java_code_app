@@ -42,16 +42,9 @@ class LocationProvider extends ChangeNotifier {
 
   getAddressFromLatLng() async {
     try {
-      print(
-          '_getAddressFromLatLng: $_currentLoctaion\n${_currentLoctaion.latitude} ${_currentLoctaion.longitude}');
       List<Placemark> placemarks = await placemarkFromCoordinates(
           _currentLoctaion.latitude, _currentLoctaion.longitude);
-      // List<Placemark> placemarks =
-      //     await placemarkFromCoordinates(15.8343747, 74.5165815);
-      print('placemarks: ${placemarks[0]}');
       Placemark place = placemarks[0];
-      print('place: $place');
-
       _currentAddress =
           "${place.street},${place.locality}, ${place.postalCode}, ${place.country}";
     } catch (e) {
