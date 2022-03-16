@@ -134,16 +134,13 @@ class OrderHistoryCard extends StatelessWidget {
                                 child: RichText(
                                   text: TextSpan(
                                       style: TypoSty.title,
-                                      text: data.menu.isNotEmpty
-                                          ? data.menu.first.nama
-                                          : "",
                                       children: [
                                         for (var i = 0;
                                             i < data.menu.length;
                                             i++)
-                                          if (i != 0 || i < 1 )
+                                          if (i != 0 || i < 1)
                                             TextSpan(
-                                                text: ', ${data.menu[i].nama}')
+                                                text: '${data.menu[i].nama},')
                                       ]
                                       // children: [
                                       //   for (final i in List.generate(
