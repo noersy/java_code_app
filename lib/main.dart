@@ -9,7 +9,7 @@ import 'package:java_code_app/providers/location_provider.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/singletons/check_connectivity.dart';
 import 'package:java_code_app/singletons/check_location.dart';
-import 'package:java_code_app/singletons/fcm.dart';
+// import 'package:java_code_app/singletons/fcm.dart';
 import 'package:java_code_app/singletons/shared_preferences.dart';
 import 'package:java_code_app/singletons/user_instance.dart';
 import 'package:java_code_app/theme/colors.dart';

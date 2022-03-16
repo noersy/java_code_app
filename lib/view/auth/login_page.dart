@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'dart:async';
 import 'dart:io';
 import 'package:device_info/device_info.dart';
@@ -15,6 +17,7 @@ import 'package:java_code_app/widget/button/button_login.dart';
 import 'package:java_code_app/widget/input/form_login.dart';
 import 'package:provider/provider.dart';
 import 'package:logging/logging.dart' as logging;
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -50,11 +53,7 @@ class _LoginPageState extends State<LoginPage> {
       await _preferences.setBoolValue(KeyPrefens.login, true);
 
       Timer(_duration, () {
-        if (_iosDeviceInfo!.isPhysicalDevice || _androidInfo!.isPhysicalDevice)
-          Navigate.toFindLocation(context);
-        else {
-          Navigate.toDashboard(context);
-        }
+        Navigate.toDashboard(context);
         setState(() => _loading = false);
       });
       return;
@@ -106,11 +105,8 @@ class _LoginPageState extends State<LoginPage> {
       await _preferences.setBoolValue(KeyPrefens.login, true);
 
       Timer(_duration, () {
-        if (_iosDeviceInfo!.isPhysicalDevice || _androidInfo!.isPhysicalDevice)
-          Navigate.toFindLocation(context);
-        else {
-          Navigate.toDashboard(context);
-        }
+        Navigate.toFindLocation(context);
+
         setState(() => _loading = false);
       });
       return;
@@ -261,7 +257,20 @@ class _LoginPageState extends State<LoginPage> {
                             boldTitle: "Apple",
                             icon: "assert/image/icon_apple.png",
                             bgColors: ColorSty.black,
-                            onPressed: () {},
+                            onPressed: () async {
+                              final credential =
+                                  await SignInWithApple.getAppleIDCredential(
+                                scopes: [
+                                  AppleIDAuthorizationScopes.email,
+                                  AppleIDAuthorizationScopes.fullName,
+                                ],
+                              );
+
+                              print(credential);
+
+                              // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
+                              // after they have been validated with Apple (see `Integration` section for more information on how to do this)
+                            },
                           ),
                         SizedBox(height: SpaceDims.sp22.h)
                       ],

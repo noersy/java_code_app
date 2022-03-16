@@ -9,7 +9,6 @@ class GoogleLogin {
 
   static final _log = logging.Logger('GoogleAuth');
 
-
   //This is what's used to retrieve the instance through the app
   static GoogleLogin getInstance() => _singleton;
 
@@ -32,7 +31,9 @@ class GoogleLogin {
 
   Future<GoogleSignInAccount?> logout() async {
     try {
-      return await _googleSignIn.signOut();
+      if (_googleSignIn.currentUser!.email.isNotEmpty) {
+        return await _googleSignIn.signOut();
+      }
     } catch (e, r) {
       _log.warning(e);
       _log.warning(r);
