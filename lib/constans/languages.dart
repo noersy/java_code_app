@@ -40,7 +40,8 @@ class ConstLang {
         lm: "Old Pin",
         bhs: "Change Language",
         penilaian: "Rating",
-        nilai_sekarang: "Rate Now"),
+        nilai_sekarang: "Rate Now",
+        namaPerangkat: 'Device Info'),
     pesanan: LangPesanan(
       tap: "In Progress",
       tap2: "History",
@@ -100,7 +101,8 @@ class ConstLang {
         lm: "Pin Lama",
         bhs: "Ganti Bahasa",
         penilaian: "Penilaian",
-        nilai_sekarang: "Nilai Sekarang"),
+        nilai_sekarang: "Nilai Sekarang",
+        namaPerangkat: 'Info Perangkat'),
     pesanan: LangPesanan(
       tap: "Sedang Berjalan",
       tap2: "Riwayat",

@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
     GeolocationStatus.getInstance().initialize();
     Preferences.getInstance().initialize();
     UserInstance.getInstance().initialize();
-    PushNotification.getInstance().initialize();
+    // PushNotification.getInstance().initialize();
 
     return MultiProvider(
       providers: [

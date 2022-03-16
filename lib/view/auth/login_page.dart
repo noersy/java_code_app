@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -23,6 +24,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  static final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  static AndroidDeviceInfo? _androidInfo;
+  static IosDeviceInfo? _iosDeviceInfo;
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
 
@@ -46,7 +50,11 @@ class _LoginPageState extends State<LoginPage> {
       await _preferences.setBoolValue(KeyPrefens.login, true);
 
       Timer(_duration, () {
-        Navigate.toFindLocation(context);
+        if (_iosDeviceInfo!.isPhysicalDevice || _androidInfo!.isPhysicalDevice)
+          Navigate.toFindLocation(context);
+        else {
+          Navigate.toDashboard(context);
+        }
         setState(() => _loading = false);
       });
       return;
@@ -98,7 +106,11 @@ class _LoginPageState extends State<LoginPage> {
       await _preferences.setBoolValue(KeyPrefens.login, true);
 
       Timer(_duration, () {
-        Navigate.toFindLocation(context);
+        if (_iosDeviceInfo!.isPhysicalDevice || _androidInfo!.isPhysicalDevice)
+          Navigate.toFindLocation(context);
+        else {
+          Navigate.toDashboard(context);
+        }
         setState(() => _loading = false);
       });
       return;

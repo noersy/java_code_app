@@ -41,6 +41,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   static final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   static AndroidDeviceInfo? _androidInfo;
+  static IosDeviceInfo? _iosDeviceInfo;
   static PackageInfo? _packageInfo;
   static final ImagePicker _picker = ImagePicker();
   static File? _fileImage;
@@ -51,7 +52,8 @@ class _ProfilePageState extends State<ProfilePage> {
       RefreshController(initialRefresh: false);
 
   getInfoDevice() async {
-    _androidInfo = await deviceInfo.androidInfo;
+    if (Platform.isAndroid) _androidInfo = await deviceInfo.androidInfo;
+    if (Platform.isIOS) _iosDeviceInfo = await deviceInfo.iosInfo;
     _packageInfo = await PackageInfo.fromPlatform();
     setState(() {});
   }
@@ -208,7 +210,7 @@ class _ProfilePageState extends State<ProfilePage> {
         onComplete: (value) {
           value1 = value;
           print('1 complete: $value');
-          Navigator.pop(context); 
+          Navigator.pop(context);
         },
       ),
     ).then((value) {
@@ -569,13 +571,32 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                   child: Column(
                                     children: [
-                                      TileListProfile(
-                                        noIcon: true,
-                                        top: false,
-                                        enable: false,
-                                        title: 'Device Info',
-                                        suffix: _androidInfo?.model ?? "",
-                                      ),
+                                      if (Platform.isIOS)
+                                        TileListProfile(
+                                          top: false,
+                                          enable: false,
+                                          title: Provider.of<LangProviders>(
+                                                  context)
+                                              .lang
+                                              .profile
+                                              .namaPerangkat,
+                                          suffix: _iosDeviceInfo?.name ??
+                                              "Simulator",
+                                          noIcon: true,
+                                        ),
+                                      if (Platform.isAndroid)
+                                        TileListProfile(
+                                          top: false,
+                                          enable: false,
+                                          title: Provider.of<LangProviders>(
+                                                  context)
+                                              .lang
+                                              .profile
+                                              .namaPerangkat,
+                                          suffix:
+                                              _androidInfo?.model ?? "Emulator",
+                                          noIcon: true,
+                                        ),
                                       TileListProfile(
                                         noIcon: true,
                                         enable: false,
@@ -631,18 +652,18 @@ class TileListProfile extends StatefulWidget {
   final Function(String value)? onSubmit;
   final bool? btn;
   final bool? noIcon;
-  TileListProfile(
-      {Key? key,
-      this.top = true,
-      this.bottom = false,
-      required this.title,
-      required this.suffix,
-      this.onPressed,
-      this.enable = true,
-      this.onSubmit,
-      this.btn,
-      this.noIcon})
-      : super(key: key);
+  TileListProfile({
+    Key? key,
+    this.top = true,
+    this.bottom = false,
+    required this.title,
+    required this.suffix,
+    this.onPressed,
+    this.enable = true,
+    this.onSubmit,
+    this.btn,
+    this.noIcon,
+  }) : super(key: key);
 
   @override
   State<TileListProfile> createState() => _TileListProfileState();
