@@ -184,6 +184,7 @@ class _BalasanReviewState extends State<BalasanReview> {
     var colorBoxChat = const Color.fromRGBO(223, 239, 241, 0.5);
     // ignore: prefer_typing_uninitialized_variables
     var timeBoxChat;
+    // ignore: prefer_typing_uninitialized_variables
     var contentChatt;
     if (positionBox == true) {
       positionBox = Alignment.centerRight;
@@ -192,10 +193,13 @@ class _BalasanReviewState extends State<BalasanReview> {
         Text(
           listChat[index].created_at.toString().substring(12, 17),
         ),
-        Icon(Icons.person)
+        const Padding(
+          padding: EdgeInsets.only(right: 10),
+          child: Icon(Icons.person),
+        )
       ]);
       contentChatt = Padding(
-        padding: const EdgeInsets.only(bottom: 8.0, right: 10, left: 20),
+        padding: const EdgeInsets.only(right: 10, left: 10, top: 0, bottom: 10),
         child: Text(
           '${listChat[index].answer}',
           textAlign: TextAlign.justify,
@@ -204,28 +208,28 @@ class _BalasanReviewState extends State<BalasanReview> {
     } else if (positionBox == false) {
       positionBox = Alignment.centerLeft;
       colorBoxChat = const Color.fromRGBO(240, 240, 240, 0.5);
-      timeBoxChat = Align(
-        alignment: positionBox,
-        child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Icon(
+      timeBoxChat = Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: Icon(
                 Icons.person,
                 color: Color.fromRGBO(0, 154, 173, 1),
               ),
-              Text(
-                '${listChat[index].nama} ',
-                style: const TextStyle(
-                  color: Color.fromRGBO(0, 154, 173, 1),
-                ),
+            ),
+            Text(
+              '${listChat[index].nama} ',
+              style: const TextStyle(
+                color: Color.fromRGBO(0, 154, 173, 1),
               ),
-              Text(
-                listChat[index].created_at.toString().substring(12, 17),
-                textAlign: TextAlign.right,
-              ),
-            ]),
-      );
+            ),
+            Text(
+              listChat[index].created_at.toString().substring(12, 17),
+              textAlign: TextAlign.right,
+            ),
+          ]);
       contentChatt = Padding(
         padding: const EdgeInsets.only(bottom: 8.0, right: 10, left: 20),
         child: Text(
@@ -235,12 +239,13 @@ class _BalasanReviewState extends State<BalasanReview> {
       );
     }
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(10),
       child: Align(
         alignment: positionBox,
         child: Container(
             constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * .70),
+                maxWidth: MediaQuery.of(context).size.width * .70,
+                minWidth: MediaQuery.of(context).size.width * .20),
             decoration: BoxDecoration(
                 color: colorBoxChat,
                 borderRadius: const BorderRadius.only(
