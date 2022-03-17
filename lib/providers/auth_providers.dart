@@ -101,8 +101,12 @@ class AuthProviders extends ChangeNotifier {
           json.decode(response.body)["status_code"] == 200) {
         editResponse = json.decode(response.body);
         if (json.decode(response.body)["data"]["user"]["foto"] == null) {
+          print('response login google:/n ${editResponse.runtimeType}');
           editResponse["data"]["user"]["foto"] =
               '''https://javacode.landa.id/img/1/review/review_1_620e0269b96d2.png''';
+          editResponse = json.encode(editResponse);
+        }
+        if (json.decode(response.body)["data"]["user"]["foto"] != null) {
           editResponse = json.encode(editResponse);
         }
         _loginUser = loginUserFromJson(editResponse.toString());

@@ -31,9 +31,9 @@ class GoogleLogin {
 
   Future<GoogleSignInAccount?> logout() async {
     try {
-      if (_googleSignIn.currentUser!.email.isNotEmpty) {
-        return await _googleSignIn.signOut();
-      }
+      // if (_googleSignIn.currentUser!.email.isNotEmpty) {
+      return await _googleSignIn.signOut();
+      // }
     } catch (e, r) {
       _log.warning(e);
       _log.warning(r);
