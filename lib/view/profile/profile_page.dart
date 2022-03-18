@@ -455,25 +455,30 @@ class _ProfilePageState extends State<ProfilePage> {
                                         title: lang.profile.nam,
                                         suffix: _user?.nama ?? " ",
                                         onSubmit: _updateNama,
+                                        numberInput: false,
                                       ),
                                       TileListProfile(
                                         title: lang.profile.tgl,
                                         suffix: _user?.tglLahir ?? ' ',
                                         onPressed: _updateTgl,
+                                        numberInput: false,
                                       ),
                                       TileListProfile(
                                         title: lang.profile.tlp,
                                         suffix: _user?.telepon ?? ' ',
                                         onSubmit: _updateTelepon,
+                                        numberInput: true,
                                       ),
                                       TileListProfile(
                                         title: 'Email',
                                         suffix: _user?.email ?? ' ',
+                                        numberInput: false,
                                       ),
                                       TileListProfile(
                                         title: '${lang.profile.ub} PIN',
                                         suffix: '*********',
                                         onPressed: () => _changePin(lang),
+                                        numberInput: false,
                                       ),
                                       AnimatedBuilder(
                                         animation: LangProviders(),
@@ -505,6 +510,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                               builder: (BuildContext context) =>
                                                   const ChangeLagSheet(),
                                             ),
+                                            numberInput: false,
                                           );
                                         },
                                       ),
@@ -540,6 +546,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       // print('navigate daftar penilaian');
                                       Navigate.toDaftarPenilaian(context);
                                     },
+                                    numberInput: false,
                                   ),
                                 ],
                               ),
@@ -583,6 +590,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           suffix: _iosDeviceInfo?.name ??
                                               "Simulator",
                                           noIcon: true,
+                                          numberInput: false,
                                         ),
                                       if (Platform.isAndroid)
                                         TileListProfile(
@@ -596,13 +604,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                           suffix:
                                               _androidInfo?.model ?? "Emulator",
                                           noIcon: true,
+                                          numberInput: false,
                                         ),
                                       TileListProfile(
                                         noIcon: true,
                                         enable: false,
                                         title: 'Version',
                                         // suffix: _packageInfo?.version ?? '',
-                                        suffix: '1.0.0',
+                                        suffix: '1.0.0', numberInput: false,
                                       ),
                                     ],
                                   ),
@@ -652,18 +661,20 @@ class TileListProfile extends StatefulWidget {
   final Function(String value)? onSubmit;
   final bool? btn;
   final bool? noIcon;
-  TileListProfile({
-    Key? key,
-    this.top = true,
-    this.bottom = false,
-    required this.title,
-    required this.suffix,
-    this.onPressed,
-    this.enable = true,
-    this.onSubmit,
-    this.btn,
-    this.noIcon,
-  }) : super(key: key);
+  final bool numberInput;
+  TileListProfile(
+      {Key? key,
+      this.top = true,
+      this.bottom = false,
+      required this.title,
+      required this.suffix,
+      this.onPressed,
+      this.enable = true,
+      this.onSubmit,
+      this.btn,
+      this.noIcon,
+      required this.numberInput})
+      : super(key: key);
 
   @override
   State<TileListProfile> createState() => _TileListProfileState();
@@ -711,10 +722,13 @@ class _TileListProfileState extends State<TileListProfile> {
                                   maxLength: 100,
                                   enabled: widget.enable,
                                   controller: _editingController,
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.digitsOnly
-                                  ],
+                                  keyboardType: widget.numberInput
+                                      ? TextInputType.number
+                                      : null,
+                                  // keyboardType:  TextInputType.number,
+                                  // inputFormatters: <TextInputFormatter>[
+                                  //   FilteringTextInputFormatter.digitsOnly
+                                  // ],
                                   decoration: InputDecoration(
                                     hintText: widget.suffix,
                                     contentPadding: const EdgeInsets.all(0),
