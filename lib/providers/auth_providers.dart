@@ -56,7 +56,7 @@ class AuthProviders extends ChangeNotifier {
               '''https://javacode.landa.id/img/1/review/review_1_620e0269b96d2.png''';
           editResponse = json.encode(editResponse);
         }
-        _loginUser = loginUserFromJson(editResponse.toString());
+        _loginUser = loginUserFromJson(editResponse);
         if (_loginUser == null) _log.info("Login failed");
         if (_loginUser != null) _log.fine("Login successes");
 
@@ -109,7 +109,7 @@ class AuthProviders extends ChangeNotifier {
         if (json.decode(response.body)["data"]["user"]["foto"] != null) {
           editResponse = json.encode(editResponse);
         }
-        _loginUser = loginUserFromJson(editResponse.toString());
+        _loginUser = loginUserFromJson(editResponse);
         if (_loginUser == null) _log.info("Login failed");
         if (_loginUser != null) _log.fine("Login successes");
 

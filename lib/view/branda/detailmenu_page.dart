@@ -122,7 +122,7 @@ class _DetailMenuState extends State<DetailMenu> {
 
   _showDialogLevel(List<Level>? _listLevel) async {
     if (_listLevel?.isEmpty ?? false) return;
-    Level _value = _listLevel!.first;
+    Level? _value = _listLevel!.first;
 
     _value = await showModalBottomSheet(
       barrierColor: ColorSty.grey.withOpacity(0.2),
@@ -147,7 +147,9 @@ class _DetailMenuState extends State<DetailMenu> {
       },
     );
 
-    setState(() => _selectedLevel = _value);
+    if (_value != null) {
+      setState(() => _selectedLevel = _value);
+    }
   }
 
   _showDialogTopping(List<Level>? _listTopping) async {

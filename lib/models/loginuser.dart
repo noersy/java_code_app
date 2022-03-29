@@ -4,7 +4,8 @@
 
 import 'dart:convert';
 
-LoginUser loginUserFromJson(String str) => LoginUser.fromJson(json.decode(str));
+LoginUser loginUserFromJson(Map<String, dynamic> str) =>
+    LoginUser.fromJson(str);
 
 String loginUserToJson(LoginUser data) => json.encode(data.toJson());
 
@@ -18,14 +19,14 @@ class LoginUser {
   final Data data;
 
   factory LoginUser.fromJson(Map<String, dynamic> json) => LoginUser(
-    statusCode: json["status_code"],
-    data: Data.fromJson(json["data"]),
-  );
+        statusCode: json["status_code"],
+        data: Data.fromJson(json["data"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "status_code": statusCode,
-    "data": data.toJson(),
-  };
+        "status_code": statusCode,
+        "data": data.toJson(),
+      };
 }
 
 class Data {
@@ -38,14 +39,14 @@ class Data {
   final String token;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    user: User.fromJson(json["user"]),
-    token: json["token"],
-  );
+        user: User.fromJson(json["user"]),
+        token: json["token"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "user": user.toJson(),
-    "token": token,
-  };
+        "user": user.toJson(),
+        "token": token,
+      };
 }
 
 class User {
@@ -74,30 +75,30 @@ class User {
   final Akses akses;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    idUser: json["id_user"],
-    email: json["email"],
-    nama: json["nama"],
-    pin: json["pin"],
-    foto: json["foto"],
-    mRolesId: json["m_roles_id"],
-    isGoogle: json["is_google"],
-    isCustomer: json["is_customer"],
-    roles: json["roles"],
-    akses: Akses.fromJson(json["akses"]),
-  );
+        idUser: json["id_user"],
+        email: json["email"],
+        nama: json["nama"],
+        pin: json["pin"],
+        foto: json["foto"],
+        mRolesId: json["m_roles_id"],
+        isGoogle: json["is_google"],
+        isCustomer: json["is_customer"],
+        roles: json["roles"],
+        akses: Akses.fromJson(json["akses"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id_user": idUser,
-    "email": email,
-    "nama": nama,
-    "pin": pin,
-    "foto": foto,
-    "m_roles_id": mRolesId,
-    "is_google": isGoogle,
-    "is_customer": isCustomer,
-    "roles": roles,
-    "akses": akses.toJson(),
-  };
+        "id_user": idUser,
+        "email": email,
+        "nama": nama,
+        "pin": pin,
+        "foto": foto,
+        "m_roles_id": mRolesId,
+        "is_google": isGoogle,
+        "is_customer": isCustomer,
+        "roles": roles,
+        "akses": akses.toJson(),
+      };
 }
 
 class Akses {
@@ -124,26 +125,26 @@ class Akses {
   final bool laporanCustomer;
 
   factory Akses.fromJson(Map<String, dynamic> json) => Akses(
-    authUser: json["auth_user"],
-    authAkses: json["auth_akses"],
-    settingMenu: json["setting_menu"],
-    settingCustomer: json["setting_customer"],
-    settingPromo: json["setting_promo"],
-    settingDiskon: json["setting_diskon"],
-    settingVoucher: json["setting_voucher"],
-    laporanMenu: json["laporan_menu"],
-    laporanCustomer: json["laporan_customer"],
-  );
+        authUser: json["auth_user"],
+        authAkses: json["auth_akses"],
+        settingMenu: json["setting_menu"],
+        settingCustomer: json["setting_customer"],
+        settingPromo: json["setting_promo"],
+        settingDiskon: json["setting_diskon"],
+        settingVoucher: json["setting_voucher"],
+        laporanMenu: json["laporan_menu"],
+        laporanCustomer: json["laporan_customer"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "auth_user": authUser,
-    "auth_akses": authAkses,
-    "setting_menu": settingMenu,
-    "setting_customer": settingCustomer,
-    "setting_promo": settingPromo,
-    "setting_diskon": settingDiskon,
-    "setting_voucher": settingVoucher,
-    "laporan_menu": laporanMenu,
-    "laporan_customer": laporanCustomer,
-  };
+        "auth_user": authUser,
+        "auth_akses": authAkses,
+        "setting_menu": settingMenu,
+        "setting_customer": settingCustomer,
+        "setting_promo": settingPromo,
+        "setting_diskon": settingDiskon,
+        "setting_voucher": settingVoucher,
+        "laporan_menu": laporanMenu,
+        "laporan_customer": laporanCustomer,
+      };
 }

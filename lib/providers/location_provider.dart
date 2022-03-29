@@ -12,14 +12,15 @@ class LocationProvider extends ChangeNotifier {
   get currentLoctaion => _currentLoctaion;
   get currentAddress => _currentAddress;
   Future<Position> determinePosition() async {
-    // Test if location services are enabled.
+    _permission = await Geolocator.checkPermission();
     _serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!_serviceEnabled) {
+
+    if (!_serviceEnabled &&
+        (_permission == LocationPermission.denied ||
+            _permission == LocationPermission.deniedForever)) {
       await Geolocator.openLocationSettings();
-      // return Future.error('Location services are disabled.');
     }
 
-    _permission = await Geolocator.checkPermission();
     if (_permission == LocationPermission.denied) {
       _permission = await Geolocator.requestPermission();
       if (_permission == LocationPermission.denied) {
@@ -35,6 +36,7 @@ class LocationProvider extends ChangeNotifier {
     return await Geolocator.getCurrentPosition().then(
       (value) {
         _currentLoctaion = value;
+        notifyListeners();
         return _currentLoctaion;
       },
     );
@@ -47,6 +49,7 @@ class LocationProvider extends ChangeNotifier {
       Placemark place = placemarks[0];
       _currentAddress =
           "${place.street},${place.locality}, ${place.postalCode}, ${place.country}";
+      notifyListeners();
     } catch (e) {
       print(e);
     }
