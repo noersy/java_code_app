@@ -200,7 +200,7 @@ class _LoginPageState extends State<LoginPage> {
                         SizedBox(height: 25.0.h),
                         FormLogin(
                           title: 'Alamat Email',
-                          hint: 'Lorem.ipsum@gmail.com',
+                          hint: 'example.email@gmail.com',
                           type: TextInputType.emailAddress,
                           editingController: _controllerEmail,
                         ),

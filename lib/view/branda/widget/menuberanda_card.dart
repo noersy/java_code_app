@@ -117,6 +117,8 @@ class _CardMenuState extends State<CardMenu> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: SpaceDims.sp22,
@@ -183,30 +185,33 @@ class _CardMenuState extends State<CardMenu> {
                       children: [
                         SvgPicture.asset("assert/image/icons/note-icon.svg"),
                         const SizedBox(width: SpaceDims.sp4),
-                        AnimatedBuilder(
-                            animation: OrderProviders(),
-                            builder: (context, snapshot) {
-                              final _orders =
-                                  Provider.of<OrderProviders>(context)
-                                      .checkOrder;
-                              String _catatan = "";
+                        SizedBox(
+                          width: width - 160,
+                          child: AnimatedBuilder(
+                              animation: OrderProviders(),
+                              builder: (context, snapshot) {
+                                final _orders =
+                                    Provider.of<OrderProviders>(context)
+                                        .checkOrder;
+                                String _catatan = "";
 
-                              if (_orders.containsKey("$id")) {
-                                _catatan = _orders["$id"]["catatan"] ?? "";
-                              }
+                                if (_orders.containsKey("$id")) {
+                                  _catatan = _orders["$id"]["catatan"] ?? "";
+                                }
 
-                              return Text(
-                                _catatan.isEmpty
-                                    ? "Tambahkan Catatan"
-                                    : _catatan,
-                                overflow: TextOverflow.ellipsis,
-                                style: TypoSty.caption2.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 12.0,
-                                  color: ColorSty.grey,
-                                ),
-                              );
-                            }),
+                                return Text(
+                                  _catatan.isEmpty
+                                      ? "Tambahkan Catatan"
+                                      : _catatan,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TypoSty.caption2.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12.0,
+                                    color: ColorSty.grey,
+                                  ),
+                                );
+                              }),
+                        ),
                       ],
                     ),
                   ],

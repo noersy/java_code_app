@@ -138,9 +138,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   void dispose() {
-    _loadStart();
-    loadTotalHistory();
-    _loadMore();
+    // _loadStart();
+    // loadTotalHistory();
+    // _loadMore();
     super.dispose();
   }
 
@@ -375,10 +375,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   PilihStatus() {
+    double width = MediaQuery.of(context).size.width;
+    double widthButton = width * 0.42;
+
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: MainAxisSize.max,
       children: [
         SizedBox(
           height: 160,
@@ -391,7 +394,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   child: Container(
                     alignment: Alignment.center,
                     height: 123,
-                    width: 170,
+                    width: widthButton,
                     padding: const EdgeInsets.only(
                       top: SpaceDims.sp12,
                       left: SpaceDims.sp8,
@@ -432,7 +435,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                           ? ColorSty.primary
                                           : ColorSty.black,
                                       fontWeight: _status == 0
-                                          ? FontWeight.bold
+                                          ? FontWeight.normal
                                           : FontWeight.w600,
                                     ),
                                   ),
@@ -483,22 +486,22 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         }),
                   ),
                 ),
-              TxtButtonStatus(),
+              TxtButtonStatus(widthButton),
             ],
           ),
         ),
-        pilihTgl(),
+        pilihTgl(widthButton),
       ],
     );
   }
 
-  TextButton TxtButtonStatus() {
+  TextButton TxtButtonStatus(double widthButton) {
     return TextButton(
       style: TextButton.styleFrom(
-        backgroundColor: ColorSty.grey60,
+        backgroundColor: const Color(0xFFF6F6F6),
         minimumSize: const Size(0, 0),
         padding: const EdgeInsets.symmetric(
-          vertical: SpaceDims.sp8 + 0.5,
+          vertical: 0.5,
         ),
         shape: RoundedRectangleBorder(
           side: const BorderSide(
@@ -509,12 +512,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
       ),
       onPressed: _setStatus,
       child: SizedBox(
-        width: 170.0,
+        width: widthButton,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(width: SpaceDims.sp12),
-            AnimatedBuilder(
+            Expanded(
+              child: AnimatedBuilder(
                 animation: LangProviders(),
                 builder: (context, snapshot) {
                   final lang = context.watch<LangProviders>().lang;
@@ -534,10 +538,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   );
-                }),
-            const SizedBox(width: SpaceDims.sp8),
-            const Icon(Icons.arrow_drop_down,
-                size: 18.0, color: ColorSty.black),
+                },
+              ),
+            ),
+            // const SizedBox(width: SpaceDims.sp8),
+            const Icon(
+              Icons.arrow_drop_down,
+              size: 34.0,
+              color: Color(0xFFC2C2C2),
+            ),
             const SizedBox(width: SpaceDims.sp8),
           ],
         ),
@@ -545,10 +554,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
   }
 
-  TextButton pilihTgl() {
+  TextButton pilihTgl(double widthButton) {
     return TextButton(
       style: TextButton.styleFrom(
-        backgroundColor: ColorSty.grey60,
+        backgroundColor: const Color(0xFFF6F6F6),
         minimumSize: const Size(0, 0),
         padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp8 + 0.5),
         shape: RoundedRectangleBorder(
@@ -559,15 +568,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
       onPressed: _pickDateRange,
       child: SizedBox(
         // width: 164,
-        // width: 170.0,
+        width: widthButton,
         child: Row(
           children: [
             const SizedBox(width: SpaceDims.sp12),
-            Text(
-              _dateRange,
-              style: TypoSty.caption2.copyWith(
-                fontSize: 13.0,
-                fontWeight: FontWeight.w600,
+            Expanded(
+              child: Text(
+                _dateRange,
+                style: TypoSty.caption2.copyWith(
+                  fontSize: 13.0,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
             const SizedBox(width: SpaceDims.sp8),

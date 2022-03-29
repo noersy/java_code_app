@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/models/listvoucher.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
+import 'package:provider/provider.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
 class DetailVoucherPage extends StatefulWidget {
@@ -21,16 +23,24 @@ class DetailVoucherPage extends StatefulWidget {
 }
 
 class _DetailVoucherPageState extends State<DetailVoucherPage> {
-  @override
   late final DateTime _start, _end;
+  bool? isUsed = false;
+
+  @override
   void initState() {
     _start = DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeMulai);
     _end = DateTime.fromMicrosecondsSinceEpoch(widget.voucher.periodeSelesai);
+    isUsed = widget.voucher.idVoucher ==
+        Provider.of<OrderProviders>(context, listen: false)
+            .selectedVoucher
+            ?.idVoucher;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    OrderProviders? orderProviders = Provider.of<OrderProviders>(context);
+
     return Scaffold(
       backgroundColor: ColorSty.bg2,
       appBar: const CostumeAppBar(
@@ -179,7 +189,13 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
           padding: const EdgeInsets.symmetric(
               horizontal: SpaceDims.sp12, vertical: SpaceDims.sp8),
           child: ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
+              if (isUsed!) {
+                await orderProviders.setVoucherEmpty();
+              } else {
+                await orderProviders.setVoucher(widget.voucher);
+              }
+
               Navigator.of(context).pop(true);
             },
             style: ElevatedButton.styleFrom(
@@ -189,7 +205,10 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
                 ),
               ),
             ),
-            child: Text("Pakai Voucher", style: TypoSty.button),
+            child: Text(
+              isUsed! ? "Gunakan Nanti" : "Pakai Voucher",
+              style: TypoSty.button,
+            ),
           ),
         ),
       ),

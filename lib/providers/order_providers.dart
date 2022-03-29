@@ -38,6 +38,7 @@ class OrderProviders extends ChangeNotifier {
   static List<Discount> _listDiscount = [];
   static List<Promo> _listPromo = [];
   static List<Order> _orders = [];
+  static LVoucher? _selectedVoucher;
 
   MenuList? get listMenu => _menuList;
   Map<String, dynamic> get checkOrder => _checkOrder;
@@ -46,6 +47,7 @@ class OrderProviders extends ChangeNotifier {
   List<Discount> get listDiscount => _listDiscount;
   List<Promo> get listPromo => _listPromo;
   List<Order> get listOrders => _orders;
+  LVoucher? get selectedVoucher => _selectedVoucher;
 
   clear() {
     _checkOrder = {};
@@ -55,6 +57,7 @@ class OrderProviders extends ChangeNotifier {
     _listDiscount = [];
     _listPromo = [];
     _orders = [];
+    _selectedVoucher = null;
 
     _log.fine("clear all orders");
     notifyListeners();
@@ -499,5 +502,15 @@ class OrderProviders extends ChangeNotifier {
       _log.warning(r);
       return false;
     }
+  }
+
+  setVoucher(LVoucher? data) {
+    _selectedVoucher = data;
+    notifyListeners();
+  }
+
+  setVoucherEmpty() {
+    _selectedVoucher = null;
+    notifyListeners();
   }
 }

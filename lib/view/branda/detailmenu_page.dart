@@ -204,6 +204,8 @@ class _DetailMenuState extends State<DetailMenu> {
   void _tambahkanPesanan() {
     if (_menu == null) return;
 
+    double? height = MediaQuery.of(context).size.height;
+
     final orders =
         Provider.of<OrderProviders>(context, listen: false).checkOrder;
 
@@ -236,6 +238,11 @@ class _DetailMenuState extends State<DetailMenu> {
         );
       }
       Navigator.of(context).pop();
+    } else {
+      const snackBar = SnackBar(content: Text('Item belum ditambahkan!'));
+      ScaffoldMessenger.of(context).showSnackBar(
+        snackBar,
+      );
     }
   }
 
@@ -255,7 +262,7 @@ class _DetailMenuState extends State<DetailMenu> {
       "name": _menu!.nama,
     };
 
-    if (_jumlahOrder >= 0) {
+    if (_jumlahOrder > 0) {
       if (orders.keys.contains("${widget.id}")) {
         await Provider.of<OrderProviders>(context, listen: false).editOrder(
           id: "${widget.id}",
@@ -274,6 +281,13 @@ class _DetailMenuState extends State<DetailMenu> {
           catatan: _catatan,
         );
       }
+      Navigator.of(context).pop();
+    } else {
+      await Provider.of<OrderProviders>(context, listen: false).addOrder(
+        data: data,
+        jumlahOrder: _jumlahOrder,
+        catatan: '',
+      );
       Navigator.of(context).pop();
     }
   }

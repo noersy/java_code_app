@@ -25,7 +25,6 @@ class SelectionVoucherPage extends StatefulWidget {
 }
 
 class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
-  LVoucher? _selectedVoucher;
   static List<LVoucher> _listVoucher = [];
   static final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -46,15 +45,24 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
     }
   }
 
+  setVoucher({LVoucher? data}) async {
+    await Provider.of<OrderProviders>(
+      context,
+      listen: false,
+    ).setVoucher(data ?? widget.initialData);
+  }
+
   @override
   void initState() {
     Provider.of<OrderProviders>(context, listen: false).getListVoucher();
-    _selectedVoucher = widget.initialData;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    OrderProviders? orderProviders = Provider.of<OrderProviders>(context);
+    LVoucher? _selectedVoucher = orderProviders.selectedVoucher;
+
     return Scaffold(
       backgroundColor: ColorSty.white,
       appBar: const CostumeAppBar(
@@ -89,26 +97,31 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
                             setState(() => _selectedVoucher = null);
                           },
                         ),
-                      if (_selectedVoucher == null && !_loading)
+                      if (!_loading)
                         for (LVoucher item in _listVoucher)
                           VoucherCard(
-                            isChecked: false,
+                            isChecked:
+                                _selectedVoucher?.idVoucher == item.idVoucher,
                             voucher: item,
                             onChanged: (String value) {
-                              setState(() => _selectedVoucher = item);
+                              _selectedVoucher?.idVoucher == item.idVoucher
+                                  ? orderProviders.setVoucherEmpty()
+                                  : orderProviders.setVoucher(item);
                             },
                             onPressed: (String value) {
-                              setState(() => _selectedVoucher = item);
+                              _selectedVoucher?.idVoucher == item.idVoucher
+                                  ? orderProviders.setVoucherEmpty()
+                                  : orderProviders.setVoucher(item);
                             },
                           ),
-                      if (_selectedVoucher != null && !_loading)
-                        VoucherCard(
-                          voucher: _selectedVoucher!,
-                          isChecked: true,
-                          onPressed: (String value) {
-                            setState(() => _selectedVoucher = null);
-                          },
-                        ),
+                      // if (_selectedVoucher != null && !_loading)
+                      //   VoucherCard(
+                      //     voucher: _selectedVoucher!,
+                      //     isChecked: true,
+                      //     onPressed: (String value) {
+                      //       setState(() => _selectedVoucher = null);
+                      //     },
+                      //   ),
                     ],
                   );
                 }),
