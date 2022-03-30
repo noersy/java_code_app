@@ -194,6 +194,7 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
                 await orderProviders.setVoucherEmpty();
               } else {
                 await orderProviders.setVoucher(widget.voucher);
+                await orderProviders.setVoucherUsed(true);
               }
 
               Navigator.of(context).pop(true);

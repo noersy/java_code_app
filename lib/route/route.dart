@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:java_code_app/main.dart';
 import 'package:java_code_app/models/listvoucher.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/transision/route_transisition.dart';
 import 'package:java_code_app/view/branda/detail_gambar.dart';
 import 'package:java_code_app/view/chekout/checkout_page.dart';
@@ -19,6 +20,7 @@ import 'package:java_code_app/view/profile/penilaian/balasan_review.dart';
 import 'package:java_code_app/view/profile/penilaian/daftar_penilaian.dart';
 import 'package:java_code_app/view/profile/penilaian/penilaian.dart';
 import 'package:java_code_app/widget/view_image.dart';
+import 'package:provider/provider.dart';
 
 import '../view/profile/penilaian/chatt_page.dart';
 
@@ -45,7 +47,10 @@ class Navigate {
         nominal: nominal,
       )));
   static void toChekOut(context) =>
-      Navigator.of(context).push(routeTransition(const CheckOutPage()));
+      Navigator.of(context).push(routeTransition(const CheckOutPage())).then(
+            (value) => Provider.of<OrderProviders>(context, listen: false)
+                .clearCheckout(),
+          );
   static Future toSelectionVoucherPage(context,
           {LVoucher? initialData}) async =>
       await Navigator.of(context).push(

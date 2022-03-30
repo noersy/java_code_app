@@ -319,7 +319,7 @@ class _PenilaianState extends State<Penilaian> {
   _imgKamera() async {
     final picker = ImagePicker();
     final image =
-        await picker.getImage(source: ImageSource.camera, imageQuality: 20);
+        await picker.pickImage(source: ImageSource.camera, imageQuality: 20);
     setState(() {
       _image = File(image!.path);
     });
@@ -328,7 +328,7 @@ class _PenilaianState extends State<Penilaian> {
 
   _imgGaleri() async {
     final picker = ImagePicker();
-    final image = await picker.getImage(
+    final image = await picker.pickImage(
         source: ImageSource.gallery,
         imageQuality: 50,
         maxHeight: 600,

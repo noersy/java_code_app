@@ -11,6 +11,8 @@ import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
+import 'package:java_code_app/widget/dialog/custom_dialog.dart';
+import 'package:java_code_app/widget/snackbar.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
@@ -29,6 +31,7 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
   static final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   bool _loading = false;
+  bool _isUsed = false;
 
   Future<void> _onRefresh() async {
     var _duration = const Duration(seconds: 1);
@@ -65,10 +68,56 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
 
     return Scaffold(
       backgroundColor: ColorSty.white,
-      appBar: const CostumeAppBar(
-        back: true,
-        title: "Pilih Voucher",
-        icon: Icon(IconsCs.voucher, color: ColorSty.primary),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomRight: Radius.circular(30),
+            bottomLeft: Radius.circular(30),
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: ColorSty.primary),
+          onPressed: () async {
+            bool? isVoucherUsed = orderProviders.isVoucherUsed ?? false;
+            if (!isVoucherUsed) {
+              await showValidation(
+                context,
+                titleText: 'Apakah Anda yakin ingin kembali?',
+                bodyText:
+                    'Jika iya. Apakah Anda ingin menggunakan voucher yang terpilih?',
+                labelYes: 'Gunakan',
+                labelClose: 'Tidak',
+                onYes: () async {
+                  if (!mounted) return;
+                  setState(() {
+                    _isUsed = true;
+                  });
+                  await Provider.of<OrderProviders>(context, listen: false)
+                      .setVoucherUsed(true);
+                  Navigator.pop(context);
+                },
+                onClose: () {
+                  Navigator.pop(context);
+                },
+              );
+            }
+            if (_isUsed) {
+              Navigator.of(context).pop(_selectedVoucher);
+            } else {
+              Navigator.pop(context);
+            }
+          },
+        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(IconsCs.voucher, color: ColorSty.primary),
+            const SizedBox(width: SpaceDims.sp8),
+            Text("Pilih Voucher", style: TypoSty.title),
+            const SizedBox(width: SpaceDims.sp46 + 3),
+          ],
+        ),
       ),
       body: SmartRefresher(
         controller: _refreshController,
@@ -176,7 +225,18 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
               ),
               const SizedBox(height: SpaceDims.sp8),
               ElevatedButton(
-                onPressed: () => Navigator.of(context).pop(_selectedVoucher),
+                onPressed: () async {
+                  if (_selectedVoucher == null) {
+                    showCustomSnackbar(
+                      context,
+                      'Voucher belum dipilih!',
+                    );
+                  } else {
+                    await Provider.of<OrderProviders>(context, listen: false)
+                        .setVoucherUsed(true);
+                    Navigator.of(context).pop(_selectedVoucher);
+                  }
+                },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
@@ -278,10 +338,22 @@ class _VoucherCardState extends State<VoucherCard> {
                       style: TypoSty.button.copyWith(color: ColorSty.black60),
                     ),
                   IconButton(
-                    onPressed: () {
-                      setState(() => _isSelected = !_isSelected);
-                      widget.onPressed("${widget.voucher?.nama}");
-                    },
+                    onPressed: widget.voucher != null
+                        ? () async {
+                            _isSelected = (await Navigate.toDetailVoucherPage(
+                                    context,
+                                    voucher: widget.voucher!)) ??
+                                false;
+
+                            if (_isSelected && widget.onChanged != null) {
+                              widget.onChanged!(widget.voucher!.nama);
+                            }
+                          }
+                        : () {},
+                    // () {
+                    //   setState(() => _isSelected = !_isSelected);
+                    //   widget.onPressed("${widget.voucher?.nama}");
+                    // },
                     icon: widget.isChecked
                         ? const Icon(
                             Icons.check_box_outlined,

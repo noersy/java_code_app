@@ -10,6 +10,7 @@ class CostumeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final void Function()? onDelete;
   final bool? back, dense;
   final Icon? icon;
+  final Function? onBack;
 
   const CostumeAppBar({
     Key? key,
@@ -20,6 +21,7 @@ class CostumeAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.profileTitle,
     this.onDelete,
     this.costumeTitle,
+    this.onBack,
   }) : super(key: key);
 
   @override
@@ -30,14 +32,20 @@ class CostumeAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-        bottomRight: Radius.circular(30),
-        bottomLeft: Radius.circular(30),
-      )),
+        borderRadius: BorderRadius.only(
+          bottomRight: Radius.circular(30),
+          bottomLeft: Radius.circular(30),
+        ),
+      ),
       leading: back != null
           ? IconButton(
               icon: const Icon(Icons.arrow_back_ios, color: ColorSty.primary),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {
+                if(onBack != null){
+                  onBack!();
+                }
+                Navigator.of(context).pop();
+              },
             )
           : null,
       actions: [

@@ -39,6 +39,7 @@ class OrderProviders extends ChangeNotifier {
   static List<Promo> _listPromo = [];
   static List<Order> _orders = [];
   static LVoucher? _selectedVoucher;
+  static bool? _isVoucherUsed = false;
 
   MenuList? get listMenu => _menuList;
   Map<String, dynamic> get checkOrder => _checkOrder;
@@ -48,6 +49,7 @@ class OrderProviders extends ChangeNotifier {
   List<Promo> get listPromo => _listPromo;
   List<Order> get listOrders => _orders;
   LVoucher? get selectedVoucher => _selectedVoucher;
+  bool? get isVoucherUsed => _isVoucherUsed;
 
   clear() {
     _checkOrder = {};
@@ -57,7 +59,14 @@ class OrderProviders extends ChangeNotifier {
     _listDiscount = [];
     _listPromo = [];
     _orders = [];
+
+    _log.fine("clear all orders");
+    notifyListeners();
+  }
+
+  clearCheckout() {
     _selectedVoucher = null;
+    _isVoucherUsed = false;
 
     _log.fine("clear all orders");
     notifyListeners();
@@ -505,12 +514,28 @@ class OrderProviders extends ChangeNotifier {
   }
 
   setVoucher(LVoucher? data) {
-    _selectedVoucher = data;
+    if (_selectedVoucher == null) {
+      _selectedVoucher = data;
+    } else {
+      if (_selectedVoucher!.idVoucher == data!.idVoucher) {
+        _selectedVoucher = data;
+        _isVoucherUsed = true;
+      } else {
+        _selectedVoucher = data;
+        _isVoucherUsed = false;
+      }
+    }
     notifyListeners();
   }
 
   setVoucherEmpty() {
     _selectedVoucher = null;
+    _isVoucherUsed = false;
+    notifyListeners();
+  }
+
+  setVoucherUsed(bool? data) {
+    _isVoucherUsed = data;
     notifyListeners();
   }
 }

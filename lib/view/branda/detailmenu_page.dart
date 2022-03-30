@@ -11,9 +11,11 @@ import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/view/branda/widget/bottom_sheet.dart';
 import 'package:java_code_app/widget/button/addorder_button.dart';
+import 'package:java_code_app/widget/dialog/custom_text.dart';
 import 'package:java_code_app/widget/input/label_toppingselection.dart';
 import 'package:java_code_app/widget/list/listmenu_tile.dart';
 import 'package:java_code_app/widget/sheet/detailmenu_sheet.dart';
+import 'package:java_code_app/widget/snackbar.dart';
 import 'package:provider/provider.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
@@ -239,9 +241,9 @@ class _DetailMenuState extends State<DetailMenu> {
       }
       Navigator.of(context).pop();
     } else {
-      const snackBar = SnackBar(content: Text('Item belum ditambahkan!'));
-      ScaffoldMessenger.of(context).showSnackBar(
-        snackBar,
+      showCustomSnackbar(
+        context,
+        'Item belum ditambahkan!',
       );
     }
   }
@@ -283,11 +285,11 @@ class _DetailMenuState extends State<DetailMenu> {
       }
       Navigator.of(context).pop();
     } else {
-      await Provider.of<OrderProviders>(context, listen: false).addOrder(
-        data: data,
-        jumlahOrder: _jumlahOrder,
-        catatan: '',
-      );
+      // await Provider.of<OrderProviders>(context, listen: false).addOrder(
+      //   data: data,
+      //   jumlahOrder: _jumlahOrder,
+      //   catatan: '',
+      // );
       Navigator.of(context).pop();
     }
   }

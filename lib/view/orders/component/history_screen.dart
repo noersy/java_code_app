@@ -52,8 +52,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
   bool _loading = false;
 
   Future<void> _onRefresh() async {
-    _orders.clear();
-    _data.clear();
+    // _orders.clear();
+    // _data.clear();
     var _duration = const Duration(seconds: 1);
     if (mounted) {
       setState(() => _loading = true);
@@ -62,7 +62,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               .getHistoryList() ??
           [];
 
-      _data = _orders;
+      _data.replaceRange(0, _data.length, _orders);
 
       Timer(_duration, () {
         if (mounted) setState(() => _loading = false);
@@ -250,13 +250,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     // tambahkan loadmore
     return Scaffold(
-      body: SmartRefresher(
-        onRefresh: _loadMore,
-        controller: _refreshController,
-        child: LoadMore(
-          textBuilder: DefaultLoadMoreTextBuilder.english,
-          isFinish: isFinisfLoadmore,
-          onLoadMore: _loadMore,
+      body: LoadMore(
+        textBuilder: DefaultLoadMoreTextBuilder.english,
+        isFinish: isFinisfLoadmore,
+        onLoadMore: _loadMore,
+        child: SmartRefresher(
+          onRefresh: _onRefresh,
+          controller: _refreshController,
           child: ListView(
             children: [
               Padding(
