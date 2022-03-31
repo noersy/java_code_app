@@ -28,23 +28,37 @@ Future postPenilaian(score, type, review, img) async {
     final response = await http.post(Uri.parse("https://$host/api/review/add"),
         headers: headers, body: json.encode(body));
     // print('response: ${response.body}');
-    if (response.statusCode == 204) {
-      _log.info("review if empty");
-      return [];
-    }
 
-    if (response.statusCode == 200 &&
-        json.decode(response.body)["status_code"] == 200) {
+    // if (response.statusCode == 204) {
+    //   _log.info("review if empty");
+    //   return [];
+    // }
+
+    Map? data = json.decode(response.body);
+
+    if (response.statusCode == 200 && data!["status_code"] == 200) {
       _log.fine("Success get all review:");
-      // print('body sukses:\n${response.body}');
-      return 'input berhasil!';
+      return {
+        'success': true,
+      };
       // return listHistoryFromJson(response.body).data;
+    } else if (data!["status_code"] == 422) {
+      return {
+        'success': false,
+        'message': 'Gagal megngirim penilaian',
+      };
+    } else {
+      return {
+        'success': false,
+        'message': data['errors']['message'],
+      };
     }
-    _log.info("Fail to get list review");
-    _log.info(response.body);
   } catch (e, r) {
     _log.warning(e);
     _log.warning(r);
   }
-  return 'mohon maaf, anda sudah pernah menginputkan di bulan ini';
+  return {
+    'success': false,
+    'message': 'Gagal megngirim penilaian',
+  };
 }

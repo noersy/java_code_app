@@ -47,10 +47,7 @@ class Navigate {
         nominal: nominal,
       )));
   static void toChekOut(context) =>
-      Navigator.of(context).push(routeTransition(const CheckOutPage())).then(
-            (value) => Provider.of<OrderProviders>(context, listen: false)
-                .clearCheckout(),
-          );
+      Navigator.of(context).push(routeTransition(const CheckOutPage()));
   static Future toSelectionVoucherPage(context,
           {LVoucher? initialData}) async =>
       await Navigator.of(context).push(

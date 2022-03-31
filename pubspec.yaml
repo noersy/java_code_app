@@ -63,6 +63,7 @@ dependencies:
   location: ^4.3.0
   geocoding: ^2.0.4
   sign_in_with_apple: ^3.3.0
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:

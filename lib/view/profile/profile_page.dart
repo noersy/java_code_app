@@ -325,7 +325,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             Column(
                               children: [
                                 const SizedBox(height: SpaceDims.sp22),
-                                SizedBox(
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    color: ColorSty.grey95,
+                                    shape: BoxShape.circle,
+                                  ),
                                   height: 171,
                                   width: 171,
                                   child: ClipRRect(

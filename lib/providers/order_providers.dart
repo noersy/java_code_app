@@ -519,7 +519,6 @@ class OrderProviders extends ChangeNotifier {
     } else {
       if (_selectedVoucher!.idVoucher == data!.idVoucher) {
         _selectedVoucher = data;
-        _isVoucherUsed = true;
       } else {
         _selectedVoucher = data;
         _isVoucherUsed = false;

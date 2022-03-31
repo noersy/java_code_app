@@ -14,6 +14,7 @@ import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/view/chekout/widget/list_order_checkout.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
+import 'package:java_code_app/widget/dialog/custom_dialog.dart';
 import 'package:java_code_app/widget/dialog/infodiscount_dialog.dart';
 import 'package:java_code_app/widget/dialog/orderdone_dialog.dart';
 import 'package:java_code_app/widget/dialog/vp_fingerprint_dialog.dart';
@@ -112,7 +113,12 @@ class _CheckOutPageState extends State<CheckOutPage> {
                   .toList(),
             );
 
-            if (value) Navigator.pop(context);
+            if (value) {
+              await Provider.of<OrderProviders>(context, listen: false)
+                  .clearCheckout();
+              Navigator.pop(context);
+            }
+
             await showDialog(
               context: context,
               builder: (_) => const OrderDoneDialog(),
@@ -275,10 +281,11 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                 iconSvg: SvgPicture.asset(
                                     "assert/image/icons/discount-icon.svg",
                                     height: 24.0),
-                                onPressed: () => showDialog(
-                                  context: context,
-                                  builder: (_) => const InfoDiscountDialog(),
-                                ),
+                                onPressed: () => showDiskonDialog(),
+                                // showDialog(
+                                //   context: context,
+                                //   builder: (_) => const InfoDiscountDialog(),
+                                // ),
                                 isLoading: _loading,
                               ),
                             if (cekVoucher.isNotEmpty)
@@ -394,6 +401,47 @@ class _CheckOutPageState extends State<CheckOutPage> {
           ),
         );
       },
+    );
+  }
+
+  showDiskonDialog() {
+    final _discount =
+        Provider.of<OrderProviders>(context, listen: false).listDiscount;
+    showCustomDialog(
+      context,
+      body: _discount.isEmpty
+          ? Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Text(
+                  'Anda tidak memiliki diskon.',
+                  style: TypoSty.caption,
+                ),
+              ),
+            )
+          : Column(
+              children: [
+                const SizedBox(height: SpaceDims.sp24),
+                Text("Info Discount", style: TypoSty.titlePrimary),
+                Column(
+                  children: [
+                    const SizedBox(height: SpaceDims.sp24),
+                    for (final item in _discount) ...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(item.nama, style: TypoSty.caption),
+                          Text("${item.diskon} %", style: TypoSty.captionBold),
+                        ],
+                      ),
+                      const SizedBox(height: SpaceDims.sp4),
+                    ],
+                  ],
+                ),
+              ],
+            ),
+      labelYes: 'Oke',
+      onYes: () => Navigator.of(context).pop(),
     );
   }
 }

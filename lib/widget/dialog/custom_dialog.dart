@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/widget/dialog/custom_button.dart';
 
 import 'custom_text.dart';
 
-showError(
+showSimpleDialog(
   BuildContext context,
   String body, {
   Function? onClose,
   String? title,
+  String? lableClose,
 }) {
   return showDialog(
     context: context,
+    barrierDismissible: false,
     builder: (BuildContext context) => Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30),
@@ -24,12 +27,6 @@ showError(
           shape: BoxShape.rectangle,
           color: Colors.white,
           borderRadius: BorderRadius.circular(30),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withOpacity(0.7),
-                offset: const Offset(0, 0),
-                blurRadius: 10),
-          ],
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -41,20 +38,19 @@ showError(
                 text: body,
                 useMaxline: false,
                 align: TextAlign.center,
-                fontSize: 16,
+                fontSize: ScreenUtil().setSp(16.0),
               ),
             ),
             const SizedBox(height: 20),
             Material(
               child: CustomButton(
-                label: 'Oke',
+                label: lableClose ?? 'Oke',
                 onTap: () {
                   Navigator.pop(context);
                   if (onClose != null) {
                     onClose();
                   }
                 },
-                width: 100,
               ),
             ),
           ],
@@ -64,7 +60,7 @@ showError(
   );
 }
 
-showValidation(
+showCustomDialog(
   BuildContext context, {
   String? bodyText,
   Function? onClose,
@@ -76,6 +72,7 @@ showValidation(
 }) {
   return showDialog(
     context: context,
+    barrierDismissible: false,
     builder: (BuildContext context) => Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30),
@@ -88,13 +85,6 @@ showValidation(
           shape: BoxShape.rectangle,
           color: Colors.white,
           borderRadius: BorderRadius.circular(30),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.7),
-              offset: const Offset(0, 0),
-              blurRadius: 10,
-            ),
-          ],
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -107,7 +97,7 @@ showValidation(
                 maxLines: 5,
                 align: TextAlign.center,
                 isOverflow: false,
-                fontSize: 18,
+                fontSize: ScreenUtil().setSp(18.0),
                 isBold: true,
               ),
             const SizedBox(height: 10),
@@ -122,7 +112,7 @@ showValidation(
                         maxLines: 5,
                         align: TextAlign.center,
                         isOverflow: false,
-                        fontSize: 18,
+                        fontSize: ScreenUtil().setSp(18.0),
                       ),
                 ),
                 // const Icon(
@@ -147,20 +137,22 @@ showValidation(
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Material(
-                  child: CustomButton(
-                    label: labelClose ?? 'Tutup',
-                    onTap: () => onClose!(),
-                    backgroundColor: Colors.white,
-                    fontColor: ColorSty.primary,
+                if (labelClose != null)
+                  Material(
+                    child: CustomButton(
+                      label: labelClose,
+                      onTap: () => onClose!(),
+                      backgroundColor: Colors.white,
+                      fontColor: ColorSty.primary,
+                    ),
                   ),
-                ),
-                Material(
-                  child: CustomButton(
-                    label: labelYes ?? 'Iya',
-                    onTap: () => onYes!(),
+                if (labelYes != null)
+                  Material(
+                    child: CustomButton(
+                      label: labelYes,
+                      onTap: () => onYes!(),
+                    ),
                   ),
-                ),
               ],
             ),
           ],

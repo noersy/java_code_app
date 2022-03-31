@@ -41,7 +41,7 @@ class CostumeAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? IconButton(
               icon: const Icon(Icons.arrow_back_ios, color: ColorSty.primary),
               onPressed: () {
-                if(onBack != null){
+                if (onBack != null) {
                   onBack!();
                 }
                 Navigator.of(context).pop();
@@ -71,8 +71,7 @@ class CostumeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 const SizedBox(width: SpaceDims.sp8),
                 if (dense ?? false) const SizedBox(width: SpaceDims.sp12),
               ],
-              if (profileTitle != null)
-                const SizedBox(width: SpaceDims.sp46 + 3),
+              if (icon != null) const SizedBox(width: SpaceDims.sp46 + 3),
               Text(title, style: TypoSty.title),
               if (profileTitle != null)
                 Column(

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/helps/image.dart';
@@ -80,8 +81,8 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
           icon: const Icon(Icons.arrow_back_ios, color: ColorSty.primary),
           onPressed: () async {
             bool? isVoucherUsed = orderProviders.isVoucherUsed ?? false;
-            if (!isVoucherUsed) {
-              await showValidation(
+            if (orderProviders.selectedVoucher != null && !isVoucherUsed) {
+              await showCustomDialog(
                 context,
                 titleText: 'Apakah Anda yakin ingin kembali?',
                 bodyText:
@@ -102,7 +103,7 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
                 },
               );
             }
-            if (_isUsed) {
+            if (_isUsed || isVoucherUsed) {
               Navigator.of(context).pop(_selectedVoucher);
             } else {
               Navigator.pop(context);
@@ -298,6 +299,8 @@ class _VoucherCardState extends State<VoucherCard> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp8),
       child: ElevatedButton(
@@ -386,15 +389,22 @@ class _VoucherCardState extends State<VoucherCard> {
                       ),
                     ),
                     Positioned(
-                      right: 0.0,
+                      right: 12.0,
                       bottom: 60.0,
-                      child: Text(
-                        " ${widget.voucher?.nominal.toString()} ",
-                        style: const TextStyle(
-                          backgroundColor: Colors.white,
-                          color: Color.fromRGBO(0, 154, 173, 1),
-                          fontSize: 35.0,
-                          decorationThickness: 2.85,
+                      child: SizedBox(
+                        width: (width * 0.35) - 12,
+                        child: AutoSizeText(
+                          " ${oCcy.format(widget.voucher?.nominal)} ",
+                          maxLines: 1,
+                          style: const TextStyle(
+                            backgroundColor: Colors.white,
+                            color: Color.fromRGBO(0, 154, 173, 1),
+                            fontSize: 35.0,
+                            decorationThickness: 2.85,
+                          ),
+                          textAlign: TextAlign.end,
+                          minFontSize: 0,
+                          stepGranularity: 0.1,
                         ),
                       ),
                     ),
@@ -429,7 +439,15 @@ class _VoucherCardState extends State<VoucherCard> {
                     Positioned(
                       bottom: 10.0,
                       left: 8.0,
-                      child: Text("Catatan...", style: TypoSty.mini),
+                      child: SizedBox(
+                        width: width * 0.37,
+                        child: Text(
+                          widget.voucher!.catatan ?? "Catatan...",
+                          style: TypoSty.mini.copyWith(
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
                     )
                   ],
                 ),

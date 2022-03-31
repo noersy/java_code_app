@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/models/listvoucher.dart';
@@ -51,9 +52,10 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
         children: [
           const SizedBox(height: SpaceDims.sp12),
           CardDetailVoucher(
-              urlImage: widget.voucher.infoVoucher,
-              title: widget.voucher.nama,
-              nominal: widget.voucher.nominal.toString()),
+            urlImage: widget.voucher.infoVoucher,
+            title: widget.voucher.nama,
+            nominal: widget.voucher.nominal,
+          ),
           const SizedBox(height: SpaceDims.sp12),
           Expanded(
             child: Container(
@@ -194,7 +196,6 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
                 await orderProviders.setVoucherEmpty();
               } else {
                 await orderProviders.setVoucher(widget.voucher);
-                await orderProviders.setVoucherUsed(true);
               }
 
               Navigator.of(context).pop(true);
@@ -218,7 +219,8 @@ class _DetailVoucherPageState extends State<DetailVoucherPage> {
 }
 
 class CardDetailVoucher extends StatelessWidget {
-  final String urlImage, title, nominal;
+  final String urlImage, title;
+  final int nominal;
 
   const CardDetailVoucher(
       {Key? key,
@@ -229,6 +231,8 @@ class CardDetailVoucher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
     return Padding(
       padding: const EdgeInsets.symmetric(
           vertical: SpaceDims.sp8, horizontal: SpaceDims.sp12),
@@ -267,15 +271,22 @@ class CardDetailVoucher extends StatelessWidget {
                 },
               ),
               Positioned(
-                right: 0.0,
+                right: 12.0,
                 bottom: 70.0,
-                child: Text(
-                  "   ${nominal.toString()} ",
-                  style: const TextStyle(
-                    backgroundColor: Colors.white,
-                    color: Color.fromRGBO(0, 154, 173, 1),
-                    fontSize: 35.0,
-                    decorationThickness: 2.85,
+                child: SizedBox(
+                  width: (width * 0.35) - 12,
+                  child: AutoSizeText(
+                    " ${oCcy.format(nominal)} ",
+                    maxLines: 1,
+                    style: const TextStyle(
+                      backgroundColor: Colors.white,
+                      color: Color.fromRGBO(0, 154, 173, 1),
+                      fontSize: 35.0,
+                      decorationThickness: 2.85,
+                    ),
+                    textAlign: TextAlign.end,
+                    minFontSize: 0,
+                    stepGranularity: 0.1,
                   ),
                 ),
               ),

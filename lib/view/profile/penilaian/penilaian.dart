@@ -5,8 +5,11 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
+import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/view/profile/penilaian/post_penilaian.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
+import 'package:java_code_app/widget/dialog/custom_dialog.dart';
+import 'package:java_code_app/widget/show_loading.dart';
 
 class Penilaian extends StatefulWidget {
   const Penilaian({Key? key}) : super(key: key);
@@ -39,15 +42,23 @@ class _PenilaianState extends State<Penilaian> {
                         Column(
                           children: [
                             Container(
+                              padding: const EdgeInsets.all(10),
                               width: MediaQuery.of(context).size.width,
                               decoration: BoxDecoration(
-                                color: const Color(0xFFF6F6F6),
+                                color: ColorSty.white80,
                                 borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.1),
+                                    spreadRadius: 3,
+                                    blurRadius: 3,
+                                    offset: const Offset(0, 0),
+                                  ),
+                                ],
                               ),
                               child: Row(
                                 children: [
-                                  Flexible(
-                                    flex: 3,
+                                  Expanded(
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -74,7 +85,8 @@ class _PenilaianState extends State<Penilaian> {
                                                 itemCount: 5,
                                                 itemPadding:
                                                     const EdgeInsets.symmetric(
-                                                        horizontal: 4.0),
+                                                  horizontal: 4.0,
+                                                ),
                                                 itemBuilder: (context, _) =>
                                                     const Icon(
                                                   Icons.star,
@@ -124,16 +136,12 @@ class _PenilaianState extends State<Penilaian> {
                                       ],
                                     ),
                                   ),
-                                  const Spacer(flex: 1),
-                                  Flexible(
-                                      flex: 1,
-                                      child: widgetTextRating(RatingText))
+                                  const SizedBox(height: 20),
+                                  widgetTextRating(RatingText),
                                 ],
                               ),
                             ),
-                            const SizedBox(
-                              height: 10,
-                            ),
+                            const SizedBox(height: 20),
                             widgetType(context),
                           ],
                         )
@@ -157,14 +165,28 @@ class _PenilaianState extends State<Penilaian> {
   TextEditingController textReviewController = TextEditingController();
   Container widgetType(BuildContext context) {
     return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         width: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
           color: const Color(0xFFF6F6F6),
           borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 3,
+              blurRadius: 3,
+              offset: const Offset(0, 0),
+            ),
+          ],
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Apa yang bisa ditingkatkan?'),
+            const SizedBox(height: 20),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Text('Apa yang bisa ditingkatkan?'),
+            ),
             Wrap(
               children: [
                 for (var i in listType) widgetButtonType(i),
@@ -176,7 +198,10 @@ class _PenilaianState extends State<Penilaian> {
                 thickness: 2,
               ),
             ),
-            const Text('Tulis Review'),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Text('Tulis Review'),
+            ),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: TextFormField(
@@ -185,66 +210,65 @@ class _PenilaianState extends State<Penilaian> {
                 maxLines: 5,
                 controller: textReviewController,
                 decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: '',
-                    fillColor: Colors.white,
-                    filled: true),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                  ),
+                  hintText: '',
+                  fillColor: Colors.white,
+                  filled: true,
+                ),
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                    onPressed: () {
-                      postPenilaian(score, selectedType,
-                              textReviewController.text, base64Image)
-                          .then((value) {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              if (value.toString().contains('berhasil')) {
-                                return AlertDialog(
-                                  title: const Text('Alert!'),
-                                  content: Text('$value'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
-                                          textReviewController.clear();
-                                        },
-                                        child: const Text('Close')),
-                                  ],
-                                );
-                              } else {
-                                return AlertDialog(
-                                  title: const Text('Gagal!'),
-                                  content: Text('$value'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
-                                          textReviewController.clear();
-                                        },
-                                        child: const Text('Close')),
-                                  ],
-                                );
-                              }
-                            });
-                        imageBytes = [];
-                        base64Image = '';
-                        // print(
-                        //     'clearing imageBytes:${imageBytes.length} | base64Image:${base64Image}');
-                      });
-                    },
-                    child: const Text('Kirim Penilaian'),
-                    style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                    )))),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          showLoading(context);
+                          postPenilaian(score, selectedType,
+                                  textReviewController.text, base64Image)
+                              .then((value) async {
+                            await hideLoading(context);
+                            if (value['success']) {
+                              return showSimpleDialog(
+                                context,
+                                value['message'] ?? 'Penilaian berhasil!',
+                                lableClose: 'Tutup',
+                                onClose: () async {
+                                  textReviewController.clear();
+                                  Navigator.pop(context);
+                                },
+                              );
+                            } else {
+                              return showSimpleDialog(
+                                context,
+                                value['message'],
+                                title: 'Gagal!',
+                                lableClose: 'Tutup',
+                                onClose: () async {
+                                  textReviewController.clear();
+                                },
+                              );
+                            }
+                            // imageBytes = [];
+                            // base64Image = '';
+                            // print(
+                            //     'clearing imageBytes:${imageBytes.length} | base64Image:${base64Image}');
+                          });
+                        },
+                        child: const Text('Kirim Penilaian'),
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        )))),
+                  ),
+                ),
                 const SizedBox(
                   width: 10,
                 ),
