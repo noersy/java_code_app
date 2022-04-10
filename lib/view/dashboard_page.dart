@@ -13,7 +13,11 @@ import 'package:java_code_app/view/profile/profile_page.dart';
 import 'package:provider/provider.dart';
 
 class DashboardPage extends StatefulWidget {
-  const DashboardPage({Key? key}) : super(key: key);
+  final int indexPage;
+  const DashboardPage({
+    Key? key,
+    this.indexPage = 0,
+  }) : super(key: key);
 
   @override
   _DashboardPageState createState() => _DashboardPageState();
@@ -38,11 +42,26 @@ class _DashboardPageState extends State<DashboardPage> {
     }
   }
 
+  getData() async {
+    OrderProviders orderProviders =
+        Provider.of<OrderProviders>(context, listen: false);
+
+    await orderProviders.getMenuList();
+    await orderProviders.getListPromo();
+    await orderProviders.getListDisCount();
+    if (_bottomNavBarSelectedIndex != 1) await orderProviders.getListOrder();
+
+    _pageController.animateToPage(
+      widget.indexPage,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
   @override
   void initState() {
-    Provider.of<OrderProviders>(context, listen: false).getMenuList();
-    Provider.of<OrderProviders>(context, listen: false).getListPromo();
-    Provider.of<OrderProviders>(context, listen: false).getListDisCount();
+    _bottomNavBarSelectedIndex = widget.indexPage;
+    getData();
     super.initState();
   }
 
@@ -75,7 +94,8 @@ class _DashboardPageState extends State<DashboardPage> {
                 unselectedItemColor: ColorSty.white.withOpacity(0.8),
                 selectedItemColor: ColorSty.white,
                 selectedLabelStyle: TypoSty.button2,
-                unselectedLabelStyle: TypoSty.button2.copyWith(fontWeight: FontWeight.normal),
+                unselectedLabelStyle:
+                    TypoSty.button2.copyWith(fontWeight: FontWeight.normal),
                 items: [
                   BottomNavigationBarItem(
                     icon: const Icon(IconsCs.beranda, size: 28.0),
@@ -93,7 +113,10 @@ class _DashboardPageState extends State<DashboardPage> {
                         child: AnimatedBuilder(
                           animation: OrderProviders(),
                           builder: (BuildContext context, Widget? child) {
-                            int _orderOngoing = Provider.of<OrderProviders>(context).listOrders.length;
+                            int _orderOngoing =
+                                Provider.of<OrderProviders>(context)
+                                    .listOrders
+                                    .length;
                             // print(Provider.of<OrderProvider>(context).orderProgress.first);
                             if (_orderOngoing > 0) {
                               return Container(
@@ -129,8 +152,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 currentIndex: _bottomNavBarSelectedIndex,
                 onTap: _onItemTapped,
               );
-            }
-        ),
+            }),
       ),
       floatingActionButton: AnimatedBuilder(
         animation: OrderProviders(),
@@ -139,8 +161,7 @@ class _DashboardPageState extends State<DashboardPage> {
           if (_order > 0) {
             return Padding(
               padding: EdgeInsets.only(
-                bottom: _bottomNavBarSelectedIndex == 1 ? 40 : 0
-              ),
+                  bottom: _bottomNavBarSelectedIndex == 1 ? 40 : 0),
               child: FloatingActionButton(
                 backgroundColor: ColorSty.primary,
                 onPressed: () {

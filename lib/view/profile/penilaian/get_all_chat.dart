@@ -4,12 +4,12 @@ library java_code_app.get_all_chat;
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:java_code_app/constans/gettoken.dart';
 import 'package:java_code_app/constans/hosts.dart';
 import 'package:java_code_app/singletons/user_instance.dart';
 import 'package:logging/logging.dart' as logging;
 
 final _log = logging.Logger('OrderProvider');
-const headers = {"Content-Type": "application/json", "token": "m_app"};
 
 class Answer {
   var id_answer,
@@ -58,8 +58,9 @@ Future getAllChat(idReview) async {
   try {
     _log.fine("Try to get list review");
     final response = await http.get(
-        Uri.parse("https://$host/api/review/detail/$idReview"),
-        headers: headers);
+      Uri.parse("https://$host/api/review/detail/$idReview"),
+      headers: await getHeader(),
+    );
     if (response.statusCode == 204) {
       _log.info("review if empty");
       // return [];
@@ -94,7 +95,7 @@ Future postChat(answer, idReview) async {
     _log.fine("Try to get postChat $bodys");
     final response = await http.post(
         Uri.parse("https://$host/api/review/answer/add"),
-        headers: headers,
+        headers: await getHeader(),
         body: bodys);
     if (response.statusCode == 204) {
       _log.info("postChat empty");

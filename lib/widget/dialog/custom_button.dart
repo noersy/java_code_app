@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:java_code_app/theme/colors.dart';
+import 'package:java_code_app/theme/shadows.dart';
 import 'package:java_code_app/widget/dialog/custom_text.dart';
 
 // ignore: must_be_immutable
@@ -44,14 +45,7 @@ class _CustomButtonState extends State<CustomButton> {
               Radius.circular(50),
             ),
             color: widget.backgroundColor ?? ColorSty.primary,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
-                spreadRadius: 3,
-                blurRadius: 3,
-                offset: const Offset(0, 0), // changes position of shadow
-              ),
-            ],
+            boxShadow: ShadowsB.boxShadow3,
             border: Border.all(
               width: 1,
               color: ColorSty.primary,

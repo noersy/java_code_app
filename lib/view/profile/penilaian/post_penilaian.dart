@@ -4,6 +4,7 @@ library java_code_app.post_penilaian;
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:java_code_app/constans/gettoken.dart';
 import 'package:java_code_app/constans/hosts.dart';
 import 'package:java_code_app/singletons/user_instance.dart';
 import 'package:logging/logging.dart' as logging;
@@ -11,7 +12,6 @@ import 'package:logging/logging.dart' as logging;
 final _log = logging.Logger('OrderProvider');
 var img =
     'iVBORw0KGgoAAAANSUhEUgAAAQ4AAAC7CAMAAACjH4DlAAAAXVBMVEUpMTRnjLEiJiNcfJxrkbgkKSgoLzEmLS5EWWxXdpM0QkxAVGUuOT9kiKslKytSbohPaYJggqM+UF8wO0I6SldIX3Q2RE9LY3oyP0crNDk+UWFWdJA7S1lPaH9jhacMRR/OAAADlElEQVR4nO3c7XKqMBSFYSi4CSCB8CGkKvd/mUfAVoNgHUiPdbuef51aprwDAQLiOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA.........';
-const headers = {"Content-Type": "application/json", "token": "m_app"};
 Future postPenilaian(score, type, review, img) async {
   final user = UserInstance.getInstance().user;
   if (user == null) return null;
@@ -25,8 +25,11 @@ Future postPenilaian(score, type, review, img) async {
       'image': img
     };
     _log.fine("Try to post review");
-    final response = await http.post(Uri.parse("https://$host/api/review/add"),
-        headers: headers, body: json.encode(body));
+    final response = await http.post(
+      Uri.parse("https://$host/api/review/add"),
+      headers: await getHeader(),
+      body: body,
+    );
     // print('response: ${response.body}');
 
     // if (response.statusCode == 204) {

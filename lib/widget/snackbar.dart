@@ -9,7 +9,7 @@ showCustomSnackbar(
   Color? textColor,
 }) {
   var snackBar = SnackBar(
-    backgroundColor: backColor ?? ColorSty.primary,
+    backgroundColor: backColor ?? ColorSty.primaryDark,
     content: CustomText(
       text: 'Item belum ditambahkan!',
       color: textColor ?? Colors.white,

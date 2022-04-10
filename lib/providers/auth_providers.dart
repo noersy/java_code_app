@@ -1,9 +1,12 @@
 // ignore_for_file: prefer_adjacent_string_concatenation
 
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:java_code_app/constans/gettoken.dart';
 import 'package:java_code_app/constans/hosts.dart';
 import 'package:java_code_app/constans/key_prefens.dart';
 import 'package:java_code_app/models/loginuser.dart';
@@ -15,10 +18,6 @@ import 'package:logging/logging.dart';
 class AuthProviders extends ChangeNotifier {
   static LoginUser? _loginUser;
   static UserDetail? _user;
-  static const _headers = {
-    "Content-Type": "application/json",
-    "token": "m_app"
-  };
   static final _log = Logger('AuthProvider');
 
   DUser? user() {
@@ -26,27 +25,25 @@ class AuthProviders extends ChangeNotifier {
     return null;
   }
 
-  Future<bool> login(
+  Future<Map> login(
     String email,
     String? password, {
     bool? isGoogle = false,
     String? nama = "",
   }) async {
     var editResponse;
+    Map response;
     final Uri _api = Uri.http(host, "$sub/api/auth/login");
     try {
       final body = <String, dynamic>{
         "email": email,
         "password": password,
-        "nama": nama,
-        "is_google": isGoogle! ? "is_google" : "",
       };
 
       _log.fine("Tray to login." + '\n$email' + '\n$password');
       final response = await http.post(
         _api,
-        headers: _headers,
-        body: json.encode(body),
+        body: body,
       );
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
@@ -56,25 +53,40 @@ class AuthProviders extends ChangeNotifier {
               '''https://javacode.landa.id/img/1/review/review_1_620e0269b96d2.png''';
           editResponse = json.encode(editResponse);
         }
+        Preferences.getInstance()
+            .setStringValue('token', editResponse['data']['token']);
         _loginUser = loginUserFromJson(editResponse);
         if (_loginUser == null) _log.info("Login failed");
         if (_loginUser != null) _log.fine("Login successes");
 
         Preferences.getInstance()
             .setIntValue(KeyPrefens.loginID, _loginUser!.data.user.idUser);
-        getUser(id: _loginUser!.data.user.idUser);
+        _user = userDetailFromJson(editResponse['data']['user']);
+        UserInstance.getInstance().initialize(user: _user);
+        // getUser(id: _loginUser!.data.user.idUser);
         notifyListeners();
         if (_loginUser != null) {
-          return true;
+          return {
+            'status': true,
+            'message': 'Login Berhasil',
+          };
         } else {
-          return false;
+          return {
+            'status': true,
+            'message': editResponse['errors'] == null
+                ? 'Login gagal'
+                : editResponse['errors'][0],
+          };
         }
       }
     } catch (e, r) {
       _log.warning(e);
       _log.warning(r);
     }
-    return false;
+    return {
+      'status': true,
+      'message': 'Login gagal',
+    };
   }
 
   Future<bool> loginGoogle(
@@ -94,8 +106,8 @@ class AuthProviders extends ChangeNotifier {
       _log.fine("Tray to login." + '\n$email' + '\n$nama');
       final response = await http.post(
         _api,
-        headers: _headers,
-        body: json.encode(body),
+        headers: await getHeader(),
+        body: body,
       );
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
@@ -130,6 +142,44 @@ class AuthProviders extends ChangeNotifier {
     return false;
   }
 
+  // Future<bool> loginDio(
+  //   String email,
+  //   String? password, {
+  //   bool? isGoogle = false,
+  //   String? nama = "",
+  // }) async {
+  //   final body = <String, dynamic>{
+  //     "email": email,
+  //     "password": password,
+  //     "nama": nama,
+  //     "is_google": isGoogle! ? "is_google" : "",
+  //   };
+  //   try {
+  //     var response = await Dio().post(
+  //       'https://$host/api/auth/login',
+  //       data: jsonEncode(body),
+  //     );
+  //     var data = response.data;
+  //     return data != null;
+  //   } catch (e) {
+  //     return false;
+  //   }
+  // }
+
+  Future<bool> getUserDio({id}) async {
+    Dio dio = Dio();
+    dio.options.headers['content-Type'] = 'application/json';
+    String? token = await Preferences.getInstance().getStringValue('token');
+    dio.options.headers['token'] = token;
+    try {
+      var response = await dio.get('https://$host/api/user/detail/$id');
+      var data = response.data;
+      return data != null;
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<bool> getUser({id}) async {
     final user = UserInstance.getInstance().user;
     if (user == null && id == null) return false; //@todo make new exception
@@ -139,7 +189,13 @@ class AuthProviders extends ChangeNotifier {
 
     try {
       _log.fine("Tray to get data user.");
-      final response = await http.get(_api, headers: _headers);
+      final response = await http.get(_api, headers: await getHeader()).timeout(
+        const Duration(seconds: 4),
+        onTimeout: () {
+          print('object');
+          return http.Response('Error', 408);
+        },
+      );
 
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
@@ -150,6 +206,8 @@ class AuthProviders extends ChangeNotifier {
         notifyListeners();
         return true;
       }
+    } on SocketException {
+      print('object');
     } catch (e, r) {
       _log.warning(e);
       _log.warning(r);
@@ -168,7 +226,8 @@ class AuthProviders extends ChangeNotifier {
       final body = jsonEncode({"$key": "$value"});
 
       _log.fine("Tray update user profile.");
-      final response = await http.post(_api, headers: _headers, body: body);
+      final response =
+          await http.post(_api, headers: await getHeader(), body: body);
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
         _log.fine("Success update $key user.");
@@ -198,7 +257,7 @@ class AuthProviders extends ChangeNotifier {
       _log.fine("Try update profile image.\n$base64");
       final response = await http.post(
         _api,
-        headers: _headers,
+        headers: await getHeader(),
         body: jsonEncode(body),
       );
 
@@ -228,7 +287,7 @@ class AuthProviders extends ChangeNotifier {
       _log.fine("Tray upload ktp");
       final response = await http.post(
         _api,
-        headers: _headers,
+        headers: await getHeader(),
         body: jsonEncode(body),
       );
 

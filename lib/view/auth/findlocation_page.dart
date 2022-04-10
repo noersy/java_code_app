@@ -33,13 +33,11 @@ class _FindLocationPageState extends State<FindLocationPage> {
         .determinePosition();
     await Provider.of<LocationProvider>(context, listen: false)
         .getAddressFromLatLng();
-    setState(() {});
     _startTime();
   }
 
   @override
   void initState() {
-    // _startTime();
     getAddress();
     super.initState();
   }

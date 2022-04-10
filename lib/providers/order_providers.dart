@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:java_code_app/constans/gettoken.dart';
 import 'package:java_code_app/constans/hosts.dart';
 import 'package:java_code_app/models/listdiscount.dart';
 import 'package:java_code_app/models/listhistory.dart';
@@ -27,7 +28,6 @@ class TotalHistory {
 
 class OrderProviders extends ChangeNotifier {
   static final _log = logging.Logger('OrderProvider');
-  static const headers = {"Content-Type": "application/json", "token": "m_app"};
   // static int _orderInProgress = 0;
   // static int _checkOrder = 0;
 
@@ -153,7 +153,7 @@ class OrderProviders extends ChangeNotifier {
       final _api = Uri.http(host, "$sub/api/menu/all");
 
       _log.fine("Tray get all menu.");
-      final response = await http.get(_api, headers: headers);
+      final response = await http.get(_api, headers: await getHeader());
 
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
@@ -171,12 +171,22 @@ class OrderProviders extends ChangeNotifier {
     }
   }
 
+  // Future<bool> getMenuListDio({id}) async {
+  //   try {
+  //     var response = await Dio().get('https://$host/api/menu/all');
+  //     var data = response.data;
+  //     return data != null;
+  //   } catch (e) {
+  //     return false;
+  //   }
+  // }
+
   Future<MenuDetail?> getDetailMenu({required int id}) async {
     try {
       final _api = Uri.http(host, "$sub/api/menu/detail/$id");
 
       _log.fine("Try to get menu detail");
-      final response = await http.get(_api, headers: headers);
+      final response = await http.get(_api, headers: await getHeader());
 
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
@@ -201,7 +211,7 @@ class OrderProviders extends ChangeNotifier {
       final _api = Uri.http(host, "$sub/api/voucher/user/${user.data.idUser}");
 
       _log.fine("Try to get list voucher.");
-      final response = await http.get(_api, headers: headers);
+      final response = await http.get(_api, headers: await getHeader());
 
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
@@ -229,7 +239,7 @@ class OrderProviders extends ChangeNotifier {
       final _api = Uri.http(host, "$sub/api/diskon/user/${user.data.idUser}");
 
       _log.fine("Try to get list discount");
-      final response = await http.get(_api, headers: headers);
+      final response = await http.get(_api, headers: await getHeader());
 
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
@@ -257,7 +267,7 @@ class OrderProviders extends ChangeNotifier {
       final _api = Uri.http(host, "$sub/api/promo/user/${user.data.idUser}");
 
       _log.fine("Try to get list promo");
-      final response = await http.get(_api, headers: headers);
+      final response = await http.get(_api, headers: await getHeader());
 
       if (response.statusCode == 204) {
         _log.info("Promo is empty");
@@ -289,7 +299,7 @@ class OrderProviders extends ChangeNotifier {
       final _api = Uri.http(host, "$sub/api/order/proses/${user.data.idUser}");
 
       _log.fine("Try to get order in progress");
-      final response = await http.get(_api, headers: headers);
+      final response = await http.get(_api, headers: await getHeader());
 
       if (response.statusCode == 204 ||
           json.decode(response.body)["status_code"] == 204) {
@@ -320,7 +330,7 @@ class OrderProviders extends ChangeNotifier {
       final _api = Uri.http(host, "$sub/api/order/detail/$id");
 
       _log.fine("Tray to get detail order");
-      final response = await http.get(_api, headers: headers);
+      final response = await http.get(_api, headers: await getHeader());
 
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
@@ -344,8 +354,9 @@ class OrderProviders extends ChangeNotifier {
     try {
       _log.fine("Try to get list history of order");
       final response = await http.get(
-          Uri.parse("https://$host/api/order/history/total/1"),
-          headers: headers);
+        Uri.parse("https://$host/api/order/history/total/1"),
+        headers: await getHeader(),
+      );
       // final response = await http.get(
       //   _api,
       //   headers: headers,
@@ -382,7 +393,7 @@ class OrderProviders extends ChangeNotifier {
       final response = await http.get(
           Uri.parse(
               "https://$host/api/order/history/${user.data.idUser}?limit=$limit&start=$start"),
-          headers: headers);
+          headers: await getHeader());
       // final response = await http.get(
       //   _api,
       //   headers: headers,
@@ -417,7 +428,7 @@ class OrderProviders extends ChangeNotifier {
       final _api = Uri.http(host, "$sub/api/order/history/${user.data.idUser}");
 
       _log.fine("Try to get list history of order");
-      final response = await http.get(_api, headers: headers);
+      final response = await http.get(_api, headers: await getHeader());
 
       if (response.statusCode == 204) {
         _log.info("History if empty");
@@ -443,7 +454,7 @@ class OrderProviders extends ChangeNotifier {
       final _api = Uri.http(host, "$sub/api/order/batal/$idOrder");
 
       _log.fine("Tray to cancel a order");
-      final response = await http.post(_api, headers: headers);
+      final response = await http.post(_api, headers: await getHeader());
 
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
@@ -489,7 +500,7 @@ class OrderProviders extends ChangeNotifier {
 
       _log.fine("Tray to checkout order");
       final response = await http.post(_api,
-          headers: headers,
+          headers: await getHeader(),
           body: jsonEncode(body),
           encoding: Encoding.getByName("utf-8"));
       // print('body print $body');

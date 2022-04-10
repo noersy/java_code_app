@@ -4,7 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel', // id
@@ -57,40 +58,42 @@ class PushNotification {
       ),
     );
 
-    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
       alert: true, // Required to display a heads up notification
       badge: true,
       sound: true,
     );
 
-    await _flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
-
+    await _flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
 
     _flutterLocalNotificationsPlugin.initialize(
       const InitializationSettings(
         android: AndroidInitializationSettings('ic_stat_name'),
       ),
     );
-
   }
 
   static int _once = 0;
 
-  void initialize() {
-    if (_once == 0) {
-      _initializeFirebase();
-      FirebaseMessaging.onBackgroundMessage(_fcmBackgroundHandler);
-      FirebaseMessaging.onMessage.listen(_message);
-      FirebaseMessaging.onMessageOpenedApp.listen(_messageOpen);
-      _once++;
-    }
-  }
+  // void initialize() {
+  //   if (_once == 0) {
+  //     _initializeFirebase();
+  //     FirebaseMessaging.onBackgroundMessage(_fcmBackgroundHandler);
+  //     FirebaseMessaging.onMessage.listen(_message);
+  //     FirebaseMessaging.onMessageOpenedApp.listen(_messageOpen);
+  //     _once++;
+  //   }
+  // }
 
   void _messageOpen(RemoteMessage message) {
     // print(message.notification?.title);
   }
 
-    //foreground fcm
+  //foreground fcm
   void _message(RemoteMessage message) {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;

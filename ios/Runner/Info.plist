@@ -29,6 +29,10 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_javacode._tcp</string>
+	</array>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Java Code need to access your to make an order</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -58,9 +62,10 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSBonjourServices</key>
-	<array>
-		<string>_javacode._tcp</string>
-	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
 </dict>
 </plist>

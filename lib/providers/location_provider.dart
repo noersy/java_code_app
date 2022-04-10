@@ -13,13 +13,11 @@ class LocationProvider extends ChangeNotifier {
   get currentAddress => _currentAddress;
   Future<Position> determinePosition() async {
     _permission = await Geolocator.checkPermission();
-    _serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    // _serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
-    if (!_serviceEnabled &&
-        (_permission == LocationPermission.denied ||
-            _permission == LocationPermission.deniedForever)) {
-      await Geolocator.openLocationSettings();
-    }
+    // if (!_serviceEnabled && (_permission == LocationPermission.deniedForever)) {
+    //   await Geolocator.openLocationSettings();
+    // }
 
     if (_permission == LocationPermission.denied) {
       _permission = await Geolocator.requestPermission();

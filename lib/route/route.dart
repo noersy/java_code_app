@@ -94,4 +94,76 @@ class Navigate {
           pageBuilder: (BuildContext context, _, __) {
             return ViewImage(urlImage: urlImage);
           }));
+
+  toOrder(context) => nextPageRemove(
+        context,
+        const DashboardPage(indexPage: 0),
+      );
+
+  nextPage(BuildContext context, dynamic page, {Function? then}) {
+    Navigator.of(context)
+        .push(
+      MaterialPageRoute(
+        builder: (context) => page,
+      ),
+    )
+        .whenComplete(() {
+      if (then != null) then();
+    });
+  }
+
+  nextPageNoAnimation(BuildContext context, dynamic page, {Function? then}) {
+    Navigator.of(context)
+        .push(
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => page,
+        transitionDuration: const Duration(seconds: 0),
+      ),
+    )
+        .whenComplete(() {
+      if (then != null) then();
+    });
+  }
+
+  nextPageReplacement(BuildContext context, dynamic page) {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => page,
+      ),
+    );
+  }
+
+  backScreen(BuildContext context) {
+    Navigator.of(context).pop();
+  }
+
+  nextPageRemove(
+    BuildContext context,
+    dynamic page, {
+    bool isforce = false,
+  }) {
+    if (isforce || Navigator.canPop(context)) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => page,
+        ),
+        (route) => false,
+      );
+    } else {
+      nextPage(context, page);
+    }
+  }
+
+  nextPageRemoveNoAnimation(
+    BuildContext context,
+    dynamic page, {
+    Function? then,
+  }) {
+    Navigator.of(context).pushAndRemoveUntil(
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) => page,
+          transitionDuration: Duration(seconds: 0),
+        ),
+        (route) => false);
+  }
 }

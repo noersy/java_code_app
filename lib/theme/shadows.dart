@@ -1,8 +1,8 @@
-import 'package:flutter/painting.dart';
+import 'package:flutter/material.dart';
 import 'package:java_code_app/theme/colors.dart';
 
 class ShadowsB {
-  static List<BoxShadow> boxShadow1 = [
+  static List<BoxShadow>? boxShadow1 = [
     BoxShadow(
       offset: const Offset(0, -0.9),
       color: ColorSty.grey80.withOpacity(0.05),
@@ -11,12 +11,21 @@ class ShadowsB {
     ),
   ];
 
-  static List<BoxShadow> boxShadow2 = [
+  static List<BoxShadow>? boxShadow2 = [
     BoxShadow(
       color: ColorSty.grey80.withOpacity(0.05),
       blurRadius: 3,
       spreadRadius: 2,
       offset: const Offset(0, 1),
+    ),
+  ];
+
+  static List<BoxShadow>? boxShadow3 = [
+    BoxShadow(
+      color: ColorSty.grey80.withOpacity(0.2),
+      spreadRadius: 3,
+      blurRadius: 3,
+      offset: const Offset(0, 0),
     ),
   ];
 }

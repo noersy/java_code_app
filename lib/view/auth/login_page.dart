@@ -14,6 +14,7 @@ import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/singletons/shared_preferences.dart';
 import 'package:java_code_app/widget/button/button_login.dart';
+import 'package:java_code_app/widget/dialog/custom_dialog.dart';
 import 'package:java_code_app/widget/input/form_login.dart';
 import 'package:provider/provider.dart';
 import 'package:logging/logging.dart' as logging;
@@ -42,14 +43,14 @@ class _LoginPageState extends State<LoginPage> {
 
   _login() async {
     setState(() => _loading = true);
-    bool isLogin =
+    Map loginResponse =
         await Provider.of<AuthProviders>(context, listen: false).login(
       _controllerEmail.text,
       _controllerPassword.text,
       isGoogle: false,
     );
 
-    if (isLogin) {
+    if (loginResponse['status']) {
       await _preferences.setBoolValue(KeyPrefens.login, true);
 
       Timer(_duration, () {
@@ -57,23 +58,24 @@ class _LoginPageState extends State<LoginPage> {
         setState(() => _loading = false);
       });
       return;
-    } else if (isLogin == false) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text(
-                  'Email/password anda salah!\nAnda belum mendaftar?'),
-              // content: Text('email '),
-              actions: <Widget>[
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Close')),
-              ],
-            );
-          });
+    } else {
+      showSimpleDialog(context, loginResponse['message']);
+      // showDialog(
+      //     context: context,
+      //     builder: (context) {
+      //       return AlertDialog(
+      //         title: const Text(
+      //             'Email/password anda salah!\nAnda belum mendaftar?'),
+      //         // content: Text('email '),
+      //         actions: <Widget>[
+      //           TextButton(
+      //               onPressed: () {
+      //                 Navigator.pop(context);
+      //               },
+      //               child: const Text('Close')),
+      //         ],
+      //       );
+      //     });
     }
 
     setState(() => _loading = false);
@@ -167,9 +169,12 @@ class _LoginPageState extends State<LoginPage> {
     return ScreenUtilInit(builder: () {
       return Scaffold(
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: SizedBox(
-              height: height <= 780 ? height + safeTopPadding + 20 : height,
+          child: SizedBox(
+            height: height <= 780 ? height + safeTopPadding + 20 : height,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
               child: Stack(
                 alignment: Alignment.topCenter,
                 children: [

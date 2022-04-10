@@ -49,7 +49,8 @@ class _EditOrderPageState extends State<EditOrderPage> {
   bool _isLoading = true;
 
   getMenu() async {
-    final data = await Provider.of<OrderProviders>(context, listen: false).getDetailMenu(id: int.parse(widget.data["id"]));
+    final data = await Provider.of<OrderProviders>(context, listen: false)
+        .getDetailMenu(id: int.parse(widget.data["id"]));
     if (mounted) setState(() => _isLoading = true);
 
     if (data != null) {
@@ -72,7 +73,8 @@ class _EditOrderPageState extends State<EditOrderPage> {
       _listTopping = data.data.topping ?? [];
 
       ///Get if order already exist
-      final orders = Provider.of<OrderProviders>(context, listen: false).checkOrder;
+      final orders =
+          Provider.of<OrderProviders>(context, listen: false).checkOrder;
 
       if (orders.containsKey("${_menu?.idMenu}")) {
         final dat = orders["${_menu?.idMenu}"];
@@ -81,7 +83,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
         if (dat["level"] != null) {
           final _level = data.data.level
               ?.where((element) => "${element.idDetail}" == dat["level"]);
-          if (_level?.isNotEmpty ?? false){
+          if (_level?.isNotEmpty ?? false) {
             _selectedLevel = _level!.first;
             _hargaLevel = _level.first.harga;
             _hargaTotal = _harga + _hargaLevel + _hargaTopping;
@@ -95,9 +97,9 @@ class _EditOrderPageState extends State<EditOrderPage> {
             return false;
           }).toList();
 
-          if(topping?.isNotEmpty ?? false){
+          if (topping?.isNotEmpty ?? false) {
             _selectedTopping = topping!;
-            _hargaTopping = topping.map((e) => e.harga).reduce((e, a) => e+a);
+            _hargaTopping = topping.map((e) => e.harga).reduce((e, a) => e + a);
             _hargaTotal = _harga + _hargaLevel + _hargaTopping;
           }
         }
@@ -148,8 +150,8 @@ class _EditOrderPageState extends State<EditOrderPage> {
                       setState(() => _selectedTopping.add(value));
                     }
                     final _top = _selectedTopping.map((e) => e.harga);
-                    if(_top.isNotEmpty) {
-                      _hargaTopping = _top.reduce((e, a) => e+a);
+                    if (_top.isNotEmpty) {
+                      _hargaTopping = _top.reduce((e, a) => e + a);
                     } else {
                       _hargaTopping = 0;
                     }
@@ -204,7 +206,8 @@ class _EditOrderPageState extends State<EditOrderPage> {
     final data = widget.data;
 
     if (_jumlahOrder <= 0) {
-      Provider.of<OrderProviders>(context, listen: false).deleteOrder(id: "${_menu?.idMenu}");
+      Provider.of<OrderProviders>(context, listen: false)
+          .deleteOrder(id: "${_menu?.idMenu}");
     } else {
       Provider.of<OrderProviders>(context, listen: false).editOrder(
         id: data["id"],
@@ -309,7 +312,8 @@ class _EditOrderPageState extends State<EditOrderPage> {
                         height: 120,
                         child: _isLoading
                             ? const SkeletonText(height: 12.0)
-                            : Text(_menu?.deskripsi ?? "none", textAlign: TextAlign.start),
+                            : Text(_menu?.deskripsi ?? "none",
+                                textAlign: TextAlign.start),
                       ),
                     ),
                     Padding(

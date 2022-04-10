@@ -4,12 +4,12 @@ library java_code_app.fetch_rating;
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:java_code_app/constans/gettoken.dart';
 import 'package:java_code_app/constans/hosts.dart';
 import 'package:java_code_app/singletons/user_instance.dart';
 import 'package:logging/logging.dart' as logging;
 
 final _log = logging.Logger('OrderProvider');
-const headers = {"Content-Type": "application/json", "token": "m_app"};
 
 class Review {
   var id_review, id_user, nama, score, type, review, image, created_at;
@@ -53,8 +53,9 @@ Future getAllReview() async {
   try {
     _log.fine("Try to get list review");
     final response = await http.get(
-        Uri.parse("https://$host/api/review/${user.data.idUser}"),
-        headers: headers);
+      Uri.parse("https://$host/api/review/${user.data.idUser}"),
+      headers: await getHeader(),
+    );
     if (response.statusCode == 204) {
       _log.info("review if empty");
       // return [];

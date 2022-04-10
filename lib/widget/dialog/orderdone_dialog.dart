@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 
 class OrderDoneDialog extends StatelessWidget {
-
   const OrderDoneDialog({
     Key? key,
   }) : super(key: key);
@@ -20,11 +20,11 @@ class OrderDoneDialog extends StatelessWidget {
           ),
         ),
         child: SizedBox(
-          height: 0.555.sh,
           width: double.infinity,
           child: Padding(
             padding: EdgeInsets.only(top: 42.h),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 SvgPicture.asset(
                   "assert/image/icons/img-pesanan-disiapkan.svg",
@@ -62,7 +62,8 @@ class OrderDoneDialog extends StatelessWidget {
                         SizedBox(height: 16.h),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp8),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: SpaceDims.sp8),
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(30.0),
@@ -90,9 +91,8 @@ class OrderDoneDialog extends StatelessWidget {
     );
   }
 
-  _submit(context) async{
+  _submit(context) async {
     // await Provider.of<OrderProviders>(context, listen: false).submitOrder(voucher);
-    Navigator.pop(context);
-    Navigator.pop(context);
+    Navigate().toOrder(context);
   }
 }

@@ -48,17 +48,17 @@ class _CardMenuState extends State<CardMenu> {
       }
     } else {
       // setState(() => _jumlahOrder++);
-      Navigate.toDetailMenu(context,
-          id: widget.data.idMenu, countOrder: _jumlahOrder);
+      // Navigate.toDetailMenu(context,
+      //     id: widget.data.idMenu, countOrder: _jumlahOrder);
       // print('jumlah order: $_jumlahOrder');
       if (_jumlahOrder < 1) {
-        setState(() => _jumlahOrder++);
         Provider.of<OrderProviders>(context, listen: false).addOrder(
-          jumlahOrder: _jumlahOrder,
+          jumlahOrder: 1,
           data: _data,
           catatan: '',
         );
       }
+      Navigate.toDetailMenu(context, id: widget.data.idMenu, countOrder: 1);
       // if (_jumlahOrder >= 1) {
       //   Provider.of<OrderProviders>(context, listen: false).addOrder(
       //     jumlahOrder: _jumlahOrder,

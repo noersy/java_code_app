@@ -348,7 +348,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                       topLeft: Radius.circular(30.0),
                       topRight: Radius.circular(30.0),
                     ),
-                    boxShadow: ShadowsB.boxShadow1,
+                    boxShadow: ShadowsB.boxShadow3,
                   ),
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: SpaceDims.sp24.h),

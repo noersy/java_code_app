@@ -24,6 +24,7 @@ import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
+import 'package:java_code_app/widget/dialog/custom_button.dart';
 import 'package:java_code_app/widget/sheet/detailmenu_sheet.dart';
 import 'package:java_code_app/widget/dialog/vp_pin_dialog.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -777,11 +778,12 @@ class _TileListProfileState extends State<TileListProfile> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       if (widget.btn == true)
-                        ElevatedButton(
-                            onPressed: () {
-                              Navigate.toDaftarPenilaian(context);
-                            },
-                            child: Text('${widget.suffix}')),
+                        CustomButton(
+                          onTap: () {
+                            Navigate.toDaftarPenilaian(context);
+                          },
+                          label: widget.suffix,
+                        ),
                       if (widget.btn != true)
                         Expanded(
                           child: Align(
