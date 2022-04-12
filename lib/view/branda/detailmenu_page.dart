@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/helps/image.dart';
-import 'package:java_code_app/models/lang.dart';
 import 'package:java_code_app/models/menudetail.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
@@ -12,7 +11,6 @@ import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/view/branda/widget/bottom_sheet.dart';
 import 'package:java_code_app/widget/button/addorder_button.dart';
-import 'package:java_code_app/widget/dialog/custom_text.dart';
 import 'package:java_code_app/widget/input/label_toppingselection.dart';
 import 'package:java_code_app/widget/list/listmenu_tile.dart';
 import 'package:java_code_app/widget/sheet/detailmenu_sheet.dart';
@@ -206,8 +204,6 @@ class _DetailMenuState extends State<DetailMenu> {
 
   void _tambahkanPesanan() {
     if (_menu == null) return;
-
-    double? height = MediaQuery.of(context).size.height;
 
     final orders =
         Provider.of<OrderProviders>(context, listen: false).checkOrder;

@@ -15,7 +15,7 @@ class CardMenuCheckout extends StatefulWidget {
   final ValueChanged<int>? onChange;
   final Map<String, dynamic> data;
 
-  CardMenuCheckout({Key? key, required this.data, this.onChange})
+  const CardMenuCheckout({Key? key, required this.data, this.onChange})
       : super(key: key);
 
   @override

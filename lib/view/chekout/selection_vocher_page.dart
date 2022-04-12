@@ -12,7 +12,6 @@ import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
-import 'package:java_code_app/widget/appbar/appbar.dart';
 import 'package:java_code_app/widget/dialog/custom_dialog.dart';
 import 'package:java_code_app/widget/snackbar.dart';
 import 'package:provider/provider.dart';

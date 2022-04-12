@@ -17,9 +17,10 @@ class GeolocationStatus {
 
   void initialize() async {
     LocationPermission permission = await Geolocator.requestPermission();
-    if (permission != LocationPermission.denied || permission != LocationPermission.deniedForever) {
+    if (permission != LocationPermission.denied ||
+        permission != LocationPermission.deniedForever) {
       hasPermission = true;
-    }else{
+    } else {
       hasPermission = false;
     }
   }
@@ -30,14 +31,9 @@ class GeolocationStatus {
 
     if (hasPermission) {
       try {
-        final result = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-
         if (true) {
           inLocation = true;
-        } else {
-          inLocation = false;
         }
-
       } on TimeoutException catch (_) {
         inLocation = false;
       }

@@ -133,7 +133,7 @@ class OrderHistoryCard extends StatelessWidget {
                             SizedBox(
                               height: 42,
                               child: Padding(
-                                padding: EdgeInsets.only(right: 8.0),
+                                padding: const EdgeInsets.only(right: 8.0),
                                 child: RichText(
                                   text: TextSpan(
                                       style: TypoSty.title,

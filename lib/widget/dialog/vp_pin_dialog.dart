@@ -95,7 +95,6 @@ class _VPinDialogState extends State<VPinDialog> {
                           if (widget.pesananPin == true) {
                             Navigator.pop(context, correct == true);
                           }
-                          print('giveString ${widget.giveString}');
                           if (correct == false) {
                             showDialog(
                               context: context,

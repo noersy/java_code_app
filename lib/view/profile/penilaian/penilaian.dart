@@ -98,33 +98,33 @@ class _PenilaianState extends State<Penilaian> {
                                                   setState(() {
                                                     score = rating;
                                                     if (rating == 1) {
-                                                      RatingText =
+                                                      ratingText =
                                                           'jelek sekali';
                                                     }
                                                     if (rating == 1.5) {
-                                                      RatingText = 'jelek';
+                                                      ratingText = 'jelek';
                                                     }
                                                     if (rating == 2) {
-                                                      RatingText =
+                                                      ratingText =
                                                           'biasa sekali';
                                                     }
                                                     if (rating == 2.5) {
-                                                      RatingText = 'biasa';
+                                                      ratingText = 'biasa';
                                                     }
                                                     if (rating == 3) {
-                                                      RatingText = 'lumayan';
+                                                      ratingText = 'lumayan';
                                                     }
                                                     if (rating == 3.5) {
-                                                      RatingText = 'cukup';
+                                                      ratingText = 'cukup';
                                                     }
                                                     if (rating == 4) {
-                                                      RatingText = 'cukup baik';
+                                                      ratingText = 'cukup baik';
                                                     }
                                                     if (rating == 4.5) {
-                                                      RatingText = 'baik';
+                                                      ratingText = 'baik';
                                                     }
                                                     if (rating == 5) {
-                                                      RatingText =
+                                                      ratingText =
                                                           'bagus sekali';
                                                     }
                                                   });
@@ -138,7 +138,7 @@ class _PenilaianState extends State<Penilaian> {
                                     ),
                                   ),
                                   const SizedBox(height: 20),
-                                  widgetTextRating(RatingText),
+                                  widgetTextRating(ratingText),
                                 ],
                               ),
                             ),
@@ -413,7 +413,7 @@ class _PenilaianState extends State<Penilaian> {
     }
   }
 
-  String RatingText = 'rating now';
+  String ratingText = 'rating now';
   double score = 1.0;
   Widget widgetTextRating(text) {
     // return Container(

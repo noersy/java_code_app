@@ -201,8 +201,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   _changePin(Lang lang) {
+    // ignore: prefer_typing_uninitialized_variables
     var value1;
-    print('_changePin');
     showDialog(
       context: context,
       builder: (_) => VPinDialog(
@@ -210,20 +210,17 @@ class _ProfilePageState extends State<ProfilePage> {
         title: lang.profile.lm,
         onComplete: (value) {
           value1 = value;
-          print('1 complete: $value');
           Navigator.pop(context);
         },
       ),
     ).then((value) {
       if (value1 == true) {
-        print('2 complete: $value');
         showDialog(
           context: context,
           builder: (_) => VPinDialog(
             title: lang.profile.br,
             giveString: true,
             onComplete: (value) {
-              print('2 complete:$value');
               if (value.runtimeType != String) return;
               provider.update(key: "pin", value: "$value");
               Navigator.pop(context);
@@ -547,7 +544,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                     title: lang.profile.penilaian.toString(),
                                     suffix: lang.profile.nilai_sekarang,
                                     onPressed: () {
-                                      print('object');
                                       // print('navigate daftar penilaian');
                                       Navigate.toDaftarPenilaian(context);
                                     },
@@ -611,7 +607,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           noIcon: true,
                                           numberInput: false,
                                         ),
-                                      TileListProfile(
+                                      const TileListProfile(
                                         noIcon: true,
                                         enable: false,
                                         title: 'Version',
@@ -667,7 +663,7 @@ class TileListProfile extends StatefulWidget {
   final bool? btn;
   final bool? noIcon;
   final bool numberInput;
-  TileListProfile(
+  const TileListProfile(
       {Key? key,
       this.top = true,
       this.bottom = false,
@@ -797,7 +793,7 @@ class _TileListProfileState extends State<TileListProfile> {
                           ),
                         ),
                       if (widget.btn != true && widget.noIcon != true)
-                        Icon(
+                        const Icon(
                           Icons.edit,
                           color: ColorSty.grey,
                           size: 16.0,

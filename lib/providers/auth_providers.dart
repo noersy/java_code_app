@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_adjacent_string_concatenation
 
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,8 +30,8 @@ class AuthProviders extends ChangeNotifier {
     bool? isGoogle = false,
     String? nama = "",
   }) async {
+    // ignore: prefer_typing_uninitialized_variables
     var editResponse;
-    Map response;
     final Uri _api = Uri.http(host, "$sub/api/auth/login");
     try {
       final body = <String, dynamic>{
@@ -94,6 +93,7 @@ class AuthProviders extends ChangeNotifier {
     bool? isGoogle = true,
     String? nama = "",
   }) async {
+    // ignore: prefer_typing_uninitialized_variables
     var editResponse;
     final Uri _api = Uri.http(host, "$sub/api/auth/login");
     try {
@@ -113,7 +113,6 @@ class AuthProviders extends ChangeNotifier {
           json.decode(response.body)["status_code"] == 200) {
         editResponse = json.decode(response.body);
         if (json.decode(response.body)["data"]["user"]["foto"] == null) {
-          print('response login google:/n ${editResponse.runtimeType}');
           editResponse["data"]["user"]["foto"] =
               '''https://javacode.landa.id/img/1/review/review_1_620e0269b96d2.png''';
           editResponse = json.encode(editResponse);
@@ -192,7 +191,6 @@ class AuthProviders extends ChangeNotifier {
       final response = await http.get(_api, headers: await getHeader()).timeout(
         const Duration(seconds: 4),
         onTimeout: () {
-          print('object');
           return http.Response('Error', 408);
         },
       );
@@ -206,8 +204,6 @@ class AuthProviders extends ChangeNotifier {
         notifyListeners();
         return true;
       }
-    } on SocketException {
-      print('object');
     } catch (e, r) {
       _log.warning(e);
       _log.warning(r);
@@ -264,8 +260,6 @@ class AuthProviders extends ChangeNotifier {
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
         if (_user == null) _log.info("Failed Upload profile image.");
-        if (_user != null)
-          _log.fine("Susses Upload profile image./nBody:${response.body}");
         getUser();
         return true;
       }
