@@ -33,14 +33,15 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(height: SpaceDims.sp12),
-        SizedBox(
-          width: double.infinity,
-          child: SingleChildScrollView(
-            physics: const NeverScrollableScrollPhysics(),
-            child: widgetListMenu(),
-          ),
-        ),
+        // const SizedBox(height: SpaceDims.sp12),
+        // SizedBox(
+        //   width: double.infinity,
+        //   child: SingleChildScrollView(
+        //     physics: const NeverScrollableScrollPhysics(),
+        //     child:
+        widgetListMenu(),
+        //   ),
+        // ),
       ],
     );
   }

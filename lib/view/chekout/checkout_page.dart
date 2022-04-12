@@ -15,7 +15,6 @@ import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/view/chekout/widget/list_order_checkout.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
 import 'package:java_code_app/widget/dialog/custom_dialog.dart';
-import 'package:java_code_app/widget/dialog/infodiscount_dialog.dart';
 import 'package:java_code_app/widget/dialog/orderdone_dialog.dart';
 import 'package:java_code_app/widget/dialog/vp_fingerprint_dialog.dart';
 import 'package:java_code_app/widget/list/listmenu_tile.dart';

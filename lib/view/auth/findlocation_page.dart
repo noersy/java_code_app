@@ -92,7 +92,7 @@ class _FindLocationPageState extends State<FindLocationPage> {
                             child: Text(
                               "${Provider.of<LocationProvider>(context).currentAddress}",
                               textAlign: TextAlign.center,
-                              style: TypoSty.title.copyWith(fontSize: 20.0),
+                              style: TypoSty.title.copyWith(fontSize: 18.0),
                             ),
                           ),
                         const SizedBox(height: SpaceDims.sp24),

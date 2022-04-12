@@ -73,9 +73,9 @@ class AuthProviders extends ChangeNotifier {
         } else {
           return {
             'status': true,
-            'message': editResponse['errors'] == null
-                ? 'Login gagal'
-                : editResponse['errors'][0],
+            'message': editResponse['errors'] != null
+                ? editResponse['errors'][0]
+                : editResponse['message'] ?? 'Login gagal',
           };
         }
       }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/models/lang.dart';
 import 'package:java_code_app/models/menudetail.dart';
@@ -324,6 +325,7 @@ class _DetailMenuState extends State<DetailMenu> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorSty.bg2,
+      resizeToAvoidBottomInset: false,
       appBar: appBarDetailMenu(),
       body: SingleChildScrollView(
         primary: true,
@@ -435,7 +437,9 @@ class _DetailMenuState extends State<DetailMenu> {
                               .lang
                               .detailMenu!
                               .harga,
-                          prefix: !_isLoading ? "Rp $_hargaTotal" : "Rp 0",
+                          prefix: !_isLoading
+                              ? "Rp ${oCcy.format(_hargaTotal)}"
+                              : "Rp 0",
                           onPressed: () {},
                         ),
 

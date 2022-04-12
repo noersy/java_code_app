@@ -430,7 +430,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   child: Text(
                                     lang.pesanan.allStatus,
                                     style: TypoSty.caption.copyWith(
-                                      fontSize: 13.0,
+                                      fontSize: 10.0.sp,
                                       color: _status == 0
                                           ? ColorSty.primary
                                           : ColorSty.black,
@@ -450,7 +450,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   child: Text(
                                     lang.pesanan.status3,
                                     style: TypoSty.caption.copyWith(
-                                      fontSize: 13.0,
+                                      fontSize: 10.0.sp,
                                       color: _status == 3
                                           ? ColorSty.primary
                                           : ColorSty.black,
@@ -470,7 +470,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   child: Text(
                                     lang.pesanan.status4,
                                     style: TypoSty.caption.copyWith(
-                                      fontSize: 13.0,
+                                      fontSize: 10.0.sp,
                                       color: _status == 4
                                           ? ColorSty.primary
                                           : ColorSty.black,
@@ -533,7 +533,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     _ttile,
                     textAlign: TextAlign.center,
                     style: TypoSty.caption.copyWith(
-                      fontSize: 13.0,
+                      fontSize: 10.0.sp,
                       color: ColorSty.black60,
                       fontWeight: FontWeight.bold,
                     ),
@@ -576,7 +576,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               child: Text(
                 _dateRange,
                 style: TypoSty.caption2.copyWith(
-                  fontSize: 13.0,
+                  fontSize: 10.0.sp,
                   fontWeight: FontWeight.w600,
                 ),
               ),

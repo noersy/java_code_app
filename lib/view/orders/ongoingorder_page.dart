@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/models/orderdetail.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -165,7 +167,8 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                           prefixCostume: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Text("Rp ${data?.data.order.potongan}",
+                              Text(
+                                  "Rp ${oCcy.format(data?.data.order.potongan)}",
                                   style: TypoSty.captionSemiBold.copyWith(
                                       fontWeight: FontWeight.normal,
                                       color: Colors.red),
@@ -333,7 +336,7 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
       totalPesanan += data!.data.detail[i].total;
     }
     return Text(
-      "Rp $totalPesanan",
+      "Rp ${oCcy.format(totalPesanan)}",
       style: TypoSty.subtitle.copyWith(
         color: ColorSty.primary,
       ),
@@ -369,8 +372,10 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
                 Text(
                   "Anda yakin ingin membatalkan pesanan ini?",
                   textAlign: TextAlign.center,
-                  style: TypoSty.title
-                      .copyWith(fontSize: 16.0, fontWeight: FontWeight.w600),
+                  style: TypoSty.title.copyWith(
+                    fontSize: 14.0.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 const SizedBox(height: SpaceDims.sp12),
                 Row(

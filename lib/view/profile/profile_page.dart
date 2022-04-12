@@ -791,7 +791,8 @@ class _TileListProfileState extends State<TileListProfile> {
                             child: Text(
                               widget.suffix,
                               overflow: TextOverflow.ellipsis,
-                              style: TypoSty.caption.copyWith(fontSize: 14.0),
+                              style:
+                                  TypoSty.caption.copyWith(fontSize: 12.0.sp),
                             ),
                           ),
                         ),

@@ -64,7 +64,7 @@ class DeleteMenuInCheckoutDialog extends StatelessWidget {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: "Montserrat",
-                            fontSize: 20.sp,
+                            fontSize: 18.sp,
                           ),
                         ),
                         const SizedBox(height: SpaceDims.sp8),
@@ -74,7 +74,7 @@ class DeleteMenuInCheckoutDialog extends StatelessWidget {
                             text: 'Kamu akan mengeluarkan menu ini dari ',
                             style: TypoSty.caption2.copyWith(
                               fontWeight: FontWeight.normal,
-                              fontSize: 16.0,
+                              fontSize: 14.0.sp,
                             ),
                             children: const <TextSpan>[
                               TextSpan(
@@ -103,7 +103,7 @@ class DeleteMenuInCheckoutDialog extends StatelessWidget {
                                 ),
                                 onPressed: () {
                                   Provider.of<OrderProviders>(context,
-                                      listen: false)
+                                          listen: false)
                                       .deleteOrder(id: id);
                                   Navigator.of(context).pop();
                                 },

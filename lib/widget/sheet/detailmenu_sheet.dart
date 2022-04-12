@@ -11,15 +11,19 @@ class BottomSheetDetailMenu extends StatelessWidget {
   const BottomSheetDetailMenu({
     Key? key,
     required this.content,
-    required this.title, this.heightGp,
+    required this.title,
+    this.heightGp,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    double bottomHeight =
+        keyboardHeight > 0 ? keyboardHeight + 300 : keyboardHeight;
+
     return Container(
-      height: 140,
+      height: 140 + bottomHeight,
       width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp12),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp16),
@@ -30,8 +34,8 @@ class BottomSheetDetailMenu extends StatelessWidget {
               height: 4.0,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                    color: ColorSty.grey,
-                    borderRadius: BorderRadius.circular(30.0),
+                  color: ColorSty.grey,
+                  borderRadius: BorderRadius.circular(30.0),
                 ),
               ),
             ),

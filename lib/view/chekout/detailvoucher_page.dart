@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/models/listvoucher.dart';
 import 'package:java_code_app/providers/order_providers.dart';
@@ -278,10 +279,10 @@ class CardDetailVoucher extends StatelessWidget {
                   child: AutoSizeText(
                     " ${oCcy.format(nominal)} ",
                     maxLines: 1,
-                    style: const TextStyle(
+                    style: TextStyle(
                       backgroundColor: Colors.white,
-                      color: Color.fromRGBO(0, 154, 173, 1),
-                      fontSize: 35.0,
+                      color: const Color.fromRGBO(0, 154, 173, 1),
+                      fontSize: 32.0.sp,
                       decorationThickness: 2.85,
                     ),
                     textAlign: TextAlign.end,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/models/orderdetail.dart';
@@ -127,7 +128,7 @@ class _CardMenuOngoingState extends State<CardMenuOngoing> {
                     Text(
                       nama,
                       style: TypoSty.title.copyWith(
-                        fontSize: 20.0,
+                        fontSize: 18.0.sp,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -143,7 +144,7 @@ class _CardMenuOngoingState extends State<CardMenuOngoing> {
                           catatan,
                           style: TypoSty.caption2.copyWith(
                             fontWeight: FontWeight.w500,
-                            fontSize: 12.0,
+                            fontSize: 10.0.sp,
                             color: ColorSty.grey,
                           ),
                         ),

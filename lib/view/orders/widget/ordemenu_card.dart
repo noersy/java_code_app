@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/models/listorder.dart';
@@ -55,7 +56,8 @@ class OrderMenuCard extends StatelessWidget {
                 ),
                 child: Image.network(
                   data.menu.isNotEmpty
-                      ? data.menu.firstWhere((e) => e.foto != null).foto ?? "http://"
+                      ? data.menu.firstWhere((e) => e.foto != null).foto ??
+                          "http://"
                       : "http://",
                   loadingBuilder: imageOnLoad,
                   errorBuilder: imageError,
@@ -111,9 +113,8 @@ class OrderMenuCard extends StatelessWidget {
                     RichText(
                       overflow: TextOverflow.ellipsis,
                       text: TextSpan(
-                          text: data.menu.isNotEmpty
-                              ? data.menu.first.nama
-                              : "",
+                          text:
+                              data.menu.isNotEmpty ? data.menu.first.nama : "",
                           style: TypoSty.title,
                           children: [
                             for (final i
@@ -128,13 +129,15 @@ class OrderMenuCard extends StatelessWidget {
                         Text(
                           "Rp ${oCcy.format(data.totalBayar)}",
                           style: TypoSty.mini.copyWith(
-                              fontSize: 14.0, color: ColorSty.primary),
+                            fontSize: 12.0.sp,
+                            color: ColorSty.primary,
+                          ),
                         ),
                         const SizedBox(width: SpaceDims.sp8),
                         Text(
                           "(${data.menu.length} Menu)",
                           style: TypoSty.mini.copyWith(
-                            fontSize: 12.0,
+                            fontSize: 10.0.sp,
                             color: ColorSty.grey,
                           ),
                         ),

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/models/listvoucher.dart';
@@ -343,20 +344,23 @@ class _VoucherCardState extends State<VoucherCard> {
                   IconButton(
                     onPressed: widget.voucher != null
                         ? () async {
-                            _isSelected = (await Navigate.toDetailVoucherPage(
-                                    context,
-                                    voucher: widget.voucher!)) ??
-                                false;
+                            setState(() => _isSelected = !_isSelected);
+                            widget.onPressed("${widget.voucher?.nama}");
 
-                            if (_isSelected && widget.onChanged != null) {
-                              widget.onChanged!(widget.voucher!.nama);
-                            }
+                            // _isSelected = (await Navigate.toDetailVoucherPage(
+                            //         context,
+                            //         voucher: widget.voucher!)) ??
+                            //     false;
+
+                            // if (_isSelected && widget.onChanged != null) {
+                            //   widget.onChanged!(widget.voucher!.nama);
+                            // }
                           }
                         : () {},
-                    // () {
-                    //   setState(() => _isSelected = !_isSelected);
-                    //   widget.onPressed("${widget.voucher?.nama}");
-                    // },
+                    // : () {
+                    //     setState(() => _isSelected = !_isSelected);
+                    //     widget.onPressed("${widget.voucher?.nama}");
+                    //   },
                     icon: widget.isChecked
                         ? const Icon(
                             Icons.check_box_outlined,
@@ -396,10 +400,10 @@ class _VoucherCardState extends State<VoucherCard> {
                         child: AutoSizeText(
                           " ${oCcy.format(widget.voucher?.nominal)} ",
                           maxLines: 1,
-                          style: const TextStyle(
+                          style: TextStyle(
                             backgroundColor: Colors.white,
-                            color: Color.fromRGBO(0, 154, 173, 1),
-                            fontSize: 35.0,
+                            color: const Color.fromRGBO(0, 154, 173, 1),
+                            fontSize: 32.0.sp,
                             decorationThickness: 2.85,
                           ),
                           textAlign: TextAlign.end,
@@ -414,24 +418,30 @@ class _VoucherCardState extends State<VoucherCard> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          const Text(
+                          Text(
                             "Valid Date:",
                             style: TextStyle(
-                                color: ColorSty.black, fontSize: 12.0),
+                              color: ColorSty.black,
+                              fontSize: 10.0.sp,
+                            ),
                           ),
                           if (_end.difference(_start).inDays < 31)
                             Text(
                               """(${_end.difference(_start).inDays} Days) ${dateFormat.format(_start)} - ${dateFormat.format(_end)} 
                           """,
                               style: TypoSty.mini.copyWith(
-                                  color: ColorSty.black60, fontSize: 9.0),
+                                color: ColorSty.black60,
+                                fontSize: 8.0.sp,
+                              ),
                             ),
                           if (_end.difference(_start).inDays > 31)
                             Text(
                               """($_months Month) ${dateFormat.format(_start)} - ${dateFormat.format(_end)} 
                           """,
                               style: TypoSty.mini.copyWith(
-                                  color: ColorSty.black60, fontSize: 9.0),
+                                color: ColorSty.black60,
+                                fontSize: 8.0.sp,
+                              ),
                             ),
                         ],
                       ),

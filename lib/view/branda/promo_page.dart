@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
@@ -11,7 +12,13 @@ class PromoPage extends StatelessWidget {
   final int? discount, nominal;
   final String title, police;
 
-  const PromoPage({Key? key, this.discount, this.nominal, required this.title, required this.police}) : super(key: key);
+  const PromoPage(
+      {Key? key,
+      this.discount,
+      this.nominal,
+      required this.title,
+      required this.police})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +34,11 @@ class PromoPage extends StatelessWidget {
         return Column(
           children: [
             SizedBox(height: SpaceDims.sp24.h),
-            CardCoupon(police: police, title: title, discount: discount, nominal: nominal),
+            CardCoupon(
+                police: police,
+                title: title,
+                discount: discount,
+                nominal: nominal),
             SizedBox(height: SpaceDims.sp24.h),
             Expanded(
               child: Container(
@@ -59,7 +70,9 @@ class PromoPage extends StatelessWidget {
                           children: [
                             Text("Nama Promo", style: TypoSty.title),
                             Text(
-                              nominal == null ? "Diskon $discount%" : "Rp $nominal Voucher ",
+                              nominal == null
+                                  ? "Diskon $discount%"
+                                  : "Rp ${oCcy.format(nominal)} Voucher ",
                               style: TypoSty.title.copyWith(
                                 color: ColorSty.primary,
                               ),
@@ -113,7 +126,8 @@ class PromoPage extends StatelessWidget {
                               child: Column(
                                 children: [
                                   Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: const [
                                       Text("1. "),
                                       Expanded(
@@ -126,7 +140,8 @@ class PromoPage extends StatelessWidget {
                                   ),
                                   SizedBox(height: SpaceDims.sp12.h),
                                   Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: const [
                                       Text("2. "),
                                       Expanded(
@@ -139,7 +154,8 @@ class PromoPage extends StatelessWidget {
                                   ),
                                   SizedBox(height: SpaceDims.sp12.h),
                                   Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: const [
                                       Text("3. "),
                                       Expanded(

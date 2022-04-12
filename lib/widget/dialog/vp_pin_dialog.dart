@@ -57,14 +57,14 @@ class _VPinDialogState extends State<VPinDialog> {
                     ? "Verifikasi Pesanan"
                     : widget.title ?? "",
                 style: TypoSty.title.copyWith(
-                  fontSize: 18.sp,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               Text(
                 "Masukan kode Pin",
                 style: TypoSty.caption2.copyWith(
-                  fontSize: 14.sp,
+                  fontSize: 12.sp,
                   fontWeight: FontWeight.normal,
                 ),
               ),

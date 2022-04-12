@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/widget/dialog/custom_text.dart';
 
@@ -14,7 +15,7 @@ showCustomSnackbar(
       text: 'Item belum ditambahkan!',
       color: textColor ?? Colors.white,
       isBold: true,
-      fontSize: 18,
+      fontSize: 16.sp,
     ),
     duration: const Duration(milliseconds: 700),
   );

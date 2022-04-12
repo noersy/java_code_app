@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -59,7 +60,7 @@ class BerandaSkeleton extends StatelessWidget {
                           Text(
                             "%",
                             style: TypoSty.heading.copyWith(
-                              fontSize: 36.0,
+                              fontSize: 34.0.sp,
                               foreground: Paint()
                                 ..style = PaintingStyle.stroke
                                 ..strokeWidth = 1

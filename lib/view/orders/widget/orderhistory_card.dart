@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/models/listhistory.dart';
@@ -121,7 +122,9 @@ class OrderHistoryCard extends StatelessWidget {
                                   Text(
                                     tanggal,
                                     style: TypoSty.mini.copyWith(
-                                        color: Colors.grey, fontSize: 14.0),
+                                      color: Colors.grey,
+                                      fontSize: 12.0.sp,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -179,13 +182,15 @@ class OrderHistoryCard extends StatelessWidget {
                                 Text(
                                   "Rp ${oCcy.format(data.totalBayar)}",
                                   style: TypoSty.mini.copyWith(
-                                      fontSize: 14.0, color: ColorSty.primary),
+                                    fontSize: 12.0.sp,
+                                    color: ColorSty.primary,
+                                  ),
                                 ),
                                 const SizedBox(width: SpaceDims.sp8),
                                 Text(
                                   "(${data.menu.length} Menu)",
                                   style: TypoSty.mini.copyWith(
-                                    fontSize: 12.0,
+                                    fontSize: 10.0.sp,
                                     color: ColorSty.grey,
                                   ),
                                 ),
@@ -208,7 +213,7 @@ class OrderHistoryCard extends StatelessWidget {
                                         shape: RoundedRectangleBorder(
                                           side: const BorderSide(
                                             color: ColorSty.primaryDark,
-                                            width: 2,
+                                            width: 1,
                                           ),
                                           borderRadius:
                                               BorderRadius.circular(30.0),
@@ -220,7 +225,7 @@ class OrderHistoryCard extends StatelessWidget {
                                       child: Text(
                                         lang.pesanan.buttonPe,
                                         style: TypoSty.button
-                                            .copyWith(fontSize: 11.0),
+                                            .copyWith(fontSize: 10.0.sp),
                                       ),
                                     ),
                                   const SizedBox(width: SpaceDims.sp8),
@@ -235,7 +240,7 @@ class OrderHistoryCard extends StatelessWidget {
                                       shape: RoundedRectangleBorder(
                                         side: const BorderSide(
                                           color: ColorSty.primaryDark,
-                                          width: 2,
+                                          width: 1,
                                         ),
                                         borderRadius:
                                             BorderRadius.circular(30.0),
@@ -245,7 +250,7 @@ class OrderHistoryCard extends StatelessWidget {
                                     child: Text(
                                       lang.pesanan.buttonLa,
                                       style: TypoSty.button
-                                          .copyWith(fontSize: 11.0),
+                                          .copyWith(fontSize: 10.0.sp),
                                     ),
                                   )
                                 ],

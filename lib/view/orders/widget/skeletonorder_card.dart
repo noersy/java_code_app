@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
@@ -108,7 +109,8 @@ class SkeletonOrderCard extends StatelessWidget {
                                   onPressed: () {},
                                   child: Text(
                                     lang.pesanan.buttonPe,
-                                    style: TypoSty.button.copyWith(fontSize: 11.0),
+                                    style: TypoSty.button
+                                        .copyWith(fontSize: 10.0.sp),
                                   ),
                                 ),
                                 const SizedBox(width: SpaceDims.sp8),
@@ -131,7 +133,8 @@ class SkeletonOrderCard extends StatelessWidget {
                                   onPressed: () {},
                                   child: Text(
                                     lang.pesanan.buttonLa,
-                                    style: TypoSty.button.copyWith(fontSize: 11.0),
+                                    style: TypoSty.button
+                                        .copyWith(fontSize: 10.0.sp),
                                   ),
                                 )
                               ],

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
@@ -47,7 +49,7 @@ class CardCoupon extends StatelessWidget {
                   child: Text(
                     discount != null ? "Diskon  " : "Voucher  ",
                     style: TypoSty.heading
-                        .copyWith(color: ColorSty.white, fontSize: 25),
+                        .copyWith(color: ColorSty.white, fontSize: 22.sp),
                   ),
                 ),
                 Flexible(
@@ -57,9 +59,9 @@ class CardCoupon extends StatelessWidget {
                         ? discount != 0
                             ? "$discount %"
                             : "-"
-                        : "Rp $nominal",
+                        : "Rp ${oCcy.format(nominal)}",
                     style: TypoSty.heading.copyWith(
-                      fontSize: discount != null ? 36.0 : 22.0,
+                      fontSize: discount != null ? 34.0.sp : 20.0.sp,
                       foreground: Paint()
                         ..style = PaintingStyle.stroke
                         ..strokeWidth = 1

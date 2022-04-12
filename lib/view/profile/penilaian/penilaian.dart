@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -206,7 +207,7 @@ class _PenilaianState extends State<Penilaian> {
               padding: const EdgeInsets.all(10.0),
               child: TextFormField(
                 enabled: true,
-                style: const TextStyle(fontSize: 12),
+                style: TextStyle(fontSize: 10.0.sp),
                 maxLines: 5,
                 controller: textReviewController,
                 decoration: const InputDecoration(

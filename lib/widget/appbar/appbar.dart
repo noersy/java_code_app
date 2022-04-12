@@ -71,8 +71,8 @@ class CostumeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 const SizedBox(width: SpaceDims.sp8),
                 if (dense ?? false) const SizedBox(width: SpaceDims.sp12),
               ],
-              if (icon != null) const SizedBox(width: SpaceDims.sp46 + 3),
-              Text(title, style: TypoSty.title),
+              // if (icon != null) const SizedBox(width: SpaceDims.sp46 + 3),
+              Text(' $title', style: TypoSty.title),
               if (profileTitle != null)
                 Column(
                   children: [

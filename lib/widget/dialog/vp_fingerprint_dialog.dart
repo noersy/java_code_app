@@ -46,14 +46,14 @@ class VFingerPrintDialog extends StatelessWidget {
               Text(
                 "Verifikasi Pesanan",
                 style: TypoSty.title.copyWith(
-                  fontSize: 18.sp,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               Text(
                 "Finger Print",
                 style: TypoSty.caption2.copyWith(
-                  fontSize: 14.sp,
+                  fontSize: 12.sp,
                   fontWeight: FontWeight.normal,
                 ),
               ),
@@ -84,15 +84,16 @@ class VFingerPrintDialog extends StatelessWidget {
                 onPressed: () {
                   Navigator.pop(context);
                   showDialog(
-                      context: context,
-                      builder: (_) => VPinDialog(
-                            pesananPin: true,
-                            onComplete: (value) {
-                              if (value.runtimeType == bool) {
-                                onSubmit(value as bool);
-                              }
-                            },
-                          ));
+                    context: context,
+                    builder: (_) => VPinDialog(
+                      pesananPin: true,
+                      onComplete: (value) {
+                        if (value.runtimeType == bool) {
+                          onSubmit(value as bool);
+                        }
+                      },
+                    ),
+                  );
                 },
                 child: Text(
                   "Verifikasi Menggunakan PIN",

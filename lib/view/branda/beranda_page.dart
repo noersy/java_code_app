@@ -1,16 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/providers/order_providers.dart';
-import 'package:java_code_app/theme/colors.dart';
-import 'package:java_code_app/theme/icons_cs_icons.dart';
-import 'package:java_code_app/theme/spacing.dart';
-import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/view/branda/component/beranda_skeleton.dart';
 import 'package:java_code_app/view/branda/component/content_beranda.dart';
 import 'package:java_code_app/view/branda/component/search_screen.dart';
-import 'package:java_code_app/widget/appbar/appbar.dart';
+import 'package:java_code_app/view/branda/widget/search_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -23,8 +18,8 @@ class BerandaPage extends StatefulWidget {
 
 class _BerandaPageState extends State<BerandaPage> {
   static String result = "";
+  final TextEditingController editingController = TextEditingController();
 
-  final TextEditingController _editingController = TextEditingController();
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   bool _loading = false;
@@ -62,62 +57,31 @@ class _BerandaPageState extends State<BerandaPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: CostumeAppBar(
-        costumeTitle: SizedBox(
-          height: 42.0,
-          child: TextFormField(
-            controller: _editingController,
-            onChanged: (value) {
-              result = value;
-              setState(() {
-                //get data by parameter
-                _onSearchMenu();
-              });
-            },
-            decoration: InputDecoration(
-              isDense: true,
-              hintText:
-                  Provider.of<LangProviders>(context).lang.beranda!.pencarian,
-              hintStyle: TypoSty.captionSemiBold.copyWith(color: ColorSty.grey),
-              prefixIcon: const Icon(
-                IconsCs.search,
-                color: ColorSty.primary,
-              ),
-              contentPadding: const EdgeInsets.only(
-                left: 53,
-                right: SpaceDims.sp12,
-                top: SpaceDims.sp12,
-                bottom: SpaceDims.sp8,
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: ColorSty.primary,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-              border: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: ColorSty.primary,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: ColorSty.primary,
-                  width: 2.0,
-                ),
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-            ),
-          ),
-        ),
-        title: '',
-      ),
-      body: SmartRefresher(
+    return SafeArea(
+      child:
+          //  Scaffold(
+          //   backgroundColor: Colors.white,
+          //   appBar: null,
+          // appBar: isOnSearch
+          //     ? CostumeAppBar(
+          //         costumeTitle: SearchBar(
+          //           editingController: editingController,
+          //           onTap: () {
+          //             toggleOnSearch(status: true);
+          //           },
+          //           onSearch: (value) {
+          //             setState(() {
+          //               result = value;
+          //             });
+          //             if (result.isNotEmpty) toggleOnSearch(status: false);
+          //             _onSearchMenu();
+          //           },
+          //         ),
+          //         title: '',
+          //       )
+          //     : null,
+          // body:
+          SmartRefresher(
         controller: _refreshController,
         onRefresh: _onRefresh,
         child: AnimatedBuilder(
@@ -127,23 +91,56 @@ class _BerandaPageState extends State<BerandaPage> {
             final menuList = provider.listMenu;
             final listPromo = provider.listPromo;
 
-            if (menuList != null && !_loading) {
-              if (result.isEmpty) {
-                return ContentBeranda(
-                  data: menuList,
-                  listPromo: listPromo,
-                );
-              } else {
-                return SearchScreen(
-                  result: result,
-                  data: menuList,
-                );
-              }
-            }
-            return const SingleChildScrollView(child: BerandaSkeleton());
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.only(
+                        bottomRight: Radius.circular(30),
+                        bottomLeft: Radius.circular(30),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          offset: const Offset(0, 2.0),
+                          blurRadius: 4.0,
+                        )
+                      ],
+                    ),
+                    child: SearchBar(
+                      editingController: editingController,
+                      onSearch: (value) {
+                        result = value;
+                        setState(() {
+                          _onSearchMenu();
+                        });
+                      },
+                    ),
+                  ),
+                  menuList != null && !_loading
+                      ? result.isEmpty
+                          ? ContentBeranda(
+                              data: menuList,
+                              listPromo: listPromo,
+                            )
+                          : SearchScreen(
+                              result: result,
+                              data: menuList,
+                            )
+                      : const BerandaSkeleton(),
+                ],
+              ),
+            );
           },
         ),
       ),
+      // ),
     );
   }
 }

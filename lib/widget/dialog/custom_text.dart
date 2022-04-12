@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomText extends StatelessWidget {
   final String? text;
@@ -40,7 +41,7 @@ class CustomText extends StatelessWidget {
       style: TextStyle(
         fontFamily: "Montserrat",
         color: color!.withOpacity(opacity ?? 1.0),
-        fontSize: fontSize ?? 12,
+        fontSize: fontSize ?? 10.sp,
         fontWeight: isBold! ? FontWeight.bold : weight ?? FontWeight.normal,
         height: 1,
         fontStyle: style,

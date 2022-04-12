@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/text_style.dart';
@@ -29,34 +30,33 @@ class _PesananPageState extends State<PesananPage>
       backgroundColor: ColorSty.white,
       appBar: AppBar(
         shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(30.0),
-                bottomLeft: Radius.circular(30.0),
-            ),
+          borderRadius: BorderRadius.only(
+            bottomRight: Radius.circular(30.0),
+            bottomLeft: Radius.circular(30.0),
+          ),
         ),
         backgroundColor: ColorSty.white,
         title: AnimatedBuilder(
-          animation: LangProviders(),
-          builder: (context, snapshot) {
-            final lang = context.watch<LangProviders>().lang;
-            return TabBar(
-              controller: _tabController,
-              indicatorPadding: const EdgeInsets.symmetric(
-                horizontal: 50.0,
-                vertical: 8.0,
-              ),
-              labelPadding: const EdgeInsets.all(0),
-              labelStyle: TypoSty.title.copyWith(fontSize: 18),
-              indicatorColor: ColorSty.primary,
-              unselectedLabelColor: ColorSty.black,
-              labelColor: ColorSty.primary,
-              tabs: [
-                Tab(child: Text(lang.pesanan.tap)),
-                Tab(child: Text(lang.pesanan.tap2)),
-              ],
-            );
-          }
-        ),
+            animation: LangProviders(),
+            builder: (context, snapshot) {
+              final lang = context.watch<LangProviders>().lang;
+              return TabBar(
+                controller: _tabController,
+                indicatorPadding: const EdgeInsets.symmetric(
+                  horizontal: 50.0,
+                  vertical: 8.0,
+                ),
+                labelPadding: const EdgeInsets.all(0),
+                labelStyle: TypoSty.title.copyWith(fontSize: 16.sp),
+                indicatorColor: ColorSty.primary,
+                unselectedLabelColor: ColorSty.black,
+                labelColor: ColorSty.primary,
+                tabs: [
+                  Tab(child: Text(lang.pesanan.tap)),
+                  Tab(child: Text(lang.pesanan.tap2)),
+                ],
+              );
+            }),
       ),
       body: TabBarView(
         controller: _tabController,

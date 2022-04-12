@@ -199,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
                           width: 339.0.w,
                           child: Text(
                             'Masuk untuk melanjutkan!',
-                            style: TypoSty.heading.copyWith(fontSize: 20.0.sp),
+                            style: TypoSty.heading.copyWith(fontSize: 18.0.sp),
                           ),
                         ),
                         SizedBox(height: 25.0.h),
