@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/helps/image.dart';
@@ -303,6 +304,7 @@ class _DetailMenuState extends State<DetailMenu> {
         bottomRight: Radius.circular(30),
         bottomLeft: Radius.circular(30),
       )),
+      centerTitle: true,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_ios, color: ColorSty.primary),
         onPressed: () => {
@@ -419,161 +421,163 @@ class _DetailMenuState extends State<DetailMenu> {
                             ),
                           ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: SpaceDims.sp24,
-                      right: SpaceDims.sp24,
-                    ),
-                    child: Column(
-                      children: [
-                        TileListDMenu(
-                          icon: IconsCs.cash,
-                          isLoading: _isLoading,
-                          title: Provider.of<LangProviders>(context)
-                              .lang
-                              .detailMenu!
-                              .harga,
-                          prefix: !_isLoading
-                              ? "Rp ${oCcy.format(_hargaTotal)}"
-                              : "Rp 0",
-                          onPressed: () {},
-                        ),
+                  Column(
+                    children: [
+                      TileListDMenu(
+                        icon: IconsCs.cash,
+                        isLoading: _isLoading,
+                        title: Provider.of<LangProviders>(context)
+                            .lang
+                            .detailMenu!
+                            .harga,
+                        prefix: !_isLoading
+                            ? "Rp ${oCcy.format(_hargaTotal)}"
+                            : "Rp 0",
+                        onPressed: () {},
+                      ),
 
-                        //if level ada
-                        if (_listLevel.isNotEmpty)
-                          TileListDMenu(
-                            prefixIcon: true,
-                            isLoading: _isLoading,
-                            icon: IconsCs.fire,
-                            title: Provider.of<LangProviders>(context)
-                                .lang
-                                .detailMenu!
-                                .level,
-                            prefix: _selectedLevel?.keterangan,
-                            onPressed: () => _showDialogLevel(_listLevel),
-                          ),
-                        //if topping ada
-                        if (_listTopping.isNotEmpty)
-                          TileListDMenu(
-                            prefixIcon: true,
-                            isLoading: _isLoading,
-                            iconSvg: SvgPicture.asset(
-                              "assert/image/icons/topping-icon.svg",
-                              height: 22.0,
-                            ),
-                            prefixCostume: RichText(
-                              textAlign: TextAlign.end,
-                              overflow: TextOverflow.ellipsis,
-                              text: TextSpan(
-                                  style: TypoSty.captionSemiBold
-                                      .copyWith(color: ColorSty.black),
-                                  text: _selectedTopping.isEmpty
-                                      ? ""
-                                      : _selectedTopping.first.keterangan,
-                                  children: [
-                                    for (var i = 0;
-                                        i < _selectedTopping.length;
-                                        i++)
-                                      if (i > 0)
-                                        TextSpan(
-                                          text:
-                                              ", ${_selectedTopping[i].keterangan}",
-                                          style:
-                                              TypoSty.captionSemiBold.copyWith(
-                                            color: ColorSty.black,
-                                          ),
-                                        )
-                                  ]),
-                            ),
-                            title: Provider.of<LangProviders>(context)
-                                .lang
-                                .detailMenu!
-                                .topping,
-                            onPressed: () => _showDialogTopping(_listTopping),
-                          ),
+                      //if level ada
+                      if (_listLevel.isNotEmpty)
                         TileListDMenu(
                           prefixIcon: true,
-                          icon: IconsCs.note,
                           isLoading: _isLoading,
+                          icon: IconsCs.fire,
                           title: Provider.of<LangProviders>(context)
                               .lang
                               .detailMenu!
-                              .catatan,
-                          prefix:
-                              _catatan.isEmpty ? "Tambahkan catatan" : _catatan,
-                          onPressed: () => showModalBottomSheet(
-                            barrierColor: ColorSty.grey.withOpacity(0.2),
-                            elevation: 5,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30.0),
-                                topRight: Radius.circular(30.0),
-                              ),
-                            ),
-                            context: context,
-                            builder: (BuildContext context) =>
-                                BottomSheetDetailMenu(
-                              title: "Buat Catatan",
-                              content: Row(
+                              .level,
+                          prefix: _selectedLevel?.keterangan,
+                          onPressed: () => _showDialogLevel(_listLevel),
+                        ),
+                      //if topping ada
+                      if (_listTopping.isNotEmpty)
+                        TileListDMenu(
+                          prefixIcon: true,
+                          isLoading: _isLoading,
+                          iconSvg: SvgPicture.asset(
+                            "assert/image/icons/topping-icon.svg",
+                            height: 22.0,
+                          ),
+                          prefixCostume: RichText(
+                            textAlign: TextAlign.end,
+                            overflow: TextOverflow.ellipsis,
+                            text: TextSpan(
+                                style: TypoSty.captionSemiBold
+                                    .copyWith(color: ColorSty.black),
+                                text: _selectedTopping.isEmpty
+                                    ? ""
+                                    : _selectedTopping.first.keterangan,
                                 children: [
-                                  Expanded(
-                                    child: TextFormField(
-                                      maxLength: 100,
-                                      controller: _editingController,
-                                      decoration: const InputDecoration(
-                                        contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 0,
-                                          vertical: 0,
+                                  for (var i = 0;
+                                      i < _selectedTopping.length;
+                                      i++)
+                                    if (i > 0)
+                                      TextSpan(
+                                        text:
+                                            ", ${_selectedTopping[i].keterangan}",
+                                        style: TypoSty.captionSemiBold.copyWith(
+                                          color: ColorSty.black,
                                         ),
+                                      )
+                                ]),
+                          ),
+                          title: Provider.of<LangProviders>(context)
+                              .lang
+                              .detailMenu!
+                              .topping,
+                          onPressed: () => _showDialogTopping(_listTopping),
+                        ),
+                      TileListDMenu(
+                        prefixIcon: true,
+                        icon: IconsCs.note,
+                        isLoading: _isLoading,
+                        title: Provider.of<LangProviders>(context)
+                            .lang
+                            .detailMenu!
+                            .catatan,
+                        prefix:
+                            _catatan.isEmpty ? "Tambahkan catatan" : _catatan,
+                        onPressed: () => showModalBottomSheet(
+                          barrierColor: ColorSty.grey.withOpacity(0.2),
+                          elevation: 5,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30.0),
+                              topRight: Radius.circular(30.0),
+                            ),
+                          ),
+                          context: context,
+                          builder: (BuildContext context) =>
+                              BottomSheetDetailMenu(
+                            title: "Buat Catatan",
+                            content: Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormField(
+                                    maxLength: 100,
+                                    controller: _editingController,
+                                    decoration: const InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 0,
+                                        vertical: 0,
                                       ),
                                     ),
                                   ),
-                                  ElevatedButton(
-                                    onPressed: _addCatatan,
-                                    style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsets.all(0),
-                                      minimumSize: const Size(25.0, 25.0),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(100.0),
-                                      ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: _addCatatan,
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.all(0),
+                                    minimumSize: const Size(25.0, 25.0),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(100.0),
                                     ),
-                                    child: const Icon(Icons.check, size: 26.0),
                                   ),
-                                ],
-                              ),
+                                  child: const Icon(Icons.check, size: 26.0),
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                        const Divider(thickness: 1.5),
-                        const SizedBox(height: SpaceDims.sp12),
-                        ElevatedButton(
-                          onPressed: _tambahkanPesanan,
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: SpaceDims.sp2,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                            ),
-                          ),
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                Provider.of<LangProviders>(context)
-                                    .lang
-                                    .detailMenu!
-                                    .tambahKeranjang,
-                                style: TypoSty.button,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: SpaceDims.sp20.w,
+                        ),
+                        child: Column(
+                          children: [
+                            const Divider(thickness: 1.5),
+                            const SizedBox(height: SpaceDims.sp12),
+                            ElevatedButton(
+                              onPressed: _tambahkanPesanan,
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: SpaceDims.sp2,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                ),
+                              ),
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    Provider.of<LangProviders>(context)
+                                        .lang
+                                        .detailMenu!
+                                        .tambahKeranjang,
+                                    style: TypoSty.button,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

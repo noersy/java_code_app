@@ -239,7 +239,7 @@ class OrderHistoryCard extends StatelessWidget {
                                       ),
                                       shape: RoundedRectangleBorder(
                                         side: const BorderSide(
-                                          color: ColorSty.primaryDark,
+                                          color: ColorSty.primary,
                                           width: 1,
                                         ),
                                         borderRadius:

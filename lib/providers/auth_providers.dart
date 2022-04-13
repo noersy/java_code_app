@@ -60,7 +60,7 @@ class AuthProviders extends ChangeNotifier {
 
         Preferences.getInstance()
             .setIntValue(KeyPrefens.loginID, _loginUser!.data.user.idUser);
-        _user = userDetailFromJson(editResponse['data']['user']);
+        _user = userDetailFromJson2(json.encode(editResponse['data']['user']));
         UserInstance.getInstance().initialize(user: _user);
         // getUser(id: _loginUser!.data.user.idUser);
         notifyListeners();

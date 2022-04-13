@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ConnectionStatus.getInstance().initialize(navigatorKey);
-    GeolocationStatus.getInstance().initialize();
+    // GeolocationStatus.getInstance().initialize();
     Preferences.getInstance().initialize();
     UserInstance.getInstance().initialize();
     // PushNotification.getInstance().initialize();

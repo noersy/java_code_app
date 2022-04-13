@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
@@ -52,8 +53,24 @@ class _PesananPageState extends State<PesananPage>
                 unselectedLabelColor: ColorSty.black,
                 labelColor: ColorSty.primary,
                 tabs: [
-                  Tab(child: Text(lang.pesanan.tap)),
-                  Tab(child: Text(lang.pesanan.tap2)),
+                  Tab(
+                    child: AutoSizeText(
+                      lang.pesanan.tap,
+                      maxLines: 1,
+                      textAlign: TextAlign.center,
+                      minFontSize: 0,
+                      stepGranularity: 0.1,
+                    ),
+                  ),
+                  Tab(
+                    child: AutoSizeText(
+                      lang.pesanan.tap2,
+                      maxLines: 1,
+                      textAlign: TextAlign.center,
+                      minFontSize: 0,
+                      stepGranularity: 0.1,
+                    ),
+                  ),
                 ],
               );
             }),

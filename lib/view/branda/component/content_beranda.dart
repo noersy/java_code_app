@@ -199,7 +199,7 @@ class _ContentBerandaState extends State<ContentBeranda>
                     ),
                     const SizedBox(
                       height: 74,
-                    )
+                    ),
                   ],
                 ),
                 Column(
@@ -225,6 +225,17 @@ class _ContentBerandaState extends State<ContentBeranda>
                           .lang
                           .beranda!
                           .semuaMinuman,
+                      data: widget.data,
+                    ),
+                    const SizedBox(height: 74)
+                  ],
+                ),
+                Column(
+                  children: [
+                    ListMenu(
+                      key: const Key("menu-4"),
+                      type: "snack",
+                      title: 'Snack',
                       data: widget.data,
                     ),
                     const SizedBox(height: 74)

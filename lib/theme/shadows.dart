@@ -28,4 +28,20 @@ class ShadowsB {
       offset: const Offset(0, 0),
     ),
   ];
+
+  static List<BoxShadow>? boxShadow4 = [
+    BoxShadow(
+      color: ColorSty.grey80.withOpacity(0.3),
+      spreadRadius: 3,
+      blurRadius: 3,
+      offset: const Offset(0, 0),
+    ),
+  ];
 }
+
+BoxShadow boxShadow3 = BoxShadow(
+  color: ColorSty.grey80.withOpacity(0.2),
+  spreadRadius: 3,
+  blurRadius: 3,
+  offset: const Offset(0, 0),
+);

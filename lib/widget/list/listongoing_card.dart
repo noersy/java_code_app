@@ -110,12 +110,13 @@ class _CardMenuOngoingState extends State<CardMenuOngoing> {
                   height: 74,
                   width: 74,
                   child: Padding(
-                      padding: const EdgeInsets.all(SpaceDims.sp4),
-                      child: Image.network(
-                        url,
-                        errorBuilder: imageError,
-                        loadingBuilder: imageOnLoad,
-                      )),
+                    padding: const EdgeInsets.all(SpaceDims.sp4),
+                    child: Image.network(
+                      url,
+                      errorBuilder: imageError,
+                      loadingBuilder: imageOnLoad,
+                    ),
+                  ),
                   decoration: BoxDecoration(
                     color: ColorSty.grey60,
                     borderRadius: BorderRadius.circular(10.0),

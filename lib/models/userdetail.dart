@@ -7,6 +7,9 @@ import 'dart:convert';
 UserDetail userDetailFromJson(String str) =>
     UserDetail.fromJson(json.decode(str));
 
+UserDetail userDetailFromJson2(String str) =>
+    UserDetail.fromJson2(json.decode(str));
+
 String userDetailToJson(UserDetail data) => json.encode(data.toJson());
 
 class UserDetail {
@@ -19,8 +22,13 @@ class UserDetail {
   final DUser data;
 
   factory UserDetail.fromJson(Map<String, dynamic> json) => UserDetail(
-        statusCode: json["status_code"],
+        statusCode: json["status_code"] ?? 200,
         data: DUser.fromJson(json["data"]),
+      );
+
+  factory UserDetail.fromJson2(Map<String, dynamic> json) => UserDetail(
+        statusCode: 200,
+        data: DUser.fromJson(json),
       );
 
   Map<String, dynamic> toJson() => {

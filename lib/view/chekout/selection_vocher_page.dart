@@ -12,6 +12,7 @@ import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
+import 'package:java_code_app/view/chekout/component/voucher_skeleton.dart';
 import 'package:java_code_app/widget/dialog/custom_dialog.dart';
 import 'package:java_code_app/widget/snackbar.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +34,7 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
       RefreshController(initialRefresh: false);
   bool _loading = false;
   bool _isUsed = false;
+  bool isLoading = true;
 
   Future<void> _onRefresh() async {
     var _duration = const Duration(seconds: 1);
@@ -56,9 +58,24 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
     ).setVoucher(data ?? widget.initialData);
   }
 
+  getData() async {
+    await Provider.of<OrderProviders>(context, listen: false)
+        .getListVoucher()
+        .then((value) {
+      if (!value) {
+        showCustomSnackbar(context, 'Mohon periksa koneksi Anda');
+      } else {
+        if (!mounted) return false;
+        setState(() {
+          isLoading = false;
+        });
+      }
+    });
+  }
+
   @override
   void initState() {
-    Provider.of<OrderProviders>(context, listen: false).getListVoucher();
+    getData();
     super.initState();
   }
 
@@ -134,46 +151,50 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
                 builder: (context, snapshot) {
                   _listVoucher =
                       Provider.of<OrderProviders>(context).listVoucher;
-                  return Column(
-                    children: [
-                      if (_listVoucher.isEmpty)
-                        const Text('Maaf, Anda Tidak Memiliki Voucher'),
-                      if (_loading)
-                        VoucherCard(
-                          voucher: _selectedVoucher,
-                          isChecked: false,
-                          isLoading: true,
-                          onPressed: (String value) {
-                            setState(() => _selectedVoucher = null);
-                          },
-                        ),
-                      if (!_loading)
-                        for (LVoucher item in _listVoucher)
-                          VoucherCard(
-                            isChecked:
-                                _selectedVoucher?.idVoucher == item.idVoucher,
-                            voucher: item,
-                            onChanged: (String value) {
-                              _selectedVoucher?.idVoucher == item.idVoucher
-                                  ? orderProviders.setVoucherEmpty()
-                                  : orderProviders.setVoucher(item);
-                            },
-                            onPressed: (String value) {
-                              _selectedVoucher?.idVoucher == item.idVoucher
-                                  ? orderProviders.setVoucherEmpty()
-                                  : orderProviders.setVoucher(item);
-                            },
-                          ),
-                      // if (_selectedVoucher != null && !_loading)
-                      //   VoucherCard(
-                      //     voucher: _selectedVoucher!,
-                      //     isChecked: true,
-                      //     onPressed: (String value) {
-                      //       setState(() => _selectedVoucher = null);
-                      //     },
-                      //   ),
-                    ],
-                  );
+                  return isLoading
+                      ? const VoucherSkeleton()
+                      : Column(
+                          children: [
+                            if (_listVoucher.isEmpty)
+                              const Text('Maaf, Anda Tidak Memiliki Voucher'),
+                            if (_loading)
+                              VoucherCard(
+                                voucher: _selectedVoucher,
+                                isChecked: false,
+                                isLoading: true,
+                                onPressed: (String value) {
+                                  setState(() => _selectedVoucher = null);
+                                },
+                              ),
+                            if (!_loading)
+                              for (LVoucher item in _listVoucher)
+                                VoucherCard(
+                                  isChecked: _selectedVoucher?.idVoucher ==
+                                      item.idVoucher,
+                                  voucher: item,
+                                  onChanged: (String value) {
+                                    _selectedVoucher?.idVoucher ==
+                                            item.idVoucher
+                                        ? orderProviders.setVoucherEmpty()
+                                        : orderProviders.setVoucher(item);
+                                  },
+                                  onPressed: (String value) {
+                                    _selectedVoucher?.idVoucher ==
+                                            item.idVoucher
+                                        ? orderProviders.setVoucherEmpty()
+                                        : orderProviders.setVoucher(item);
+                                  },
+                                ),
+                            // if (_selectedVoucher != null && !_loading)
+                            //   VoucherCard(
+                            //     voucher: _selectedVoucher!,
+                            //     isChecked: true,
+                            //     onPressed: (String value) {
+                            //       setState(() => _selectedVoucher = null);
+                            //     },
+                            //   ),
+                          ],
+                        );
                 }),
           ),
         ),

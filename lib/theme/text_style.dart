@@ -69,13 +69,13 @@ class TypoSty {
   static TextStyle button = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.w600,
-    fontSize: ScreenUtil().setSp(10.0),
+    fontSize: ScreenUtil().setSp(12.0),
   );
 
   static TextStyle button2 = TextStyle(
     fontFamily: "Montserrat",
     fontWeight: FontWeight.w600,
-    fontSize: ScreenUtil().setSp(10.0),
+    fontSize: ScreenUtil().setSp(12.0),
   );
 
   static TextStyle mini = TextStyle(

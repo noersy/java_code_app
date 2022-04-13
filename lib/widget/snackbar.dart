@@ -12,12 +12,12 @@ showCustomSnackbar(
   var snackBar = SnackBar(
     backgroundColor: backColor ?? ColorSty.primaryDark,
     content: CustomText(
-      text: 'Item belum ditambahkan!',
+      text: text,
       color: textColor ?? Colors.white,
       isBold: true,
       fontSize: 16.sp,
     ),
-    duration: const Duration(milliseconds: 700),
+    duration: const Duration(milliseconds: 1500),
   );
   ScaffoldMessenger.of(context).showSnackBar(
     snackBar,

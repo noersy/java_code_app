@@ -1,10 +1,11 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 
 class CostumeAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
+  final String? title;
   final Widget? costumeTitle;
   final String? profileTitle;
   final void Function()? onDelete;
@@ -72,12 +73,26 @@ class CostumeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 if (dense ?? false) const SizedBox(width: SpaceDims.sp12),
               ],
               // if (icon != null) const SizedBox(width: SpaceDims.sp46 + 3),
-              Text(' $title', style: TypoSty.title),
+              if (title != null)
+                AutoSizeText(
+                  ' $title',
+                  maxLines: 1,
+                  style: TypoSty.title,
+                  textAlign: TextAlign.center,
+                  minFontSize: 0,
+                  stepGranularity: 0.1,
+                ),
               if (profileTitle != null)
                 Column(
                   children: [
-                    Text(profileTitle!,
-                        style: TypoSty.title.copyWith(color: ColorSty.primary)),
+                    AutoSizeText(
+                      profileTitle!,
+                      maxLines: 1,
+                      style: TypoSty.title.copyWith(color: ColorSty.primary),
+                      textAlign: TextAlign.center,
+                      minFontSize: 0,
+                      stepGranularity: 0.1,
+                    ),
                     const SizedBox(height: SpaceDims.sp2),
                     Container(
                       width: 55,

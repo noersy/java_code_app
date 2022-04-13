@@ -211,7 +211,12 @@ class OrderProviders extends ChangeNotifier {
       final _api = Uri.http(host, "$sub/api/voucher/user/${user.data.idUser}");
 
       _log.fine("Try to get list voucher.");
-      final response = await http.get(_api, headers: await getHeader());
+      final response = await http.get(_api, headers: await getHeader()).timeout(
+        const Duration(seconds: 4),
+        onTimeout: () {
+          return http.Response('Error', 408);
+        },
+      );
 
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {

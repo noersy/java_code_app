@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
@@ -36,66 +37,85 @@ class TileListDMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Divider(thickness: 1.5),
-        ListTile(
-          onTap: prefixIcon ?? false ? onPressed : null,
-          leading: Padding(
-            padding: const EdgeInsets.only(top: SpaceDims.sp2),
-            child: iconSvg == null
-                ? Icon(icon, color: ColorSty.primary, size: 23.0)
-                : iconSvg!,
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: SpaceDims.sp20.w),
+          child: const Divider(
+            thickness: 1.5,
+            height: 0,
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp8),
-          horizontalTitleGap: 0,
-          minVerticalPadding: 0,
-          visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(title, style: TypoSty.captionBold),
-              Row(
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: SpaceDims.sp20,
+            // vertical: SpaceDims.sp8,
+          ),
+          child: Container(
+            height: 50,
+            alignment: Alignment.center,
+            child: ListTile(
+              onTap: prefixIcon ?? false ? onPressed : null,
+              leading: Padding(
+                padding: const EdgeInsets.only(top: SpaceDims.sp2),
+                child: iconSvg == null
+                    ? Icon(icon, color: ColorSty.primary, size: 2.0)
+                    : iconSvg!,
+              ),
+              // contentPadding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp8),
+              horizontalTitleGap: 0,
+              minVerticalPadding: 0,
+              visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
+
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
-                    width: isLoading!
-                        ? 90
-                        : (prefixCostume != null)
-                            ? 165
-                            : 118,
-                    child: isLoading!
-                        ? const SkeletonText(height: 20.0)
-                        : prefixCostume ??
-                            Text(
-                              prefix ?? "",
-                              style: prefixIcon ?? false
-                                  ? TypoSty.captionSemiBold
-                                      .copyWith(fontWeight: FontWeight.normal)
-                                      .merge(textStylePrefix)
-                                  : dense ?? false
+                  Text(title, style: TypoSty.captionBold),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: isLoading!
+                            ? 90
+                            : (prefixCostume != null)
+                                ? 165
+                                : 118,
+                        child: isLoading!
+                            ? const SkeletonText(height: 20.0)
+                            : prefixCostume ??
+                                Text(
+                                  prefix ?? "",
+                                  style: prefixIcon ?? false
                                       ? TypoSty.captionSemiBold
                                           .copyWith(
                                               fontWeight: FontWeight.normal)
                                           .merge(textStylePrefix)
-                                      : TypoSty.title
-                                          .copyWith(color: ColorSty.primary)
-                                          .merge(textStylePrefix),
-                              textAlign: TextAlign.right,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                                      : dense ?? false
+                                          ? TypoSty.captionSemiBold
+                                              .copyWith(
+                                                  fontWeight: FontWeight.normal)
+                                              .merge(textStylePrefix)
+                                          : TypoSty.title
+                                              .copyWith(color: ColorSty.primary)
+                                              .merge(textStylePrefix),
+                                  textAlign: TextAlign.right,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                      ),
+                      if (prefixIcon ?? false)
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left:
+                                dense ?? false ? SpaceDims.sp4 : SpaceDims.sp8,
+                          ),
+                          child: Icon(
+                            Icons.arrow_forward_ios,
+                            size: dense ?? false ? 18.0 : 22.0,
+                            color: ColorSty.grey,
+                          ),
+                        ),
+                    ],
                   ),
-                  if (prefixIcon ?? false)
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: dense ?? false ? SpaceDims.sp4 : SpaceDims.sp8,
-                      ),
-                      child: Icon(
-                        Icons.arrow_forward_ios,
-                        size: dense ?? false ? 18.0 : 22.0,
-                        color: ColorSty.grey,
-                      ),
-                    ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ],
