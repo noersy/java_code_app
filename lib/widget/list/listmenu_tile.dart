@@ -37,16 +37,16 @@ class TileListDMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: SpaceDims.sp20.w),
-          child: const Divider(
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: SpaceDims.sp20),
+          child: Divider(
             thickness: 1.5,
             height: 0,
           ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: SpaceDims.sp20,
+            horizontal: SpaceDims.sp10,
             // vertical: SpaceDims.sp8,
           ),
           child: Container(
@@ -54,12 +54,12 @@ class TileListDMenu extends StatelessWidget {
             alignment: Alignment.center,
             child: ListTile(
               onTap: prefixIcon ?? false ? onPressed : null,
-              leading: Padding(
-                padding: const EdgeInsets.only(top: SpaceDims.sp2),
-                child: iconSvg == null
-                    ? Icon(icon, color: ColorSty.primary, size: 2.0)
-                    : iconSvg!,
-              ),
+              // leading: Padding(
+              //   padding: const EdgeInsets.only(top: SpaceDims.sp2),
+              //   child: iconSvg == null
+              //       ? Icon(icon, color: ColorSty.primary, size: 2.0)
+              //       : iconSvg!,
+              // ),
               // contentPadding: const EdgeInsets.symmetric(horizontal: SpaceDims.sp8),
               horizontalTitleGap: 0,
               minVerticalPadding: 0,

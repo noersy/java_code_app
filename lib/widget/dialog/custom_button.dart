@@ -11,6 +11,7 @@ class CustomButton extends StatefulWidget {
   double? width, height;
   Color? backgroundColor;
   Color? fontColor;
+  double? fontSize;
 
   CustomButton({
     Key? key,
@@ -20,6 +21,7 @@ class CustomButton extends StatefulWidget {
     this.height,
     this.backgroundColor = ColorSty.primary,
     this.fontColor,
+    this.fontSize,
   }) : super(key: key);
 
   @override
@@ -60,7 +62,7 @@ class _CustomButtonState extends State<CustomButton> {
                 text: widget.label,
                 isBold: true,
                 color: widget.fontColor ?? Colors.white,
-                fontSize: 14.sp,
+                fontSize: widget.fontSize ?? 14.sp,
               ),
             ],
           ),

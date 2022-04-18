@@ -109,11 +109,8 @@ class _BalasanReviewState extends State<BalasanReview> {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.only(
-                          left: 18.0,
-                          top: 5,
-                          bottom:
-                              MediaQuery.of(context).viewInsets.bottom + 10),
+                      padding:
+                          const EdgeInsets.only(left: 18.0, top: 5, bottom: 10),
                       child: Container(
                         decoration: BoxDecoration(
                             border: Border.all(
@@ -151,9 +148,7 @@ class _BalasanReviewState extends State<BalasanReview> {
                     ),
                   ),
                   Padding(
-                      padding: EdgeInsets.only(
-                          right: 15,
-                          bottom: MediaQuery.of(context).viewInsets.bottom + 5),
+                      padding: const EdgeInsets.only(right: 15, bottom: 5),
                       child: IconButton(
                         onPressed: () {
                           // print(

@@ -83,63 +83,63 @@ class SkeletonOrderCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      AnimatedBuilder(
-                          animation: LangProviders(),
-                          builder: (context, snapshot) {
-                            final lang = context.watch<LangProviders>().lang;
-                            return Row(
-                              children: [
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    minimumSize: Size.zero,
-                                    primary: ColorSty.white,
-                                    onPrimary: ColorSty.primary,
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: SpaceDims.sp8,
-                                      horizontal: SpaceDims.sp12,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      side: const BorderSide(
-                                        color: ColorSty.primaryDark,
-                                        width: 2,
-                                      ),
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ),
-                                  ),
-                                  onPressed: () {},
-                                  child: Text(
-                                    lang.pesanan.buttonPe,
-                                    style: TypoSty.button
-                                        .copyWith(fontSize: 10.0.sp),
-                                  ),
-                                ),
-                                const SizedBox(width: SpaceDims.sp8),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    minimumSize: Size.zero,
-                                    primary: ColorSty.primary,
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: SpaceDims.sp8,
-                                      horizontal: SpaceDims.sp12,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      side: const BorderSide(
-                                        color: ColorSty.primaryDark,
-                                        width: 2,
-                                      ),
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ),
-                                  ),
-                                  onPressed: () {},
-                                  child: Text(
-                                    lang.pesanan.buttonLa,
-                                    style: TypoSty.button
-                                        .copyWith(fontSize: 10.0.sp),
-                                  ),
-                                )
-                              ],
-                            );
-                          }),
+                      // AnimatedBuilder(
+                      //     animation: LangProviders(),
+                      //     builder: (context, snapshot) {
+                      //       final lang = context.watch<LangProviders>().lang;
+                      //       return Row(
+                      //         children: [
+                      //           ElevatedButton(
+                      //             style: ElevatedButton.styleFrom(
+                      //               minimumSize: Size.zero,
+                      //               primary: ColorSty.white,
+                      //               onPrimary: ColorSty.primary,
+                      //               padding: const EdgeInsets.symmetric(
+                      //                 vertical: SpaceDims.sp8,
+                      //                 horizontal: SpaceDims.sp12,
+                      //               ),
+                      //               shape: RoundedRectangleBorder(
+                      //                 side: const BorderSide(
+                      //                   color: ColorSty.primaryDark,
+                      //                   width: 2,
+                      //                 ),
+                      //                 borderRadius: BorderRadius.circular(30.0),
+                      //               ),
+                      //             ),
+                      //             onPressed: () {},
+                      //             child: Text(
+                      //               lang.pesanan.buttonPe,
+                      //               style: TypoSty.button
+                      //                   .copyWith(fontSize: 10.0.sp),
+                      //             ),
+                      //           ),
+                      //           const SizedBox(width: SpaceDims.sp8),
+                      //           ElevatedButton(
+                      //             style: ElevatedButton.styleFrom(
+                      //               minimumSize: Size.zero,
+                      //               primary: ColorSty.primary,
+                      //               padding: const EdgeInsets.symmetric(
+                      //                 vertical: SpaceDims.sp8,
+                      //                 horizontal: SpaceDims.sp12,
+                      //               ),
+                      //               shape: RoundedRectangleBorder(
+                      //                 side: const BorderSide(
+                      //                   color: ColorSty.primaryDark,
+                      //                   width: 2,
+                      //                 ),
+                      //                 borderRadius: BorderRadius.circular(30.0),
+                      //               ),
+                      //             ),
+                      //             onPressed: () {},
+                      //             child: Text(
+                      //               lang.pesanan.buttonLa,
+                      //               style: TypoSty.button
+                      //                   .copyWith(fontSize: 10.0.sp),
+                      //             ),
+                      //           )
+                      //         ],
+                      //       );
+                      //     }),
                     ],
                   ),
                 ),

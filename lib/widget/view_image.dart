@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/helps/image.dart';
 import 'package:photo_view/photo_view.dart';
 
 class ViewImage extends StatelessWidget {
@@ -8,10 +9,8 @@ class ViewImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Navigator.pop(context);
       },
       child: Scaffold(
@@ -19,6 +18,7 @@ class ViewImage extends StatelessWidget {
         body: PhotoView(
           heroAttributes: const PhotoViewHeroAttributes(tag: "image"),
           imageProvider: NetworkImage(urlImage),
+          errorBuilder: imageError,
           maxScale: 0.9,
           minScale: 0.1,
           initialScale: 0.5,

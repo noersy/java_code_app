@@ -46,14 +46,16 @@ class AuthProviders extends ChangeNotifier {
       );
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
-        editResponse = json.decode(response.body);
+        editResponse = jsonDecode(response.body);
         if (json.decode(response.body)["data"]["user"]["foto"] == null) {
           editResponse["data"]["user"]["foto"] =
               '''https://javacode.landa.id/img/1/review/review_1_620e0269b96d2.png''';
-          editResponse = json.encode(editResponse);
+          // editResponse = json.encode(editResponse);
         }
-        Preferences.getInstance()
-            .setStringValue('token', editResponse['data']['token']);
+        Preferences.getInstance().setStringValue(
+          'token',
+          editResponse['data']['token'].toString(),
+        );
         _loginUser = loginUserFromJson(editResponse);
         if (_loginUser == null) _log.info("Login failed");
         if (_loginUser != null) _log.fine("Login successes");

@@ -8,8 +8,8 @@ class CostumeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final Widget? costumeTitle;
   final String? profileTitle;
-  final void Function()? onDelete;
-  final bool? back, dense;
+  final Function? onDelete;
+  final bool? back, dense, isDelete;
   final Icon? icon;
   final Function? onBack;
 
@@ -23,6 +23,7 @@ class CostumeAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onDelete,
     this.costumeTitle,
     this.onBack,
+    this.isDelete = false,
   }) : super(key: key);
 
   @override
@@ -50,12 +51,14 @@ class CostumeAppBar extends StatelessWidget implements PreferredSizeWidget {
             )
           : null,
       actions: [
-        if (onDelete != null)
+        if (isDelete!)
           Padding(
             padding:
                 const EdgeInsets.only(right: SpaceDims.sp2, top: SpaceDims.sp4),
             child: IconButton(
-              onPressed: onDelete,
+              onPressed: () {
+                onDelete!();
+              },
               icon: const Icon(
                 Icons.delete_outline,
                 color: Colors.red,
@@ -73,7 +76,7 @@ class CostumeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 if (dense ?? false) const SizedBox(width: SpaceDims.sp12),
               ],
               // if (icon != null) const SizedBox(width: SpaceDims.sp46 + 3),
-              if (title != null)
+              if (title!.isNotEmpty)
                 AutoSizeText(
                   ' $title',
                   maxLines: 1,
@@ -101,7 +104,7 @@ class CostumeAppBar extends StatelessWidget implements PreferredSizeWidget {
                     )
                   ],
                 ),
-              if (onDelete == null) ...[
+              if (!isDelete! && back != null) ...[
                 const SizedBox(width: SpaceDims.sp32),
                 const SizedBox(width: SpaceDims.sp24),
               ],

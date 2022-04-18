@@ -44,12 +44,9 @@ class _CheckOutPageState extends State<CheckOutPage> {
   Future<void> _onRefresh() async {
     var _duration = const Duration(seconds: 1);
     if (mounted) {
-      setState(() => _loading = true);
-
       await _getData();
 
       Timer(_duration, () {
-        setState(() => _loading = false);
         _refreshController.refreshCompleted();
       });
     }
@@ -230,7 +227,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     const SizedBox(height: 5),
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: SpaceDims.sp20,
+                        horizontal: SpaceDims.sp24,
                         // vertical: SpaceDims.sp14,
                       ),
                       child: Container(
@@ -296,6 +293,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                 ? null
                                 : Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
                                         "Rp ${oCcy.format(_selectedVoucher!.nominal)}",

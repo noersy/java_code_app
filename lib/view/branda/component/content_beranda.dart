@@ -48,18 +48,27 @@ class _ContentBerandaState extends State<ContentBeranda>
 
   _setMakanan() {
     setState(() => _sIndex = 1);
-    final possition = _scrollManu.position.maxScrollExtent / 2;
+    double width = MediaQuery.of(context).size.width;
+    final possition = _scrollManu.position.minScrollExtent + width;
     _scrollManu.animateTo(possition, duration: _duration, curve: Curves.ease);
     // _pageController.animateToPage(1, duration: _duration, curve: Curves.ease);
   }
 
   _setMenuman() {
     setState(() => _sIndex = 2);
+    double width = MediaQuery.of(context).size.width;
+    final possition = _scrollManu.position.maxScrollExtent - width;
+    _scrollManu.animateTo(possition, duration: _duration, curve: Curves.ease);
+    // _pageController.animateToPage(2, duration: _duration, curve: Curves.ease);
+  }
+
+  _setSnack() {
+    setState(() => _sIndex = 3);
     final max = _scrollController.position.maxScrollExtent;
     final maxMenu = _scrollManu.position.maxScrollExtent;
     _scrollController.animateTo(max, duration: _duration, curve: Curves.ease);
     _scrollManu.animateTo(maxMenu, duration: _duration, curve: Curves.ease);
-    // _pageController.animateToPage(2, duration: _duration, curve: Curves.ease);
+    // _pageController.animateToPage(1, duration: _duration, curve: Curves.ease);
   }
 
   @override
@@ -158,17 +167,29 @@ class _ContentBerandaState extends State<ContentBeranda>
                     .semuaMinuman,
                 icon: IconsCs.coffee,
               ),
+              LabelButton(
+                color: _sIndex == 3 ? ColorSty.black : ColorSty.primary,
+                onPressed: _setSnack,
+                title: 'Snack',
+                svgPicture: SvgPicture.asset(
+                  "assert/image/icons/ep_food.svg",
+                  color: ColorSty.white,
+                  width: 24,
+                ),
+              ),
             ],
           ),
         ),
         GestureDetector(
           onHorizontalDragEnd: (DragEndDetails detail) {
             if (detail.velocity.pixelsPerSecond.dx < 0) {
+              if (_sIndex == 2) _setSnack();
               if (_sIndex == 1) _setMenuman();
               if (_sIndex == 0) _setMakanan();
             } else {
               if (_sIndex == 1) _setAll();
               if (_sIndex == 2) _setMakanan();
+              if (_sIndex == 3) _setMenuman();
             }
           },
           child: SingleChildScrollView(
@@ -179,73 +200,82 @@ class _ContentBerandaState extends State<ContentBeranda>
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  children: [
-                    ListMenu(
-                      type: "makanan",
-                      title: Provider.of<LangProviders>(context)
-                          .lang
-                          .beranda!
-                          .semuaMakanan,
-                      data: widget.data,
-                    ),
-                    ListMenu(
-                      type: "minuman",
-                      title: Provider.of<LangProviders>(context)
-                          .lang
-                          .beranda!
-                          .semuaMinuman,
-                      data: widget.data,
-                    ),
-                    const SizedBox(
-                      height: 74,
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    ListMenu(
-                      key: const Key("menu-2"),
-                      type: "makanan",
-                      title: Provider.of<LangProviders>(context)
-                          .lang
-                          .beranda!
-                          .semuaMakanan,
-                      data: widget.data,
-                    ),
-                    const SizedBox(height: 74)
-                  ],
-                ),
-                Column(
-                  children: [
-                    ListMenu(
-                      key: const Key("menu-3"),
-                      type: "minuman",
-                      title: Provider.of<LangProviders>(context)
-                          .lang
-                          .beranda!
-                          .semuaMinuman,
-                      data: widget.data,
-                    ),
-                    const SizedBox(height: 74)
-                  ],
-                ),
-                Column(
-                  children: [
-                    ListMenu(
-                      key: const Key("menu-4"),
-                      type: "snack",
-                      title: 'Snack',
-                      data: widget.data,
-                    ),
-                    const SizedBox(height: 74)
-                  ],
-                ),
+                if (_sIndex == 0)
+                  Column(
+                    children: [
+                      ListMenu(
+                        type: "makanan",
+                        title: Provider.of<LangProviders>(context)
+                            .lang
+                            .beranda!
+                            .semuaMakanan,
+                        data: widget.data,
+                      ),
+                      ListMenu(
+                        type: "minuman",
+                        title: Provider.of<LangProviders>(context)
+                            .lang
+                            .beranda!
+                            .semuaMinuman,
+                        data: widget.data,
+                      ),
+                      ListMenu(
+                        type: "snack",
+                        title: 'Snack',
+                        data: widget.data,
+                      ),
+                      const SizedBox(
+                        height: 74,
+                      ),
+                    ],
+                  ),
+                if (_sIndex == 1)
+                  Column(
+                    children: [
+                      ListMenu(
+                        key: const Key("menu-2"),
+                        type: "makanan",
+                        title: Provider.of<LangProviders>(context)
+                            .lang
+                            .beranda!
+                            .semuaMakanan,
+                        data: widget.data,
+                      ),
+                      const SizedBox(height: 74)
+                    ],
+                  ),
+                if (_sIndex == 2)
+                  Column(
+                    children: [
+                      ListMenu(
+                        key: const Key("menu-3"),
+                        type: "minuman",
+                        title: Provider.of<LangProviders>(context)
+                            .lang
+                            .beranda!
+                            .semuaMinuman,
+                        data: widget.data,
+                      ),
+                      const SizedBox(height: 74)
+                    ],
+                  ),
+                if (_sIndex == 3)
+                  Column(
+                    children: [
+                      ListMenu(
+                        key: const Key("menu-4"),
+                        type: "snack",
+                        title: 'Snack',
+                        data: widget.data,
+                      ),
+                      const SizedBox(height: 74)
+                    ],
+                  ),
               ],
             ),
           ),
         ),
-        const SizedBox(height: 70)
+        // const SizedBox(height: 70)
       ],
     );
   }

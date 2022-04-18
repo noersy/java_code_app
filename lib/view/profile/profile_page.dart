@@ -200,6 +200,12 @@ class _ProfilePageState extends State<ProfilePage> {
     if (mounted) setState(() {});
   }
 
+  _updateEmail(String value) {
+    if (value.isEmpty) return;
+    provider.update(key: "email", value: value);
+    if (mounted) setState(() {});
+  }
+
   _changePin(Lang lang) {
     // ignore: prefer_typing_uninitialized_variables
     var value1;
@@ -284,11 +290,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _onRefresh() async {
-    var _duration = const Duration(seconds: 1);
     if (mounted) {
       await Provider.of<AuthProviders>(context, listen: false).getUser();
-
-      Timer(_duration, () {});
     }
     _refreshController.refreshCompleted();
   }
@@ -475,6 +478,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         title: 'Email',
                                         suffix: _user?.email ?? ' ',
                                         numberInput: false,
+                                        onSubmit: _updateEmail,
                                       ),
                                       TileListProfile(
                                         title: '${lang.profile.ub} PIN',
@@ -629,8 +633,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                     width: 204,
                                     child: Align(
                                       alignment: Alignment.center,
-                                      child: Text("Log Out",
-                                          style: TypoSty.button),
+                                      child: Text(
+                                        "Log Out",
+                                        style: TypoSty.button,
+                                      ),
                                     ),
                                   ),
                                   style: ElevatedButton.styleFrom(
@@ -683,6 +689,12 @@ class TileListProfile extends StatefulWidget {
 
 class _TileListProfileState extends State<TileListProfile> {
   final TextEditingController _editingController = TextEditingController();
+
+  @override
+  void initState() {
+    _editingController.text = widget.suffix;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -766,9 +778,7 @@ class _TileListProfileState extends State<TileListProfile> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(widget.title, style: TypoSty.captionSemiBold),
-                const SizedBox(
-                  width: 20,
-                ),
+                const SizedBox(width: 20),
                 Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -779,6 +789,7 @@ class _TileListProfileState extends State<TileListProfile> {
                             Navigate.toDaftarPenilaian(context);
                           },
                           label: widget.suffix,
+                          fontSize: 12,
                         ),
                       if (widget.btn != true)
                         Expanded(

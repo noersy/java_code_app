@@ -69,7 +69,10 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
         back: true,
         title: 'Pesanan',
         icon: const Icon(IconsCs.pesanan, size: 28.0, color: ColorSty.primary),
-        onDelete: status == 0 ? _cancelOrder : null,
+        onDelete: () {
+          _cancelOrder();
+        },
+        isDelete: true,
       ),
       body: SingleChildScrollView(
         primary: true,
@@ -102,7 +105,6 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
       ),
       bottomNavigationBar: Container(
         width: double.infinity,
-        height: 380,
         decoration: const BoxDecoration(
             color: ColorSty.grey80,
             borderRadius: BorderRadius.only(
@@ -118,211 +120,220 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
             ]),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             const SizedBox(height: SpaceDims.sp24),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: SpaceDims.sp24),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              "Total Pesanan ",
-                              style: TypoSty.captionSemiBold,
-                            ),
-                            if (data != null)
-                              Text("(${data?.data.detail.length} Menu) :",
-                                  style: TypoSty.caption)
-                            else
-                              Skeleton(height: 16.0, width: 20),
-                          ],
-                        ),
-                        if (data != null)
-                          totalPesanan()
-                        else
-                          Skeleton(height: 16.0, width: 50),
-                      ],
-                    ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: SpaceDims.sp26,
                   ),
-                  const SizedBox(height: SpaceDims.sp14),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: SpaceDims.sp24,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "Total Pesanan ",
+                            style: TypoSty.captionSemiBold,
+                          ),
+                          if (data != null)
+                            Text("(${data?.data.detail.length} Menu) :",
+                                style: TypoSty.caption)
+                          else
+                            Skeleton(height: 16.0, width: 20),
+                        ],
+                      ),
+                      if (data != null)
+                        totalPesanan()
+                      else
+                        Skeleton(height: 16.0, width: 50),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: SpaceDims.sp14),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TileListDMenu(
+                      dense: true,
+                      prefixIcon: true,
+                      title: data?.data.order.namaVoucher != null
+                          ? "Voucher"
+                          : "Diskon",
+                      prefixCostume: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                              "Rp ${oCcy.format(data?.data.order.potongan ?? 0)}",
+                              style: TypoSty.captionSemiBold.copyWith(
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.red),
+                              textAlign: TextAlign.right),
+                          Text(
+                            data?.data.order.namaVoucher != null
+                                ? "${data?.data.order.namaVoucher}"
+                                : "${data?.data.order.diskon ?? 0}%",
+                            style: TypoSty.mini,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.right,
+                          )
+                        ],
+                      ),
+                      isLoading: _isLoading,
+                      iconSvg: data?.data.order.namaVoucher != null
+                          ? SvgPicture.asset(
+                              "assert/image/icons/voucher-icon.svg")
+                          : SvgPicture.asset("assert/image/icons/la_coins.svg"),
+                      onPressed: () {},
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TileListDMenu(
-                          dense: true,
-                          prefixIcon: true,
-                          title: data?.data.order.namaVoucher != null
-                              ? "Voucher"
-                              : "Diskon",
-                          prefixCostume: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                  "Rp ${oCcy.format(data?.data.order.potongan)}",
-                                  style: TypoSty.captionSemiBold.copyWith(
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.red),
-                                  textAlign: TextAlign.right),
-                              Text(
-                                data?.data.order.namaVoucher != null
-                                    ? "${data?.data.order.namaVoucher}"
-                                    : "${data?.data.order.diskon}%",
-                                style: TypoSty.mini,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.right,
-                              )
+                    TileListDMenu(
+                      dense: true,
+                      title: "Pembayaran",
+                      prefix: "Pay Later",
+                      icon: IconsCs.coins,
+                      isLoading: _isLoading,
+                      onPressed: () {},
+                    ),
+                    TileListDMenu(
+                      dense: true,
+                      title: "Total Pembayaran",
+                      prefix: "${data?.data.order.totalBayar}",
+                      textStylePrefix: TypoSty.titlePrimary,
+                      icon: Icons.wine_bar,
+                      isLoading: _isLoading,
+                      onPressed: () {},
+                    ),
+                    const SizedBox(height: SpaceDims.sp14),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: SpaceDims.sp26,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Pesanan kamu sedang disiapkan",
+                            style: TypoSty.title,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: SpaceDims.sp14,
+                              right: SpaceDims.sp14,
+                              top: SpaceDims.sp6,
+                              bottom: SpaceDims.sp6,
+                            ),
+                            child: Row(
+                              children: [
+                                if (status == 1)
+                                  const Icon(
+                                    Icons.check_circle,
+                                    color: ColorSty.primary,
+                                  )
+                                else
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                      height: 10,
+                                      width: 10,
+                                      child: DecoratedBox(
+                                        decoration: BoxDecoration(
+                                          color: ColorSty.grey,
+                                          borderRadius:
+                                              BorderRadius.circular(100.0),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                const SizedBox(width: SpaceDims.sp8),
+                                const Expanded(child: Divider(thickness: 2)),
+                                const SizedBox(width: SpaceDims.sp8),
+                                if (status == 2)
+                                  const Icon(
+                                    Icons.check_circle,
+                                    color: ColorSty.primary,
+                                  )
+                                else
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                      height: 10,
+                                      width: 10,
+                                      child: DecoratedBox(
+                                        decoration: BoxDecoration(
+                                          color: ColorSty.grey,
+                                          borderRadius:
+                                              BorderRadius.circular(100.0),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                const SizedBox(width: SpaceDims.sp8),
+                                const Expanded(child: Divider(thickness: 2)),
+                                const SizedBox(width: SpaceDims.sp8),
+                                if (status == 3)
+                                  const Icon(
+                                    Icons.check_circle,
+                                    color: ColorSty.primary,
+                                  )
+                                else
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                      height: 10,
+                                      width: 10,
+                                      child: DecoratedBox(
+                                        decoration: BoxDecoration(
+                                          color: ColorSty.grey,
+                                          borderRadius:
+                                              BorderRadius.circular(100.0),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                const SizedBox(width: SpaceDims.sp8),
+                              ],
+                            ),
+                          ),
+                          Row(
+                            children: const [
+                              SizedBox(
+                                width: 80,
+                                child: Text("Pesanan diterima"),
+                              ),
+                              Expanded(
+                                  child: Divider(color: Colors.transparent)),
+                              SizedBox(
+                                width: 80,
+                                child: Text(
+                                  "Silahkan Ambil",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              Expanded(
+                                  child: Divider(color: Colors.transparent)),
+                              SizedBox(
+                                width: 80,
+                                child: Text(
+                                  "Pesanan Selesai",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
                             ],
                           ),
-                          isLoading: _isLoading,
-                          iconSvg: data?.data.order.namaVoucher != null
-                              ? SvgPicture.asset(
-                                  "assert/image/icons/voucher-icon.svg")
-                              : SvgPicture.asset(
-                                  "assert/image/icons/la_coins.svg"),
-                          onPressed: () {},
-                        ),
-                        Stack(children: [
-                          TileListDMenu(
-                            dense: true,
-                            title: "Pembayaran",
-                            prefix: "Pay Later",
-                            icon: IconsCs.coins,
-                            isLoading: _isLoading,
-                            onPressed: () {},
-                          ),
-                        ]),
-                        TileListDMenu(
-                          dense: true,
-                          title: "Total Pembayaran",
-                          prefix: "${data?.data.order.totalBayar}",
-                          textStylePrefix: TypoSty.titlePrimary,
-                          icon: Icons.wine_bar,
-                          isLoading: _isLoading,
-                          onPressed: () {},
-                        ),
-                        const SizedBox(height: SpaceDims.sp18),
-                        Text(
-                          "Pesanan kamu sedang disiapkan",
-                          style: TypoSty.title,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: SpaceDims.sp14,
-                            right: SpaceDims.sp14,
-                            top: SpaceDims.sp24,
-                            bottom: SpaceDims.sp8,
-                          ),
-                          child: Row(
-                            children: [
-                              if (status == 1)
-                                const Icon(
-                                  Icons.check_circle,
-                                  color: ColorSty.primary,
-                                )
-                              else
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: SizedBox(
-                                    height: 10,
-                                    width: 10,
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        color: ColorSty.grey,
-                                        borderRadius:
-                                            BorderRadius.circular(100.0),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              const SizedBox(width: SpaceDims.sp8),
-                              const Expanded(child: Divider(thickness: 2)),
-                              const SizedBox(width: SpaceDims.sp8),
-                              if (status == 2)
-                                const Icon(
-                                  Icons.check_circle,
-                                  color: ColorSty.primary,
-                                )
-                              else
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: SizedBox(
-                                    height: 10,
-                                    width: 10,
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        color: ColorSty.grey,
-                                        borderRadius:
-                                            BorderRadius.circular(100.0),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              const SizedBox(width: SpaceDims.sp8),
-                              const Expanded(child: Divider(thickness: 2)),
-                              const SizedBox(width: SpaceDims.sp8),
-                              if (status == 3)
-                                const Icon(
-                                  Icons.check_circle,
-                                  color: ColorSty.primary,
-                                )
-                              else
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: SizedBox(
-                                    height: 10,
-                                    width: 10,
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        color: ColorSty.grey,
-                                        borderRadius:
-                                            BorderRadius.circular(100.0),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              const SizedBox(width: SpaceDims.sp8),
-                            ],
-                          ),
-                        ),
-                        Row(
-                          children: const [
-                            SizedBox(
-                              width: 80,
-                              child: Text("Pesanan diterima"),
-                            ),
-                            Expanded(child: Divider(color: Colors.transparent)),
-                            SizedBox(
-                              width: 80,
-                              child: Text(
-                                "Silahkan Ambil",
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            Expanded(child: Divider(color: Colors.transparent)),
-                            SizedBox(
-                              width: 80,
-                              child: Text(
-                                "Pesanan Selesai",
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                          const SizedBox(height: SpaceDims.sp20),
+                        ],
+                      ),
                     ),
-                  )
-                ],
-              ),
+                  ],
+                ),
+              ],
             ),
           ],
         ),

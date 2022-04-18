@@ -17,7 +17,7 @@ import 'package:java_code_app/view/orders/widget/orderhistory_card.dart';
 import 'package:java_code_app/view/orders/widget/skeletonorder_card.dart';
 import 'package:loadmore/loadmore.dart';
 import 'package:provider/provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+// import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
@@ -37,8 +37,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
   // ignore: prefer_final_fields
   static List<History> _ordersLimit = [];
   static int _status = 0;
-  static final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  // static final RefreshController _refreshController =
+  //     RefreshController(initialRefresh: false);
   static final DateTime _dateNow = DateTime.now();
   static DateTime? _dateStart;
   static DateTime? _dateEnd;
@@ -48,25 +48,23 @@ class _HistoryScreenState extends State<HistoryScreen> {
       dateFormat.format(
         DateTime(_dateNow.year, _dateNow.month, _dateNow.day + 7),
       );
-
-  bool _loading = false;
+  bool _loading = true;
+  bool _loadingLoadMore = false;
+  var totalHistory = 0;
 
   Future<void> _onRefresh() async {
-    // _orders.clear();
-    // _data.clear();
     var _duration = const Duration(seconds: 1);
     if (mounted) {
-      setState(() => _loading = true);
+      List<History> newList =
+          await Provider.of<OrderProviders>(context, listen: false)
+                  .getHistoryList() ??
+              [];
 
-      _orders = await Provider.of<OrderProviders>(context, listen: false)
-              .getHistoryList() ??
-          [];
+      if (!mounted) return;
+      setState(() {
+        _orders = newList;
 
-      _data.replaceRange(0, _data.length, _orders);
-
-      Timer(_duration, () {
-        if (mounted) setState(() => _loading = false);
-        _refreshController.refreshCompleted();
+        _data.replaceRange(0, _data.length, _orders);
       });
     }
   }
@@ -127,12 +125,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
   void initState() {
     _clearAllList();
     // _onRefresh();
-    loadTotalHistory();
-    _loadStart().then((value) => {
-          setState(() {
-            _loading = false;
-          })
-        });
+    loadTotalHistory().then((value) {
+      _loadStart();
+    });
     super.initState();
   }
 
@@ -159,34 +154,33 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   Future<bool> _loadMore() async {
-    print('_loadMore _data.length ${_data.length}');
-    if (_data.length < totalHistory) {
+    if (!_loadingLoadMore) {
+      if (_data.length < totalHistory) {
+        await getMoredata();
+      } else {
+        LoadMoreStatus.nomore;
+        if (mounted) {
+          setState(() {
+            isFinisfLoadmore = true;
+          });
+        }
+      }
+    }
+    return true;
+  }
+
+  getMoredata() async {
+    if (mounted) {
+      setState(() => _loadingLoadMore = true);
+      _orders = (await Provider.of<OrderProviders>(context, listen: false)
+              .getHistoryLimit(5, _data.length)) ??
+          [];
       if (mounted) {
-        // setState(() => _loading = true);
-        _orders = (await Provider.of<OrderProviders>(context, listen: false)
-                .getHistoryLimit(5, _data.length)) ??
-            [];
         setState(() {
           _data.addAll(_orders);
+          _loadingLoadMore = false;
         });
-        // if (mounted) {
-        //   setState(() {
-        //     _loading = false;
-        //   });
-        // }
-        isFinisfLoadmore = true;
       }
-      return true;
-    } else {
-      LoadMoreStatus.nomore;
-      isFinisfLoadmore = true;
-      //data habis
-      // if (mounted) {
-      //   setState(() {
-      //     _loading = false;
-      //   });
-      // }
-      return true;
     }
   }
 
@@ -219,19 +213,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
           [];
       _data = _orders;
 
-      // Timer(_duration, () {
-      //   if (mounted) {
-      //     setState(() {
-      //       _loading = false;
-      //     });
-      //   }
-      // });
+      Timer(_duration, () {
+        if (mounted) {
+          setState(() {
+            _loading = false;
+          });
+        }
+      });
     }
     print('load start: ${_data.length}');
     // return true;
   }
 
-  var totalHistory = 0;
   Future<void> loadTotalHistory() async {
     print('dataConvert: ');
     var data = (await Provider.of<OrderProviders>(context, listen: false)
@@ -250,91 +243,103 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     // tambahkan loadmore
     return Scaffold(
-      body: LoadMore(
-        textBuilder: DefaultLoadMoreTextBuilder.english,
-        isFinish: isFinisfLoadmore,
-        onLoadMore: _loadMore,
-        child: SmartRefresher(
-          onRefresh: _onRefresh,
-          controller: _refreshController,
-          child: ListView(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: SpaceDims.sp18,
-                  vertical: SpaceDims.sp14,
-                ),
-                child: _orders.isNotEmpty
-                    ? Stack(
-                        alignment: Alignment.topCenter,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 50),
-                            child: Column(
+      body: _loading
+          ? const Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: SpaceDims.sp18,
+                vertical: SpaceDims.sp14,
+              ),
+              child: SkeletonOrderCard(),
+            )
+          : RefreshIndicator(
+              onRefresh: _onRefresh,
+              child: LoadMore(
+                textBuilder: DefaultLoadMoreTextBuilder.english,
+                isFinish: isFinisfLoadmore,
+                onLoadMore: _loadMore,
+                whenEmptyLoad: false,
+                delegate: const DefaultLoadMoreDelegate(),
+                child: ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        SpaceDims.sp18,
+                        SpaceDims.sp14,
+                        SpaceDims.sp18,
+                        0,
+                      ),
+                      child: _orders.isNotEmpty
+                          ? Stack(
+                              alignment: Alignment.topCenter,
                               children: [
-                                if (_loading)
-                                  const SkeletonOrderCard()
-                                else
-                                  Column(
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 50),
+                                  child: Column(
                                     children: [
-                                      //  tampil order history card
-                                      for (final item in _data)
-                                        OrderHistoryCard(
-                                          onPressed: () {},
-                                          data: item,
-                                        ),
-                                      const SizedBox(height: 10.0)
+                                      Column(
+                                        children: [
+                                          //  tampil order history card
+                                          for (final item in _data)
+                                            OrderHistoryCard(
+                                              onPressed: () {},
+                                              data: item,
+                                            ),
+                                          // const SizedBox(height: 10.0)
+                                        ],
+                                      ),
+                                      const SizedBox(height: SpaceDims.sp8),
                                     ],
                                   ),
-                                const SizedBox(height: SpaceDims.sp8),
+                                ),
+                                PilihStatus(),
                               ],
+                            )
+                          : SizedBox(
+                              height: MediaQuery.of(context).size.height - 120,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Image.asset(
+                                      "assert/image/bg_findlocation.png"),
+                                  AnimatedBuilder(
+                                      animation: LangProviders(),
+                                      builder: (context, snapshot) {
+                                        final lang =
+                                            context.watch<LangProviders>().lang;
+                                        return Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const Icon(
+                                              IconsCs.order,
+                                              size: 120,
+                                              color: ColorSty.primary,
+                                            ),
+                                            const SizedBox(
+                                                height: SpaceDims.sp22),
+                                            Text(
+                                              lang.pesanan.riwayatCaption,
+                                              textAlign: TextAlign.center,
+                                              style: TypoSty.title2,
+                                            ),
+                                            const SizedBox(
+                                                height: SpaceDims.sp12),
+                                            Text(
+                                              lang.pesanan.riwayatCaption2,
+                                              textAlign: TextAlign.center,
+                                              style: TypoSty.title2,
+                                            ),
+                                          ],
+                                        );
+                                      })
+                                ],
+                              ),
                             ),
-                          ),
-                          PilihStatus(),
-                        ],
-                      )
-                    : SizedBox(
-                        height: MediaQuery.of(context).size.height - 120,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Image.asset("assert/image/bg_findlocation.png"),
-                            AnimatedBuilder(
-                                animation: LangProviders(),
-                                builder: (context, snapshot) {
-                                  final lang =
-                                      context.watch<LangProviders>().lang;
-                                  return Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(
-                                        IconsCs.order,
-                                        size: 120,
-                                        color: ColorSty.primary,
-                                      ),
-                                      const SizedBox(height: SpaceDims.sp22),
-                                      Text(
-                                        lang.pesanan.riwayatCaption,
-                                        textAlign: TextAlign.center,
-                                        style: TypoSty.title2,
-                                      ),
-                                      const SizedBox(height: SpaceDims.sp12),
-                                      Text(
-                                        lang.pesanan.riwayatCaption2,
-                                        textAlign: TextAlign.center,
-                                        style: TypoSty.title2,
-                                      ),
-                                    ],
-                                  );
-                                })
-                          ],
-                        ),
-                      ),
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
       bottomNavigationBar: _data.isNotEmpty
           ? Container(
               height: 110,

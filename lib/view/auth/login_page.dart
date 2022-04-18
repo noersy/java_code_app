@@ -172,9 +172,6 @@ class _LoginPageState extends State<LoginPage> {
           child: SizedBox(
             height: height <= 780 ? height + safeTopPadding + 20 : height,
             child: SingleChildScrollView(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
               child: Stack(
                 alignment: Alignment.topCenter,
                 children: [

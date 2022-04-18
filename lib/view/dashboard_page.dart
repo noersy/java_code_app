@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:java_code_app/models/lang.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
@@ -128,11 +129,16 @@ class _DashboardPageState extends State<DashboardPage> {
                                   borderRadius: BorderRadius.circular(100.0),
                                   border: Border.all(color: ColorSty.white),
                                 ),
-                                child: Text(
+                                padding: const EdgeInsets.all(3),
+                                child: AutoSizeText(
                                   "$_orderOngoing",
                                   style: TypoSty.button.copyWith(
                                     color: ColorSty.white,
                                   ),
+                                  maxLines: 1,
+                                  textAlign: TextAlign.center,
+                                  minFontSize: 0,
+                                  stepGranularity: 0.1,
                                 ),
                               );
                             } else {

@@ -25,7 +25,6 @@ class _BerandaPageState extends State<BerandaPage> {
   bool _loading = false;
 
   Future<void> _onRefresh() async {
-    if (mounted) setState(() => _loading = true);
     var _duration = const Duration(seconds: 0);
 
     await Provider.of<OrderProviders>(context, listen: false).getMenuList();
@@ -35,7 +34,6 @@ class _BerandaPageState extends State<BerandaPage> {
 
     if (mounted) {
       Timer(_duration, () {
-        setState(() => _loading = false);
         _refreshController.refreshCompleted();
       });
     }

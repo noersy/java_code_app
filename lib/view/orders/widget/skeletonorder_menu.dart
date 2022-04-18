@@ -26,8 +26,8 @@ class SkeletonOrderMenuCard extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  width: 120,
-                  height: 120,
+                  width: 100,
+                  height: 100,
                   margin: const EdgeInsets.all(SpaceDims.sp8),
                   decoration: BoxDecoration(
                     color: ColorSty.grey60,
@@ -38,7 +38,7 @@ class SkeletonOrderMenuCard extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding:
-                    const EdgeInsets.symmetric(vertical: SpaceDims.sp12),
+                        const EdgeInsets.symmetric(vertical: SpaceDims.sp12),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

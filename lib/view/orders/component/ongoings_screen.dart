@@ -31,12 +31,10 @@ class _OngoingScreenState extends State<OngoingScreen>
 
   Future<void> _onRefresh() async {
     var _duration = const Duration(seconds: 1);
-    if (mounted) setState(() => _loading = true);
 
     await Provider.of<OrderProviders>(context, listen: false).getListOrder();
 
     Timer(_duration, () {
-      if (mounted) setState(() => _loading = false);
       _refreshController.refreshCompleted();
     });
   }

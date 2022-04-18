@@ -17,12 +17,8 @@ class BottomSheetDetailMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
-    double bottomHeight =
-        keyboardHeight > 0 ? keyboardHeight + 300 : keyboardHeight;
-
     return Container(
-      height: 140 + bottomHeight,
+      height: 140,
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.symmetric(vertical: SpaceDims.sp12),
       child: Padding(

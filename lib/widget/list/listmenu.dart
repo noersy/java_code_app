@@ -5,6 +5,7 @@ import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/view/branda/widget/menuberanda_card.dart';
+import 'package:java_code_app/widget/dialog/custom_text.dart';
 
 class ListMenu extends StatefulWidget {
   final String type, title;
@@ -22,6 +23,16 @@ class ListMenu extends StatefulWidget {
 }
 
 class _ListMenuState extends State<ListMenu> {
+  bool isAny = false;
+
+  @override
+  void initState() {
+    isAny = widget.data.data.any(
+      (el) => el.kategori == widget.type,
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -53,26 +64,36 @@ class _ListMenuState extends State<ListMenu> {
               ),
             ),
             const SizedBox(height: SpaceDims.sp12),
-            SizedBox(
-              width: double.infinity,
-              child: SingleChildScrollView(
-                physics: const NeverScrollableScrollPhysics(),
-                primary: false,
-                child: Column(
-                  children: widget.data.data.map((e) {
-                    bool isAny = widget.data.data.any(
-                      (el) => el.kategori == widget.type,
-                    );
-                    return isAny ? CardMenu(data: e) : const SizedBox();
-                  }).toList(),
-                  // [
-                  //   for (final item in widget.data.data)
-                  //     if (widget.type == item.kategori)
-                  //         CardMenu(data: item),
-                  // ],
-                ),
-              ),
-            ),
+            !isAny
+                ? Container(
+                    height: 100,
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(20),
+                    child: CustomText(
+                      align: TextAlign.center,
+                      fontSize: 14,
+                      text: 'Menu Kosong',
+                    ),
+                  )
+                : SizedBox(
+                    width: double.infinity,
+                    child: SingleChildScrollView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      primary: false,
+                      child: Column(
+                        children: widget.data.data.map((e) {
+                          return e.kategori == widget.type
+                              ? CardMenu(data: e)
+                              : const SizedBox();
+                        }).toList(),
+                        // [
+                        //   for (final item in widget.data.data)
+                        //     if (widget.type == item.kategori)
+                        //         CardMenu(data: item),
+                        // ],
+                      ),
+                    ),
+                  ),
           ],
         ),
       ),

@@ -39,13 +39,10 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
   Future<void> _onRefresh() async {
     var _duration = const Duration(seconds: 1);
     if (mounted) {
-      setState(() => _loading = true);
-
       await Provider.of<OrderProviders>(context, listen: false)
           .getListVoucher();
 
       Timer(_duration, () {
-        setState(() => _loading = false);
         _refreshController.refreshCompleted();
       });
     }

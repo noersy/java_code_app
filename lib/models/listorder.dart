@@ -96,7 +96,7 @@ class Menu {
         nama: json["nama"],
         foto: json["foto"],
         jumlah: json["jumlah"] ?? 0,
-        harga: json["harga"],
+        harga: json["harga"] ?? '',
         total: json["total"],
         catatan: json["catatan"],
       );
