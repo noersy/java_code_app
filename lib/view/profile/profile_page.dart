@@ -1,10 +1,8 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -27,7 +25,6 @@ import 'package:java_code_app/widget/appbar/appbar.dart';
 import 'package:java_code_app/widget/dialog/custom_button.dart';
 import 'package:java_code_app/widget/sheet/detailmenu_sheet.dart';
 import 'package:java_code_app/widget/dialog/vp_pin_dialog.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
@@ -43,7 +40,6 @@ class _ProfilePageState extends State<ProfilePage> {
   static final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   static AndroidDeviceInfo? _androidInfo;
   static IosDeviceInfo? _iosDeviceInfo;
-  static PackageInfo? _packageInfo;
   static final ImagePicker _picker = ImagePicker();
   static File? _fileImage;
   static final DateFormat _dateFormat = DateFormat('dd/MM/yy');
@@ -55,7 +51,6 @@ class _ProfilePageState extends State<ProfilePage> {
   getInfoDevice() async {
     if (Platform.isAndroid) _androidInfo = await deviceInfo.androidInfo;
     if (Platform.isIOS) _iosDeviceInfo = await deviceInfo.iosInfo;
-    _packageInfo = await PackageInfo.fromPlatform();
     setState(() {});
   }
 
@@ -167,10 +162,9 @@ class _ProfilePageState extends State<ProfilePage> {
         String base64Image = base64Encode(compressedFile.readAsBytesSync());
 
         Provider.of<AuthProviders>(context, listen: false)
-            .uploadProfileImage(base64Image);
-        Provider.of<AuthProviders>(context, listen: false).getUser();
+            .uploadProfileImage(context, base64Image);
+        Provider.of<AuthProviders>(context, listen: false).getUser(context);
       }
-      setState(() {});
     }
   }
 
@@ -182,28 +176,30 @@ class _ProfilePageState extends State<ProfilePage> {
     );
 
     if (value != null) {
-      provider.update(
-          key: "tgl_lahir", value: _dateFormat.format((value as DateTime)));
-      if (mounted) setState(() {});
+      Provider.of<AuthProviders>(context, listen: false).update(
+        context,
+        key: "tgl_lahir",
+        value: _dateFormat.format((value as DateTime)),
+      );
     }
   }
 
   _updateTelepon(String value) {
     if (value.isEmpty) return;
-    provider.update(key: "telepon", value: value);
-    if (mounted) setState(() {});
+    Provider.of<AuthProviders>(context, listen: false)
+        .update(context, key: "telepon", value: value);
   }
 
   _updateNama(String value) {
     if (value.isEmpty) return;
-    provider.update(key: "nama", value: value);
-    if (mounted) setState(() {});
+    Provider.of<AuthProviders>(context, listen: false)
+        .update(context, key: "nama", value: value);
   }
 
   _updateEmail(String value) {
     if (value.isEmpty) return;
-    provider.update(key: "email", value: value);
-    if (mounted) setState(() {});
+    Provider.of<AuthProviders>(context, listen: false)
+        .update(context, key: "email", value: value);
   }
 
   _changePin(Lang lang) {
@@ -269,14 +265,14 @@ class _ProfilePageState extends State<ProfilePage> {
         String base64Image = base64Encode(compressedFile.readAsBytesSync());
 
         Provider.of<AuthProviders>(context, listen: false)
-            .uploadKtp(base64Image);
+            .uploadKtp(context, base64Image);
       }
       setState(() {});
     }
   }
 
   _logout() {
-    Navigator.pushReplacementNamed(context, "/");
+    Navigate.toLogin(context);
     Preferences.getInstance().clear();
     GoogleLogin.getInstance().logout();
     UserInstance.getInstance().clear();
@@ -291,7 +287,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void _onRefresh() async {
     if (mounted) {
-      await Provider.of<AuthProviders>(context, listen: false).getUser();
+      await Provider.of<AuthProviders>(context, listen: false).getUser(context);
     }
     _refreshController.refreshCompleted();
   }

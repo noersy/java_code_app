@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/constans/tools.dart';
+import 'package:java_code_app/constans/try_api.dart';
 import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/models/listvoucher.dart';
 import 'package:java_code_app/providers/order_providers.dart';
@@ -32,7 +33,7 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
   static List<LVoucher> _listVoucher = [];
   static final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  bool _loading = false;
+  final bool _loading = false;
   bool _isUsed = false;
   bool isLoading = true;
 
@@ -40,7 +41,7 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
     var _duration = const Duration(seconds: 1);
     if (mounted) {
       await Provider.of<OrderProviders>(context, listen: false)
-          .getListVoucher();
+          .getListVoucher(context);
 
       Timer(_duration, () {
         _refreshController.refreshCompleted();
@@ -56,18 +57,29 @@ class _SelectionVoucherPageState extends State<SelectionVoucherPage> {
   }
 
   getData() async {
-    await Provider.of<OrderProviders>(context, listen: false)
-        .getListVoucher()
-        .then((value) {
-      if (!value) {
-        showCustomSnackbar(context, 'Mohon periksa koneksi Anda');
-      } else {
-        if (!mounted) return false;
-        setState(() {
-          isLoading = false;
-        });
-      }
-    });
+    bool isAnyConnection = await checkConnection();
+
+    if (isAnyConnection) {
+      await Provider.of<OrderProviders>(context, listen: false)
+          .getListVoucher(context)
+          .then((value) {
+        if (!value) {
+          showCustomSnackbar(context, 'Mohon periksa koneksi Anda');
+        } else {
+          if (!mounted) return false;
+          setState(() {
+            isLoading = false;
+          });
+        }
+      });
+    } else {
+      Provider.of<OrderProviders>(context, listen: false).setNetworkError(
+        true,
+        context: context,
+        title: 'Koneksi anda terputus',
+        then: () => getData(),
+      );
+    }
   }
 
   @override

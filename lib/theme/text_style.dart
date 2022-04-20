@@ -82,4 +82,9 @@ class TypoSty {
     fontWeight: FontWeight.normal,
     fontSize: ScreenUtil().setSp(8.0),
   );
+
+  static TextStyle medium = TextStyle(
+    fontWeight: FontWeight.normal,
+    fontSize: ScreenUtil().setSp(8.0),
+  );
 }

@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:java_code_app/constans/try_api.dart';
+import 'package:java_code_app/providers/order_providers.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:bubble/bubble.dart';
 
@@ -42,14 +45,25 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _loadMessages() async {
-    final response = await rootBundle.loadString('assets/messages.json');
-    final messages = (jsonDecode(response) as List)
-        .map((e) => types.Message.fromJson(e as Map<String, dynamic>))
-        .toList();
+    bool isAnyConnection = await checkConnection();
 
-    setState(() {
-      _messages = messages;
-    });
+    if (isAnyConnection) {
+      final response = await rootBundle.loadString('assets/messages.json');
+      final messages = (jsonDecode(response) as List)
+          .map((e) => types.Message.fromJson(e as Map<String, dynamic>))
+          .toList();
+
+      setState(() {
+        _messages = messages;
+      });
+    } else {
+      Provider.of<OrderProviders>(context, listen: false).setNetworkError(
+        true,
+        context: context,
+        title: 'Koneksi anda terputus',
+        then: () => _loadMessages(),
+      );
+    }
   }
 
   Widget _bubbleBuilder(

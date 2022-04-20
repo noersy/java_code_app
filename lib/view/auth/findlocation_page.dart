@@ -2,9 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:java_code_app/constans/key_prefens.dart';
+import 'package:java_code_app/constans/try_api.dart';
+import 'package:java_code_app/providers/auth_providers.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/providers/location_provider.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
+import 'package:java_code_app/singletons/shared_preferences.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:provider/provider.dart';
@@ -17,14 +22,21 @@ class FindLocationPage extends StatefulWidget {
 }
 
 class _FindLocationPageState extends State<FindLocationPage> {
+  final Preferences _preferences = Preferences.getInstance();
+
   _startTime() async {
     var _duration = const Duration(seconds: 3);
     return Timer(_duration, _navigationPage);
   }
 
   void _navigationPage() async {
-    Provider.of<LangProviders>(context, listen: false).checkLangPref();
-    Navigate.toDashboard(context);
+    bool _isAlreadyLogin = await _preferences.getBoolValue(KeyPrefens.login);
+    await Provider.of<LangProviders>(context, listen: false).checkLangPref();
+    if (_isAlreadyLogin) {
+      Navigate.toDashboard(context);
+    } else {
+      Navigate.toLogin(context);
+    }
   }
 
   getAddress() async {
@@ -35,9 +47,30 @@ class _FindLocationPageState extends State<FindLocationPage> {
     _startTime();
   }
 
+  Future _checkPrefens() async {
+    await checkConnection().then((value) async {
+      if (value) {
+        bool _isAlreadyLogin =
+            await _preferences.getBoolValue(KeyPrefens.login);
+        if (_isAlreadyLogin) {
+          final id = await _preferences.getIntValue(KeyPrefens.loginID);
+          await Provider.of<AuthProviders>(context, listen: false)
+              .getUser(context, id: id);
+        }
+      } else {
+        Provider.of<OrderProviders>(context, listen: false).setNetworkError(
+          true,
+          context: context,
+          title: 'Koneksi anda terputus',
+          then: () => _checkPrefens(),
+        );
+      }
+    });
+  }
+
   @override
   void initState() {
-    getAddress();
+    _checkPrefens().then((value) => getAddress());
     super.initState();
   }
 

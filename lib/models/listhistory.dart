@@ -4,7 +4,8 @@
 
 import 'dart:convert';
 
-ListHistory listHistoryFromJson(String str) => ListHistory.fromJson(json.decode(str));
+ListHistory listHistoryFromJson(String str) =>
+    ListHistory.fromJson(json.decode(str));
 
 String listHistoryToJson(ListHistory data) => json.encode(data.toJson());
 
@@ -12,20 +13,27 @@ class ListHistory {
   ListHistory({
     required this.statusCode,
     required this.data,
+    required this.totalPrice,
+    required this.totalOrder,
   });
 
   final int statusCode;
   final List<History> data;
+  final int totalPrice;
+  final int totalOrder;
 
   factory ListHistory.fromJson(Map<String, dynamic> json) => ListHistory(
-    statusCode: json["status_code"],
-    data: List<History>.from(json["data"].map((x) => History.fromJson(x))),
-  );
+        statusCode: json["status_code"],
+        data: List<History>.from(
+            json["data"]['listData'].map((x) => History.fromJson(x))),
+        totalPrice: json["data"]['totalPrice'] ?? 0,
+        totalOrder: json["data"]['totalOrder'] ?? 0,
+      );
 
   Map<String, dynamic> toJson() => {
-    "status_code": statusCode,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
-  };
+        "status_code": statusCode,
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+      };
 }
 
 class History {
@@ -48,24 +56,25 @@ class History {
   final List<Menu> menu;
 
   factory History.fromJson(Map<String, dynamic> json) => History(
-    idOrder: json["id_order"],
-    noStruk: json["no_struk"],
-    nama: json["nama"],
-    totalBayar: json["total_bayar"],
-    tanggal: DateTime.parse(json["tanggal"]),
-    status: json["status"],
-    menu: List<Menu>.from(json["menu"].map((x) => Menu.fromJson(x))),
-  );
+        idOrder: json["id_order"],
+        noStruk: json["no_struk"],
+        nama: json["nama"],
+        totalBayar: json["total_bayar"],
+        tanggal: DateTime.parse(json["tanggal"]),
+        status: json["status"],
+        menu: List<Menu>.from(json["menu"].map((x) => Menu.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id_order": idOrder,
-    "no_struk": noStruk,
-    "nama": nama,
-    "total_bayar": totalBayar,
-    "tanggal": "${tanggal.year.toString().padLeft(4, '0')}-${tanggal.month.toString().padLeft(2, '0')}-${tanggal.day.toString().padLeft(2, '0')}",
-    "status": status,
-    "menu": List<dynamic>.from(menu.map((x) => x.toJson())),
-  };
+        "id_order": idOrder,
+        "no_struk": noStruk,
+        "nama": nama,
+        "total_bayar": totalBayar,
+        "tanggal":
+            "${tanggal.year.toString().padLeft(4, '0')}-${tanggal.month.toString().padLeft(2, '0')}-${tanggal.day.toString().padLeft(2, '0')}",
+        "status": status,
+        "menu": List<dynamic>.from(menu.map((x) => x.toJson())),
+      };
 }
 
 class Menu {
@@ -90,24 +99,24 @@ class Menu {
   final String? catatan;
 
   factory Menu.fromJson(Map<String, dynamic> json) => Menu(
-    idMenu: json["id_menu"],
-    kategori: json["kategori"],
-    nama: json["nama"],
-    foto: json["foto"],
-    jumlah: json["jumlah"],
-    harga: json["harga"],
-    total: json["total"],
-    catatan: json["catatan"],
-  );
+        idMenu: json["id_menu"],
+        kategori: json["kategori"],
+        nama: json["nama"],
+        foto: json["foto"],
+        jumlah: json["jumlah"],
+        harga: json["harga"],
+        total: json["total"],
+        catatan: json["catatan"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id_menu": idMenu,
-    "kategori": kategori,
-    "nama": nama,
-    "foto": foto,
-    "jumlah": jumlah,
-    "harga": harga,
-    "total": total,
-    "catatan": catatan,
-  };
+        "id_menu": idMenu,
+        "kategori": kategori,
+        "nama": nama,
+        "foto": foto,
+        "jumlah": jumlah,
+        "harga": harga,
+        "total": total,
+        "catatan": catatan,
+      };
 }

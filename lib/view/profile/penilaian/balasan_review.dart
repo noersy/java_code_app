@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:java_code_app/constans/try_api.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
+import 'package:provider/provider.dart';
 
 import 'get_all_chat.dart';
 
@@ -20,25 +23,37 @@ class _BalasanReviewState extends State<BalasanReview> {
     true,
     false,
   ];
-  loadChat() {
-    listChat.clear();
-    Future data = getAllChat(widget.idReview);
-    data.then((value) {
-      Map json = jsonDecode(value);
-      // print('json: ${json['data']}');
-      var jsonData = json['data'];
-      // var getidReview = jsonData['review'];
-      // print('getidReview ${getidReview['id_review']}');
-      for (var i in jsonData['answer']) {
-        // print('i: $i');
-        Answer ans = Answer.fromJson(i);
-        listChat.add(ans);
-      }
-      setState(() {
-        widgetListChat();
-        // idReview = getidReview['id_review'];
+
+  loadChat() async {
+    bool isAnyConnection = await checkConnection();
+
+    if (isAnyConnection) {
+      listChat.clear();
+      Future data = getAllChat(widget.idReview);
+      data.then((value) {
+        Map json = jsonDecode(value);
+        // print('json: ${json['data']}');
+        var jsonData = json['data'];
+        // var getidReview = jsonData['review'];
+        // print('getidReview ${getidReview['id_review']}');
+        for (var i in jsonData['answer']) {
+          // print('i: $i');
+          Answer ans = Answer.fromJson(i);
+          listChat.add(ans);
+        }
+        setState(() {
+          widgetListChat();
+          // idReview = getidReview['id_review'];
+        });
       });
-    });
+    } else {
+      Provider.of<OrderProviders>(context, listen: false).setNetworkError(
+        true,
+        context: context,
+        title: 'Koneksi anda terputus',
+        then: () => loadChat(),
+      );
+    }
   }
 
   sendChat(answer, idReview) {

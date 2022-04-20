@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:java_code_app/constans/try_api.dart';
 import 'package:java_code_app/models/lang.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/providers/order_providers.dart';
@@ -44,19 +45,32 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   getData() async {
-    OrderProviders orderProviders =
-        Provider.of<OrderProviders>(context, listen: false);
+    await checkConnection().then((value) async {
+      if (value) {
+        OrderProviders orderProviders =
+            Provider.of<OrderProviders>(context, listen: false);
 
-    await orderProviders.getMenuList();
-    await orderProviders.getListPromo();
-    await orderProviders.getListDisCount();
-    if (_bottomNavBarSelectedIndex != 1) await orderProviders.getListOrder();
+        await orderProviders.getMenuList(context);
+        await orderProviders.getListPromo(context);
+        await orderProviders.getListDisCount(context);
+        if (_bottomNavBarSelectedIndex != 1) {
+          await orderProviders.getListOrder(context);
+        }
 
-    _pageController.animateToPage(
-      widget.indexPage,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.fastOutSlowIn,
-    );
+        _pageController.animateToPage(
+          widget.indexPage,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.fastOutSlowIn,
+        );
+      } else {
+        Provider.of<OrderProviders>(context, listen: false).setNetworkError(
+          true,
+          context: context,
+          title: 'Koneksi anda terputus',
+          then: () => getData(),
+        );
+      }
+    });
   }
 
   @override

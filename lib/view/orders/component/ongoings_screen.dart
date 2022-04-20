@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:java_code_app/constans/try_api.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
@@ -32,7 +33,8 @@ class _OngoingScreenState extends State<OngoingScreen>
   Future<void> _onRefresh() async {
     var _duration = const Duration(seconds: 1);
 
-    await Provider.of<OrderProviders>(context, listen: false).getListOrder();
+    await Provider.of<OrderProviders>(context, listen: false)
+        .getListOrder(context);
 
     Timer(_duration, () {
       _refreshController.refreshCompleted();
@@ -41,14 +43,29 @@ class _OngoingScreenState extends State<OngoingScreen>
 
   getListOrder() async {
     if (mounted) setState(() => _loading = true);
-    await Provider.of<OrderProviders>(context, listen: false).getListOrder();
+    await Provider.of<OrderProviders>(context, listen: false)
+        .getListOrder(context);
     if (mounted) setState(() => _loading = false);
+  }
+
+  checkConnectivity() async {
+    bool isAnyConnection = await checkConnection();
+    if (isAnyConnection) {
+      getListOrder();
+      _onRefresh();
+    } else {
+      Provider.of<OrderProviders>(context, listen: false).setNetworkError(
+        true,
+        context: context,
+        title: 'Koneksi anda terputus',
+        then: () => checkConnectivity(),
+      );
+    }
   }
 
   @override
   void initState() {
-    getListOrder();
-    _onRefresh();
+    checkConnectivity();
     super.initState();
   }
 

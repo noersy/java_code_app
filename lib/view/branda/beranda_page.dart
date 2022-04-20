@@ -26,11 +26,12 @@ class _BerandaPageState extends State<BerandaPage> {
 
   Future<void> _onRefresh() async {
     var _duration = const Duration(seconds: 0);
+    OrderProviders orderProvider =
+        Provider.of<OrderProviders>(context, listen: false);
 
-    await Provider.of<OrderProviders>(context, listen: false).getMenuList();
-    await Provider.of<OrderProviders>(context, listen: false).getListPromo();
-
-    Provider.of<OrderProviders>(context, listen: false).getListDisCount();
+    await orderProvider.getMenuList(context);
+    await orderProvider.getListPromo(context);
+    await orderProvider.getListDisCount(context);
 
     if (mounted) {
       Timer(_duration, () {
@@ -43,7 +44,8 @@ class _BerandaPageState extends State<BerandaPage> {
     if (mounted) setState(() => _loading = true);
     var _duration = const Duration(seconds: 0);
 
-    await Provider.of<OrderProviders>(context, listen: false).getMenuList();
+    await Provider.of<OrderProviders>(context, listen: false)
+        .getMenuList(context);
 
     if (mounted) {
       Timer(_duration, () {

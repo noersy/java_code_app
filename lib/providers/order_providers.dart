@@ -1,7 +1,8 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
+import 'dart:async';
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:java_code_app/constans/gettoken.dart';
@@ -14,8 +15,10 @@ import 'package:java_code_app/models/listvoucher.dart';
 import 'package:java_code_app/models/menudetail.dart';
 import 'package:java_code_app/models/menulist.dart';
 import 'package:java_code_app/models/orderdetail.dart' as detail;
+import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/singletons/random_string.dart';
 import 'package:java_code_app/singletons/user_instance.dart';
+import 'package:java_code_app/widget/dialog/custom_dialog.dart';
 import 'package:logging/logging.dart' as logging;
 
 class TotalHistory {
@@ -40,6 +43,7 @@ class OrderProviders extends ChangeNotifier {
   static List<Order> _orders = [];
   static LVoucher? _selectedVoucher;
   static bool? _isVoucherUsed = false;
+  static bool? _isNetworkError = false;
 
   MenuList? get listMenu => _menuList;
   Map<String, dynamic> get checkOrder => _checkOrder;
@@ -50,6 +54,7 @@ class OrderProviders extends ChangeNotifier {
   List<Order> get listOrders => _orders;
   LVoucher? get selectedVoucher => _selectedVoucher;
   bool? get isVoucherUsed => _isVoucherUsed;
+  bool? get isNetworkError => _isNetworkError;
 
   clear() {
     _checkOrder = {};
@@ -70,6 +75,29 @@ class OrderProviders extends ChangeNotifier {
 
     _log.fine("clear all orders");
     notifyListeners();
+  }
+
+  setNetworkError(
+    bool status, {
+    BuildContext? context,
+    String? title,
+    Function? then,
+  }) {
+    _isNetworkError = status;
+    notifyListeners();
+    if (context != null) {
+      _isNetworkError = false;
+      notifyListeners();
+      Navigate.toOfflinePage(
+        context,
+        title!,
+        then: () {
+          if (then != null) {
+            then();
+          }
+        },
+      );
+    }
   }
 
   addOrder({
@@ -148,25 +176,45 @@ class OrderProviders extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<MenuList?> getMenuList() async {
+  Future<MenuList?> getMenuList(BuildContext context) async {
+    if (_isNetworkError!) return null;
     try {
       final _api = Uri.http(host, "$sub/api/menu/all");
-
-      _log.fine("Tray get all menu.");
-      final response = await http.get(_api, headers: await getHeader());
-
-      if (response.statusCode == 200 &&
-          json.decode(response.body)["status_code"] == 200) {
+      final response = await http
+          .get(
+            _api,
+            headers: await getHeader(),
+          )
+          .timeout(const Duration(seconds: 4));
+      var responseBody = json.decode(response.body);
+      if (response.statusCode == 200 && responseBody['status_code'] == 200) {
         _menuList = menuListFromJson(response.body);
         if (_menuList != null) _log.fine("Success get all menu");
+        setNetworkError(false);
         notifyListeners();
         return _menuList;
       }
-
-      _log.info("Fail to get all menu");
-      _log.info(response.body);
+      return null;
+    } on SocketException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
+      return null;
+    } on TimeoutException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Koneksi time out.',
+      );
       return null;
     } catch (e) {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
       return null;
     }
   }
@@ -181,62 +229,91 @@ class OrderProviders extends ChangeNotifier {
   //   }
   // }
 
-  Future<MenuDetail?> getDetailMenu({required int id}) async {
+  Future<MenuDetail?> getDetailMenu(
+    BuildContext context, {
+    required int id,
+  }) async {
+    if (_isNetworkError!) return null;
     try {
       final _api = Uri.http(host, "$sub/api/menu/detail/$id");
+      final response = await http
+          .get(_api, headers: await getHeader())
+          .timeout(const Duration(seconds: 4));
 
-      _log.fine("Try to get menu detail");
-      final response = await http.get(_api, headers: await getHeader());
-
-      if (response.statusCode == 200 &&
-          json.decode(response.body)["status_code"] == 200) {
-        _log.fine("Success get detail menu");
+      var responseBody = json.decode(response.body);
+      if (response.statusCode == 200 && responseBody["status_code"] == 200) {
+        setNetworkError(false);
         return menuDetailFromJson(response.body);
       }
-
-      _log.info("Fail to get menu detail");
-      _log.info(response.body);
       return null;
-    } catch (e, r) {
-      _log.warning(e);
-      _log.warning(r);
+    } on SocketException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
+      return null;
+    } on TimeoutException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Koneksi time out.',
+      );
+      return null;
+    } catch (e) {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
       return null;
     }
   }
 
-  Future<bool> getListVoucher() async {
+  Future<bool> getListVoucher(BuildContext context) async {
+    if (_isNetworkError!) return false;
     try {
       final user = UserInstance.getInstance().user;
       if (user == null) return false;
       final _api = Uri.http(host, "$sub/api/voucher/user/${user.data.idUser}");
+      final response = await http
+          .get(_api, headers: await getHeader())
+          .timeout(const Duration(seconds: 4));
 
-      _log.fine("Try to get list voucher.");
-      final response = await http.get(_api, headers: await getHeader()).timeout(
-        const Duration(seconds: 4),
-        onTimeout: () {
-          return http.Response('Error', 408);
-        },
-      );
-
-      if (response.statusCode == 200 &&
-          json.decode(response.body)["status_code"] == 200) {
+      var responseBody = json.decode(response.body);
+      if (response.statusCode == 200 && responseBody["status_code"] == 200) {
         _listVoucher = listVoucherFromJson(response.body).data;
-        _log.fine("Success get list voucher");
+        setNetworkError(false);
         notifyListeners();
         return true;
       }
-
-      _log.info("Fail to get list voucher");
-      _log.info(response.body);
       return false;
-    } catch (e, r) {
-      _log.warning(e);
-      _log.warning(r);
+    } on SocketException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
+      return false;
+    } on TimeoutException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Koneksi time out.',
+      );
+      return false;
+    } catch (e) {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
       return false;
     }
   }
 
-  Future<bool> getListDisCount() async {
+  Future<bool> getListDisCount(BuildContext context) async {
+    if (_isNetworkError!) return false;
     final user = UserInstance.getInstance().user;
     if (user == null) return false;
 
@@ -244,238 +321,355 @@ class OrderProviders extends ChangeNotifier {
       final _api = Uri.http(host, "$sub/api/diskon/user/${user.data.idUser}");
 
       _log.fine("Try to get list discount");
-      final response = await http.get(_api, headers: await getHeader());
+      final response = await http
+          .get(_api, headers: await getHeader())
+          .timeout(const Duration(seconds: 4));
 
-      if (response.statusCode == 200 &&
-          json.decode(response.body)["status_code"] == 200) {
+      var responseBody = json.decode(response.body);
+      if (response.statusCode == 200 && responseBody["status_code"] == 200) {
         _listDiscount = listDiscountFromJson(response.body).data;
-        _log.fine("Success get list discount");
+        setNetworkError(false);
         notifyListeners();
         return true;
       }
-
-      _log.info("Fail to get list discount");
-      _log.info(response.body);
       return false;
-    } catch (e, r) {
-      _log.warning(e);
-      _log.warning(r);
+    } on SocketException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
+      return false;
+    } on TimeoutException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Koneksi time out.',
+      );
+      return false;
+    } catch (e) {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
       return false;
     }
   }
 
-  Future<bool> getListPromo() async {
+  Future<bool> getListPromo(BuildContext context) async {
+    if (_isNetworkError!) return false;
     final user = UserInstance.getInstance().user;
     if (user == null) return false;
 
     try {
       final _api = Uri.http(host, "$sub/api/promo/user/${user.data.idUser}");
+      final response = await http
+          .get(_api, headers: await getHeader())
+          .timeout(const Duration(seconds: 4));
 
-      _log.fine("Try to get list promo");
-      final response = await http.get(_api, headers: await getHeader());
-
-      if (response.statusCode == 204) {
-        _log.info("Promo is empty");
-        _listPromo = [];
-      }
-
-      if (response.statusCode == 200 &&
-          json.decode(response.body)["status_code"] == 200) {
+      var responseBody = json.decode(response.body);
+      if (response.statusCode == 200 && responseBody["status_code"] == 200) {
         _listPromo = listPromoFromJson(response.body).data;
-        _log.fine("Success get list promo");
+        setNetworkError(false);
         notifyListeners();
         return true;
       }
-
-      _log.info("Fail to get get list promo");
-      _log.info(response.body);
       return false;
-    } catch (e, r) {
-      _log.warning(e);
-      _log.warning(r);
+    } on SocketException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
+      return false;
+    } on TimeoutException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Koneksi time out.',
+      );
+      return false;
+    } catch (e) {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
       return false;
     }
   }
 
-  Future<bool> getListOrder() async {
+  Future<bool> getListOrder(BuildContext context) async {
+    if (_isNetworkError!) return false;
     final user = UserInstance.getInstance().user;
     if (user == null) return false;
     try {
       final _api = Uri.http(host, "$sub/api/order/proses/${user.data.idUser}");
 
       _log.fine("Try to get order in progress");
-      final response = await http.get(_api, headers: await getHeader());
+      final response = await http
+          .get(_api, headers: await getHeader())
+          .timeout(const Duration(seconds: 4));
 
-      if (response.statusCode == 204 ||
-          json.decode(response.body)["status_code"] == 204) {
-        _log.info("Order is empty");
-        _orders = [];
-      }
-
-      if (response.statusCode == 200 &&
-          json.decode(response.body)["status_code"] == 200) {
+      var responseBody = json.decode(response.body);
+      if (response.statusCode == 200 && responseBody['status_code'] == 200) {
         _orders = listOrderFromJson(response.body).data;
-        if (_orders.isEmpty) _log.info("Failed get order in progress.");
-        _log.fine("Success get order in progress.");
+        setNetworkError(false);
         notifyListeners();
         return true;
       }
-      _log.info("Fail to get order in progress");
-      _log.info(response.body);
       return false;
-    } catch (e, r) {
-      _log.warning(e);
-      _log.warning(r);
+    } on SocketException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
+      return false;
+    } on TimeoutException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Koneksi time out.',
+      );
+      return false;
+    } catch (e) {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
       return false;
     }
   }
 
-  Future<detail.OrderDetail?> getDetailOrder({required int id}) async {
+  Future<detail.OrderDetail?> getDetailOrder(
+    BuildContext context, {
+    required int id,
+  }) async {
+    if (_isNetworkError!) return null;
     try {
       final _api = Uri.http(host, "$sub/api/order/detail/$id");
+      final response = await http
+          .get(_api, headers: await getHeader())
+          .timeout(const Duration(seconds: 4));
 
-      _log.fine("Tray to get detail order");
-      final response = await http.get(_api, headers: await getHeader());
-
-      if (response.statusCode == 200 &&
-          json.decode(response.body)["status_code"] == 200) {
-        _log.fine("Success get detail order");
+      var responseBody = json.decode(response.body);
+      if (response.statusCode == 200 && responseBody["status_code"] == 200) {
+        setNetworkError(false);
         return detail.orderDetailFromJson(response.body);
       }
-      _log.info("Fail to get detail order");
-      _log.info(response.body);
-    } catch (e, r) {
-      _log.warning(e);
-      _log.warning(r);
-    }
-    return null;
-  }
-
-  Future getTotalHistory() async {
-    final user = UserInstance.getInstance().user;
-
-    if (user == null) return null;
-
-    try {
-      _log.fine("Try to get list history of order");
-      final response = await http.get(
-        Uri.parse("https://$host/api/order/history/total/1"),
-        headers: await getHeader(),
+      return null;
+    } on SocketException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
       );
-      // final response = await http.get(
-      //   _api,
-      //   headers: headers,
-      // );
-      // print('response.limit: ${response.body}');
-      if (response.statusCode == 204) {
-        _log.info("History if empty");
-        return [];
-      }
-
-      if (response.statusCode == 200 &&
-          json.decode(response.body)["status_code"] == 200) {
-        _log.fine("Success get list history of order:");
-        return response.body;
-        // return listHistoryFromJson(response.body).data;
-      }
-      _log.info("Fail to get liest history");
-      _log.info(response.body);
-    } catch (e, r) {
-      _log.warning(e);
-      _log.warning(r);
+      return null;
+    } on TimeoutException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Koneksi time out.',
+      );
+      return null;
+    } catch (e) {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
+      return null;
     }
-    return null;
   }
 
-  Future<List<History>?> getHistoryLimit(limit, start) async {
+  Future getTotalHistory(BuildContext context) async {
+    if (_isNetworkError!) return null;
     final user = UserInstance.getInstance().user;
-    // print('user: ${user!.data.idUser}');
-
     if (user == null) return null;
 
     try {
-      _log.fine("Try to get list history of order");
-      final response = await http.get(
-          Uri.parse(
-              "https://$host/api/order/history/${user.data.idUser}?limit=$limit&start=$start"),
-          headers: await getHeader());
-      // final response = await http.get(
-      //   _api,
-      //   headers: headers,
-      // );
-      // print('response.limit: ${response.body}');
-      if (response.statusCode == 204) {
-        _log.info("History if empty");
-        return [];
-      }
+      final response = await http
+          .get(
+            Uri.http(host, '$sub/order/history/total/${user.data.idUser}'),
+            headers: await getHeader(),
+          )
+          .timeout(const Duration(seconds: 4));
 
-      if (response.statusCode == 200 &&
-          json.decode(response.body)["status_code"] == 200) {
-        _log.fine("Success get list history of order:");
-        // print('body sukses:\n${response.body}');
-        return listHistoryFromJson(response.body).data;
+      var responseBody = json.decode(response.body);
+      if (response.statusCode == 200 && responseBody["status_code"] == 200) {
+        setNetworkError(false);
+        return response.body;
       }
-      _log.info("Fail to get liest history");
-      _log.info(response.body);
-    } catch (e, r) {
-      _log.warning(e);
-      _log.warning(r);
+      return [];
+    } on SocketException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
+      return null;
+    } on TimeoutException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Koneksi time out.',
+      );
+      return null;
+    } catch (e) {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
+      return null;
     }
-    return null;
   }
 
-  Future<List<History>?> getHistoryList() async {
+  Future<ListHistory?> getHistoryLimit(
+    BuildContext context,
+    limit,
+    start,
+    String startDate,
+    String endDate,
+  ) async {
+    if (_isNetworkError!) return null;
     final user = UserInstance.getInstance().user;
+    if (user == null) return null;
 
+    try {
+      Map<String, dynamic>? request = {
+        "limit": limit,
+        "offset": start,
+        "tanggal": {"startDate": startDate, "endDate": endDate},
+      };
+
+      final response = await http
+          .post(
+            Uri.http(host, '$sub/api/order/history/${user.data.idUser}'),
+            body: jsonEncode(request),
+            headers: await getHeader(),
+          )
+          .timeout(const Duration(seconds: 4));
+
+      var responseBody = json.decode(response.body);
+      if (response.statusCode == 200 && responseBody['status_code'] == 200) {
+        setNetworkError(false);
+        return listHistoryFromJson(response.body);
+      }
+      return null;
+    } on SocketException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
+      return null;
+    } on TimeoutException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Koneksi time out.',
+      );
+      return null;
+    } catch (e) {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
+      return null;
+    }
+  }
+
+  Future<List<History>?> getHistoryList(BuildContext context) async {
+    if (_isNetworkError!) return null;
+    final user = UserInstance.getInstance().user;
     if (user == null) return null;
 
     try {
       final _api = Uri.http(host, "$sub/api/order/history/${user.data.idUser}");
+      final response = await http
+          .get(_api, headers: await getHeader())
+          .timeout(const Duration(seconds: 4));
 
-      _log.fine("Try to get list history of order");
-      final response = await http.get(_api, headers: await getHeader());
-
-      if (response.statusCode == 204) {
-        _log.info("History if empty");
-        return [];
-      }
-
-      if (response.statusCode == 200 &&
-          json.decode(response.body)["status_code"] == 200) {
-        _log.fine("Success get list history of order");
+      var responseBody = json.decode(response.body);
+      if (response.statusCode == 200 && responseBody['status_code'] == 200) {
+        setNetworkError(false);
         return listHistoryFromJson(response.body).data;
       }
-      _log.info("Fail to get liest history");
-      _log.info(response.body);
-    } catch (e, r) {
-      _log.warning(e);
-      _log.warning(r);
+      return null;
+    } on SocketException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
+      return null;
+    } on TimeoutException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Koneksi time out.',
+      );
+      return null;
+    } catch (e) {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
+      return null;
     }
-    return null;
   }
 
-  Future<bool> cancelOrder({required int idOrder}) async {
+  Future<bool> cancelOrder(BuildContext context, {required int idOrder}) async {
+    if (_isNetworkError!) return false;
     try {
       final _api = Uri.http(host, "$sub/api/order/batal/$idOrder");
+      final response = await http
+          .post(_api, headers: await getHeader())
+          .timeout(const Duration(seconds: 4));
 
-      _log.fine("Tray to cancel a order");
-      final response = await http.post(_api, headers: await getHeader());
-
-      if (response.statusCode == 200 &&
-          json.decode(response.body)["status_code"] == 200) {
-        _log.fine("Success cancel a order");
+      var responseBody = json.decode(response.body);
+      if (response.statusCode == 200 && responseBody["status_code"] == 200) {
+        setNetworkError(false);
         return true;
+      } else {
+        showSimpleDialog(
+          context,
+          responseBody['message'] ?? responseBody['errors']?[0] ?? '',
+        );
+        return false;
       }
-      _log.info("Failed to cancel a order");
-      _log.info(response.body);
-    } catch (e, r) {
-      _log.warning(e);
-      _log.warning(r);
+    } on SocketException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
+      return false;
+    } on TimeoutException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Koneksi time out.',
+      );
+      return false;
+    } catch (e) {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
+      return false;
     }
-    return false;
   }
 
-  Future<bool> sendCheckOut({
+  Future<bool> sendCheckOut(
+    BuildContext context, {
     int? idVoucher,
     List<int>? idDiscount,
     int? discount,
@@ -484,6 +678,7 @@ class OrderProviders extends ChangeNotifier {
     required int totalPay,
     required List<Map<String, dynamic>> menu,
   }) async {
+    if (_isNetworkError!) return false;
     try {
       final user = UserInstance.getInstance().user;
       if (user == null) return false;
@@ -503,28 +698,50 @@ class OrderProviders extends ChangeNotifier {
         "menu": menu
       };
 
-      _log.fine("Tray to checkout order");
-      final response = await http.post(_api,
-          headers: await getHeader(),
-          body: jsonEncode(body),
-          encoding: Encoding.getByName("utf-8"));
-      // print('body print $body');
-      if (response.statusCode == 200 &&
-          json.decode(response.body)["status_code"] == 200) {
-        submitOrder();
-        getListOrder();
+      final response = await http
+          .post(
+            _api,
+            headers: await getHeader(),
+            body: jsonEncode(body),
+            encoding: Encoding.getByName("utf-8"),
+          )
+          .timeout(const Duration(seconds: 4));
 
-        _log.fine("Checkout success");
+      var responseBody = json.decode(response.body);
+      if (response.statusCode == 200 && responseBody["status_code"] == 200) {
+        submitOrder();
+        getListOrder(context);
+
+        setNetworkError(false);
         notifyListeners();
         return true;
+      } else {
+        showSimpleDialog(
+          context,
+          responseBody['message'] ?? responseBody['errors']?[0] ?? '',
+        );
+        return false;
       }
-
-      _log.warning("Checkout failed");
-      _log.info(response.body);
+    } on SocketException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
       return false;
-    } catch (e, r) {
-      _log.warning(e);
-      _log.warning(r);
+    } on TimeoutException {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Koneksi time out.',
+      );
+      return false;
+    } catch (e) {
+      setNetworkError(
+        true,
+        context: context,
+        title: 'Terjadi masalah dengan server.',
+      );
       return false;
     }
   }

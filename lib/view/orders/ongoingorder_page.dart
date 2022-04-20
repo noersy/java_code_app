@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/constans/tools.dart';
+import 'package:java_code_app/constans/try_api.dart';
 import 'package:java_code_app/models/orderdetail.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
@@ -30,24 +31,40 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
 
   getOrder() async {
     setState(() => _isLoading = true);
-    data = await Provider.of<OrderProviders>(context, listen: false)
-        .getDetailOrder(id: widget.id);
-    if (data != null) status = data!.data.order.status;
-    setState(() => _isLoading = false);
+    bool isAnyConnection = await checkConnection();
+
+    if (isAnyConnection) {
+      await Provider.of<OrderProviders>(context, listen: false)
+          .getDetailOrder(context, id: widget.id)
+          .then((value) {
+        setState(() {
+          data = value;
+          status = value!.data.order.status;
+          _isLoading = false;
+        });
+      });
+    } else {
+      Provider.of<OrderProviders>(context, listen: false).setNetworkError(
+        true,
+        context: context,
+        title: 'Koneksi anda terputus',
+        then: () => getOrder(),
+      );
+    }
   }
 
-  _cancelOrder() async {
+  _cancelOrder(BuildContext context) async {
     await showDialog(
         context: context,
         builder: (_) => ConfirmationDialog(
               onSubmit: () async {
                 setState(() => _isLoading = true);
                 if (data != null) {
-                  final result =
-                      await Provider.of<OrderProviders>(context, listen: false)
-                          .cancelOrder(idOrder: data!.data.order.idOrder);
+                  final result = await Provider.of<OrderProviders>(context,
+                          listen: false)
+                      .cancelOrder(context, idOrder: data!.data.order.idOrder);
                   Provider.of<OrderProviders>(context, listen: false)
-                      .getListOrder();
+                      .getListOrder(context);
                   if (result) Navigator.pop(context);
                 }
               },
@@ -70,9 +87,9 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
         title: 'Pesanan',
         icon: const Icon(IconsCs.pesanan, size: 28.0, color: ColorSty.primary),
         onDelete: () {
-          _cancelOrder();
+          _cancelOrder(context);
         },
-        isDelete: true,
+        isDelete: !_isLoading && status == 0,
       ),
       body: SingleChildScrollView(
         primary: true,
@@ -203,7 +220,8 @@ class _OngoingOrderPageState extends State<OngoingOrderPage> {
                     TileListDMenu(
                       dense: true,
                       title: "Total Pembayaran",
-                      prefix: "${data?.data.order.totalBayar}",
+                      prefix:
+                          "Rp ${oCcy.format(data?.data.order.totalBayar ?? 0)}",
                       textStylePrefix: TypoSty.titlePrimary,
                       icon: Icons.wine_bar,
                       isLoading: _isLoading,

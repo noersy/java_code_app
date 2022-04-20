@@ -9,16 +9,12 @@ import 'package:java_code_app/providers/auth_providers.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/providers/location_provider.dart';
 import 'package:java_code_app/providers/order_providers.dart';
-import 'package:java_code_app/singletons/check_connectivity.dart';
-import 'package:java_code_app/singletons/check_location.dart';
-// import 'package:java_code_app/singletons/fcm.dart';
 import 'package:java_code_app/singletons/shared_preferences.dart';
 import 'package:java_code_app/singletons/user_instance.dart';
 import 'package:java_code_app/theme/colors.dart';
-import 'package:java_code_app/view/auth/login_page.dart';
+import 'package:java_code_app/view/auth/findlocation_page.dart';
 import 'package:java_code_app/view/dashboard_page.dart';
 import 'package:java_code_app/widget/firebase_config.dart';
-// import 'package:java_code_app/widget/tes_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:logging/logging.dart';
 import 'package:device_preview/device_preview.dart';
@@ -64,7 +60,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ConnectionStatus.getInstance().initialize(navigatorKey);
+    // ConnectionStatus.getInstance().initialize(navigatorKey);
     // GeolocationStatus.getInstance().initialize();
     Preferences.getInstance().initialize();
     UserInstance.getInstance().initialize();
@@ -99,7 +95,7 @@ class MyApp extends StatelessWidget {
                   primary: ColorSty.primary,
                 ),
           ),
-          home: const LoginPage(),
+          home: const FindLocationPage(),
         ),
       ),
     );

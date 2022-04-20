@@ -44,7 +44,7 @@ dependencies:
   syncfusion_flutter_datepicker: any
   photo_view: any
   image_picker: any
-  http: any
+  http: ^0.13.4
   image_cropper: any
   flutter_native_image: any
   firebase_core: any

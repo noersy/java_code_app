@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:java_code_app/main.dart';
 import 'package:java_code_app/models/listvoucher.dart';
 import 'package:java_code_app/transision/route_transisition.dart';
+import 'package:java_code_app/view/auth/login_page.dart';
 import 'package:java_code_app/view/branda/detail_gambar.dart';
 import 'package:java_code_app/view/chekout/checkout_page.dart';
 import 'package:java_code_app/view/dashboard_page.dart';
@@ -12,6 +13,7 @@ import 'package:java_code_app/view/branda/detailmenu_page.dart';
 import 'package:java_code_app/view/chekout/detailvoucher_page.dart';
 import 'package:java_code_app/view/chekout/editorder_page.dart';
 import 'package:java_code_app/view/auth/findlocation_page.dart';
+import 'package:java_code_app/view/offline/offline_page.dart';
 import 'package:java_code_app/view/orders/ongoingorder_page.dart';
 import 'package:java_code_app/view/branda/promo_page.dart';
 import 'package:java_code_app/view/chekout/selection_vocher_page.dart';
@@ -33,6 +35,8 @@ class Navigate {
       .pushReplacement(routeTransition(const FindLocationPage()));
   static void toDashboard(context) => Navigator.of(context)
       .pushReplacement(routeTransition(const DashboardPage()));
+  static void toLogin(context) =>
+      Navigator.of(context).pushReplacement(routeTransition(const LoginPage()));
   static void toPromoPage(context,
           {required String title,
           required String police,
@@ -78,6 +82,14 @@ class Navigate {
       )));
   static void toChattReview(context) =>
       Navigator.of(context).push(routeTransition(const ChatPage()));
+  static void toOfflinePage(context, String title, {Function? then}) =>
+      Navigator.of(context)
+          .push(routeTransition(OfflinePage(
+        title: title,
+      )))
+          .whenComplete(() {
+        if (then != null) then();
+      });
   // static void toViewOrderKasir(context, {required Map<String, dynamic> dataOrders, bool? preparing}) => Navigator.of(context).push(routeTransition(OrderDetailPage(dataOrder: dataOrders, preparing: preparing)));
   static void toDetailGambar(context, foto) =>
       Navigator.of(context).push(routeTransition(DetailGambar(

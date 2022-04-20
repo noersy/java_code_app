@@ -51,16 +51,11 @@ Future getAllReview() async {
   final user = UserInstance.getInstance().user;
   if (user == null) return null;
   try {
-    _log.fine("Try to get list review");
     final response = await http.get(
       Uri.parse("https://$host/api/review/${user.data.idUser}"),
       headers: await getHeader(),
     );
-    if (response.statusCode == 204) {
-      _log.info("review if empty");
-      // return [];
-    }
-
+    
     if (response.statusCode == 200 &&
         json.decode(response.body)["status_code"] == 200) {
       _log.fine("Success get all review:");

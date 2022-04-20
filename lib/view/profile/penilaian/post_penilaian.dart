@@ -30,12 +30,6 @@ Future postPenilaian(score, type, review, img) async {
       headers: await getHeader(),
       body: body,
     );
-    // print('response: ${response.body}');
-
-    // if (response.statusCode == 204) {
-    //   _log.info("review if empty");
-    //   return [];
-    // }
 
     Map? data = json.decode(response.body);
 

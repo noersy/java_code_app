@@ -2,7 +2,6 @@
 
 import 'dart:async';
 import 'dart:io';
-import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -17,7 +16,6 @@ import 'package:java_code_app/widget/button/button_login.dart';
 import 'package:java_code_app/widget/dialog/custom_dialog.dart';
 import 'package:java_code_app/widget/input/form_login.dart';
 import 'package:provider/provider.dart';
-import 'package:logging/logging.dart' as logging;
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginPage extends StatefulWidget {
@@ -28,16 +26,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  static final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-  static AndroidDeviceInfo? _androidInfo;
-  static IosDeviceInfo? _iosDeviceInfo;
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
 
   // final ConnectionStatus _connectionStatus = ConnectionStatus.getInstance();
   final Preferences _preferences = Preferences.getInstance();
   final _duration = const Duration(seconds: 1);
-  static final _log = logging.Logger('LoginPage');
 
   bool _loading = false;
 
@@ -45,6 +39,7 @@ class _LoginPageState extends State<LoginPage> {
     setState(() => _loading = true);
     Map loginResponse =
         await Provider.of<AuthProviders>(context, listen: false).login(
+      context,
       _controllerEmail.text,
       _controllerPassword.text,
       isGoogle: false,
@@ -92,73 +87,31 @@ class _LoginPageState extends State<LoginPage> {
   _loginWithGoogle() async {
     setState(() => _loading = true);
     if (_googleSignIn.currentUser != null) await _googleSignIn.disconnect();
-    GoogleSignInAccount? _currentUser;
-    print('GoogleSignInAccount $_currentUser');
-    await _googleSignIn.signIn();
-    print(
-        'GoogleSignInAccount ${_googleSignIn.currentUser?.displayName} | Pwd: ${_googleSignIn.currentUser?.email}');
-    bool isLogin =
-        await Provider.of<AuthProviders>(context, listen: false).loginGoogle(
+    Map isLogin =
+        await Provider.of<AuthProviders>(context, listen: false).login(
+      context,
       _googleSignIn.currentUser!.email,
+      '',
       isGoogle: true,
       nama: _googleSignIn.currentUser?.displayName,
     );
-    if (isLogin) {
+    if (isLogin['status']) {
       await _preferences.setBoolValue(KeyPrefens.login, true);
 
       Timer(_duration, () {
         Navigate.toFindLocation(context);
-
         setState(() => _loading = false);
       });
       return;
-    } else if (isLogin == false) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text(
-                  'Email/password anda salah!\nAnda belum mendaftar?'),
-              // content: Text('email '),
-              actions: <Widget>[
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Close')),
-              ],
-            );
-          });
+    } else {
+      showSimpleDialog(context, isLogin['message']);
     }
 
     setState(() => _loading = false);
   }
 
-  _checkInternet() async {
-    // final _isConnected = await _connectionStatus.checkConnection();
-  }
-
-  _checkPrefens() async {
-    print('_checkPrefens');
-    bool _isAlreadyLogin = await _preferences.getBoolValue(KeyPrefens.login);
-    if (_isAlreadyLogin) {
-      setState(() => _loading = true);
-      final id = await _preferences.getIntValue(KeyPrefens.loginID);
-      await Provider.of<AuthProviders>(context, listen: false).getUser(id: id);
-
-      if (mounted) {
-        Timer(_duration, () {
-          Navigate.toFindLocation(context);
-          setState(() => _loading = false);
-        });
-      }
-    }
-  }
-
   @override
   void initState() {
-    _checkInternet();
-    _checkPrefens();
     super.initState();
   }
 
@@ -267,9 +220,6 @@ class _LoginPageState extends State<LoginPage> {
                                   AppleIDAuthorizationScopes.fullName,
                                 ],
                               );
-
-                              print(credential);
-
                               // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
                               // after they have been validated with Apple (see `Integration` section for more information on how to do this)
                             },

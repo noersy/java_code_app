@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/theme/colors.dart';
 import 'package:java_code_app/theme/spacing.dart';
-import 'package:java_code_app/theme/text_style.dart';
-import 'package:provider/provider.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
 class SkeletonOrderCard extends StatelessWidget {

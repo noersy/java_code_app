@@ -2,10 +2,12 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:java_code_app/constans/tools.dart';
+import 'package:java_code_app/constans/try_api.dart';
 import 'package:java_code_app/models/listhistory.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/providers/order_providers.dart';
@@ -40,30 +42,34 @@ class _HistoryScreenState extends State<HistoryScreen> {
   // static final RefreshController _refreshController =
   //     RefreshController(initialRefresh: false);
   static final DateTime _dateNow = DateTime.now();
-  static DateTime? _dateStart;
-  static DateTime? _dateEnd;
+  static DateTime? _dateStart = DateTime(_dateNow.year, _dateNow.month - 1);
+  static DateTime? _dateEnd = _dateNow;
   bool isFinisfLoadmore = false;
-  String _dateRange = dateFormat.format(_dateNow) +
-      " - " +
-      dateFormat.format(
-        DateTime(_dateNow.year, _dateNow.month, _dateNow.day + 7),
-      );
+  String _dateRange =
+      dateFormat.format(_dateStart!) + " - " + dateFormat.format(_dateEnd!);
   bool _loading = true;
   bool _loadingLoadMore = false;
-  var totalHistory = 0;
+  int totalHistory = 0;
+  int totalPrice = 0;
 
   Future<void> _onRefresh() async {
     var _duration = const Duration(seconds: 1);
     if (mounted) {
-      List<History> newList =
+      ListHistory? dataOrder =
           await Provider.of<OrderProviders>(context, listen: false)
-                  .getHistoryList() ??
-              [];
+              .getHistoryLimit(
+        context,
+        10,
+        0,
+        DateFormat('yyyy-MM-dd').format(_dateStart!),
+        DateFormat('yyyy-MM-dd').format(_dateEnd!),
+      );
 
       if (!mounted) return;
       setState(() {
-        _orders = newList;
-
+        _status = 0;
+        _dropdownValue = "Semua Status";
+        _orders = dataOrder!.data;
         _data.replaceRange(0, _data.length, _orders);
       });
     }
@@ -91,7 +97,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       _dateRange = dateFormat.format(val.startDate!) +
           " - " +
           dateFormat.format(val.endDate!);
-      setState(() {});
+      _loadStart();
     }
   }
 
@@ -121,21 +127,29 @@ class _HistoryScreenState extends State<HistoryScreen> {
     setState(() => _dropdownValue = newValue!);
   }
 
+  checkConnectivity() async {
+    bool isAnyConnection = await checkConnection();
+    if (isAnyConnection) {
+      _clearAllList();
+      _loadStart();
+    } else {
+      Provider.of<OrderProviders>(context, listen: false).setNetworkError(
+        true,
+        context: context,
+        title: 'Koneksi anda terputus',
+        then: () => checkConnectivity(),
+      );
+    }
+  }
+
   @override
   void initState() {
-    _clearAllList();
-    // _onRefresh();
-    loadTotalHistory().then((value) {
-      _loadStart();
-    });
+    checkConnectivity();
     super.initState();
   }
 
   @override
   void dispose() {
-    // _loadStart();
-    // loadTotalHistory();
-    // _loadMore();
     super.dispose();
   }
 
@@ -172,33 +186,25 @@ class _HistoryScreenState extends State<HistoryScreen> {
   getMoredata() async {
     if (mounted) {
       setState(() => _loadingLoadMore = true);
-      _orders = (await Provider.of<OrderProviders>(context, listen: false)
-              .getHistoryLimit(5, _data.length)) ??
-          [];
+      ListHistory? dataOrder =
+          await Provider.of<OrderProviders>(context, listen: false)
+              .getHistoryLimit(
+        context,
+        10,
+        0,
+        DateFormat('yyyy-MM-dd').format(_dateStart!),
+        DateFormat('yyyy-MM-dd').format(_dateEnd!),
+      );
+
       if (mounted) {
         setState(() {
-          _data.addAll(_orders);
+          _data.addAll(dataOrder!.data);
+          totalHistory = dataOrder.totalOrder;
+          totalPrice = dataOrder.totalPrice;
           _loadingLoadMore = false;
         });
       }
     }
-  }
-
-  Future<bool> _loadMoreOffline() async {
-    if (mounted) {
-      setState(() => _loading = true);
-
-      _orders = (await Provider.of<OrderProviders>(context, listen: false)
-              .getHistoryLimit(5, 0)) ??
-          [];
-      _data = _orders;
-      if (mounted) {
-        setState(() {
-          _loading = false;
-        });
-      }
-    }
-    return true;
   }
 
   Future<void> _loadStart() async {
@@ -208,14 +214,23 @@ class _HistoryScreenState extends State<HistoryScreen> {
     if (mounted) {
       setState(() => _loading = true);
 
-      _orders = (await Provider.of<OrderProviders>(context, listen: false)
-              .getHistoryLimit(10, 0)) ??
-          [];
-      _data = _orders;
+      ListHistory? dataOrder =
+          await Provider.of<OrderProviders>(context, listen: false)
+              .getHistoryLimit(
+        context,
+        10,
+        0,
+        _dateStart == null ? '' : DateFormat('yyyy-MM-dd').format(_dateStart!),
+        _dateEnd == null ? '' : DateFormat('yyyy-MM-dd').format(_dateEnd!),
+      );
 
       Timer(_duration, () {
         if (mounted) {
           setState(() {
+            _orders = dataOrder!.data;
+            _data = dataOrder.data;
+            totalHistory = dataOrder.totalOrder;
+            totalPrice = dataOrder.totalPrice;
             _loading = false;
           });
         }
@@ -228,7 +243,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Future<void> loadTotalHistory() async {
     print('dataConvert: ');
     var data = (await Provider.of<OrderProviders>(context, listen: false)
-            .getTotalHistory()
+            .getTotalHistory(context)
             .then((value) {
           Map json = jsonDecode(value);
           TotalHistory ttlHstry = TotalHistory.fromJson(json['data']);
@@ -370,8 +385,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           child: SkeletonText(height: 16.0),
                         )
                       : Text(
-                          "Rp ${oCcy.format(_data.map((e) => e.totalBayar).reduce((a, b) => a + b))}",
-                          style: TypoSty.titlePrimary),
+                          "Rp ${oCcy.format(totalPrice)}",
+                          style: TypoSty.titlePrimary,
+                        ),
                 ],
               ),
             )
@@ -584,6 +600,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   fontSize: 10.0.sp,
                   fontWeight: FontWeight.w600,
                 ),
+                textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(width: SpaceDims.sp8),

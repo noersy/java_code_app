@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:java_code_app/constans/tools.dart';
+import 'package:java_code_app/constans/try_api.dart';
 import 'package:java_code_app/models/listvoucher.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
@@ -40,7 +41,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
 
   static final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  bool _loading = false;
+  final bool _loading = false;
   Future<void> _onRefresh() async {
     var _duration = const Duration(seconds: 1);
     if (mounted) {
@@ -59,25 +60,37 @@ class _CheckOutPageState extends State<CheckOutPage> {
   }
 
   _getData() async {
-    await Provider.of<OrderProviders>(context, listen: false).getListVoucher();
-    cekVoucher =
-        Provider.of<OrderProviders>(context, listen: false).listVoucher;
-    // print('cek cekVoucher:${cekVoucher.length} ');
-    await Provider.of<OrderProviders>(context, listen: false).getListDisCount();
-    final _orders =
-        Provider.of<OrderProviders>(context, listen: false).checkOrder;
-    final _discount =
-        Provider.of<OrderProviders>(context, listen: false).listDiscount;
-    totalDiscout = _discount.isNotEmpty
-        ? _discount.map((e) => e.diskon).reduce((a, b) => a + b)
-        : totalDiscout;
+    bool isAnyConnection = await checkConnection();
+    if (isAnyConnection) {
+      await Provider.of<OrderProviders>(context, listen: false)
+          .getListVoucher(context);
+      cekVoucher =
+          Provider.of<OrderProviders>(context, listen: false).listVoucher;
+      // print('cek cekVoucher:${cekVoucher.length} ');
+      await Provider.of<OrderProviders>(context, listen: false)
+          .getListDisCount(context);
+      final _orders =
+          Provider.of<OrderProviders>(context, listen: false).checkOrder;
+      final _discount =
+          Provider.of<OrderProviders>(context, listen: false).listDiscount;
+      totalDiscout = _discount.isNotEmpty
+          ? _discount.map((e) => e.diskon).reduce((a, b) => a + b)
+          : totalDiscout;
 
-    totalOrders = _orders.values.map((e) => e["harga"]).reduce((a, b) => a + b);
+      totalOrders =
+          _orders.values.map((e) => e["harga"]).reduce((a, b) => a + b);
 
-    totalDisP = (totalOrders * (totalDiscout / 100)).toInt();
-    totalPay = totalOrders - totalDisP;
-    numOrders = _orders.length;
-    if (mounted) setState(() {});
+      totalDisP = (totalOrders * (totalDiscout / 100)).toInt();
+      totalPay = totalOrders - totalDisP;
+      numOrders = _orders.length;
+    } else {
+      Provider.of<OrderProviders>(context, listen: false).setNetworkError(
+        true,
+        context: context,
+        title: 'Koneksi anda terputus',
+        then: () => _getData(),
+      );
+    }
   }
 
   void _checkOut() {
@@ -91,6 +104,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
         onSubmit: (bool value) async {
           if (value) {
             Provider.of<OrderProviders>(context, listen: false).sendCheckOut(
+              context,
               idVoucher: _selectedVoucher?.idVoucher,
               idDiscount: _discount.map((e) => e.idDiskon).toList(),
               discount: totalDiscout,
@@ -113,12 +127,11 @@ class _CheckOutPageState extends State<CheckOutPage> {
               await Provider.of<OrderProviders>(context, listen: false)
                   .clearCheckout();
               Navigator.pop(context);
+              await showDialog(
+                context: context,
+                builder: (_) => const OrderDoneDialog(),
+              );
             }
-
-            await showDialog(
-              context: context,
-              builder: (_) => const OrderDoneDialog(),
-            );
           }
         },
       ),
@@ -173,6 +186,10 @@ class _CheckOutPageState extends State<CheckOutPage> {
         final isMak = _orders.values
             .where((element) => element["jenis"] == "makanan")
             .isNotEmpty;
+        final isSnack = _orders.values
+            .where((element) => element["jenis"] == "snack")
+            .isNotEmpty;
+
         return Scaffold(
           appBar: const CostumeAppBar(
             back: true,
@@ -199,6 +216,12 @@ class _CheckOutPageState extends State<CheckOutPage> {
                           orders: _orders,
                           title: 'Minuman',
                           type: 'minuman',
+                        ),
+                      if (isSnack)
+                        ListOrder(
+                          orders: _orders,
+                          title: 'Snack',
+                          type: 'snack',
                         ),
                     ],
                   ),

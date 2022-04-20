@@ -2,9 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:java_code_app/constans/try_api.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/widget/appbar/appbar.dart';
+import 'package:provider/provider.dart';
 import 'fetch_rating.dart';
 
 class DaftarPenilaian extends StatefulWidget {
@@ -30,10 +33,24 @@ class _DaftarPenilaianState extends State<DaftarPenilaian>
     });
   }
 
+  checkConnectivity() async {
+    bool isAnyConnection = await checkConnection();
+    if (isAnyConnection) {
+      clearList();
+      loadReview();
+    } else {
+      Provider.of<OrderProviders>(context, listen: false).setNetworkError(
+        true,
+        context: context,
+        title: 'Koneksi anda terputus',
+        then: () => checkConnectivity(),
+      );
+    }
+  }
+
   @override
   void initState() {
-    clearList();
-    loadReview();
+    checkConnectivity();
     super.initState();
   }
 

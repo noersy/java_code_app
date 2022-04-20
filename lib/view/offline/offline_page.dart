@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:java_code_app/singletons/check_connectivity.dart';
+import 'package:java_code_app/constans/try_api.dart';
+import 'package:java_code_app/providers/order_providers.dart';
+import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
+import 'package:provider/provider.dart';
 
 class OfflinePage extends StatelessWidget {
   final String title;
@@ -43,7 +46,13 @@ class OfflinePage extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    ConnectionStatus.getInstance().checkConnection();
+                    checkConnection().then((value) {
+                      if (value) {
+                        Provider.of<OrderProviders>(context, listen: false)
+                            .setNetworkError(false);
+                        Navigate().backScreen(context);
+                      }
+                    });
                   },
                   child: SizedBox(
                     width: 100,

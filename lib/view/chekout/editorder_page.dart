@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:java_code_app/constans/try_api.dart';
 import 'package:java_code_app/helps/image.dart';
 import 'package:java_code_app/models/menudetail.dart';
 import 'package:java_code_app/providers/order_providers.dart';
@@ -49,68 +50,78 @@ class _EditOrderPageState extends State<EditOrderPage> {
   bool _isLoading = true;
 
   getMenu() async {
-    final data = await Provider.of<OrderProviders>(context, listen: false)
-        .getDetailMenu(id: int.parse(widget.data["id"]));
-    if (mounted) setState(() => _isLoading = true);
+    bool isAnyConnection = await checkConnection();
 
-    if (data != null) {
-      _menu = data.data.menu;
-      _harga = _menu?.harga ?? 0;
-      _hargaTotal = _harga;
+    if (isAnyConnection) {
+      final data = await Provider.of<OrderProviders>(context, listen: false)
+          .getDetailMenu(context, id: int.parse(widget.data["id"]));
+      if (mounted) setState(() => _isLoading = true);
 
-      if (data.data.topping?.isNotEmpty ?? false) {
-        _selectedTopping = [data.data.topping!.first];
-        _hargaLevel = data.data.topping!.first.harga;
-        _hargaTotal = _harga + _hargaLevel + _hargaTopping;
-      }
-      if (data.data.level?.isNotEmpty ?? false) {
-        _selectedLevel = data.data.level!.first;
-        _hargaTopping = data.data.level!.first.harga;
-        _hargaTotal = _harga + _hargaLevel + _hargaTopping;
-      }
+      if (data != null) {
+        _menu = data.data.menu;
+        _harga = _menu?.harga ?? 0;
+        _hargaTotal = _harga;
 
-      _listLevel = data.data.level ?? [];
-      _listTopping = data.data.topping ?? [];
-
-      ///Get if order already exist
-      final orders =
-          Provider.of<OrderProviders>(context, listen: false).checkOrder;
-
-      if (orders.containsKey("${_menu?.idMenu}")) {
-        final dat = orders["${_menu?.idMenu}"];
-        _jumlahOrder = dat["countOrder"];
-
-        if (dat["level"] != null) {
-          final _level = data.data.level
-              ?.where((element) => "${element.idDetail}" == dat["level"]);
-          if (_level?.isNotEmpty ?? false) {
-            _selectedLevel = _level!.first;
-            _hargaLevel = _level.first.harga;
-            _hargaTotal = _harga + _hargaLevel + _hargaTopping;
-          }
+        if (data.data.topping?.isNotEmpty ?? false) {
+          _selectedTopping = [data.data.topping!.first];
+          _hargaLevel = data.data.topping!.first.harga;
+          _hargaTotal = _harga + _hargaLevel + _hargaTopping;
         }
-        if (dat["topping"] != null) {
-          final topping = data.data.topping?.where((item) {
-            for (final e in dat["topping"]) {
-              if (e == item.idDetail) return true;
+        if (data.data.level?.isNotEmpty ?? false) {
+          _selectedLevel = data.data.level!.first;
+          _hargaTopping = data.data.level!.first.harga;
+          _hargaTotal = _harga + _hargaLevel + _hargaTopping;
+        }
+
+        _listLevel = data.data.level ?? [];
+        _listTopping = data.data.topping ?? [];
+
+        ///Get if order already exist
+        final orders =
+            Provider.of<OrderProviders>(context, listen: false).checkOrder;
+
+        if (orders.containsKey("${_menu?.idMenu}")) {
+          final dat = orders["${_menu?.idMenu}"];
+          _jumlahOrder = dat["countOrder"];
+
+          if (dat["level"] != null) {
+            final _level = data.data.level
+                ?.where((element) => "${element.idDetail}" == dat["level"]);
+            if (_level?.isNotEmpty ?? false) {
+              _selectedLevel = _level!.first;
+              _hargaLevel = _level.first.harga;
+              _hargaTotal = _harga + _hargaLevel + _hargaTopping;
             }
-            return false;
-          }).toList();
-
-          if (topping?.isNotEmpty ?? false) {
-            _selectedTopping = topping!;
-            _hargaTopping = topping.map((e) => e.harga).reduce((e, a) => e + a);
-            _hargaTotal = _harga + _hargaLevel + _hargaTopping;
           }
+          if (dat["topping"] != null) {
+            final topping = data.data.topping?.where((item) {
+              for (final e in dat["topping"]) {
+                if (e == item.idDetail) return true;
+              }
+              return false;
+            }).toList();
+
+            if (topping?.isNotEmpty ?? false) {
+              _selectedTopping = topping!;
+              _hargaTopping =
+                  topping.map((e) => e.harga).reduce((e, a) => e + a);
+              _hargaTotal = _harga + _hargaLevel + _hargaTopping;
+            }
+          }
+
+          if (dat["catatan"] != null) _catatan = dat["catatan"];
         }
 
-        if (dat["catatan"] != null) _catatan = dat["catatan"];
+        _isLoading = false;
       }
-
-      _isLoading = false;
+    } else {
+      Provider.of<OrderProviders>(context, listen: false).setNetworkError(
+        true,
+        context: context,
+        title: 'Koneksi anda terputus',
+        then: () => getMenu(),
+      );
     }
-
-    if (mounted) setState(() {});
   }
 
   @override
