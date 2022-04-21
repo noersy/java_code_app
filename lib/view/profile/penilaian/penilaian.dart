@@ -156,6 +156,49 @@ class _PenilaianState extends State<Penilaian> {
         });
   }
 
+  onPost() async {
+    if (textReviewController.text.isEmpty) {
+      showSimpleDialog(context, 'Review harus ditulis!');
+    } else {
+      showLoading(context);
+      postPenilaian(
+        context,
+        score,
+        selectedType,
+        textReviewController.text,
+        base64Image,
+      ).then((value) async {
+        await hideLoading(context);
+        await hideLoading(context);
+        if (value['success']) {
+          return showSimpleDialog(
+            context,
+            value['message'] ?? 'Penilaian berhasil!',
+            lableClose: 'Tutup',
+            onClose: () async {
+              textReviewController.clear();
+              Navigator.pop(context);
+            },
+          );
+        } else {
+          return showSimpleDialog(
+            context,
+            value['message'],
+            title: 'Gagal!',
+            lableClose: 'Tutup',
+            onClose: () async {
+              textReviewController.clear();
+            },
+          );
+        }
+        // imageBytes = [];
+        // base64Image = '';
+        // print(
+        //     'clearing imageBytes:${imageBytes.length} | base64Image:${base64Image}');
+      });
+    }
+  }
+
   List listType = [
     'Harga',
     'Rasa',
@@ -230,42 +273,7 @@ class _PenilaianState extends State<Penilaian> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                         onPressed: () {
-                          showLoading(context);
-                          postPenilaian(
-                            context,
-                            score,
-                            selectedType,
-                            textReviewController.text,
-                            base64Image,
-                          ).then((value) async {
-                            await hideLoading(context);
-                            await hideLoading(context);
-                            if (value['success']) {
-                              return showSimpleDialog(
-                                context,
-                                value['message'] ?? 'Penilaian berhasil!',
-                                lableClose: 'Tutup',
-                                onClose: () async {
-                                  textReviewController.clear();
-                                  Navigator.pop(context);
-                                },
-                              );
-                            } else {
-                              return showSimpleDialog(
-                                context,
-                                value['message'],
-                                title: 'Gagal!',
-                                lableClose: 'Tutup',
-                                onClose: () async {
-                                  textReviewController.clear();
-                                },
-                              );
-                            }
-                            // imageBytes = [];
-                            // base64Image = '';
-                            // print(
-                            //     'clearing imageBytes:${imageBytes.length} | base64Image:${base64Image}');
-                          });
+                          onPost();
                         },
                         child: const Text('Kirim Penilaian'),
                         style: ButtonStyle(

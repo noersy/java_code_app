@@ -31,8 +31,8 @@ void main() async {
   });
 
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
-  // await firebaseConfiguration();
+  await Firebase.initializeApp();
+  await firebaseConfiguration();
 
   runZonedGuarded(() {
     runApp(

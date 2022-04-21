@@ -11,10 +11,7 @@ import 'package:java_code_app/constans/gettoken.dart';
 import 'package:java_code_app/constans/hosts.dart';
 import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/singletons/user_instance.dart';
-import 'package:logging/logging.dart' as logging;
 import 'package:provider/provider.dart';
-
-final _log = logging.Logger('OrderProvider');
 
 class Review {
   var id_review, id_user, nama, score, type, review, image, created_at;
@@ -60,19 +57,15 @@ Future getAllReview(BuildContext context) async {
   final user = UserInstance.getInstance().user;
   if (user == null) return null;
 
-  final Uri _api = Uri.http(host, "$sub/api/review/${user.data.idUser}");
   try {
-    final response = await http
-        .get(
-          _api,
-          headers: await getHeader(),
-        )
-        .timeout(
-          const Duration(seconds: 4),
-        );
+    final _api = Uri.http(host, "$sub/api/review/${user.data.idUser}");
+    final response = await http.get(
+      _api,
+      headers: await getHeader(),
+    );
 
     var responseBody = json.decode(response.body);
-    if (response.statusCode == 200 && responseBody == 200) {
+    if (response.statusCode == 200 && responseBody['status_code'] == 200) {
       return (response.body);
     }
     return null;

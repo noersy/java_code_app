@@ -42,14 +42,14 @@ Future postPenilaian(BuildContext context, score, type, review, img) async {
     if (response.statusCode == 200 && responseBody['status_code'] == 200) {
       return {
         'success': true,
-        'message': 'Sukses megngirim penilaian',
+        'message': 'Sukses mengirim penilaian',
       };
     } else {
       return {
         'success': false,
         'message': responseBody['message'] ??
             responseBody['errors']?[0] ??
-            'Gagal megngirim penilaian',
+            'Gagal mengirim penilaian',
       };
     }
   } on SocketException {
@@ -60,7 +60,7 @@ Future postPenilaian(BuildContext context, score, type, review, img) async {
     );
     return {
       'success': false,
-      'message': 'Gagal megngirim penilaian',
+      'message': 'Gagal mengirim penilaian',
     };
   } on TimeoutException {
     orderProviders.setNetworkError(
@@ -70,7 +70,7 @@ Future postPenilaian(BuildContext context, score, type, review, img) async {
     );
     return {
       'success': false,
-      'message': 'Gagal megngirim penilaian',
+      'message': 'Gagal mengirim penilaian',
     };
   } catch (e) {
     orderProviders.setNetworkError(
@@ -80,7 +80,7 @@ Future postPenilaian(BuildContext context, score, type, review, img) async {
     );
     return {
       'success': false,
-      'message': 'Gagal megngirim penilaian',
+      'message': 'Gagal mengirim penilaian',
     };
   }
 }
