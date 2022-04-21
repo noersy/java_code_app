@@ -20,16 +20,20 @@ class DaftarPenilaian extends StatefulWidget {
 class _DaftarPenilaianState extends State<DaftarPenilaian>
     with TickerProviderStateMixin {
   loadReview() {
-    Future data = getAllReview();
+    Future data = getAllReview(context);
     data.then((value) {
-      Map json = jsonDecode(value);
-      for (var i in json['data']) {
-        Review rv = Review.fromJson(i);
-        listReview.add(rv);
+      if (value == null) {
+        listReview = [];
+      } else {
+        Map json = jsonDecode(value);
+        for (var i in json['data']) {
+          Review rv = Review.fromJson(i);
+          listReview.add(rv);
+        }
+        setState(() {
+          widgetListReview();
+        });
       }
-      setState(() {
-        widgetListReview();
-      });
     });
   }
 

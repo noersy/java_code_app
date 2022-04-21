@@ -231,9 +231,14 @@ class _PenilaianState extends State<Penilaian> {
                     child: ElevatedButton(
                         onPressed: () {
                           showLoading(context);
-                          postPenilaian(score, selectedType,
-                                  textReviewController.text, base64Image)
-                              .then((value) async {
+                          postPenilaian(
+                            context,
+                            score,
+                            selectedType,
+                            textReviewController.text,
+                            base64Image,
+                          ).then((value) async {
+                            await hideLoading(context);
                             await hideLoading(context);
                             if (value['success']) {
                               return showSimpleDialog(
