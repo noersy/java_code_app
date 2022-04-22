@@ -83,20 +83,24 @@ class OrderProviders extends ChangeNotifier {
     String? title,
     Function? then,
   }) {
-    _isNetworkError = status;
-    notifyListeners();
-    if (context != null) {
-      _isNetworkError = false;
+    if (!_isNetworkError! && status) {
+      _isNetworkError = status;
       notifyListeners();
-      Navigate.toOfflinePage(
-        context,
-        title!,
-        then: () {
-          if (then != null) {
-            then();
-          }
-        },
-      );
+      if (context != null) {
+        _isNetworkError = false;
+        notifyListeners();
+        Navigate.toOfflinePage(
+          context,
+          title!,
+          then: () {
+            if (then != null) {
+              then();
+            }
+          },
+        );
+      }
+    } else {
+      _isNetworkError = status;
     }
   }
 

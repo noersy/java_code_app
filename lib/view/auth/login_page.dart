@@ -14,6 +14,7 @@ import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/singletons/shared_preferences.dart';
 import 'package:java_code_app/widget/button/button_login.dart';
 import 'package:java_code_app/widget/dialog/custom_dialog.dart';
+import 'package:java_code_app/widget/firebase_config.dart';
 import 'package:java_code_app/widget/input/form_login.dart';
 import 'package:provider/provider.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -46,6 +47,7 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     if (loginResponse['status']) {
+      subscribeNotif();
       await _preferences.setBoolValue(KeyPrefens.login, true);
 
       Timer(_duration, () {
