@@ -7,6 +7,7 @@ import 'package:java_code_app/theme/icons_cs_icons.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
 import 'package:java_code_app/widget/button/label_button.dart';
+import 'package:java_code_app/widget/firebase_config.dart';
 import 'package:provider/provider.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
@@ -23,10 +24,15 @@ class BerandaSkeleton extends StatelessWidget {
           padding: const EdgeInsets.only(left: SpaceDims.sp24),
           child: Row(
             children: [
-              const Icon(
-                IconsCs.coupon,
-                color: ColorSty.primary,
-                size: 22.0,
+              InkWell(
+                onTap: () async {
+                  await sendPushNotif();
+                },
+                child: const Icon(
+                  IconsCs.coupon,
+                  color: ColorSty.primary,
+                  size: 22.0,
+                ),
               ),
               const SizedBox(width: SpaceDims.sp22),
               Text(

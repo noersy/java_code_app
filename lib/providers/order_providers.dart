@@ -83,20 +83,24 @@ class OrderProviders extends ChangeNotifier {
     String? title,
     Function? then,
   }) {
-    _isNetworkError = status;
-    notifyListeners();
-    if (context != null) {
-      _isNetworkError = false;
+    if (!_isNetworkError! && status) {
+      _isNetworkError = status;
       notifyListeners();
-      Navigate.toOfflinePage(
-        context,
-        title!,
-        then: () {
-          if (then != null) {
-            then();
-          }
-        },
-      );
+      if (context != null) {
+        _isNetworkError = false;
+        notifyListeners();
+        Navigate.toOfflinePage(
+          context,
+          title!,
+          then: () {
+            if (then != null) {
+              then();
+            }
+          },
+        );
+      }
+    } else {
+      _isNetworkError = status;
     }
   }
 
@@ -190,27 +194,27 @@ class OrderProviders extends ChangeNotifier {
       if (response.statusCode == 200 && responseBody['status_code'] == 200) {
         _menuList = menuListFromJson(response.body);
         if (_menuList != null) _log.fine("Success get all menu");
-        setNetworkError(false);
+        await setNetworkError(false);
         notifyListeners();
         return _menuList;
       }
       return null;
     } on SocketException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
       );
       return null;
     } on TimeoutException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Koneksi time out.',
       );
       return null;
     } catch (e) {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
@@ -242,26 +246,26 @@ class OrderProviders extends ChangeNotifier {
 
       var responseBody = json.decode(response.body);
       if (response.statusCode == 200 && responseBody["status_code"] == 200) {
-        setNetworkError(false);
+        await setNetworkError(false);
         return menuDetailFromJson(response.body);
       }
       return null;
     } on SocketException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
       );
       return null;
     } on TimeoutException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Koneksi time out.',
       );
       return null;
     } catch (e) {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
@@ -283,27 +287,27 @@ class OrderProviders extends ChangeNotifier {
       var responseBody = json.decode(response.body);
       if (response.statusCode == 200 && responseBody["status_code"] == 200) {
         _listVoucher = listVoucherFromJson(response.body).data;
-        setNetworkError(false);
+        await setNetworkError(false);
         notifyListeners();
         return true;
       }
       return false;
     } on SocketException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
       );
       return false;
     } on TimeoutException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Koneksi time out.',
       );
       return false;
     } catch (e) {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
@@ -328,27 +332,27 @@ class OrderProviders extends ChangeNotifier {
       var responseBody = json.decode(response.body);
       if (response.statusCode == 200 && responseBody["status_code"] == 200) {
         _listDiscount = listDiscountFromJson(response.body).data;
-        setNetworkError(false);
+        await setNetworkError(false);
         notifyListeners();
         return true;
       }
       return false;
     } on SocketException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
       );
       return false;
     } on TimeoutException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Koneksi time out.',
       );
       return false;
     } catch (e) {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
@@ -371,27 +375,27 @@ class OrderProviders extends ChangeNotifier {
       var responseBody = json.decode(response.body);
       if (response.statusCode == 200 && responseBody["status_code"] == 200) {
         _listPromo = listPromoFromJson(response.body).data;
-        setNetworkError(false);
+        await setNetworkError(false);
         notifyListeners();
         return true;
       }
       return false;
     } on SocketException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
       );
       return false;
     } on TimeoutException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Koneksi time out.',
       );
       return false;
     } catch (e) {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
@@ -415,27 +419,27 @@ class OrderProviders extends ChangeNotifier {
       var responseBody = json.decode(response.body);
       if (response.statusCode == 200 && responseBody['status_code'] == 200) {
         _orders = listOrderFromJson(response.body).data;
-        setNetworkError(false);
+        await setNetworkError(false);
         notifyListeners();
         return true;
       }
       return false;
     } on SocketException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
       );
       return false;
     } on TimeoutException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Koneksi time out.',
       );
       return false;
     } catch (e) {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
@@ -457,26 +461,26 @@ class OrderProviders extends ChangeNotifier {
 
       var responseBody = json.decode(response.body);
       if (response.statusCode == 200 && responseBody["status_code"] == 200) {
-        setNetworkError(false);
+        await setNetworkError(false);
         return detail.orderDetailFromJson(response.body);
       }
       return null;
     } on SocketException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
       );
       return null;
     } on TimeoutException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Koneksi time out.',
       );
       return null;
     } catch (e) {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
@@ -500,26 +504,26 @@ class OrderProviders extends ChangeNotifier {
 
       var responseBody = json.decode(response.body);
       if (response.statusCode == 200 && responseBody["status_code"] == 200) {
-        setNetworkError(false);
+        await setNetworkError(false);
         return response.body;
       }
       return [];
     } on SocketException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
       );
       return null;
     } on TimeoutException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Koneksi time out.',
       );
       return null;
     } catch (e) {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
@@ -556,26 +560,26 @@ class OrderProviders extends ChangeNotifier {
 
       var responseBody = json.decode(response.body);
       if (response.statusCode == 200 && responseBody['status_code'] == 200) {
-        setNetworkError(false);
+        await setNetworkError(false);
         return listHistoryFromJson(response.body);
       }
       return null;
     } on SocketException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
       );
       return null;
     } on TimeoutException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Koneksi time out.',
       );
       return null;
     } catch (e) {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
@@ -597,26 +601,26 @@ class OrderProviders extends ChangeNotifier {
 
       var responseBody = json.decode(response.body);
       if (response.statusCode == 200 && responseBody['status_code'] == 200) {
-        setNetworkError(false);
+        await setNetworkError(false);
         return listHistoryFromJson(response.body).data;
       }
       return null;
     } on SocketException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
       );
       return null;
     } on TimeoutException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Koneksi time out.',
       );
       return null;
     } catch (e) {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
@@ -635,7 +639,7 @@ class OrderProviders extends ChangeNotifier {
 
       var responseBody = json.decode(response.body);
       if (response.statusCode == 200 && responseBody["status_code"] == 200) {
-        setNetworkError(false);
+        await setNetworkError(false);
         return true;
       } else {
         showSimpleDialog(
@@ -645,21 +649,21 @@ class OrderProviders extends ChangeNotifier {
         return false;
       }
     } on SocketException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
       );
       return false;
     } on TimeoutException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Koneksi time out.',
       );
       return false;
     } catch (e) {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
@@ -712,7 +716,7 @@ class OrderProviders extends ChangeNotifier {
         submitOrder();
         getListOrder(context);
 
-        setNetworkError(false);
+        await setNetworkError(false);
         notifyListeners();
         return true;
       } else {
@@ -723,21 +727,21 @@ class OrderProviders extends ChangeNotifier {
         return false;
       }
     } on SocketException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',
       );
       return false;
     } on TimeoutException {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Koneksi time out.',
       );
       return false;
     } catch (e) {
-      setNetworkError(
+      await setNetworkError(
         true,
         context: context,
         title: 'Terjadi masalah dengan server.',

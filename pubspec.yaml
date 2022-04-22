@@ -47,9 +47,9 @@ dependencies:
   http: ^0.13.4
   image_cropper: any
   flutter_native_image: any
-  firebase_core: any
-  firebase_messaging: any
-  flutter_local_notifications: any
+  firebase_core: ^1.15.0
+  firebase_messaging: ^11.2.14
+  flutter_local_notifications: ^9.4.0
   google_sign_in: any
   logging: ^1.0.2
   loadmore: ^2.0.1

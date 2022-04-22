@@ -2,14 +2,16 @@
 
 library java_code_app.fetch_rating;
 
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:java_code_app/constans/gettoken.dart';
 import 'package:java_code_app/constans/hosts.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/singletons/user_instance.dart';
-import 'package:logging/logging.dart' as logging;
-
-final _log = logging.Logger('OrderProvider');
+import 'package:provider/provider.dart';
 
 class Review {
   var id_review, id_user, nama, score, type, review, image, created_at;
@@ -47,27 +49,46 @@ class Review {
 }
 
 List listReview = [];
-Future getAllReview() async {
+Future getAllReview(BuildContext context) async {
+  OrderProviders orderProviders =
+      Provider.of<OrderProviders>(context, listen: false);
+  if (orderProviders.isNetworkError!) return false;
+
   final user = UserInstance.getInstance().user;
   if (user == null) return null;
+
   try {
+    final _api = Uri.http(host, "$sub/api/review/${user.data.idUser}");
     final response = await http.get(
-      Uri.parse("https://$host/api/review/${user.data.idUser}"),
+      _api,
       headers: await getHeader(),
     );
-    
-    if (response.statusCode == 200 &&
-        json.decode(response.body)["status_code"] == 200) {
-      _log.fine("Success get all review:");
+
+    var responseBody = json.decode(response.body);
+    if (response.statusCode == 200 && responseBody['status_code'] == 200) {
       return (response.body);
-      // print('body sukses:\n${response.body}');
-      // return listHistoryFromJson(response.body).data;
     }
-    _log.info("Fail to get list review");
-    _log.info(response.body);
-  } catch (e, r) {
-    _log.warning(e);
-    _log.warning(r);
+    return null;
+  } on SocketException {
+    orderProviders.setNetworkError(
+      true,
+      context: context,
+      title: 'Terjadi masalah dengan server.',
+    );
+    return null;
+  } on TimeoutException {
+    orderProviders.setNetworkError(
+      true,
+      context: context,
+      title: 'Koneksi time out.',
+    );
+    return null;
+  } catch (e) {
+    orderProviders.setNetworkError(
+      true,
+      context: context,
+      title: 'Terjadi masalah dengan server.',
+    );
+    return null;
   }
-  return null;
 }

@@ -12,6 +12,7 @@ import 'package:java_code_app/route/route.dart';
 import 'package:java_code_app/singletons/shared_preferences.dart';
 import 'package:java_code_app/theme/spacing.dart';
 import 'package:java_code_app/theme/text_style.dart';
+import 'package:java_code_app/widget/firebase_config.dart';
 import 'package:provider/provider.dart';
 
 class FindLocationPage extends StatefulWidget {
@@ -70,8 +71,9 @@ class _FindLocationPageState extends State<FindLocationPage> {
 
   @override
   void initState() {
-    _checkPrefens().then((value) => getAddress());
     super.initState();
+    firebaseMessageHandling();
+    _checkPrefens().then((value) => getAddress());
   }
 
   @override

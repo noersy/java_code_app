@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:java_code_app/constans/tools.dart';
 import 'package:java_code_app/providers/auth_providers.dart';
 import 'package:java_code_app/providers/lang_providers.dart';
 import 'package:java_code_app/providers/location_provider.dart';
@@ -19,7 +23,48 @@ import 'package:provider/provider.dart';
 import 'package:logging/logging.dart';
 import 'package:device_preview/device_preview.dart';
 
-void main() async {
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'high_importance_channel',
+  'High Importance Notifications',
+  importance: Importance.high,
+  playSound: true,
+);
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+}
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin>()
+      ?.requestPermissions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  FirebaseMessaging.instance.getInitialMessage().then((message) {
+    if (message != null) {
+      executeMessage(message);
+    }
+  });
+
   Logger.root.level = Level.OFF;
   if (kDebugMode) Logger.root.level = Level.ALL;
   final _log = Logger('Main');
@@ -29,10 +74,6 @@ void main() async {
       print('${record.level.name}: ${record.time}: ${record.message}');
     }
   });
-
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  await firebaseConfiguration();
 
   runZonedGuarded(() {
     runApp(

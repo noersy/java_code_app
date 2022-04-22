@@ -2,21 +2,28 @@
 
 library java_code_app.post_penilaian;
 
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:java_code_app/constans/gettoken.dart';
 import 'package:java_code_app/constans/hosts.dart';
+import 'package:java_code_app/providers/order_providers.dart';
 import 'package:java_code_app/singletons/user_instance.dart';
-import 'package:logging/logging.dart' as logging;
+import 'package:provider/provider.dart';
 
-final _log = logging.Logger('OrderProvider');
 var img =
     'iVBORw0KGgoAAAANSUhEUgAAAQ4AAAC7CAMAAACjH4DlAAAAXVBMVEUpMTRnjLEiJiNcfJxrkbgkKSgoLzEmLS5EWWxXdpM0QkxAVGUuOT9kiKslKytSbohPaYJggqM+UF8wO0I6SldIX3Q2RE9LY3oyP0crNDk+UWFWdJA7S1lPaH9jhacMRR/OAAADlElEQVR4nO3c7XKqMBSFYSi4CSCB8CGkKvd/mUfAVoNgHUiPdbuef51aprwDAQLiOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA.........';
-Future postPenilaian(score, type, review, img) async {
+Future postPenilaian(BuildContext context, score, type, review, img) async {
+  OrderProviders orderProviders =
+      Provider.of<OrderProviders>(context, listen: false);
+  if (orderProviders.isNetworkError!) return false;
+
   final user = UserInstance.getInstance().user;
   if (user == null) return null;
+
   try {
-    // print('score: $score | type: $type | review: $review  | image: $img ');
     final body = <String, dynamic>{
       'id_user': '${user.data.idUser}',
       'score': '$score',
@@ -24,38 +31,56 @@ Future postPenilaian(score, type, review, img) async {
       'review': '$review',
       'image': img
     };
-    _log.fine("Try to post review");
+    final Uri _api = Uri.http(host, "$sub/api/review/add");
     final response = await http.post(
-      Uri.parse("https://$host/api/review/add"),
+      _api,
       headers: await getHeader(),
-      body: body,
+      body: jsonEncode(body),
     );
 
-    Map? data = json.decode(response.body);
-
-    if (response.statusCode == 200 && data!["status_code"] == 200) {
-      _log.fine("Success get all review:");
+    var responseBody = json.decode(response.body);
+    if (response.statusCode == 200 && responseBody['status_code'] == 200) {
       return {
         'success': true,
-      };
-      // return listHistoryFromJson(response.body).data;
-    } else if (data!["status_code"] == 422) {
-      return {
-        'success': false,
-        'message': 'Gagal megngirim penilaian',
+        'message': 'Sukses mengirim penilaian',
       };
     } else {
       return {
         'success': false,
-        'message': data['errors']['message'],
+        'message': responseBody['message'] ??
+            responseBody['errors']?[0] ??
+            'Gagal mengirim penilaian',
       };
     }
-  } catch (e, r) {
-    _log.warning(e);
-    _log.warning(r);
+  } on SocketException {
+    orderProviders.setNetworkError(
+      true,
+      context: context,
+      title: 'Terjadi masalah dengan server.',
+    );
+    return {
+      'success': false,
+      'message': 'Gagal mengirim penilaian',
+    };
+  } on TimeoutException {
+    orderProviders.setNetworkError(
+      true,
+      context: context,
+      title: 'Koneksi time out.',
+    );
+    return {
+      'success': false,
+      'message': 'Gagal mengirim penilaian',
+    };
+  } catch (e) {
+    orderProviders.setNetworkError(
+      true,
+      context: context,
+      title: 'Terjadi masalah dengan server.',
+    );
+    return {
+      'success': false,
+      'message': 'Gagal mengirim penilaian',
+    };
   }
-  return {
-    'success': false,
-    'message': 'Gagal megngirim penilaian',
-  };
 }
